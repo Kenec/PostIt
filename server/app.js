@@ -1,42 +1,49 @@
-const express = require('express');
 
+// *** main dependencies *** //
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const swig = require('swig');
+
+
+// *** routes *** //
+const routes = require('./routes/index.js');
+
+
+// *** express instance *** //
 const app = express();
 
-// Routes
 
-// home
-app.get('/', (req, res) => {
-  res.send('This is a server response');
-});
+// *** view engine *** //
+let swigg = new swig.Swig();
+app.engine('html', swigg.renderFile);
+app.set('view engine', 'html');
 
-// post: signup
-app.post('/api/user/signup', (req, res) => {
-  res.send('This is the sign up page for POST');
-});
 
-// post: signin
-app.post('/api/user/signin', (req, res) => {
-  res.send('This is the signin page for POST');
-});
+// *** static directory *** //
+app.set('views', path.join(__dirname, 'views'));
 
-// post: group
-app.post('/api/group', (req, res) => {
-  res.send('This is the group page for POST');
-});
 
-// post: group id
-app.post('/api/group/:group_id?/user', (req, res) => {
-  res.send(`This user is added to group ${req.params.group_id}`);
-});
+// *** config middleware *** //
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../client')));
 
-// post: group message
-app.post('/api/group/:group_id?/message', (req, res) => {
-  res.send(`This message is added to group ${req.params.group_id}`);
-});
 
-// get: group message
-app.get('/api/group/:group_id?/message', (req, res) => {
-  res.send(`This message seen added to group ${req.params.group_id}`);
+// *** main routes *** //
+app.use('/', routes);
+
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  let err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // Listen

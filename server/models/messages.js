@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        
+        messages.belongsTo(models.group);
       },
     },
   });

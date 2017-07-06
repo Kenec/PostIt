@@ -7,8 +7,7 @@ module.exports =(sequelize, DataTypes) => {
     email: DataTypes.STRING
   }, {
     classMethods: {
-      associate: (models) => {
-        // associations can be defined here
+      associate: (models) => {        
       },
     },
   });
