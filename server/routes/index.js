@@ -34,14 +34,51 @@ router.post('/api/group', (req, res) => {
       groupid: req.body.groupid,
       groupname: req.body.groupname,
       createdby: req.body.createdby,
-      members: "kene, philip, ronny"
+      members: ""
    }).then(group => {
     res.json(group);
   });
 });
 
+// ** /api/group/<group id>/user **
+router.post('/api/group/:groupid/user', (req, res) => {
+  const groupid = req.params.groupid;
+  const newMember = req.body.new_member;
+  models.group.findOne({
+      where: { groupid:groupid }
+   })
+   .then(group =>{
+     return group.updateAttributes({
+       members:group.dataValues.members+", "+newMember
+     });
+   })
+   .then(updatedGroup => {
+    res.json(updatedGroup);
+  });
+});
 
+// ** /api/group/:groupid/messages **
+router.post('/api/group/:groupid/messages', (req, res) => {
+  models.message.create({
+      groupid: req.params.groupid,
+      message: req.body.message,
+      priority: req.body.priority
+   }).then(message => {
+    res.json(message);
+  });
+});
 
+// ** /api/group/:groupid/messages **
+router.get('/api/group/:groupid/messages', (req, res) => {
+  let groupid = req.params.groupid;
+  models.message.findAll({
+    where:{
+      groupid:groupid
+    }
+   }).then(message => {
+    res.json(message);
+  });
+});
 
 
 module.exports = router;

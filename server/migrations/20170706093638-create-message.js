@@ -8,9 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      messageid: {
-        type: Sequelize.INTEGER
-      },
       groupid: {
         type: Sequelize.INTEGER
       },
