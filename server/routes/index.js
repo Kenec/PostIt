@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models/index');
 
+// ** render /api/user/signup **
+router.get('/api/user/signup', (req, res) => {
+  res.send("Ok this is working");
+});
+
+
 // ** /api/user/signup **
 router.post('/api/user/signup', (req, res) => {
   models.signup.create({
