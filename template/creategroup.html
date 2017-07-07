@@ -35,10 +35,10 @@
             <div class="btn-group">
               <button type="button" class="btn btn-default"><a href=""><span class="glyphicon glyphicon-alert notification"></span><b> Notification </b></a></button>
               <button type="button" class="btn btn-default"><a href=""><span class="glyphicon glyphicon-envelope"></span><b> Message </b></a></button>
-              <button type="button" class="btn btn-default"><a href=""><span class="glyphicon glyphicon-bin"></span><b> Archive </b></a></button>
+              <button type="button" class="btn btn-default"><a href=""><span class="glyphicon glyphicon-trash"></span><b> Archive </b></a></button>
 
               <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"></span> Menu<span class="caret"></span></button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"></span> Menu<span class="caret"></span></button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Create Group</a></li>
                     <li><a href="#">Add Members</a></li>
@@ -50,17 +50,59 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
 
             </div>
-            <div class="col-md-4">
-
+            <div class="col-md-6">
+              <div class="row">
+                  <div class="">
+                    <form>
+                      <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Enter New Group Name">
+                        <div class="input-group-btn">
+                          <button class="btn btn-primary" type="submit">Add Group</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+              </div>
             </div>
             <div class="col-md-4">
-                <div class=""><h2>Created Group</h2></div>
-                <div class="">
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span class="text-primary"><b>Groups Belonged To<b/></span></a>
+                    </h4>
+                  </div>
+                  <div id="collapse1" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <ul>
+                          <li>Andela Fellows</li>
+                          <li>Football Team</li>
+                          <li>Classmates</li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><span class="text-primary"><b>Groups Created<b><span></a>
+                    </h4>
+                  </div>
+                  <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <ul>
+                        <li>Andela Fellows</li>
+                        <li>Football Team</li>
+                        <li>Classmates</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
 
                 </div>
             </div>
