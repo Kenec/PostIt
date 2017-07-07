@@ -11,7 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Create group</title>
+    <title>Sent Messages</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 ">
+            <div class="col-md-2">
               <div class="side-menu"><a href="#"><button class="btn btn-danger btn-block" type="button" name="button">Compose</button></a></div>
               <div class="side-menu"><a href="#">Inbox (5)</a></div>
               <div class="side-menu"><a href="#">Sent Message</a></div>
@@ -61,17 +61,41 @@
             </div>
             <div class="col-md-6">
               <div class="row">
-                  <div class="">
-                    <div class="page-title text-primary">CREATE NEW GROUP</div>
-                    <form>
-                      <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" placeholder="Enter New Group Name">
-                        <div class="input-group-btn">
-                          <button class="btn btn-primary" type="submit">Add Group</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+                <div class="page-title text-primary">
+                <span>RECEIVED MESSAGES</span>
+                <span class="pull-right"></span>
+                </div>
+                <table class="table table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th><span class="glyphicon glyphicon-trash"></span></th>
+                      <th>Received From</th>
+                      <th>Messages</th>
+                      <th>Read By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="checkbox" value=""></td>
+                      <td>Andela Fellows</td>
+                      <td>Hello Guys, Please who is in Abuja now?.... <a href="#">Read</a></td>
+                      <td><em><a href="#">Kene, Obi, Philip and 9 others</a></em></td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" value=""></td>
+                      <td>Classmates</td>
+                      <td>Hey! I want us to have a get together <a href="#">Read</a></td>
+                      <td><em><a href="#">Kene, Obi, Philip and 9 others</a></em></td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" value=""></td>
+                      <td>Football Team</td>
+                      <td>We shall be having our training on Sunday. Be punctual <a href="#">Read</a></td>
+                      <td><em><a href="#">Kene, Obi, Philip and 9 others</a></em></td>
+                    </tr>
+                  </tbody>
+                </table>
+
               </div>
             </div>
             <div class="col-md-4">
@@ -85,9 +109,9 @@
                   <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <ul>
-                          <li>Andela Fellows</li>
-                          <li>Football Team</li>
-                          <li>Classmates</li>
+                          <li><a href="#">Andela Fellows</a></li>
+                          <li><a href="#">Football Team</a></li>
+                          <li><a href="#">Classmates</a></li>
                         </ul>
                     </div>
                   </div>
@@ -101,9 +125,9 @@
                   <div id="collapse2" class="panel-collapse collapse">
                     <div class="panel-body">
                       <ul>
-                        <li>Andela Fellows</li>
-                        <li>Football Team</li>
-                        <li>Classmates</li>
+                        <li><a href="#">Andela Fellows</a></li>
+                        <li><a href="#">Football Team</a></li>
+                        <li><a href="#">Classmates</a></li>
                       </ul>
                     </div>
                   </div>
@@ -112,10 +136,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="footer">
-        <div class="col-md-8"></div>
-        <div class="col-md-2 pull-right bold">&copy; <b>Designed by Kene &nbsp;&nbsp;&nbsp; 2017</b></div>
     </div>
 
 

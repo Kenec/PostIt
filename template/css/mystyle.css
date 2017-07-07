@@ -21,9 +21,15 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height:100px;
+    height:50px;
     background:#D3D3D3
 }
-.notification{
-  
+.side-menu{
+  padding: 0px 0px 5px 0px;
+}
+.page-title{
+  background-color: #D3D3D3;
+  padding: 5px 8px 5px 8px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }

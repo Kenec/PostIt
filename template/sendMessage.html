@@ -11,7 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Create group</title>
+    <title>Send Message</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 ">
+            <div class="col-md-2">
               <div class="side-menu"><a href="#"><button class="btn btn-danger btn-block" type="button" name="button">Compose</button></a></div>
               <div class="side-menu"><a href="#">Inbox (5)</a></div>
               <div class="side-menu"><a href="#">Sent Message</a></div>
@@ -61,17 +61,31 @@
             </div>
             <div class="col-md-6">
               <div class="row">
-                  <div class="">
-                    <div class="page-title text-primary">CREATE NEW GROUP</div>
-                    <form>
-                      <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" placeholder="Enter New Group Name">
-                        <div class="input-group-btn">
-                          <button class="btn btn-primary" type="submit">Add Group</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+                <div class="page-title text-primary">SEND MESSAGE</div>
+                <form class="" action="" method="POST">
+                    <div class="form-group">
+                        <label for="groups">Select Group:</label>
+                        <select class="form-control" name="groups">
+                            <option value="">Andela Fellows</option>
+                            <option value="">Football Teams</option>
+                            <option value="">Classmates</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message_priority">Message Priority:</label>
+                        <select class="form-control" name="message_priority">
+                            <option value="1">Normal</option>
+                            <option value="2">Urgent</option>
+                            <option value="3">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" rows="5" id="message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
               </div>
             </div>
             <div class="col-md-4">
@@ -112,10 +126,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="footer">
-        <div class="col-md-8"></div>
-        <div class="col-md-2 pull-right bold">&copy; <b>Designed by Kene &nbsp;&nbsp;&nbsp; 2017</b></div>
     </div>
 
 
