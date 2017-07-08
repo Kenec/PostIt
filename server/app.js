@@ -2,7 +2,7 @@
 // *** main dependencies *** //
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
+// const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -18,7 +18,7 @@ const app = express();
 
 
 // *** view engine *** //
-let swigg = new swig.Swig();
+const swigg = new swig.Swig();
 app.engine('html', swigg.renderFile);
 app.set('view engine', 'html');
 
@@ -41,7 +41,7 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  let err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
