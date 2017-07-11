@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const group = sequelize.define('Group', {
-    groupid: {
+  const Group = sequelize.define('Group', {
+  id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     groupname: {
       type:DataTypes.STRING,
       unique: true,
-      allowNull:false
+      allowNull:false,
+      validate:{
+        notEmpty:{
+          msg: "Group name must not be empty"
+        },
+      },
     },
     createdby:{
       type:DataTypes.STRING,
@@ -17,16 +22,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        group.belongsTo(models.User,{
+        Group.belongsTo(models.User,{
           foreignKey: 'id',
           as: 'createdby',
         });
-        group.hasMany(models.message,{
+        Group.hasMany(models.Message,{
           onDelete: 'CASCADE'
         });
-        group.hasMany(models.member);
+        Group.hasMany(models.Member);
       },
     },
   });
-  return group;
+  return Group;
 };

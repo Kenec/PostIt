@@ -3,65 +3,24 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models/index');
 
-// ** render /api/user/signup **
-router.get('/api/user/signup', (req, res) => {
-  res.send('Ok this is working');
-});
-
+const userController = require("../controller").user;
+const groupController = require("../controller").group;
+const groupUserController = require("../controller").groupUser;
 
 // ** /api/user/signup **
-router.post('/api/user/signup', (req, res) =>{
-  models.User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  }).then(User =>{
-    res.json(User);
-  });
-});
+router.post('/api/user/signup', userController.create);
 
 // ** /api/user/signin **
-router.post('/api/user/signin', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  models.signup.findOne({
-    where: {
-      username,
-      password
-    }
-  }).then((signup) => {
-    res.json(signup);
-  });
-});
+router.post('/api/user/signin', userController.list);
 
 // ** /api/group **
-router.post('/api/group', (req, res) => {
-  models.group.create({
-    groupname: req.body.groupname,
-    created: req.body.created,
-    members: []
-  }).then((group) => {
-    res.json(group);
-  });
-});
+router.post('/api/group', groupController.create);
 
 // ** /api/group/<group id>/user **
-router.post('/api/group/:groupid/user', (req, res) => {
-  const newMember = req.body.newMember;
-  models.group.findOne({
-    where: {
-       groupid:req.params.groupid
-     }
-  }).then((group) =>{
-      group.update({
-      members:group.members.push(newMember)
-    },{
-      where: {
-        groupid:req.params.groupid
-      }
-    }).then(updatedGroup => res.json(updatedGroup))
-  });
-});
+router.post('/api/group/:groupid/user',groupUserController.create);
+
+// ** /api/group/<group id>/user **
+router.get('/api/group/:groupid',groupUserController.retrieve);
 
 
 // ** /api/group/:groupid/messages **

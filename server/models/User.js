@@ -8,14 +8,35 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type:DataTypes.STRING,
       unique: true,
-      allowNull:false
+      allowNull:false,
+      validate:{
+        isAlphanumeric:{
+          msg: "Must be an Valid String"
+        },
+        notEmpty:{
+          msg: "Username must not be empty"
+        },
+      },
     },
     password:{
-      type:DataTypes.STRING
+      type:DataTypes.STRING,
+      validate:{
+        notEmpty:{
+          msg: "password must not be empty"
+        },
+      },
     },
     email: {
-      type:DataTypes.STRING
-    }
+      type:DataTypes.STRING,
+      validate:{
+        notEmpty:{
+          msg: "email must not be empty"
+        },
+        isEmail:{
+          msg: "Not a valid Email"
+        },
+      },
+    },
   }, {
     classMethods: {
       associate: (models) => {

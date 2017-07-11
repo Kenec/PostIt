@@ -1,23 +1,45 @@
 module.exports = (sequelize, DataTypes) => {
-  const member = sequelize.define('Member', {
+  const Member = sequelize.define('Member', {
     id:{
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
+    },
+    userid:{
+        type: DataTypes.INTEGER,
+        validate:{
+          isInt:{
+            msg: "Userid Must be an Integer"
+          },
+          notEmpty:{
+            msg: "Userid must not be empty"
+          },
+        },
+    },
+    groupid:{
+        type: DataTypes.INTEGER,
+        validate:{
+          isInt:{
+            msg: "Groupid Must be an Integer"
+          },
+          notEmpty:{
+            msg: "Groupid must not be empty"
+          },
+        },
     }
   }, {
     classMethods: {
       associate: (models) => {
-        member.belongsTo(models.group,{
+        Member.belongsTo(models.Group,{
           foreignKey: 'id',
           as: 'Group',
         });
-        member.belongsTo(models.user,{
+        Member.belongsTo(models.User,{
           foreignKey: 'id',
           as: 'User',
         });
       }
     }
   });
-  return member;
+  return Member;
 };

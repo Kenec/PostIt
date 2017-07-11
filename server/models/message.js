@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const message = sequelize.define('Message', {
+  const Message = sequelize.define('Message', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -14,16 +14,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        message.belongsTo(models.user,{
+        Message.belongsTo(models.User,{
           foreignKey: 'id',
           as: 'sentBy',
         });
-        message.belongsTo(models.group,{
+        Message.belongsTo(models.Group,{
           foreignKey: 'id',
           as: 'group',
         });
       },
     },
   });
-  return message;
+  return Message;
 };
