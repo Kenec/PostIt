@@ -10,14 +10,13 @@ router.get('/api/user/signup', (req, res) => {
 
 
 // ** /api/user/signup **
-router.post('/api/user/signup', (req, res) => {
-  models.signup.create({
-    userid: req.body.userid,
+router.post('/api/user/signup', (req, res) =>{
+  models.User.create({
     username: req.body.username,
     email: req.body.email,
     password: req.body.password
-  }).then((signup) => {
-    res.json(signup);
+  }).then(User =>{
+    res.json(User);
   });
 });
 
@@ -38,10 +37,9 @@ router.post('/api/user/signin', (req, res) => {
 // ** /api/group **
 router.post('/api/group', (req, res) => {
   models.group.create({
-    groupid: req.body.groupid,
     groupname: req.body.groupname,
-    createdby: req.body.createdby,
-    members: ''
+    created: req.body.created,
+    members: []
   }).then((group) => {
     res.json(group);
   });
@@ -49,18 +47,22 @@ router.post('/api/group', (req, res) => {
 
 // ** /api/group/<group id>/user **
 router.post('/api/group/:groupid/user', (req, res) => {
-  const groupid = req.params.groupid;
-  const newMember = req.body.new_member;
+  const newMember = req.body.newMember;
   models.group.findOne({
-    where: { groupid }
-  })
-    .then(group => group.updateAttributes({
-      members: `${group.dataValues.members}, ${newMember}`
-    }))
-    .then((updatedGroup) => {
-      res.json(updatedGroup);
-    });
+    where: {
+       groupid:req.params.groupid
+     }
+  }).then((group) =>{
+      group.update({
+      members:group.members.push(newMember)
+    },{
+      where: {
+        groupid:req.params.groupid
+      }
+    }).then(updatedGroup => res.json(updatedGroup))
+  });
 });
+
 
 // ** /api/group/:groupid/messages **
 router.post('/api/group/:groupid/messages', (req, res) => {
