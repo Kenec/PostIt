@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         Group.hasMany(models.Message,{
           onDelete: 'CASCADE'
         });
-        Group.hasMany(models.Member);
+        Group.belongsTo(models.Member);
       },
     },
   });

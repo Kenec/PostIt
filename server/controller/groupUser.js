@@ -24,24 +24,6 @@ module.exports = {
         }
     })
   },
-  retrieve(req, res) {
-  return Member
-    .findAll({
-      where:{
-        groupid: req.params.groupid,
-      },
-      include:[{
-        model:'Group',
-      }],
-    })
-    .then(user => {
-      if(user.length == 0){
-        return res.status(404).send({message: "Member for the Group not found"});
-      }
-      return res.status(200).send(user);
-    })
-    .catch(error => res.status(400).send(error));
-},
 
 
 };

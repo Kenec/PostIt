@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     priority_level:{
       type: DataTypes.STRING
+    },
+    groupid:{
+      type: DataTypes.INTEGER
+    },
+    sentBy:{
+      type: DataTypes.INTEGER
     }
   }, {
     classMethods: {

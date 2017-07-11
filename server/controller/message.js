@@ -1,18 +1,18 @@
-const Group = require("../models").Group;
-const Member = require("../models").Member;
-const User = require("../models").User;
-
+const Message = require("../models").Message;
 
 module.exports = {
   create(req, res) {
-    return Group
+    return Message
       .create({
-        groupname: req.body.groupname,
-        createdby: req.body.createdby,
+        message: req.body.message,
+        priority_level: req.body.priority_level,
+        groupid: req.params.groupid,
+        sentBy: req.body.sentBy,
       })
       .then(group => res.status(201).send(group))
       .catch(error => res.status(400).send(error));
   },
+
   retrieve(req, res) {
   return Group
     .findById(req.params.groupid,{

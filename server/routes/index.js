@@ -6,6 +6,7 @@ const models = require('../models/index');
 const userController = require("../controller").user;
 const groupController = require("../controller").group;
 const groupUserController = require("../controller").groupUser;
+const messageController = require("../controller").message;
 
 // ** /api/user/signup **
 router.post('/api/user/signup', userController.create);
@@ -17,22 +18,13 @@ router.post('/api/user/signin', userController.list);
 router.post('/api/group', groupController.create);
 
 // ** /api/group/<group id>/user **
-router.post('/api/group/:groupid/user',groupUserController.create);
+router.post('/api/group/:groupid/user', groupUserController.create);
 
 // ** /api/group/<group id>/user **
-router.get('/api/group/:groupid',groupUserController.retrieve);
-
+router.get('/api/group/:groupid', groupController.retrieve);
 
 // ** /api/group/:groupid/messages **
-router.post('/api/group/:groupid/messages', (req, res) => {
-  models.message.create({
-    groupid: req.params.groupid,
-    message: req.body.message,
-    priority: req.body.priority
-  }).then((message) => {
-    res.json(message);
-  });
-});
+router.post('/api/group/:groupid/message',messageController.create);
 
 // ** /api/group/:groupid/messages **
 router.get('/api/group/:groupid/messages', (req, res) => {
