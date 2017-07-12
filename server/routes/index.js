@@ -1,12 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const models = require('../models/index');
 
-const userController = require("../controller").user;
-const groupController = require("../controller").group;
-const groupUserController = require("../controller").groupUser;
-const messageController = require("../controller").message;
+const userController = require('../controller').user;
+const groupController = require('../controller').group;
+const groupUserController = require('../controller').groupUser;
+const messageController = require('../controller').message;
 
 // ** /api/user/signup **
 router.post('/api/user/signup', userController.create);
@@ -21,22 +20,13 @@ router.post('/api/group', groupController.create);
 router.post('/api/group/:groupid/user', groupUserController.create);
 
 // ** /api/group/<group id>/user **
-router.get('/api/group/:groupid', groupController.retrieve);
+router.get('/api/group/:groupid', groupUserController.retrieve);
 
 // ** /api/group/:groupid/messages **
-router.post('/api/group/:groupid/message',messageController.create);
+router.post('/api/group/:groupid/message', messageController.create);
 
 // ** /api/group/:groupid/messages **
-router.get('/api/group/:groupid/messages', (req, res) => {
-  const groupid = req.params.groupid;
-  models.message.findAll({
-    where: {
-      groupid
-    }
-  }).then((message) => {
-    res.json(message);
-  });
-});
+router.get('/api/group/:groupid/messages', messageController.retrieve);
 
 
 module.exports = router;

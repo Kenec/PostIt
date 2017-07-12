@@ -1,4 +1,4 @@
-const Message = require("../models").Message;
+const Message = require('../models').Message;
 
 module.exports = {
   create(req, res) {
@@ -9,23 +9,25 @@ module.exports = {
         groupid: req.params.groupid,
         sentBy: req.body.sentBy,
       })
-      .then(group => res.status(201).send(group))
+      .then(message => res.status(201).send(message))
       .catch(error => res.status(400).send(error));
   },
 
   retrieve(req, res) {
-  return Group
-    .findById(req.params.groupid,{
-      include:[{
-        model:User,
-      }],
-    })
-    .then(user => {
-      if(user.length == 0){
-        return res.status(404).send({message: "Member for the Group not found"});
-      }
-      return res.status(200).send(user);
-    })
-    .catch(error => res.status(400).send(error));
-},
+    return Message
+      .findAll({
+        where: {
+          groupid: req.params.groupid,
+        }
+      })
+      .then((user) => {
+        if (user.length === 0) {
+          return res.status(404).send({
+            message: 'No message in this group yet'
+          });
+        }
+        return res.status(200).send(user);
+      })
+      .catch(error => res.status(400).send(error));
+  },
 };

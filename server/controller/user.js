@@ -1,4 +1,4 @@
-const User = require("../models").User;
+import { User } from '../models';
 
 module.exports = {
   create(req, res) {
@@ -12,7 +12,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-    list(req, res) {
+  list(req, res) {
     return User
       .findOne({
         where: {

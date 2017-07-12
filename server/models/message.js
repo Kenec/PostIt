@@ -8,23 +8,23 @@ module.exports = (sequelize, DataTypes) => {
     message: {
       type: DataTypes.TEXT
     },
-    priority_level:{
+    priority_level: {
       type: DataTypes.STRING
     },
-    groupid:{
+    groupid: {
       type: DataTypes.INTEGER
     },
-    sentBy:{
+    sentBy: {
       type: DataTypes.INTEGER
     }
   }, {
     classMethods: {
       associate: (models) => {
-        Message.belongsTo(models.User,{
+        Message.belongsTo(models.User, {
           foreignKey: 'id',
           as: 'sentBy',
         });
-        Message.belongsTo(models.Group,{
+        Message.belongsTo(models.Group, {
           foreignKey: 'id',
           as: 'group',
         });

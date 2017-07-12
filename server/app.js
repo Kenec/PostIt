@@ -1,6 +1,6 @@
 
 // *** main dependencies *** //
-const express = require('express');
+import express from 'express';
 const path = require('path');
 // const favicon = require('serve-favicon');
 const logger = require('morgan');
