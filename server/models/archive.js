@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     userid: DataTypes.INTEGER
   }, {
     classMethods: {
-      associate: ( models ) => {
+      associate: (models) => {
         // associations can be defined here
       }
     }

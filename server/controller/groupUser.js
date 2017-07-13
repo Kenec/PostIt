@@ -22,7 +22,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  //retreive group by its id
+  // retreive group by its id
   retrieve(req, res) {
     return Group
       .findById(req.params.groupid, {
@@ -42,7 +42,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  //list all group by its id
+  // list all group by its id
   list(req, res) {
     return Group
       .findAll()
