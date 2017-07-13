@@ -1,18 +1,15 @@
-const Member = require('../models').Member;
-const Group = require('../models').Group;
-const User = require('../models').User;
-
+import { userGroups, Group } from '../models';
 
 module.exports = {
   create(req, res) {
-    Member.findAll({
+    userGroups.findAll({
       where: {
         userid: req.body.userid,
         groupid: req.params.groupid,
-      }
+      },
     }).then((result) => {
       if (result.length === 0) {
-        return Member
+        return userGroups
           .create({
             userid: req.body.userid,
             groupid: req.params.groupid,
@@ -21,24 +18,37 @@ module.exports = {
           .catch(error => res.status(400).send(error));
       }
       res.status(400).send('Duplicate User Error');
-    });
+    })
+      .catch(error => res.status(400).send(error));
   },
+
+  //retreive group by its id
   retrieve(req, res) {
-    return Member
-      .findAll({
-        include: [{
-          model: Group
-        }]
+    return Group
+      .findById(req.params.groupid, {
+        // include: [{
+        //   model:Group,
+        //   //all: true,
+        // }]
       })
       .then((user) => {
         if (user.length === 0) {
           return res.status(404).send({
-            message: 'Member for the Group not found'
+            message: 'Group not found'
           });
         }
         return res.status(200).send(user);
       })
       .catch(error => res.status(400).send(error));
   },
+
+  //list all group by its id
+  list(req, res) {
+    return Group
+      .findAll()
+      .then(group => res.status(200).send(group))
+      .catch(error => res.status(400).send(error));
+  },
+
 
 };

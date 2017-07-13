@@ -20,14 +20,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Message.belongsTo(models.User, {
-          foreignKey: 'id',
-          as: 'sentBy',
-        });
-        Message.belongsTo(models.Group, {
-          foreignKey: 'id',
-          as: 'group',
-        });
+        Message.belongsTo(models.User);
+        Message.belongsTo(models.Group);
       },
     },
   });

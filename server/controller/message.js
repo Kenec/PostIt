@@ -1,4 +1,4 @@
-const Message = require('../models').Message;
+import { Message } from '../models';
 
 module.exports = {
   create(req, res) {

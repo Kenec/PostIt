@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Member = sequelize.define('Member', {
+  const userGroups = sequelize.define('userGroups', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -29,17 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
-      associate: (models) => {
-        Member.belongsTo(models.Group, {
-          foreignKey: 'id',
-          as: 'Group',
-        });
-        Member.belongsTo(models.User, {
-          foreignKey: 'id',
-          as: 'User',
-        });
-      }
+
     }
   });
-  return Member;
+  return userGroups;
 };

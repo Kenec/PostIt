@@ -1,6 +1,5 @@
-const Group = require('../models').Group;
-const User = require('../models').User;
-
+import { Group } from '../models';
+import { userGroups } from '../models';
 
 module.exports = {
   create(req, res) {
@@ -9,7 +8,12 @@ module.exports = {
         groupname: req.body.groupname,
         createdby: req.body.createdby,
       })
-      .then(group => res.status(201).send(group))
+      .then(group => userGroups.create({
+        groupid: group.id,
+        userid: req.body.createdby
+      })
+        .then(() => res.status(201).send(group))
+        .catch(error => res.status(400).send(error)))
       .catch(error => res.status(400).send(error));
   },
 

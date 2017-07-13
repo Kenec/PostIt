@@ -37,13 +37,18 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-  }, {
-    classMethods: {
-      associate: (models) => {
-        User.hasMany(models.Message);
-        User.belongsToMany(models.Group);
-      }
-    }
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Message, {
+      foreignKey: 'sentBy',
+    });
+    // User.belongsToMany(models.Group, {
+    //   as: 'Users',
+    //   through: 'userGroups',
+    //   foreignKey: 'user_id',
+    // });
+  };
+
   return User;
 };

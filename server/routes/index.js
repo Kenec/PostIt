@@ -22,6 +22,9 @@ router.post('/api/group/:groupid/user', groupUserController.create);
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupUserController.retrieve);
 
+// ** /api/group/<group id>/user **
+router.get('/api/group', groupUserController.list);
+
 // ** /api/group/:groupid/messages **
 router.post('/api/group/:groupid/message', messageController.create);
 

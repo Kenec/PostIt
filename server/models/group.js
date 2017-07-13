@@ -22,14 +22,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Group.belongsTo(models.User, {
-          foreignKey: 'id',
-          as: 'createdby',
-        });
         Group.hasMany(models.Message, {
           onDelete: 'CASCADE'
         });
-        Group.belongsTo(models.Member);
+        Group.belongsToMany(models.User, {
+          through: 'userGroups',
+          foreignKey: 'groupid'
+        });
       },
     },
   });
