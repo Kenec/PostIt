@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "../scss/main.css",
+	"sources": [
+		"../scss/main.scss"
+	],
+	"sourcesContent": [
+		"$padding_left: 30px;\r\n$margin-right: 15px;\r\n$margin-top: 30px;\r\n$margin-bottom: 10px;\r\n$font_size: 30px;\r\n$link_color: #191970;\r\n$footer_height: 50px;\r\n$footer_background:#D3D3D3;\r\n$page_title_background_color:#D3D3D3;\r\n$padding_bottom: 50px;\r\n$hundred: 100%;\r\n$message_board_height: 400px;\r\n.my_title{\r\n  padding-left: $padding_left;\r\n  font-size: $font_size;\r\n  img{\r\n    margin-right: $margin-right;\r\n    float: left;\r\n  }\r\n\r\n}\r\n\r\n.bold-black-link{\r\n  margin-top: $margin-top;\r\n  a{\r\n    color: $link_color;\r\n    text-decoration: underline;\r\n    font-weight: bold;\r\n    font-style: italic;\r\n    margin-bottom: $margin-bottom;\r\n\r\n  }\r\n}\r\nhtml,\r\nbody {\r\n   margin:0;\r\n   padding:0;\r\n   height:$hundred;\r\n}\r\n.content{\r\n   min-height:$hundred;\r\n   position:relative;\r\n   padding-bottom: $padding_bottom;\r\n}\r\n.footer{\r\n    bottom: 0;\r\n    position: absolute;\r\n    width:$hundred;\r\n    height:$footer_height;\r\n    background:$footer_background;\r\n}\r\n.side-menu{\r\n  padding: 0px 0px 5px 0px;\r\n}\r\n.page-title{\r\n  background-color: $page_title_background_color;\r\n  padding: 5px 8px 5px 8px;\r\n  margin-bottom: $margin-bottom;\r\n  font-weight: bold;\r\n}\r\n.message_board{\r\n  height:$message_board_height;\r\n  line-height:2em;\r\n  overflow: auto ;\r\n  padding:5px;\r\n}\r\n"
+	],
+	"mappings": ";AAYA,AAAA,SAAS,CAAA;EACP,YAAY,EAbC,IAAI;EAcjB,SAAS,EAVC,IAAI;CAgBf;;;AARD,AAGE,SAHO,CAGP,GAAG,CAAA;EACD,YAAY,EAfD,IAAI;EAgBf,KAAK,EAAE,IAAK;CACb;;;AAIH,AAAA,gBAAgB,CAAA;EACd,UAAU,EArBC,IAAI;CA8BhB;;;AAVD,AAEE,gBAFc,CAEd,CAAC,CAAA;EACC,KAAK,EApBI,OAAO;EAqBhB,eAAe,EAAE,SAAU;EAC3B,WAAW,EAAE,IAAK;EAClB,UAAU,EAAE,MAAO;EACnB,aAAa,EA1BD,IAAI;CA4BjB;;;AAEH,AAAA,IAAI;AACJ,AAAA,IAAI,CAAC;EACF,MAAM,EAAC,CAAE;EACT,OAAO,EAAC,CAAE;EACV,MAAM,EA3BC,IAAI;CA4Bb;;;AACD,AAAA,QAAQ,CAAA;EACL,UAAU,EA9BH,IAAI;EA+BX,QAAQ,EAAC,QAAS;EAClB,cAAc,EAjCA,IAAI;CAkCpB;;;AACD,AAAA,OAAO,CAAA;EACH,MAAM,EAAE,CAAE;EACV,QAAQ,EAAE,QAAS;EACnB,KAAK,EArCC,IAAI;EAsCV,MAAM,EA1CM,IAAI;EA2ChB,UAAU,EA1CK,OAAO;CA2CzB;;;AACD,AAAA,UAAU,CAAA;EACR,OAAO,EAAE,eAAgB;CAC1B;;;AACD,AAAA,WAAW,CAAA;EACT,gBAAgB,EA/CW,OAAO;EAgDlC,OAAO,EAAE,eAAgB;EACzB,aAAa,EAtDC,IAAI;EAuDlB,WAAW,EAAE,IAAK;CACnB;;;AACD,AAAA,cAAc,CAAA;EACZ,MAAM,EAlDe,KAAK;EAmD1B,WAAW,EAAC,GAAI;EAChB,QAAQ,EAAE,IAAM;EAChB,OAAO,EAAC,GAAI;CACb",
+	"names": []
+}

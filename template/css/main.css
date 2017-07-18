@@ -1,0 +1,72 @@
+/* line 13, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.my_title {
+  padding-left: 30px;
+  font-size: 30px;
+}
+
+/* line 16, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.my_title img {
+  margin-right: 15px;
+  float: left;
+}
+
+/* line 23, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.bold-black-link {
+  margin-top: 30px;
+}
+
+/* line 25, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.bold-black-link a {
+  color: #191970;
+  text-decoration: underline;
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+/* line 34, C:/Javascript_Project/PostIt/template/scss/main.scss */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* line 40, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.content {
+  min-height: 100%;
+  position: relative;
+  padding-bottom: 50px;
+}
+
+/* line 45, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.footer {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  background: #D3D3D3;
+}
+
+/* line 52, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.side-menu {
+  padding: 0px 0px 5px 0px;
+}
+
+/* line 55, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.page-title {
+  background-color: #D3D3D3;
+  padding: 5px 8px 5px 8px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* line 61, C:/Javascript_Project/PostIt/template/scss/main.scss */
+.message_board {
+  height: 400px;
+  line-height: 2em;
+  overflow: auto;
+  padding: 5px;
+}
+
+/*# sourceMappingURL=../css/main.map */

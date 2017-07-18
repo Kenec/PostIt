@@ -1,0 +1,23 @@
+
+{
+  "development": {
+    "username": "postgres",
+    "password": "kene",
+    "database": "postit",
+    "host": "127.0.0.1",
+    "port":"5000",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "kene",
+    "database": "postit",
+    "host": "127.0.0.1",
+    "port":"5000",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable":"DATABASE_URL",
+    "dialect": "postgres"
+  }
+}
