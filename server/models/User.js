@@ -1,3 +1,5 @@
+import { bcrypt } from 'bcrypt-nodejs';
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
@@ -28,6 +30,7 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique: true,
       validate: {
         notEmpty: {
           msg: 'email must not be empty'
@@ -37,18 +40,32 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
+  },{
+    classMethods: {
+      associate(models) {
+        User.belongsToMany(models.Group, { through: "userGroups" });
+      }
+    },
+    // instanceMethods: {
+    //     generateHash: (password) => {
+    //         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    //     },
+    //     validPassword: (password) => {
+    //         return bcrypt.compareSync(password, this.password);
+    //     },
+    // }
   });
 
-  User.associate = (models) => {
-    User.hasMany(models.Message, {
-      foreignKey: 'sentBy',
-    });
-    // User.belongsToMany(models.Group, {
-    //   as: 'Users',
-    //   through: 'userGroups',
-    //   foreignKey: 'user_id',
-    // });
-  };
+  // User.associate = (models) => {
+  //   User.hasMany(models.Message, {
+  //     foreignKey: 'sentBy',
+  //   });
+  //   // User.belongsToMany(models.Group, {
+  //   //   as: 'Users',
+  //   //   through: 'userGroups',
+  //   //   foreignKey: 'user_id',
+  //   // });
+  // };
 
   return User;
 };

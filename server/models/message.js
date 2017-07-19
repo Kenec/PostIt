@@ -6,16 +6,40 @@ export default (sequelize, DataTypes) => {
       primaryKey: true
     },
     message: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Message must not be empty'
+        },
+      },
     },
     priority_level: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Priority must not be empty'
+        },
+      },
     },
     groupid: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'GroupId must not be empty'
+        },
+      },
     },
     sentBy: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'sentBy must not be empty'
+        },
+      },
     }
   }, {
     classMethods: {

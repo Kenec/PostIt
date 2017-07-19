@@ -28,4 +28,4 @@ export default {
     },
   }),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Groups')
-};
+}

@@ -11,9 +11,17 @@ export default {
         groupid: group.id,
         userid: req.body.createdby
       })
-        .then(() => res.status(201).send(group))
+        .then(() => res.status(201).send({
+          groupname: group.groupname,
+          message: 'group created successfully',
+          success:true,
+        }))
         .catch(error => res.status(400).send(error)))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        groupname: error.errors[0].message,
+        message: 'group not created',
+        success:false,
+      }));
   },
 
 };

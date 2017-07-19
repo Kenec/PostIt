@@ -14,10 +14,17 @@ export default {
             userid: req.body.userid,
             groupid: req.params.groupid,
           })
-          .then(userGroup => res.status(201).send(userGroup))
+          .then(userGroup => res.status(201).send({
+            message: 'User Added',
+            groupid: userGroup.groupid,
+            success: true
+          }))
           .catch(error => res.status(400).send(error));
       }
-      res.status(400).send('Duplicate User Error');
+      res.status(400).send({
+        message: 'User  Already Exist',
+        success: false
+      });
     })
       .catch(error => res.status(400).send(error));
   },
