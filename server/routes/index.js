@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import controller from '../controller';
 import jwt from "jsonwebtoken";
 
@@ -10,7 +11,7 @@ const messageController = controller.message;
 
 // ** /api/user/signup **
 router.get('/', (req, res) => {
-  res.send('<h1>This is the Home Page</h2>');
+  res.sendFile(path.resolve('../client/index.html'));
 });
 
 // ** /api/user/signup **

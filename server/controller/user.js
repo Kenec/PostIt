@@ -17,7 +17,7 @@ export default {
         email: user.email
       }))
       .catch(error => res.status(400).send({
-        message: error.errors[0].message,
+        message: 'Username already exists',
         success: false
       }));
   },
