@@ -9,9 +9,19 @@ const groupController = controller.group;
 const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
-// ** /api/user/signup **
+// ** /signin **
 router.get('/', (req, res) => {
-  res.sendFile(path.resolve('../client/index.html'));
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /signup **
+router.get('/signup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /forgotpassword **
+router.get('/recoverpassword', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
 });
 
 // ** /api/user/signup **

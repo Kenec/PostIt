@@ -15,9 +15,3 @@ cache:
 before_script:
   - npm install sequelize-cli -g
   - sequelize db:migrate
-after_script:
-  - nyc npm test && nyc report --reporter=text-lcov | coveralls
-after_success:
-  - npm run coveralls
-notifications:
-  webhooks: https://coveralls.io/webhook?repo_token=H9AhM6hCSE6BzPXk2XQRY420Ok1spAQ0f

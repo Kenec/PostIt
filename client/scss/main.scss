@@ -1,0 +1,77 @@
+$padding_left: 30px;
+$margin-right: 15px;
+$margin-top: 30px;
+$margin-bottom: 10px;
+$font_size: 30px;
+$link_color: #191970;
+$footer_height: 50px;
+$footer_background:#D3D3D3;
+$page_title_background_color:#D3D3D3;
+$padding_bottom: 50px;
+$hundred: 100%;
+$message_board_height: 400px;
+
+
+.my_title{
+  padding-left: $padding_left;
+  font-size: $font_size;
+  img{
+    margin-right: $margin-right;
+    float: left;
+  }
+
+}
+
+.image{
+  margin-right: $margin-right;
+  float: left;
+}
+
+.big-font{
+  font-size: $font_size - 5;
+}
+
+.bold-black-link{
+  margin-top: $margin-top;
+  a{
+    color: $link_color;
+    text-decoration: underline;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: $margin-bottom;
+
+  }
+}
+html,
+body {
+   margin:0;
+   padding:0;
+   height:$hundred;
+}
+.content{
+   min-height:$hundred;
+   position:relative;
+   padding-bottom: $padding_bottom;
+}
+.footer{
+    bottom: 0;
+    position: absolute;
+    width:$hundred;
+    height:$footer_height;
+    background:$footer_background;
+}
+.side-menu{
+  padding: 0px 0px 5px 0px;
+}
+.page-title{
+  background-color: $page_title_background_color;
+  padding: 5px 8px 5px 8px;
+  margin-bottom: $margin-bottom;
+  font-weight: bold;
+}
+.message_board{
+  height:$message_board_height;
+  line-height:2em;
+  overflow: auto ;
+  padding:5px;
+}

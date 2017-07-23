@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
+import NavigationBar from './NavigationBar';
+import Footer from './Footer';
+
+require('../scss/main.scss');
 
 class App extends Component {
 
   render(){
-    const age = 8;
-    let message = age < 8 ? <h2>You can Order only soft drinks</h2> : <h2>You can order Beer</h2>;
-
-    return message
+    return(
+      <div>
+        <div className='content'>
+            <NavigationBar />
+            {this.props.children}
+        </div>
+      </div>
+    );
   }
 }
 
