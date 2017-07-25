@@ -1,7 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import axios from 'axios';
 
 class Signin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: ''
+    }
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(e){
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  onSubmit(e){
+    e.preventDefault();
+    //axios.post('/api/user/signin',{username:this.state.username, password: this.state.password});
+    //console.log(this.state);
+    this.props.userSigninRequest();
+  }
 
   render(){
     return(
@@ -19,7 +42,7 @@ class Signin extends Component {
                           PostIt is a messenger application that allows you post messages to your created group.
                           <b>PostIt </b>
                           always deliver your messages on time.
-                        </span>
+                        </span><hr/>
                     </div>
                   </div>
               </div>
@@ -36,18 +59,18 @@ class Signin extends Component {
                     <div className="panel-heading"><h4>Login</h4></div>
                     <div className="panel-body">
                         <div className='row'>
-                            <form className="" action="" method="">
+                            <form onSubmit={this.onSubmit} className="" action="" method="">
                               <div className='row'>
                                 <div className="input-field">
-                                    <input type="text" className="validate" placeholder="Enter your username"  id="username" required/>
-                                    <label for="username">Username:</label>
+                                    <input type="text" className="validate" onChange={this.onChange} value={this.state.username} name="username" placeholder="Enter your username"  id="username" required/>
+                                    <label htmlFor="username">Username:</label>
                                 </div>
 
                                 <div className="input-field">
-                                    <input type="password" name="password" placeholder="Enter your password" className="validate" id="pwd" required/>
-                                    <label for="pwd">Password:</label>
+                                    <input type="password" name="password" onChange={this.onChange} value={this.state.password} placeholder="Enter your password" className="validate" id="pwd" required/>
+                                    <label htmlFor="pwd">Password:</label>
                                 </div>
-                                <button type="submit" className="btn btn-primary">Login</button>
+                                <button type="submit" name="signin_btn" className="btn btn-primary">Login</button>
                               </div>
                             </form>
                         </div>

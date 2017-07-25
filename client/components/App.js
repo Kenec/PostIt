@@ -12,6 +12,7 @@ class App extends Component {
         <div className='content'>
             <NavigationBar />
             {this.props.children}
+            <Footer />
         </div>
       </div>
     );

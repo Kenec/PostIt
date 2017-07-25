@@ -14,6 +14,7 @@
   "author": "Kene",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.2",
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -52,6 +53,7 @@
     "react-router": "^2.8.1",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
     "sequelize": "^4.2.1",
     "sequelize-cli": "^2.7.0",
     "serve-favicon": "^2.4.3",

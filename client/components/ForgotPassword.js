@@ -24,7 +24,7 @@ class ForgotPassword extends Component {
                                 <input type="email" className="form-control"  name="email" id="email" required/>
                             </div>
 
-                            <button type="submit" className="btn btn-primary">Recover Password</button>
+                            <button type="submit" name="forgotpassword_btn" className="btn btn-primary">Recover Password</button>
                         </form>
                         <div  className="text-primary">
                           <br/>
