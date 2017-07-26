@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
-//import axios from 'axios';
+import { Link, browserHistory } from 'react-router';
+import axios from 'axios';
 import { connect } from 'react-redux';
-import { userSignupRequest } from '../actions/signupActions';
 
+import { userSignupRequest } from '../actions/signupActions';
 
 class Signup extends Component {
   constructor(props) {
@@ -13,7 +13,9 @@ class Signup extends Component {
       email:'',
       phone:'',
       password: '',
-      repassword:''
+      repassword:'',
+      errors: {},
+      success: {}
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -27,12 +29,20 @@ class Signup extends Component {
 
   onSubmit(e){
     e.preventDefault();
-    //axios.post('/api/user/signin',{username:this.state.username, password: this.state.password});
-    console.log(this.state);
-    this.props.userSignupRequest(this.state);
+    this.setState({ errors: {}, success: {} });
+    this.props.userSignupRequest(this.state)
+      .then(
+        () => {
+          browserHistory.push('/');
+        },
+        ( {response} ) => this.setState({ errors: response.data })
+      )
+      .catch((error) => {});
   }
 
   render(){
+    const { errors } = this.state;
+    const { userSignupRequest } = this.props;
     return(
       <div className="container-fluid">
           <div className="row">
@@ -64,8 +74,9 @@ class Signup extends Component {
                   </div>
                     <div className="panel-heading"><h4>Signup</h4></div>
                     <div className="panel-body">
+                        {errors.message && <span className="help-block red-text"><b>{errors.message}</b></span>}
                         <div className='row'>
-                            <form onSubmit={this.onSubmit} className="" action="" method="">
+                          <form onSubmit={this.onSubmit} className="" action="" method="">
                               <div className='row'>
                                 <div className="input-field">
                                     <input type="text" className="validate" name="username" onChange={this.onChange} value={this.props.username} placeholder="Enter your username"  id="username" required/>
@@ -112,4 +123,7 @@ class Signup extends Component {
 Signup.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired
 }
-export default connect(null, {userSignupRequest})(Signup);
+Signup.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+export default connect((state) => { return {}}, {userSignupRequest})(Signup);

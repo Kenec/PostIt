@@ -20,7 +20,7 @@ class ForgotPassword extends Component {
                         <form className="" action="" method="POST">
 
                             <div className="form-group">
-                                <label for="email">Email address:</label>
+                                <label htmlFor="email">Email address:</label>
                                 <input type="email" className="form-control"  name="email" id="email" required/>
                             </div>
 

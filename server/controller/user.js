@@ -10,14 +10,14 @@ export default {
         email: req.body.email,
         password: md5(req.body.password)
       })
-      .then(user => res.status(201).send({
+      .then(user => res.status(201).json({
         message: 'User Created successfully',
         success:true,
         username: user.username,
         email: user.email
       }))
-      .catch(error => res.status(400).send({
-        message: 'Username already exists',
+      .catch(error => res.status(400).json({
+        message: 'Account Already Exists!',
         success: false
       }));
   },
