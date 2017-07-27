@@ -10,17 +10,7 @@ const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
 // ** /signin **
-router.get('/', (req, res) => {
-  res.sendFile(path.resolve('./client/index.html'));
-});
-
-// ** /signup **
-router.get('/signup', (req, res) => {
-  res.sendFile(path.resolve('./client/index.html'));
-});
-
-// ** /forgotpassword **
-router.get('/recoverpassword', (req, res) => {
+router.get('/*', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
 

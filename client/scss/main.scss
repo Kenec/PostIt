@@ -22,6 +22,18 @@ $message_board_height: 400px;
 
 }
 
+textarea {
+   resize: none;
+}
+
+a:link{
+  text-decoration: none;
+}
+
+a:hover{
+  font-weight: bold;
+}
+
 .image{
   margin-right: $margin-right;
   float: left;
