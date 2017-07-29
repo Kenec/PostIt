@@ -1,3 +1,3 @@
 export default {
-  'secret':'mynameiskenechukwu'
+  jwtSecret:'mynameiskenechukwu'
 }

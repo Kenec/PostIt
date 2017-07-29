@@ -31,7 +31,7 @@ class Signin extends Component {
       .then(
         (res) => this.context.router.push('/message'),
         ({response}) => this.setState({
-          errors: response.data.message,
+          errors: response.data,
           isLoading: false
         })
       );
@@ -73,6 +73,7 @@ class Signin extends Component {
                       <div className="panel-heading"><h4>Login</h4></div>
                       <div className="panel-body">
                           <div className='row'>
+                            {errors.message && <div className="alert alert-danger">{errors.message}</div>}
                               <form onSubmit={this.onSubmit} className="" action="" method="">
                                 <div className='row'>
                                   <div className="input-field">

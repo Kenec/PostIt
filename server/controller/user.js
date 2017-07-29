@@ -1,6 +1,7 @@
 import { User } from '../models';
 import jwt from 'jsonwebtoken';
 import md5 from 'md5';
+import config from '../config';
 
 export default {
   create(req, res) {
@@ -33,14 +34,15 @@ export default {
           if (user[0]) {
             // create an authToken for the user
             const token = jwt.sign({
-              data: user[0].id
-            }, "kenechukwu", { expiresIn: "2h" });
+              id: user[0].id,
+              username: user[0].username
+            }, config.jwtSecret, { expiresIn: "2h" });
 
             res
               .status(202)
               .send({
                 token,
-                message: `${user[0].id} has successfully logged in`,
+                message: 'Successfully logged in',
                 username: `${user[0].username}`,
                 success:true,
               });
@@ -49,7 +51,7 @@ export default {
 
           res.status(401)
             .send({
-              message: "username not found, please register"
+              message: "Username not found, please register"
             });
         });
     },
