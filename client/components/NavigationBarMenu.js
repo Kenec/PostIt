@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { logout } from '../actions/signinActions';
 
 class NavigationBarMenu extends Component {
-
+  logout(e){
+    e.preventDefault;
+    this.props.logout();
+  }
   render(){
-
+    const { isAuthenticated, user } = this.props.auth
     return(
       <div className="well container-fluid ">
           <div className="row">
@@ -13,8 +18,8 @@ class NavigationBarMenu extends Component {
                 <strong className="text-info"><b>POSTIT</b></strong>
               </div>
               <div className="col-md-4 right-align">
-                <a href="#"><span className="glyphicon glyphicon-user">&nbsp;</span>Welcome Kene!</a>
-                <a href="#">&nbsp;&nbsp;&nbsp;Logout</a>
+                <a href="#"><span className="glyphicon glyphicon-user">&nbsp;</span>Welcome {isAuthenticated &&  user.username  }!</a>
+                <a href="" onClick={this.logout.bind(this)}>&nbsp;&nbsp;&nbsp;Logout</a>
               </div>
               <div className="row">
                 <div className="col-md-6">
@@ -35,4 +40,15 @@ class NavigationBarMenu extends Component {
   }
 }
 
-export default NavigationBarMenu;
+NavigationBarMenu.propTypes = {
+  auth: React.PropTypes.object.isRequired,
+  logout: React.PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    auth: state.userLoginReducer
+  };
+}
+
+export default connect(mapStateToProps, {logout})(NavigationBarMenu);

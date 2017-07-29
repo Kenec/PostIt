@@ -14,19 +14,21 @@ import CreateGroup from '../components/CreateGroup';
 import AddUser from '../components/AddUser';
 import GroupInfo from '../components/GroupInfo';
 
+import requireAuth from '../utils/requireAuth';
+
 export default (
   <Route path='/' component={App} >
       <IndexRoute component={Signin} />
       <Route path='signup' component={Signup} />
       <Route path='recoverpassword' component={ForgotPassword} />
 
-      <Route path='/message' component={MessageBoard} />
-      <Route path='/composeMessage' component={ComposeMessage} />
-      <Route path='/sentMessage' component={SentMessage} />
-      <Route path='/archiveMessage' component={ArchiveMessage} />
-      <Route path='/detailMessage' component={DetailMessage} />
-      <Route path='/createGroup' component={CreateGroup} />
-      <Route path='/addUser' component={AddUser} />
-      <Route path='/groupInfo' component={GroupInfo} />
+      <Route path='/message' component={requireAuth(MessageBoard)} />
+      <Route path='/composeMessage' component={requireAuth(ComposeMessage)} />
+      <Route path='/sentMessage' component={requireAuth(SentMessage)} />
+      <Route path='/archiveMessage' component={requireAuth(ArchiveMessage)} />
+      <Route path='/detailMessage' component={requireAuth(DetailMessage)} />
+      <Route path='/createGroup' component={requireAuth(CreateGroup)} />
+      <Route path='/addUser' component={requireAuth(AddUser)} />
+      <Route path='/groupInfo' component={requireAuth(GroupInfo)} />
   </Route>
 )
