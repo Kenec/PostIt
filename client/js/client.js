@@ -2,16 +2,14 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
 
 import routes from './routes';
-import rootReducer from '../reducers'
+import configureStore from '../store/store'
 
-const store = createStore(
-  (state = {}) => state,
-  applyMiddleware(thunk)
-);
+let initialState = {};
+
+let store = configureStore(initialState)
+
 render(
   <Provider store={store}>
     <Router history={ browserHistory } routes={ routes } />

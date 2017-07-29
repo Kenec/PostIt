@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import axios from 'axios';
 import NavigationBar from './NavigationBar';
+import { connect } from 'react-redux';
+import { userSigninRequestAction } from '../actions/signinActions';
 
 class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      errors: {},
+      isLoading: false
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -22,12 +26,19 @@ class Signin extends Component {
 
   onSubmit(e){
     e.preventDefault();
-    //axios.post('/api/user/signin',{username:this.state.username, password: this.state.password});
-    //console.log(this.state);
-    this.props.userSigninRequest();
+     this.setState({ errors: {}, isLoading: true});
+     this.props.userSigninRequestAction(this.state)
+      .then(
+        (res) => this.context.router.push('/message'),
+        ({response}) => this.setState({
+          errors: response.data.message,
+          isLoading: false
+        })
+      );
   }
 
   render(){
+    const { username, password, errors, isLoading } = this.state;
     return(
       <div>
         <NavigationBar/>
@@ -73,7 +84,7 @@ class Signin extends Component {
                                       <input type="password" name="password" onChange={this.onChange} value={this.state.password} placeholder="Enter your password" className="validate" id="pwd" required/>
                                       <label htmlFor="pwd">Password:</label>
                                   </div>
-                                  <button type="submit" name="signin_btn" className="btn btn-primary">Login</button>
+                                  <button type="submit" name="signin_btn" disabled={isLoading} className="btn btn-primary">Login</button>
                                 </div>
                               </form>
                           </div>
@@ -93,4 +104,11 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+Signin.propTypes = {
+  userSigninRequestAction: React.PropTypes.func.isRequired
+}
+Signin.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+
+export default connect(null, { userSigninRequestAction })(Signin);
