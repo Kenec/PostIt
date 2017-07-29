@@ -62,6 +62,10 @@ module.exports = {
     filename: 'bundle.min.js',
     publicPath: '/dist/'
   },
+  node: {
+    net: 'empty',
+    dns: 'empty'
+  },
   plugins: [
     new ExtractTextPlugin("client/scss/main.css"),
     new webpack.ProvidePlugin({
