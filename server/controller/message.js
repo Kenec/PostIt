@@ -1,23 +1,31 @@
-import { Message } from '../models';
+import { Messages } from '../models';
 
 export default {
   create(req, res) {
-    return Message
+    return Messages
       .create({
         message: req.body.message,
         priority_level: req.body.priority_level,
-        groupid: req.params.groupid,
+        groupId: req.params.groupid,
         sentBy: req.body.sentBy,
       })
-      .then(message => res.status(201).send(message))
-      .catch(error => res.status(400).send(error));
+      .then(message => res.status(201).send({
+        status: 'Message sent successfully',
+        message: message.message,
+        priority_level: message.priority_level,
+        group: message.groupId,
+        sentBy: message.sentBy
+      }))
+      .catch(error => res.status(400).send({
+        status: 'message cannot be sent'
+      }));
   },
 
   retrieve(req, res) {
-    return Message
+    return Messages
       .findAll({
         where: {
-          groupid: req.params.groupid,
+          groupId: req.params.groupid,
         }
       })
       .then((user) => {

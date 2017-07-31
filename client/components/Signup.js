@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 import NavigationBar from './NavigationBar';
 import { userSignupRequest } from '../actions/signupActions';
-
+import  validateInput  from '../../server/shared/validations/signup';
+import  {addFlashMessage}   from '../actions/flashMessages';
 
 class Signup extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class Signup extends Component {
       password: '',
       repassword:'',
       errors: {},
-      success: {}
+      success: {},
+      isLoading: false
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -29,23 +31,39 @@ class Signup extends Component {
     });
   }
 
+  isValid() {
+    const { errors, isValid } = validateInput(this.state);
+
+    if(!isValid) {
+      this.setState({errors})
+    }
+
+    return isValid;
+  }
+
   onSubmit(e){
     e.preventDefault();
-    this.setState({ errors: {}, success: {} });
-    this.props.userSignupRequest(this.state)
-      .then(
-        () => {
-          //browserHistory.push
-          this.context.router.push('/message');
-        },
-        ( {response} ) => this.setState({ errors: response.data })
-      )
-      .catch((error) => {});
+    if (this.isValid()) {
+      this.setState({ errors: {}, success: {}, isLoading:true });
+      this.props.userSignupRequest(this.state)
+        .then(
+          () => {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: 'You signed up successfully. Enter your username and password to login'
+            });
+            this.context.router.push('/');
+          },
+          ( {response} ) => this.setState({ errors: response.data, isLoading: false })
+        )
+        .catch((error) => {});
+    }
+
   }
 
   render(){
     const { errors } = this.state;
-    const { userSignupRequest } = this.props;
+    const { userSignupRequest, addFlashMessage } = this.props;
     return(
       <div>
         <NavigationBar/>
@@ -86,28 +104,33 @@ class Signup extends Component {
                                   <div className="input-field">
                                       <input type="text" className="validate" name="username" onChange={this.onChange} value={this.props.username} placeholder="Enter your username"  id="username" required/>
                                       <label htmlFor="username">Username:</label>
+                                      {errors.username && <span className="help-block red-text">{errors.username}</span>}
                                   </div>
 
                                   <div className="input-field">
                                       <input type="email" className="validate" name="email" onChange={this.onChange} value={this.props.email} placeholder="Enter your email"  id="email" required/>
                                       <label htmlFor="email">Email:</label>
+                                      {errors.email && <span className="help-block red-text">{errors.email}</span>}
                                   </div>
 
                                   <div className="input-field">
                                       <input type="text" className="validate" name="phone" onChange={this.onChange} value={this.props.phone} placeholder="Enter your phone"  id="phone" required/>
                                       <label htmlFor="phone">Phone:</label>
+                                      {errors.phone && <span className="help-block red-text">{errors.phone}</span>}
                                   </div>
 
                                   <div className="input-field">
                                       <input type="password" name="password" onChange={this.onChange} value={this.props.password} placeholder="Enter your password" className="validate" id="pwd" required/>
                                       <label htmlFor="pwd">Password:</label>
+                                      {errors.password && <span className="help-block red-text">{errors.password}</span>}
                                   </div>
 
                                   <div className="input-field">
                                       <input type="password" name="repassword" onChange={this.onChange} value={this.props.repassword} placeholder="Enter your password again" className="validate" id="repwd" required/>
                                       <label htmlFor="repwd">Confirm Password:</label>
+                                      {errors.confirmPassword && <span className="help-block red-text">{errors.confirmPassword}</span>}
                                   </div>
-                                  <button type="submit" name="signup_btn" className="btn btn-primary">Signup</button>
+                                  <button type="submit" disabled={this.state.isLoading} name="signup_btn" className="btn btn-primary">Signup</button>
                                 </div>
                               </form>
                           </div>
@@ -127,9 +150,10 @@ class Signup extends Component {
   }
 }
 Signup.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired
+  userSignupRequest: React.PropTypes.func.isRequired,
+  addFlashMessage: React.PropTypes.func.isRequired
 }
 Signup.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
-export default connect((state) => { return {}}, {userSignupRequest})(Signup);
+export default connect(null, {userSignupRequest, addFlashMessage })(Signup);

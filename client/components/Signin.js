@@ -4,6 +4,7 @@ import axios from 'axios';
 import NavigationBar from './NavigationBar';
 import { connect } from 'react-redux';
 import { userSigninRequestAction } from '../actions/signinActions';
+import { deleteFlashMessage }  from '../actions/flashMessages'
 
 class Signin extends Component {
   constructor(props) {
@@ -16,12 +17,17 @@ class Signin extends Component {
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+
+  onClick(){
+    this.props.deleteFlashMessage(this.props.messages.id);
   }
 
   onSubmit(e){
@@ -39,6 +45,12 @@ class Signin extends Component {
 
   render(){
     const { username, password, errors, isLoading } = this.state;
+    const messages = this.props.messages.map(message =>
+      <div className='alert alert-success' key={message.id}>
+        <button onClick={this.props.deleteFlashMessage(message.id)} className="close"><span>&times;</span></button>
+        {message.text}
+      </div>
+    );
     return(
       <div>
         <NavigationBar/>
@@ -70,6 +82,7 @@ class Signin extends Component {
                     <div className="">
 
                     </div>
+                      {messages}
                       <div className="panel-heading"><h4>Login</h4></div>
                       <div className="panel-body">
                           <div className='row'>
@@ -106,10 +119,16 @@ class Signin extends Component {
 }
 
 Signin.propTypes = {
-  userSigninRequestAction: React.PropTypes.func.isRequired
+  userSigninRequestAction: React.PropTypes.func.isRequired,
+  messages: React.PropTypes.array.isRequired,
+  deleteFlashMessage: React.PropTypes.func.isRequired
 }
 Signin.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
-
-export default connect(null, { userSigninRequestAction })(Signin);
+function mapStateToProps(state) {
+  return {
+    messages: state.flashMessages
+  }
+}
+export default connect(mapStateToProps, { userSigninRequestAction, deleteFlashMessage })(Signin);

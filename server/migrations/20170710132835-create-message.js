@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Messages', {
     id: {
       allowNull: false,
@@ -7,10 +7,15 @@ export default {
       type: Sequelize.INTEGER
     },
     message: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      allowNull: false,
+      validate: {
+          notEmpty: true
+        }
     },
     priority_level: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
@@ -20,14 +25,16 @@ export default {
       allowNull: false,
       type: Sequelize.DATE
     },
-    groupid: {
+    groupId: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: 'Groups',
         key: 'id',
       },
     },
     sentBy: {
+      allowNull: false,
       type: Sequelize.INTEGER,
       references: {
         model: 'Users',

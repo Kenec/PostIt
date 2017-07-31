@@ -11,9 +11,61 @@ const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
 // ** /signin **
-router.get('/*', (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
+
+// ** /signup **
+router.get('/signup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /recoverpassword **
+router.get('/recoverpassword', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /message **
+router.get('/message', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /composeMessage **
+router.get('/composeMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /sentMessage **
+router.get('/sentMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /archiveMessage **
+router.get('/archiveMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /detailMessage **
+router.get('/detailMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /createGroup **
+router.get('/createGroup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /addUser **
+router.get('/addUser', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /groupInfo **
+router.get('/groupInfo', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ******************************************************************************** //
+// ******************************* api routes ************************************* //
+// ******************************************************************************* //
 
 // ** /api/user/signup **
 router.post('/api/user/signup', userController.create);
@@ -23,7 +75,7 @@ router.post('/api/user/signin', userController.list);
 
 let token;
 // setting a middleware to protect all other routes
-  router.use((req, res, next) => {
+    router.use((req, res, next) => {
     token = req.body.token || req.query.token ||
       req.headers["x-access-token"];
     jwt.verify(token, config.jwtSecret, (err, authToken) => {
@@ -54,8 +106,14 @@ router.post('/api/group', groupController.create);
 // ** /api/group/<group id>/user **
 router.post('/api/group/:groupid/user', groupUserController.create);
 
+// *** To get the groups of a looged in user
+router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
+
 // ** /api/group/<group id>/user **
-router.get('/api/group/:groupid', groupUserController.retrieve);
+router.get('/api/group/:groupid', groupController.retrieve);
+
+// *** /api/groups/:id/users
+router.get('/api/groups/:id/users', groupUserController.retrieveMembers);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group', groupUserController.list);

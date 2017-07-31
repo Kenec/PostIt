@@ -1,11 +1,11 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Groups', {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    groupname: {
+    groupName: {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false

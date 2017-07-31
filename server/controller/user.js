@@ -1,13 +1,20 @@
-import { User } from '../models';
+import { Users } from '../models';
 import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import config from '../config';
+import  validateInput  from '../shared/validations/signup';
 
 export default {
   create(req, res) {
-    return User
+    const { errors, isValid } = validateInput(req.body);
+
+    if (!isValid) {
+      res.status(400).json(errors);
+    }
+    return Users
       .create({
         username: req.body.username,
+        phone: req.body.phone,
         email: req.body.email,
         password: md5(req.body.password)
       })
@@ -23,7 +30,7 @@ export default {
       }));
   },
   list(req, res) {
-      User
+      Users
         .findAll({
           where: {
             username: [req.body.username],
@@ -63,42 +70,3 @@ export default {
     },
 
   };
-//   list(req, res) {
-//     User
-//       .findOne({
-//         where: {
-//           username: req.body.username,
-//           password: req.body.password,
-//         }
-//       })
-//       .then((user) => {
-//           if(user[0]) {
-//             //create an authToken for the user
-//             const token = jwt.sign({
-//               data: user[0].id
-//             }, "kenechukwu", { expiresInMinutes: 1440 });
-//
-//
-//           res
-//           .status(202)
-//           .send({
-//             token:token,
-//             message:`${user[0].id} has successfully logged in`
-//           });
-//           return;
-//       }
-//
-//       res
-//       .status(401)
-//           .send({
-//             message: "username not found, please register"
-//           });
-//     }),
-//   },
-//   getAllUsers(req, res) {
-//    return User
-//      .findAll()
-//      .then(users => res.status(200).send(users))
-//      .catch(error => res.status(400).send(error));
-//  },
-// };

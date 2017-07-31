@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Message = sequelize.define('Message', {
+  const Messages = sequelize.define('Messages', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -23,7 +23,7 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    groupid: {
+    groupId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -41,13 +41,18 @@ export default (sequelize, DataTypes) => {
         },
       },
     }
-  }, {
+  },{
     classMethods: {
       associate: (models) => {
-        Message.belongsTo(models.User);
-        Message.belongsTo(models.Group);
+        Messages.belongsTo(models.Users);
+        Messages.belongsTo(models.Groups);
       },
     },
   });
-  return Message;
+  // Messages.associate = (models) => {
+  //   Messages.belongsTo(models.Users);
+  //   Messages.belongsTo(models.Groups);
+  //
+  // };
+  return Messages;
 };

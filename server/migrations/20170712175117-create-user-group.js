@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('userGroups', {
     id: {
       allowNull: false,
@@ -14,14 +14,16 @@ export default {
       allowNull: false,
       type: Sequelize.DATE
     },
-    groupid: {
+    groupId: {
+      allowNull: false,
       type: Sequelize.INTEGER,
       references: {
         model: 'Groups',
         key: 'id',
       },
     },
-    userid: {
+    userId: {
+      allowNull: false,
       type: Sequelize.INTEGER,
       references: {
         model: 'Users',

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Archives', {
     id: {
       allowNull: false,
@@ -6,11 +6,22 @@ export default {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    messageid: {
-      type: Sequelize.INTEGER
+    messageId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Messages',
+        key: 'id',
+      },
+
     },
-    userid: {
-      type: Sequelize.INTEGER
+    userId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,
