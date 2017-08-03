@@ -62,6 +62,33 @@ export default {
             });
         });
     },
+    //Fetch Member by username and return its id
+    FetchMemberByName(req, res) {
+      return Users
+        .findAll({ where: {username : req.body.username } })
+        .then((user) => {
+          if(user[0]){
+            res
+              .status(202)
+              .send({
+                userid: `${user[0].id}`,
+                username: `${user[0].username}`,
+                phone: `${user[0].phone}`,
+                email: `${user[0].email}`,
+              });
+            return;
+          }
+          res.status(400).send({
+            message: 'User not found',
+          });
+        })
+        .catch((error) => {
+          res.status(400).send({
+            message: 'User does not exist'
+          });
+        });
+    },
+
     getAllUsers(req, res) {
       return models.Users
         .findAll()

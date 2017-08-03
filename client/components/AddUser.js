@@ -5,15 +5,15 @@ import LeftSideMenu from './LeftSideMenu';
 import GroupList from './GroupList';
 import AddUserBoard from './AddUserBoard';
 
+import { connect } from 'react-redux';
+import { getUserGroups } from '../actions/groupActions';
+
 class AddUser extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render(){
     return (
       <div className="content">
-          <NavigationBarMenu />
+          <NavigationBarMenu  />
 
           <div className="container-fluid">
               <div className="row">
@@ -34,4 +34,13 @@ class AddUser extends Component {
   }
 }
 
-export default AddUser;
+AddUser.propTypes = {
+  getUserGroups: React.PropTypes.func.isRequired,
+}
+function mapStateToProps(state) {
+  return {
+    group: state.group
+  }
+}
+
+export default connect(mapStateToProps, {getUserGroups})(AddUser);

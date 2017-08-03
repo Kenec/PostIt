@@ -4,7 +4,8 @@ import axios from 'axios';
 import NavigationBar from './NavigationBar';
 import { connect } from 'react-redux';
 import { userSigninRequestAction } from '../actions/signinActions';
-import { deleteFlashMessage }  from '../actions/flashMessages'
+import { deleteFlashMessage }  from '../actions/flashMessages';
+import { getUserGroups } from '../actions/groupActions';
 
 class Signin extends Component {
   constructor(props) {
@@ -35,7 +36,10 @@ class Signin extends Component {
      this.setState({ errors: {}, isLoading: true});
      this.props.userSigninRequestAction(this.state)
       .then(
-        (res) => this.context.router.push('/message'),
+        (res) => {
+          this.props.getUserGroups({username:this.state.username});
+          this.context.router.push('/message')
+        },
         ({response}) => this.setState({
           errors: response.data,
           isLoading: false
@@ -45,6 +49,8 @@ class Signin extends Component {
 
   render(){
     const { username, password, errors, isLoading } = this.state;
+    const { getUserGroups } = this.props;
+
     const messages = this.props.messages.map(message =>
       <div className='alert alert-success' key={message.id}>
         <button onClick={this.props.deleteFlashMessage(message.id)} className="close"><span>&times;</span></button>
@@ -121,14 +127,16 @@ class Signin extends Component {
 Signin.propTypes = {
   userSigninRequestAction: React.PropTypes.func.isRequired,
   messages: React.PropTypes.array.isRequired,
-  deleteFlashMessage: React.PropTypes.func.isRequired
+  deleteFlashMessage: React.PropTypes.func.isRequired,
+  getUserGroups: React.PropTypes.func.isRequired,
 }
 Signin.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 function mapStateToProps(state) {
   return {
-    messages: state.flashMessages
+    messages: state.flashMessages,
+    group: state.group
   }
 }
-export default connect(mapStateToProps, { userSigninRequestAction, deleteFlashMessage })(Signin);
+export default connect(mapStateToProps, { userSigninRequestAction, deleteFlashMessage, getUserGroups })(Signin);

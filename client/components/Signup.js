@@ -64,6 +64,7 @@ class Signup extends Component {
   render(){
     const { errors } = this.state;
     const { userSignupRequest, addFlashMessage } = this.props;
+
     return(
       <div>
         <NavigationBar/>

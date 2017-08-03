@@ -12,14 +12,13 @@ export default {
         userId: req.body.createdby
       })
         .then(() => res.status(201).send({
-          groupName: group.groupName,
-          message: 'group created successfully',
+          message: group.groupName+' group created successfully',
           success:true,
         }))
         .catch(error => res.status(400).send(error)))
       .catch(error => res.status(400).send({
         groupName: error.errors[0].message,
-        message: 'group not created',
+        message: 'Group Already Exists',
         success:false,
       }));
   },
@@ -27,6 +26,17 @@ export default {
     return userGroups
       .findAll({ where: { group_id: req.params.id } })
       .then(groups => res.status(200).send(groups))
+      .catch((error) => {
+        res.status(400).send(error);
+      });
+  },
+  fetchGroupByCreator(req, res) {
+    return Groups
+      .findAll({
+        where: { createdby: req.body.userId },
+        attributes: ['id', 'groupName', 'createdAt']
+      })
+      .then(group => res.status(200).send(group))
       .catch((error) => {
         res.status(400).send(error);
       });

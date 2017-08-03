@@ -77,7 +77,7 @@ let token;
 // setting a middleware to protect all other routes
     router.use((req, res, next) => {
     token = req.body.token || req.query.token ||
-      req.headers["x-access-token"];
+      req.headers["Authorization"] || req.headers["x-access-token"];
     jwt.verify(token, config.jwtSecret, (err, authToken) => {
       if (err) {
         res.status(401)
@@ -106,8 +106,14 @@ router.post('/api/group', groupController.create);
 // ** /api/group/<group id>/user **
 router.post('/api/group/:groupid/user', groupUserController.create);
 
+// ** /api/group/<group id>/user **
+router.post('/api/group/creator', groupController.fetchGroupByCreator);
+
 // *** To get the groups of a looged in user
 router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
+
+// *** To get the groups of a looged in user
+router.post('/api/users/username', userController.FetchMemberByName);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupController.retrieve);
