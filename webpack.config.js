@@ -2,7 +2,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const webpack = require('webpack');
 const path = require('path');
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // const extractSass = new ExtractTextPlugin({
 //     filename: "client/scss/main.css",
@@ -44,8 +44,7 @@ module.exports = {
       { test: /\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?importLoaders=1',
-          // 'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+          'css-loader?importLoaders=1'
         ] },
       {
         use: ExtractTextPlugin.extract({
