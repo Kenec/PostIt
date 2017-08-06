@@ -42,11 +42,11 @@ module.exports = {
         //     })
       },
       { test: /\.css$/,
-        // loaders: [
-        //   'style-loader',
-        //   'css-loader?importLoaders=1',
-        //   'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
-        // ] },
+        loaders: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+        ] },
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: "css-loader"
