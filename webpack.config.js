@@ -11,7 +11,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = {
-  devtool: debug ? 'inline-sourcemap' : true,
+  devtool: debug ? 'inline-sourcemap' : false,
   entry: [
     'webpack-hot-middleware/client',
     './client/js/client.js'
