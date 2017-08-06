@@ -44,13 +44,13 @@ module.exports = {
       { test: /\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?importLoaders=1'
-        ] },
-      {
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        }),
+          'css-loader?importLoaders=1',
+          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+        ],
+        //   use: ExtractTextPlugin.extract({
+        //   fallback: 'style-loader',
+        //   use: 'css-loader'
+        // }),
       },
       { test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]'
