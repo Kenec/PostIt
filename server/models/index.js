@@ -4,7 +4,7 @@ import Sequelize from 'sequelize';
 import configuration from '../config.json';
 
 const basename = path.basename(module.filename);
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 
 const config = configuration[env];
 
