@@ -62,6 +62,36 @@ export default {
       })
     });
   },
+  fetchMembersOfGroup(req, res) {
+
+    const id = req.params.id;
+
+    return Groups
+      .find({
+         include: [{
+           model: Users,
+            as: 'users',
+            required: false,
+            attributes: ['id', 'username', 'email', 'phone'],
+            through: { attributes: [] }
+         }],
+         where: { id },
+         attributes: ['id', 'groupName', 'createdby']
+      })
+      .then((group) => {
+        if (group.length === 0) {
+          return res.status(404).send({
+            message: 'Group not found'
+          });
+        }
+        return res.status(200).send(group);
+      })
+      .catch(error => {
+        res.status(400).send({
+        message: 'Group does not exist'
+      })
+    });
+  },
 
   //Get group by id
   retrieveMembers(req, res) {

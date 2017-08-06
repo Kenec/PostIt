@@ -34,10 +34,11 @@ class AddUserBoard extends Component {
             ({data}) => {
               this.setState({
                 success: 'User added successfully',
+                isLoading: false
               });
             },
             ({response}) => {
-              this.setState({ errors: response.data});
+              this.setState({ errors: response.data, isLoading: false});
             }
           )
           .catch((error) => {});

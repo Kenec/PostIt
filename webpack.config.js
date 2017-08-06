@@ -64,7 +64,10 @@ module.exports = {
   },
   node: {
     net: 'empty',
-    dns: 'empty'
+    dns: 'empty',
+    fs: 'empty',
+    tls: 'empty',
+    child_process: 'empty',
   },
   plugins: [
     new ExtractTextPlugin("client/scss/main.css"),

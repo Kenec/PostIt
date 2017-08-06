@@ -21,11 +21,25 @@ export function getGroupsCreatedByUserAction(data) {
     groupsByUser: data
   }
 }
+
+export function getUsersInGroupAction(data) {
+  return {
+    type: "GET_USERS_IN_GROUP",
+    usersInGroup: data
+  }
+}
+
 export function addUserToGroupsAction(data) {
   return {
     type: "ADD_USER_TO_GROUPS",
     userData: data
   }
+}
+
+export function getUsersInGroup (groupId) {
+    return dispatch => {
+      return axios.get('/api/groups/'+groupId+'/users');
+    }
 }
 
 export function addUserToGroups (groupId,userId) {

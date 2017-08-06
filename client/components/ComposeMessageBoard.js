@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
-import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
+import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup } from '../actions/groupActions';
+import { composeMessage } from '../actions/messageActions';
+import { sendMail } from '../utils/sendMail';
+import { sendSMS } from '../utils/sendSMS';
 
 class ComposeMessageBoard extends Component {
   constructor(props) {
@@ -30,10 +33,46 @@ class ComposeMessageBoard extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    if(this.state.Message && this.state.priority_level && this.state.sentBy){
+        this.setState({ errors: {}, success: '', isLoading:true });
+        const messageData = {
+          message: this.state.Message,
+          priority_level: this.state.priority_level,
+          sentBy: this.state.sentBy
+        }
+        this.props.composeMessage(this.state.groupId, messageData).then(
+          ({data}) => {
+            this.props.getUsersInGroup(this.state.groupId).then(
+              ({data}) => {
+                if(this.state.priority_level === 'Urgent') {
+                  const usersArray = data.users;
+                  sendMail(usersArray);
+                } else if(this.state.priority_level === 'Critical') {
+                  const usersArray = data.users;
+                  sendMail(usersArray);
+                  sendSMS(usersArray);
+                }
+                this.setState({
+                  success: 'Message sent successfully!',
+                  isLoading: false
+                });
+              },
+              ({response}) => {
+                  this.setState({ errors: response.data});
+              }
+            );
+
+          },
+          ({response}) => {
+            this.setState({ errors: response.data});
+          }
+        ).catch((error) => {});
+    }
   }
 
   render(){
     const {groups, groupsByUser} = this.props.group
+    const { errors, success } = this.state;
 
     if(!groups || !groupsByUser) {
       return (
@@ -48,6 +87,9 @@ class ComposeMessageBoard extends Component {
     return(
         <div className="row">
           <div className="page-title blue-text text-darken-2">SEND MESSAGE</div>
+          {errors.message && <span className="help-block red-text"><b>{errors.message}</b></span>}
+          {success && <span className="help-block green-text"><b>{success}</b></span>}
+
           <form onSubmit={this.onSubmit} className="" action="" method="">
               <div className="form-group">
                   <label htmlFor="groups"><span className="black-text"><b>Select Group:</b></span></label>
@@ -79,10 +121,14 @@ class ComposeMessageBoard extends Component {
 ComposeMessageBoard.propTypes = {
   getGroupsCreatedByUser: React.PropTypes.func.isRequired,
   getUserGroups: React.PropTypes.func.isRequired,
+  composeMessage: React.PropTypes.func.isRequired,
+  getUsersInGroup: React.PropTypes.func.isRequired,
+
 }
 function mapStateToProps(state) {
   return {
-    group: state.group
+    group: state.group,
+    message: state.message
   }
 }
-export default connect(mapStateToProps, {getGroupsCreatedByUser, getUserGroups})(ComposeMessageBoard);
+export default connect(mapStateToProps, {getGroupsCreatedByUser, getUserGroups, composeMessage, getUsersInGroup})(ComposeMessageBoard);
