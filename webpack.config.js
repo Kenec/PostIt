@@ -45,7 +45,8 @@ module.exports = {
         loaders: [
           'style-loader',
           'css-loader?importLoaders=1',
-          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+          'font-loader?format[]=truetype'+
+          '&format[]=woff&format[]=embedded-opentype'
         ],
         //   use: ExtractTextPlugin.extract({
         //   fallback: 'style-loader',
