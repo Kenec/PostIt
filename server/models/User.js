@@ -1,7 +1,5 @@
-import { bcrypt } from 'bcrypt-nodejs';
-
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Users = sequelize.define('Users', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -20,6 +18,13 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
+    phone: {
+     allowNull: false,
+     type: DataTypes.STRING,
+     validate: {
+       not: ['[a-z]', 'i']
+     }
+   },
     password: {
       type: DataTypes.STRING,
       validate: {
@@ -37,35 +42,36 @@ export default (sequelize, DataTypes) => {
         },
         isEmail: {
           msg: 'Not a valid Email'
-        },
-      },
-    },
-  },{
-    classMethods: {
-      associate(models) {
-        User.belongsToMany(models.Group, { through: "userGroups" });
+        }
       }
-    },
-    // instanceMethods: {
-    //     generateHash: (password) => {
-    //         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-    //     },
-    //     validPassword: (password) => {
-    //         return bcrypt.compareSync(password, this.password);
-    //     },
-    // }
-  });
+    }
+  }
+  // ,{
+  //   classMethods: {
+  //    associate(models) {
+  //     //  Users.hasMany(models.Messages, {
+  //     //      foreignKey: 'sentBy',
+  //     //   });
+  //       Users.belongsToMany(models.Groups, {
+  //         through: 'userGroups',
+  //         as: 'groups',
+  //         foreignKey: 'userId',
+  //       });
+  //    }
+  //  },
+  // }
+);
 
-  // User.associate = (models) => {
-  //   User.hasMany(models.Message, {
-  //     foreignKey: 'sentBy',
-  //   });
-  //   // User.belongsToMany(models.Group, {
-  //   //   as: 'Users',
-  //   //   through: 'userGroups',
-  //   //   foreignKey: 'user_id',
-  //   // });
-  // };
+  Users.associate = (models) => {
+    Users.hasMany(models.Messages, {
+      foreignKey: 'sentBy',
+    });
+    Users.belongsToMany(models.Groups, {
+      through: 'userGroups',
+      as: 'groups',
+      foreignKey: 'userId',
+    });
+  };
 
-  return User;
+  return Users;
 };

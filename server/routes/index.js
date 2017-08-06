@@ -1,6 +1,8 @@
 import express from 'express';
+import path from 'path';
 import controller from '../controller';
 import jwt from "jsonwebtoken";
+import config from '../config';
 
 const router = express.Router();
 const userController = controller.user;
@@ -8,10 +10,62 @@ const groupController = controller.group;
 const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
-// ** /api/user/signup **
+// ** /signin **
 router.get('/', (req, res) => {
-  res.send('<h1>This is the Home Page</h2>');
+  res.sendFile(path.resolve('./client/index.html'));
 });
+
+// ** /signup **
+router.get('/signup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /recoverpassword **
+router.get('/recoverpassword', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /message **
+router.get('/message', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /composeMessage **
+router.get('/composeMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /sentMessage **
+router.get('/sentMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /archiveMessage **
+router.get('/archiveMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /detailMessage **
+router.get('/detailMessage', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /createGroup **
+router.get('/createGroup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /addUser **
+router.get('/addUser', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ** /groupInfo **
+router.get('/groupInfo', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// ******************************************************************************** //
+// ******************************* api routes ************************************* //
+// ******************************************************************************* //
 
 // ** /api/user/signup **
 router.post('/api/user/signup', userController.create);
@@ -21,14 +75,14 @@ router.post('/api/user/signin', userController.list);
 
 let token;
 // setting a middleware to protect all other routes
-  router.use((req, res, next) => {
+    router.use((req, res, next) => {
     token = req.body.token || req.query.token ||
-      req.headers["x-access-token"];
-    jwt.verify(token, "kenechukwu", (err, authToken) => {
+      req.headers["Authorization"] || req.headers["x-access-token"];
+    jwt.verify(token, config.jwtSecret, (err, authToken) => {
       if (err) {
         res.status(401)
           .send({
-            message: "sorry, user not authenticated, invalid access token"
+            message: "Sorry, user not authenticated, invalid access token"
           });
         return;
       }
@@ -53,7 +107,19 @@ router.post('/api/group', groupController.create);
 router.post('/api/group/:groupid/user', groupUserController.create);
 
 // ** /api/group/<group id>/user **
-router.get('/api/group/:groupid', groupUserController.retrieve);
+router.post('/api/group/creator', groupController.fetchGroupByCreator);
+
+// *** To get the groups of a looged in user
+router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
+
+// *** To get the groups of a looged in user
+router.post('/api/users/username', userController.FetchMemberByName);
+
+// ** /api/group/<group id>/user **
+router.get('/api/group/:groupid', groupController.retrieve);
+
+// *** /api/groups/:id/users
+router.get('/api/groups/:id/users', groupUserController.fetchMembersOfGroup);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group', groupUserController.list);

@@ -1,11 +1,11 @@
 export default (sequelize, DataTypes) => {
-  const Group = sequelize.define('Group', {
+  const Groups = sequelize.define('Groups', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    groupname: {
+    groupName: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
@@ -19,18 +19,31 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {
-    classMethods: {
-      associate: (models) => {
-        Group.hasMany(models.Message, {
-          onDelete: 'CASCADE'
-        });
-        Group.belongsToMany(models.User, {
-          through: 'userGroups',
-          foreignKey: 'groupid'
-        });
-      },
-    },
-  });
-  return Group;
+  }
+  // ,{
+  //   classMethods: {
+  //     associate: (models) => {
+  //       // Groups.hasMany(models.Messages, {
+  //       //   onDelete: 'CASCADE'
+  //       // });
+  //       // Groups.belongsToMany(models.Users, {
+  //       //   through: models.userGroups,
+  //       //   as: 'users',
+  //       //   foreignKey: 'groupId'
+  //       // });
+  //     },
+  //   },
+  // }
+);
+  Groups.associate = (models) => {
+   Groups.belongsToMany(models.Users, {
+     through: 'userGroups',
+     as: 'users',
+     foreignKey: 'groupId'
+   });
+   Groups.hasMany(models.Messages, {
+     onDelete: 'CASCADE'
+   });
+ };
+  return Groups;
 };

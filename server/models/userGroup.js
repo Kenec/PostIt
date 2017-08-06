@@ -5,8 +5,13 @@ export default (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    userid: {
+    userId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      refrences: {
+       model: 'Users',
+       key: 'id'
+     },
       validate: {
         isInt: {
           msg: 'Userid Must be an Integer'
@@ -16,8 +21,13 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    groupid: {
+    groupId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      refrences: {
+        model: 'Groups',
+        key: 'id'
+      },
       validate: {
         isInt: {
           msg: 'Groupid Must be an Integer'
@@ -26,10 +36,6 @@ export default (sequelize, DataTypes) => {
           msg: 'Groupid must not be empty'
         },
       },
-    }
-  }, {
-    classMethods: {
-
     }
   });
   return userGroups;

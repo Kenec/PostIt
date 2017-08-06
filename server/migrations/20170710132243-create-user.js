@@ -1,6 +1,7 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
     id: {
+      allowNull: false,
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true
@@ -8,13 +9,32 @@ export default {
     username: {
       type: Sequelize.STRING,
       unique: true,
-      allowNull: false
+      allowNull: false,
+      validate: {
+          notEmpty: true
+        }
+    },
+    phone: {
+      allowNull: false,
+      type: Sequelize.STRING,
+      validate: {
+        not: ['[a-z]', 'i']
+      }
     },
     password: {
-      type: Sequelize.STRING
+      allowNull: false,
+      type: Sequelize.STRING,
+      validate: {
+        notEmpty: true
+      }
     },
     email: {
-      type: Sequelize.STRING
+      allowNull: false,
+      type: Sequelize.STRING,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     createdAt: {
       allowNull: false,

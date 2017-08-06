@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('MessageReads', {
     id: {
       allowNull: false,
@@ -6,11 +6,19 @@ export default {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    messageid: {
-      type: Sequelize.INTEGER
+    messageId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Messages',
+        key: 'id',
+      },
     },
-    userid: {
-      type: Sequelize.INTEGER
+    userId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,

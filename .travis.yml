@@ -1,14 +1,17 @@
 language: node_js
+branches:
+  only:
+    - master
 node_js:
-  - "node"
-  - "6.11.1"
-install: [
-    "npm install -g mocha",
-    "mocha install",
-    "npm install",
-    "chmod +x node_modules/.bin/*"
-  ],
-env:
-- NODE_ENV=TEST
+  - "6.10"
+install:
+  - npm install
 script:
   - npm test
+services:
+  - postgresql
+cache:
+  - npm install
+before_script:
+  - npm install sequelize-cli -g
+  - sequelize db:migrate

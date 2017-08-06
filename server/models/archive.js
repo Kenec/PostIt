@@ -1,18 +1,29 @@
 export default (sequelize, DataTypes) => {
-  const Archive = sequelize.define('Archive', {
+  const Archives = sequelize.define('Archives', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    messageid: DataTypes.INTEGER,
-    userid: DataTypes.INTEGER
-  }, {
-    classMethods: {
-      associate: (models) => {
-        // associations can be defined here
-      }
-    }
+    messageId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      refrences: {
+        model: 'Messages',
+        key: 'id'
+      },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      refrences: {
+        model: 'Users',
+        key: 'id'
+      },
+    },
   });
-  return Archive;
+    Archives.associate = (models) => {
+
+    };
+  return Archives;
 };
