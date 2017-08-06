@@ -2,7 +2,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const webpack = require('webpack');
 const path = require('path');
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // const extractSass = new ExtractTextPlugin({
 //     filename: "client/scss/main.css",
@@ -44,12 +44,12 @@ module.exports = {
       { test: /\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?importLoaders=1',
-          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+          'css-loader?importLoaders=1'
         ] },
+      {
         use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader"
+          fallback: 'style-loader',
+          use: 'css-loader'
         }),
       },
       { test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -70,7 +70,7 @@ module.exports = {
     child_process: 'empty',
   },
   plugins: [
-    new ExtractTextPlugin("client/scss/main.css"),
+    new ExtractTextPlugin('client/scss/main.css'),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
