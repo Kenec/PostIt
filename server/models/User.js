@@ -63,8 +63,9 @@ export default (sequelize, DataTypes) => {
 );
 
   Users.associate = (models) => {
-    Users.hasMany(models.Messages, {
-      foreignKey: 'sentBy',
+    Users.hasMany(models.Messages,{
+      foreignKey: 'id',
+      onDelete: 'CASCADE',
     });
     Users.belongsToMany(models.Groups, {
       through: 'userGroups',

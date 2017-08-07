@@ -1,14 +1,48 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
+import { retrieveMessage } from '../actions/messageActions';
 
 class ReceivedMessageBoard extends Component {
 
+  componentWillMount() {
+    const { isAuthenticated, user } = this.props.auth;
+    
+  }
+
   render(){
+    const {groups, groupsByUser} = this.props.group
+
+    if(!groups || !groupsByUser) {
+      return (
+        <h4>Loading ...</h4>
+      )
+    }
+    const groupsCreatedList = groupsByUser.map((group) => {
+      return <li key={group.id} value={group.id}><a href="#">{group.groupName}</a></li>
+    });
+    const groupsBelongedList = groups.groups.map((group) => {
+      return <option key={group.id} value={group.id}>{group.groupName}</option>
+    });
+
     return(
       <div className="row">
         <div className="page-title blue-text text-darken-2">
         <span>RECEIVED MESSAGES</span>
-        <span className="pull-right"></span>
+        <span className="pull-right">
+
+        </span>
+        </div>
+        <div className="row well well-sm">
+          <div className="col-md-4">
+            <div className="form-group">
+                  <label htmlFor="groups"><span className="black-text"><b>Select Group:</b></span></label>
+                  <select className="form-control"  name="groupId">
+                      {groupsBelongedList}
+                  </select>
+            </div>
+          </div>
+
         </div>
         <table className="table highlight striped">
           <thead>
@@ -54,5 +88,16 @@ class ReceivedMessageBoard extends Component {
     );
   }
 }
-
-export default ReceivedMessageBoard;
+ReceivedMessageBoard.propTypes = {
+  getUserGroups: React.PropTypes.func.isRequired,
+  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  auth: React.PropTypes.object.isRequired,
+  retrieveMessage: React.PropTypes.func.isRequired,
+}
+function mapStateToProps(state) {
+  return {
+    group: state.group,
+    auth: state.userLoginReducer,
+  }
+}
+export default connect(mapStateToProps, {getUserGroups, getGroupsCreatedByUser, retrieveMessage})(ReceivedMessageBoard);

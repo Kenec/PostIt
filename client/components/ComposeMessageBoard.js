@@ -9,6 +9,7 @@ import { sendMail } from '../utils/sendMail';
 import { sendSMS } from '../utils/sendSMS';
 
 class ComposeMessageBoard extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,13 +17,21 @@ class ComposeMessageBoard extends Component {
       groupName: '',
       Message: '',
       priority_level: '',
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
       errors: {},
       success: '',
       isLoading: false
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillMount() {
+    const { isAuthenticated, user } = this.props.auth;
+    if(isAuthenticated){
+      this.setState({
+        sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
+      });
+    }
   }
 
   onChange(e){
@@ -80,7 +89,7 @@ class ComposeMessageBoard extends Component {
       )
     }
 
-    const options = groupsByUser.map((group) => {
+    const options = groups.groups.map((group) => {
       return <option key={group.id} value={group.id}>{group.groupName}</option>
     });
 
@@ -123,10 +132,12 @@ ComposeMessageBoard.propTypes = {
   getUserGroups: React.PropTypes.func.isRequired,
   composeMessage: React.PropTypes.func.isRequired,
   getUsersInGroup: React.PropTypes.func.isRequired,
+  auth: React.PropTypes.object.isRequired,
 
 }
 function mapStateToProps(state) {
   return {
+    auth: state.userLoginReducer,
     group: state.group,
     message: state.message
   }

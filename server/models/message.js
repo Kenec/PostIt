@@ -41,18 +41,26 @@ export default (sequelize, DataTypes) => {
         },
       },
     }
-  },{
-    classMethods: {
-      associate: (models) => {
-        Messages.belongsTo(models.Users);
-        Messages.belongsTo(models.Groups);
-      },
-    },
-  });
-  // Messages.associate = (models) => {
-  //   Messages.belongsTo(models.Users);
-  //   Messages.belongsTo(models.Groups);
-  //
-  // };
+  }
+  );
+  // ,{
+  //   classMethods: {
+  //     associate: (models) => {
+  //       Messages.belongsTo(models.Users);
+  //       Messages.belongsTo(models.Groups);
+  //     },
+  //   },
+  // });
+  Messages.associate = (models) => {
+    Messages.belongsTo(models.Users, {
+      foreignKey: 'sentBy',
+      as: 'Users',
+    });
+    Messages.hasMany(models.Groups,{
+      foreignKey: 'groupId',
+      as: 'Groups',
+    });
+
+  };
   return Messages;
 };
