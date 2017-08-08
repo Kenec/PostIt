@@ -1,4 +1,4 @@
-import { Messages } from '../models';
+import { Messages, Groups, Users } from '../models';
 
 export default {
   create(req, res) {
@@ -24,9 +24,15 @@ export default {
   retrieve(req, res) {
     return Messages
       .findAll({
+         include: [{
+           model: Users,
+           as: 'Users',
+           attributes: ['id', 'username'],
+         }],
         where: {
           groupId: req.params.groupid,
-        }
+        },
+        attributes: ['id', 'message','groupId','sentBy', 'createdAt']
       })
       .then((user) => {
         if (user.length === 0) {
@@ -34,8 +40,9 @@ export default {
             message: 'No message in this group yet'
           });
         }
+
         return res.status(200).send(user);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => {console.log(error);res.status(400).send(error)});
   },
 };

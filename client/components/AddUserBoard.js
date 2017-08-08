@@ -10,7 +10,6 @@ class AddUserBoard extends Component {
     this.state = {
       groupId: '',
       username:'',
-      user: jwt.decode(localStorage.getItem('jwtToken')).username,
       isLoading: false,
       errors: {},
       success: '',
@@ -18,6 +17,15 @@ class AddUserBoard extends Component {
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillMount() {
+    const { isAuthenticated, user } = this.props.auth;
+    if(isAuthenticated){
+      this.setState({
+        user: jwt.decode(localStorage.getItem('jwtToken')).username,
+      });
+    }
   }
 
   onSubmit(e) {
@@ -99,10 +107,12 @@ AddUserBoard.propTypes = {
   getUserInfo: React.PropTypes.func.isRequired,
   addUserToGroups: React.PropTypes.func.isRequired,
   getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  auth: React.PropTypes.object.isRequired,
 }
 function mapStateToProps(state) {
   return {
-    group: state.group
+    group: state.group,
+    auth: state.userLoginReducer,
   }
 }
 export default connect(mapStateToProps, {getUserGroups, getUserInfo, addUserToGroups, getGroupsCreatedByUser})(AddUserBoard);

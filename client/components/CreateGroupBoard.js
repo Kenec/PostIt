@@ -8,13 +8,21 @@ class CreateGroupBoard extends Component {
     super(props);
     this.state = {
       groupName: '',
-      createdby: jwt.decode(localStorage.getItem('jwtToken')).id,
       errors: {},
       success: '',
       isLoading: false
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillMount() {
+    const { isAuthenticated, user } = this.props.auth;
+    if(isAuthenticated){
+      this.setState({
+        createdby: jwt.decode(localStorage.getItem('jwtToken')).id,
+      });
+    }
   }
 
   onChange(e){
@@ -69,9 +77,11 @@ class CreateGroupBoard extends Component {
 }
 CreateGroupBoard.propTypes = {
   createGroup: React.PropTypes.func.isRequired,
+  auth: React.PropTypes.object.isRequired,
 }
 function mapStateToProps(state){
   return {
+    auth: state.userLoginReducer,
     group: state.group
   }
 }

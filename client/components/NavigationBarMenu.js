@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../actions/signinActions';
 import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
+import { retrieveMessage } from '../actions/messageActions';
 
 class NavigationBarMenu extends Component {
   componentWillMount() {
