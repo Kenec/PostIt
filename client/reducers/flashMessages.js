@@ -13,6 +13,7 @@ export default function  flashMessages ( state=[], action={} ) {
           }
         ];
       break;
+      
     case "DELETE_FLASH_MESSAGE":
           const index = findIndex(state, {id: action.id });
           if(index >= 0){

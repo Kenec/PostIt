@@ -9,7 +9,8 @@ export default function group(state={}, action) {
         return Object.assign({}, state, {groupsByUser: action.groupsByUser})
     case "GET_USERS_IN_GROUP":
         return Object.assign({}, state, {usersInGroup: action.usersInGroup})
-
+    case "SEARCH_ALL_USERS":
+        return Object.assign({}, state, {searchedUsers: action.users})
     default:
     return state;
 

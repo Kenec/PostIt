@@ -118,7 +118,7 @@ class ComposeMessageBoard extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="message"><span className="black-text"><b>Message:</b></span></label>
-                  <textarea onChange={this.onChange} value={this.props.priority_level} name="Message" className="form-control" rows="5" id="message"></textarea>
+                  <textarea onChange={this.onChange} value={this.props.Message} name="Message" className="form-control" rows="5" id="message"></textarea>
               </div>
 
               <button type="submit" disabled={this.state.isLoading} className="btn btn-primary">Send Message</button>

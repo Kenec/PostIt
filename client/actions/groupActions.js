@@ -8,10 +8,17 @@ export function createGroupAction(groupData) {
   }
 }
 
-export function getuserGroupsAction(data) {
+export function getuserGroupsAction(groupData) {
   return {
     type: "GET_USER_GROUPS",
-    groups: data
+    groups: groupData
+  }
+}
+
+export function searchAllUsersAction(usersData) {
+  return {
+    type: "SEARCH_ALL_USERS",
+    users: usersData
   }
 }
 
@@ -36,9 +43,25 @@ export function addUserToGroupsAction(data) {
   }
 }
 
+/**
+ * Represents a book.
+ * @constructor
+ * @param {string} username - The is the username of the user being searhed.
+ * 
+ */
+export function searchAllUsers(username) {
+    return dispatch => {
+      return axios.post('/api/users',username).then(res => {
+        dispatch(searchAllUsersAction(res.data))
+      });
+
+    }
+}
+
 export function getUsersInGroup (groupId) {
     return dispatch => {
       return axios.get('/api/groups/'+groupId+'/users');
+
     }
 }
 

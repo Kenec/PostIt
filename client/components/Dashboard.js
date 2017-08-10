@@ -3,9 +3,9 @@ import { Link } from 'react-router';
 import NavigationBarMenu from './NavigationBarMenu';
 import LeftSideGroupMenu from './LeftSideGroupMenu';
 import GroupList from './GroupList';
-import CreateGroupBoard from './CreateGroupBoard';
+import DashboardComponent from './DashboardComponent';
 
-class CreateGroup extends Component {
+class MessageBoard extends Component {
   constructor(props) {
     super(props);
   }
@@ -17,14 +17,13 @@ class CreateGroup extends Component {
 
           <div className="container-fluid">
               <div className="row">
-                <div className="col-md-2">
+                <div className="col-md-3">
                   <LeftSideGroupMenu />
                 </div>
-                  <div className="col-md-8">
-                    <CreateGroupBoard />
+                  <div className="col-md-7">
+                    <DashboardComponent />
                   </div>
                   <div className="col-md-2">
-                  
                 </div>
               </div>
           </div>
@@ -34,4 +33,4 @@ class CreateGroup extends Component {
   }
 }
 
-export default CreateGroup;
+export default MessageBoard;

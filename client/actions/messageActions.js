@@ -22,8 +22,6 @@ export function composeMessage (groupId, messageData) {
 
 export function retrieveMessage (groupId) {
     return dispatch => {
-      return axios.get('/api/group/'+groupId+'/messages').then( res => {
-          dispatch(retrieveMessageAction(res.data));
-        });
+      return axios.get('/api/group/'+groupId+'/messages');
     }
 }

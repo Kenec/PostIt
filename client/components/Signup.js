@@ -77,7 +77,7 @@ class Signup extends Component {
                     <div className="row">
                       <h3 className="">Welcome To PostIt App<hr/></h3>
                       <div>
-                          <img src="images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
+                          <img src="/images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
                           <span className="big-font">
                             PostIt is a messenger application that allows you post messages to your created group.
                             <b>PostIt </b>

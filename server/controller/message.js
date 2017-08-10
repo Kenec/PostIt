@@ -14,7 +14,9 @@ export default {
         message: message.message,
         priority_level: message.priority_level,
         group: message.groupId,
-        sentBy: message.sentBy
+        sentBy: message.sentBy,
+        id: message.id,
+        createdAt: message.createdAt,
       }))
       .catch(error => res.status(400).send({
         status: 'message cannot be sent'
@@ -37,7 +39,7 @@ export default {
       .then((user) => {
         if (user.length === 0) {
           return res.status(404).send({
-            message: 'No message in this group yet'
+            message: 'This is the start of messaging in this group!'
           });
         }
 

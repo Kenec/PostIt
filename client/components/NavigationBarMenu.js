@@ -24,7 +24,7 @@ class NavigationBarMenu extends Component {
       <div className="well container-fluid ">
           <div className="row">
               <div className="col-md-8 my_title">
-                <img src="images/postit.png" width="50px" height="50px"/>
+                <img src="/images/postit.png" width="50px" height="50px"/>
                 <strong className="text-info"><b>POSTIT</b></strong>
               </div>
               <div className="col-md-4 right-align">

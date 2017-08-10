@@ -11,6 +11,59 @@ $padding_bottom: 50px;
 $hundred: 100%;
 $message_board_height: 400px;
 
+#email-list {
+    min-height: 707px;
+}
+.no_spacing{
+  margin-bottom: 2px;
+
+}
+.collection {
+  .collection-item{
+    .avatar {
+      min-height: 0px !important;
+    }
+  }
+}
+.group-channel {
+    padding-left: 10px !important;
+    font-weight: 400;
+}
+.secondary-content {
+    top: 9px !important;
+}
+
+.group-collection {
+    padding-left: 10px !important;
+    font-weight: 600;
+}
+
+span{
+  .bad{
+    .new {
+      font-weight: 300;
+      font-size: 1.1rem;
+      color: #fff;
+      background-color: #c24141;
+      border-radius: 40px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}
+
+span{
+  .bad {
+    margin-left: 14px;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 24px;
+    height: 25px;
+    color: #757575;
+    float: right;
+    box-sizing: border-box;
+  }
+}
 
 .my_title{
   padding-left: $padding_left;
@@ -86,4 +139,19 @@ body {
   line-height:2em;
   overflow: auto ;
   padding:5px;
+}
+.group{
+  position: relative;
+}
+.group_board{
+  height:300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.bottom_of_message{
+  bottom: 0px;
+  height:100px;
+  position: absolute;
 }

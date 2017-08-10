@@ -10,7 +10,7 @@ const groupController = controller.group;
 const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
-// ** /signin **
+// This is the general route for the react components //
 router.get('/', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
@@ -50,6 +50,14 @@ router.get('/detailMessage', (req, res) => {
 
 // ** /createGroup **
 router.get('/createGroup', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /dashboard **
+router.get('/dashboard', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /groups **
+router.get('/group/:groupid', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
 
@@ -114,6 +122,9 @@ router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
 
 // *** To get the groups of a looged in user
 router.post('/api/users/username', userController.FetchMemberByName);
+
+// *** api route to get all users *** //
+router.post('/api/users', groupUserController.searchUser);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupController.retrieve);
