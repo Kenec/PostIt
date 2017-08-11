@@ -7,13 +7,11 @@ node_js:
 install:
   - npm install
 script:
-  - npm test
+  - npm test-prod
 services:
   - postgresql
 cache:
   - npm install
 before_script:
   - npm install sequelize-cli -g
-  - psql -c "CREATE DATABASE postit;" -U postgres
-  - psql -c "CREATE USER postgres WITH PASSWORD 'kene';" -U postgres
   - sequelize db:migrate
