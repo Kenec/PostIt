@@ -60,7 +60,7 @@ and send messages. User can also recover password when lost.
 
 ## Authors
 
-#### Nnamani Kenechukwu Charles 
+#### * Nnamani Kenechukwu Charles 
 
 ## License
 
