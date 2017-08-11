@@ -11,8 +11,8 @@ module.exports = {
       unique: true,
       allowNull: false,
       validate: {
-          notEmpty: true
-        }
+        notEmpty: true
+      }
     },
     phone: {
       allowNull: false,

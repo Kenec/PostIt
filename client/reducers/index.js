@@ -9,6 +9,6 @@ const rootReducer = combineReducers({
   flashMessages,
   group,
   message
-})
+});
 
 export default rootReducer;

@@ -19,12 +19,12 @@ export default (sequelize, DataTypes) => {
       },
     },
     phone: {
-     allowNull: false,
-     type: DataTypes.STRING,
-     validate: {
-       not: ['[a-z]', 'i']
-     }
-   },
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        not: ['[a-z]', 'i']
+      }
+    },
     password: {
       type: DataTypes.STRING,
       validate: {
@@ -60,10 +60,10 @@ export default (sequelize, DataTypes) => {
   //    }
   //  },
   // }
-);
+  );
 
   Users.associate = (models) => {
-    Users.hasMany(models.Messages,{
+    Users.hasMany(models.Messages, {
       foreignKey: 'id',
       onDelete: 'CASCADE',
     });

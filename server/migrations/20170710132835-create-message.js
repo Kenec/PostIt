@@ -10,8 +10,8 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: false,
       validate: {
-          notEmpty: true
-        }
+        notEmpty: true
+      }
     },
     priority_level: {
       type: Sequelize.STRING,
@@ -43,4 +43,4 @@ module.exports = {
     },
   }),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Messages')
-}
+};

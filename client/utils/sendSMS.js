@@ -1,6 +1,6 @@
 
-export function sendSMS (userArraysOfObj) {
+export function sendSMS(userArraysOfObj) {
   userArraysOfObj.map((user) => {
-    console.log(user.phone + " received notification");
+    console.log(`${user.phone} received notification`);
   });
 }

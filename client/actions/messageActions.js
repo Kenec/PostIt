@@ -53,9 +53,7 @@ export function retrieveMessageAction(retrieveMessages) {
  *
  */
 export function composeMessage(groupId, messageData) {
-  return () => {
-    return axios.post(`/api/group/${groupId}/message`, messageData);
-  };
+  return () => axios.post(`/api/group/${groupId}/message`, messageData);
 }
 
 /**
@@ -67,9 +65,7 @@ export function composeMessage(groupId, messageData) {
  *
  */
 export function retrieveMessage(groupId) {
-  return () => {
-    return axios.get(`/api/group/${groupId}/messages`);
-  };
+  return () => axios.get(`/api/group/${groupId}/messages`);
 }
 
 
@@ -81,5 +77,5 @@ export function retrieveMessage(groupId) {
 export function clearRetrievedMessage() {
   return (dispatch) => {
     dispatch(clearRetrievedMessageAction());
-  }
+  };
 }

@@ -56,11 +56,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'sentBy',
       as: 'Users',
     });
-    Messages.hasMany(models.Groups,{
+    Messages.hasMany(models.Groups, {
       foreignKey: 'groupId',
       as: 'Groups',
     });
-
   };
   return Messages;
 };

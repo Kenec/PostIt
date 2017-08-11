@@ -85,11 +85,9 @@ export function addUserToGroupsAction(data) {
  *
  */
 export function searchAllUsers(username) {
-  return (dispatch) => {
-    return axios.post('/api/users', username).then((res) => {
-      dispatch(searchAllUsersAction(res.data));
-    });
-  };
+  return dispatch => axios.post('/api/users', username).then((res) => {
+    dispatch(searchAllUsersAction(res.data));
+  });
 }
 
 /**
@@ -99,9 +97,7 @@ export function searchAllUsers(username) {
  *
  */
 export function getUsersInGroup(groupId) {
-  return () => {
-    return axios.get(`/api/groups/${groupId}/users`);
-  };
+  return () => axios.get(`/api/groups/${groupId}/users`);
 }
 
 /**
@@ -112,9 +108,7 @@ export function getUsersInGroup(groupId) {
  *
  */
 export function addUserToGroups(groupId, userId) {
-  return () => {
-    return axios.post(`/api/group/${groupId}/user`, userId);
-  };
+  return () => axios.post(`/api/group/${groupId}/user`, userId);
 }
 
 /**
@@ -124,9 +118,7 @@ export function addUserToGroups(groupId, userId) {
  *
  */
 export function getUserInfo(data) {
-  return () => {
-    return axios.post('/api/users/username', data);
-  };
+  return () => axios.post('/api/users/username', data);
 }
 
 /**
@@ -136,12 +128,10 @@ export function getUserInfo(data) {
  *
  */
 export function createGroup(groupData) {
-  return (dispatch) => {
-    return axios.post('/api/group', groupData).then(() => {
-      dispatch(createGroupAction(groupData));
-    }
-    );
-  };
+  return dispatch => axios.post('/api/group', groupData).then(() => {
+    dispatch(createGroupAction(groupData));
+  }
+  );
 }
 /**
  * Get users in group function.
@@ -151,11 +141,9 @@ export function createGroup(groupData) {
  *
  */
 export function getUserGroups(user) {
-  return (dispatch) => {
-    return axios.post('/api/users/me', user).then((res) => {
-      dispatch(getuserGroupsAction(res.data));
-    });
-  };
+  return dispatch => axios.post('/api/users/me', user).then((res) => {
+    dispatch(getuserGroupsAction(res.data));
+  });
 }
 /**
  * Get groups created by a user function.
@@ -164,9 +152,7 @@ export function getUserGroups(user) {
  *
  */
 export function getGroupsCreatedByUser(user) {
-  return (dispatch) => {
-    return axios.post('/api/group/creator', user).then((res) => {
-      dispatch(getGroupsCreatedByUserAction(res.data));
-    });
-  };
+  return dispatch => axios.post('/api/group/creator', user).then((res) => {
+    dispatch(getGroupsCreatedByUserAction(res.data));
+  });
 }

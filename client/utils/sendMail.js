@@ -1,9 +1,9 @@
-//import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
 
-export function sendMail (userArraysOfObj) {
+export function sendMail(userArraysOfObj) {
   let emailReceivers = '';
   userArraysOfObj.map((user) => {
-    emailReceivers = emailReceivers + user.email + ",";
+    emailReceivers = `${emailReceivers + user.email},`;
   });
 
   // create reusable transporter object using the default SMTP transport

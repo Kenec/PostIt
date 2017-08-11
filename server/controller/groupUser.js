@@ -33,20 +33,19 @@ export default {
 
   // retreive a user and all the group he belongs to
   fetchUserAndGroup(req, res) {
-
     const username = req.body.username;
 
     return Users
       .find({
-         include: [{
-           model: Groups,
-            as: 'groups',
-            required: false,
-            attributes: ['id', 'groupName'],
-            through: { attributes: [] }
-         }],
-         where: { username },
-         attributes: ['id', 'email', 'phone', 'username', 'createdAt']
+        include: [{
+          model: Groups,
+          as: 'groups',
+          required: false,
+          attributes: ['id', 'groupName'],
+          through: { attributes: [] }
+        }],
+        where: { username },
+        attributes: ['id', 'email', 'phone', 'username', 'createdAt']
       })
       .then((user) => {
         if (user.length === 0) {
@@ -56,26 +55,26 @@ export default {
         }
         return res.status(200).send(user);
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(400).send({
-        message: 'User does not exist'
-      })
-    });
+          message: 'User does not exist'
+        });
+      });
   },
   fetchMembersOfGroup(req, res) {
     const id = req.params.id;
 
     return Groups
       .find({
-         include: [{
-           model: Users,
-            as: 'users',
-            required: false,
-            attributes: ['id', 'username', 'email', 'phone'],
-            through: { attributes: [] }
-         }],
-         where: { id },
-         attributes: ['id', 'groupName', 'createdby']
+        include: [{
+          model: Users,
+          as: 'users',
+          required: false,
+          attributes: ['id', 'username', 'email', 'phone'],
+          through: { attributes: [] }
+        }],
+        where: { id },
+        attributes: ['id', 'groupName', 'createdby']
       })
       .then((group) => {
         if (group.length === 0) {
@@ -85,14 +84,14 @@ export default {
         }
         return res.status(200).send(group);
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(400).send({
-        message: 'Group does not exist'
-      })
-    });
+          message: 'Group does not exist'
+        });
+      });
   },
 
-  //Get group by id
+  // Get group by id
   retrieveMembers(req, res) {
     return userGroups
       .findAll({ where: { groupId: req.params.id } })
@@ -110,12 +109,12 @@ export default {
       .catch(error => res.status(400).send(error));
   },
 
-/** This method searches for a user from the Users DB where a user is LIKE the input field **/
+  /** This method searches for a user from the Users DB where a user is LIKE the input field * */
   searchUser(req, res) {
     return Users.findAll({
-        where: {username:  {$like: `%${req.body.username}%`}},
-        attributes: ['id', 'username', 'email', 'phone'],
-      })
+      where: { username: { $like: `%${req.body.username}%` } },
+      attributes: ['id', 'username', 'email', 'phone'],
+    })
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
   }

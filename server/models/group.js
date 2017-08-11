@@ -34,17 +34,17 @@ export default (sequelize, DataTypes) => {
   //     },
   //   },
   // }
-);
+  );
   Groups.associate = (models) => {
-   Groups.belongsToMany(models.Users, {
-     through: 'userGroups',
-     as: 'users',
-     foreignKey: 'groupId'
-   });
-   Groups.belongsTo(models.Messages,{
-     foreignKey: 'groupId',
-     onDelete: 'CASCADE',
-   });
- };
+    Groups.belongsToMany(models.Users, {
+      through: 'userGroups',
+      as: 'users',
+      foreignKey: 'groupId'
+    });
+    Groups.belongsTo(models.Messages, {
+      foreignKey: 'groupId',
+      onDelete: 'CASCADE',
+    });
+  };
   return Groups;
 };
