@@ -5,11 +5,11 @@ import path from 'path';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import routes from './routes/index';
-import config from '../webpack.config.js';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import routes from './routes/index';
+import config from '../webpack.config';
 
 
 // *** express instance *** //
@@ -19,7 +19,10 @@ const app = express();
 const compiler = webpack(config);
 
 // *** webpack middleware
-app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath:config.output.publicPath}));
+app.use(webpackDevMiddleware(compiler, {
+  noInfo: true,
+  publicPath: config.output.publicPath
+}));
 app.use(webpackHotMiddleware(compiler));
 
 // *** config middleware *** //

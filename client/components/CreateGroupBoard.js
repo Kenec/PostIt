@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createGroup } from '../actions/groupActions';
+import { createGroup, getUserGroups } from '../actions/groupActions';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 
@@ -10,7 +10,8 @@ class CreateGroupBoard extends Component {
       groupName: '',
       errors: {},
       success: '',
-      isLoading: false
+      isLoading: false,
+      username: jwt.decode(localStorage.getItem('jwtToken')).username,
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -36,7 +37,11 @@ class CreateGroupBoard extends Component {
     this.setState({ errors: {}, success: '', isLoading:true });
     this.props.createGroup(this.state)
       .then(
-        () => {
+        (res) => {
+          const { getUserGroups } = this.props.group;
+          const { isAuthenticated, user } = this.props.auth
+
+          this.props.getUserGroups({username: user.username});
           this.setState({
             success: this.state.groupName+' Group created successfully!',
             isLoading: false
@@ -77,6 +82,7 @@ class CreateGroupBoard extends Component {
 }
 CreateGroupBoard.propTypes = {
   createGroup: React.PropTypes.func.isRequired,
+  getUserGroups: React.PropTypes.func.isRequired,
   auth: React.PropTypes.object.isRequired,
 }
 function mapStateToProps(state){
@@ -85,4 +91,4 @@ function mapStateToProps(state){
     group: state.group
   }
 }
-export default connect(mapStateToProps, { createGroup })(CreateGroupBoard);
+export default connect(mapStateToProps, { createGroup, getUserGroups })(CreateGroupBoard);

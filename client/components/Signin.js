@@ -38,7 +38,7 @@ class Signin extends Component {
       .then(
         (res) => {
           this.props.getUserGroups({username:this.state.username});
-          this.context.router.push('/message')
+          this.context.router.push('/dashboard')
         },
         ({response}) => this.setState({
           errors: response.data,
@@ -69,7 +69,7 @@ class Signin extends Component {
                     <div className="row">
                       <h3 className="">Welcome To PostIt App<hr/></h3>
                       <div>
-                          <img src="images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
+                          <img src="/images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
                           <span className="big-font">
                             PostIt is a messenger application that allows you post messages to your created group.
                             <b>PostIt </b>

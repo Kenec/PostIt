@@ -10,9 +10,9 @@ const composeEnhancers =
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     }) : compose;
 
-let finalCreateStore = composeEnhancers(
-    applyMiddleware(createLogger(),thunk)
-  )(createStore)
+const finalCreateStore = composeEnhancers(
+  applyMiddleware(createLogger(), thunk)
+)(createStore);
 
 export default function configureStore(initialState = {}) {
   return finalCreateStore(rootReducer, initialState);

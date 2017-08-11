@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import controller from '../controller';
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 import config from '../config';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const groupController = controller.group;
 const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
-// ** /signin **
+// This is the general route for the react components //
 router.get('/', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
@@ -52,6 +52,14 @@ router.get('/detailMessage', (req, res) => {
 router.get('/createGroup', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
+// ** /dashboard **
+router.get('/dashboard', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+// ** /groups **
+router.get('/group/:groupid', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
 
 // ** /addUser **
 router.get('/addUser', (req, res) => {
@@ -75,30 +83,30 @@ router.post('/api/user/signin', userController.list);
 
 let token;
 // setting a middleware to protect all other routes
-    router.use((req, res, next) => {
-    token = req.body.token || req.query.token ||
-      req.headers["Authorization"] || req.headers["x-access-token"];
-    jwt.verify(token, config.jwtSecret, (err, authToken) => {
-      if (err) {
-        res.status(401)
-          .send({
-            message: "Sorry, user not authenticated, invalid access token"
-          });
-        return;
-      }
-      // if authenticated with auth token,
-      // save auth token and to request for use in other routes
-      req.authToken = authToken;
-      authToken = JSON.stringify(authToken);
-      // testing for saving user data
-      // res.cookie("userid", decoded.id);
-      res.append("user", authToken);
-      next();
-    });
+router.use((req, res, next) => {
+  token = req.body.token || req.query.token ||
+      req.headers.Authorization || req.headers['x-access-token'];
+  jwt.verify(token, config.jwtSecret, (err, authToken) => {
+    if (err) {
+      res.status(401)
+        .send({
+          message: 'Sorry, user not authenticated, invalid access token'
+        });
+      return;
+    }
+    // if authenticated with auth token,
+    // save auth token and to request for use in other routes
+    req.authToken = authToken;
+    authToken = JSON.stringify(authToken);
+    // testing for saving user data
+    // res.cookie("userid", decoded.id);
+    res.append('user', authToken);
+    next();
   });
+});
 
-  // protected routes
-  // set after the above middleware to prevent access to unathourized
+// protected routes
+// set after the above middleware to prevent access to unathourized
 
 // ** /api/group **
 router.post('/api/group', groupController.create);
@@ -114,6 +122,9 @@ router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
 
 // *** To get the groups of a looged in user
 router.post('/api/users/username', userController.FetchMemberByName);
+
+// *** api route to get all users *** //
+router.post('/api/users', groupUserController.searchUser);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupController.retrieve);

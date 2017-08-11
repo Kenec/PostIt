@@ -9,9 +9,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       refrences: {
-       model: 'Users',
-       key: 'id'
-     },
+        model: 'Users',
+        key: 'id'
+      },
       validate: {
         isInt: {
           msg: 'Userid Must be an Integer'

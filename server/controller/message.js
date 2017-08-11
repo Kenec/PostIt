@@ -14,7 +14,9 @@ export default {
         message: message.message,
         priority_level: message.priority_level,
         group: message.groupId,
-        sentBy: message.sentBy
+        sentBy: message.sentBy,
+        id: message.id,
+        createdAt: message.createdAt,
       }))
       .catch(error => res.status(400).send({
         status: 'message cannot be sent'
@@ -24,25 +26,25 @@ export default {
   retrieve(req, res) {
     return Messages
       .findAll({
-         include: [{
-           model: Users,
-           as: 'Users',
-           attributes: ['id', 'username'],
-         }],
+        include: [{
+          model: Users,
+          as: 'Users',
+          attributes: ['id', 'username'],
+        }],
         where: {
           groupId: req.params.groupid,
         },
-        attributes: ['id', 'message','groupId','sentBy', 'createdAt']
+        attributes: ['id', 'message', 'groupId', 'sentBy', 'createdAt']
       })
       .then((user) => {
         if (user.length === 0) {
           return res.status(404).send({
-            message: 'No message in this group yet'
+            message: 'This is the start of messaging in this group!'
           });
         }
 
         return res.status(200).send(user);
       })
-      .catch(error => {console.log(error);res.status(400).send(error)});
+      .catch((error) => { console.log(error); res.status(400).send(error); });
   },
 };

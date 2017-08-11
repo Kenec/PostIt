@@ -9,7 +9,11 @@
     "undo": "sequelize db:migrate:undo:all",
     "migrate": "sequelize db:migrate",
     "test-prep": "npm run undo && npm run migrate && npm run test-run",
-    "test": "npm run test-run"
+    "test": "npm run test-run",
+    "eslint": "eslint --fix **/*.js",
+    "eslint-all": "eslint --fix *",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test"
   },
   "author": "Kene",
   "license": "ISC",
@@ -44,6 +48,7 @@
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
+    "moment": "^2.18.1",
     "morgan": "^1.8.2",
     "node-sass": "^4.5.3",
     "nodemailer": "^4.0.1",

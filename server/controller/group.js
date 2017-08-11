@@ -12,22 +12,27 @@ export default {
         userId: req.body.createdby
       })
         .then(() => res.status(201).send({
-          message: group.groupName+' group created successfully',
-          success:true,
+          message: `${group.groupName} group created successfully`,
+          success: true,
         }))
         .catch(error => res.status(400).send(error)))
       .catch(error => res.status(400).send({
         groupName: error.errors[0].message,
         message: 'Group Already Exists',
-        success:false,
+        success: false,
       }));
   },
   retrieve(req, res) {
-    return userGroups
-      .findAll({ where: { group_id: req.params.id } })
+    return Groups
+      .findAll({
+        where: { id: req.params.id }
+      })
       .then(groups => res.status(200).send(groups))
       .catch((error) => {
-        res.status(400).send(error);
+        res.status(400).send({
+          error,
+          message: 'Group selected not found'
+        });
       });
   },
   fetchGroupByCreator(req, res) {
