@@ -14,5 +14,6 @@ cache:
   - npm install
 before_script:
   - npm install sequelize-cli -g
-  - createdb postit --username=postgres 
+  - psql -c "CREATE DATABASE postit;" -U postgres
+  - psql -c "CREATE USER postgres WITH PASSWORD 'kene';" -U postgres
   - sequelize db:migrate
