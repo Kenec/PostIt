@@ -63,7 +63,6 @@ export default {
     });
   },
   fetchMembersOfGroup(req, res) {
-
     const id = req.params.id;
 
     return Groups

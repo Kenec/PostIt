@@ -7,7 +7,7 @@ import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup } from '../actio
 import { composeMessage } from '../actions/messageActions';
 import { sendMail } from '../utils/sendMail';
 import { sendSMS } from '../utils/sendSMS';
-import { retrieveMessage, retrieveMessageAction } from '../actions/messageActions';
+import { retrieveMessage, retrieveMessageAction, clearRetrievedMessageAction } from '../actions/messageActions';
 
 
 class GroupBoard extends Component {
@@ -32,9 +32,11 @@ class GroupBoard extends Component {
   componentDidMount(){
     this.props.retrieveMessage(this.props.groupSelectedId).then(
       (messageData) => {
+        this.setState({ retrievedMessages: []});
         this.props.retrieveMessageAction(messageData.data);
+        const { updatedMessageData } = this.props.message;
         this.setState({
-          retrievedMessages: messageData.data,
+          retrievedMessages: updatedMessageData,
         });
       },
       ({response}) => {
@@ -114,20 +116,13 @@ class GroupBoard extends Component {
     const {groups, groupsByUser} = this.props.group;
     const groupId = this.props.groupSelectedId;
     const groupName = this.props.groupName;
-
+    this.props.clearRetrievedMessageAction();
     if(isAuthenticated){
       this.setState({
         sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
         priority_level: 'Normal',
       });
     }
-
-    if(groupName !== 'No Group Found') {
-      this.setState({
-        isLoading: true,
-      });
-    }
-
   }
 
 
@@ -138,34 +133,37 @@ class GroupBoard extends Component {
     const groupName = this.props.groupName;
     const groupId = this.props.groupId;
 
-    if(!groups || !groupsByUser || !messageData || groupName === 'No Group Found') {
+    if(!groups || !groupsByUser || groupName === 'No Group Found') {
       return (
         <h4>Loading ...</h4>
       )
     }
 
+
     if(!groups.groups) {
         this.context.router.push('/dashboard')
     }
-
-    const groupsMessagesList = messageData.map((groupMessage) => {
-      if(groupName !== 'No Group Found') {
-        return(
-            <div key={groupMessage.id}>
-              <div className="well well-sm no_spacing">
-                <p id={groupMessage.id}>
-                  <span className='left cyan lighten-5'><i>{groupMessage.Users.username}</i></span>
-                  <span className='right red-text lighten-5'>{moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}</span>
-                </p>
-                <div>
-                  <hr/>
-                  <p className='blue-text lighten-3' id={groupMessage.id}>{groupMessage.message}</p>
+    let groupsMessagesList;
+    if(messageData){
+      groupsMessagesList = messageData.map((groupMessage) => {
+        if(groupName !== 'No Group Found') {
+          return(
+              <div key={groupMessage.id}>
+                <div className="well well-sm no_spacing">
+                  <p id={groupMessage.id}>
+                    <span className='left cyan lighten-5'><i>{groupMessage.Users.username}</i></span>
+                    <span className='right red-text lighten-5'>{moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}</span>
+                  </p>
+                  <div>
+                    <hr/>
+                    <p className='blue-text lighten-3' id={groupMessage.id}>{groupMessage.message}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        }
-    });
+            )
+          }
+      });
+    }
 
     return(
       <div className="row">
@@ -204,6 +202,7 @@ GroupBoard.propTypes = {
   getGroupsCreatedByUser: React.PropTypes.func.isRequired,
   auth: React.PropTypes.object.isRequired,
   retrieveMessage: React.PropTypes.func.isRequired,
+  clearRetrievedMessageAction: React.PropTypes.func.isRequired,
 }
 function mapStateToProps(state) {
   return {
@@ -212,4 +211,4 @@ function mapStateToProps(state) {
     message: state.message
   }
 }
-export default connect(mapStateToProps, {getUserGroups, getGroupsCreatedByUser, retrieveMessageAction, composeMessage, getUsersInGroup, retrieveMessage})(GroupBoard);
+export default connect(mapStateToProps, {getUserGroups, clearRetrievedMessageAction, getGroupsCreatedByUser, retrieveMessageAction, composeMessage, getUsersInGroup, retrieveMessage})(GroupBoard);

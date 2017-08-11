@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup, getuserGroupsAction } from '../actions/groupActions';
+import { getUserGroups, getUsersInGroupAction, getUsersInGroup, getuserGroupsAction } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 class GroupMembers extends Component {
@@ -16,6 +16,7 @@ class GroupMembers extends Component {
     const { isAuthenticated, user } = this.props.auth;
     this.props.getUsersInGroup(this.props.groupSelectedId).then(
       ({data}) => {
+        this.props.getUsersInGroupAction(data.users);
         this.setState({ groupMembers: data.users});
       },
       ({response}) => {
@@ -26,15 +27,15 @@ class GroupMembers extends Component {
   }
   render(){
 
-    const {groups, groupsByUser} = this.props.group;
+    const {groups, groupsByUser, usersInGroup} = this.props.group;
 
-    if(!groups || !groupsByUser) {
+    if(!groups || !groupsByUser || !usersInGroup) {
       return (
         <h4>Loading ...</h4>
       )
     }
 
-    const groupsMemberList = this.state.groupMembers.map((groupMember) => {
+    const groupsMemberList = usersInGroup.map((groupMember) => {
       return(
         <Link to={'/user/'+groupMember.id} key={groupMember.id}>
           <div className="well well-sm no_spacing">
@@ -61,7 +62,7 @@ class GroupMembers extends Component {
 GroupMembers.propTypes = {
   getUserGroups: React.PropTypes.func.isRequired,
   getUsersInGroup: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  getUsersInGroupAction: React.PropTypes.func.isRequired,
   auth: React.PropTypes.object.isRequired,
   retrieveMessage: React.PropTypes.func.isRequired,
 }
@@ -72,4 +73,4 @@ function mapStateToProps(state) {
     message: state.message
   }
 }
-export default connect(mapStateToProps, {getUserGroups, getGroupsCreatedByUser, getuserGroupsAction, getUsersInGroup, retrieveMessage})(GroupMembers);
+export default connect(mapStateToProps, {getUserGroups, getUsersInGroupAction, getuserGroupsAction, getUsersInGroup, retrieveMessage})(GroupMembers);

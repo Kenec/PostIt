@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
-import { getUserGroups, getUserInfo, addUserToGroups, getGroupsCreatedByUser, searchAllUsers } from '../actions/groupActions';
+import { getUserGroups, getUserInfo, addUserToGroups, getUsersInGroupAction, searchAllUsers } from '../actions/groupActions';
 
 class SearchMember extends Component {
   constructor(props) {
@@ -53,9 +53,21 @@ class SearchMember extends Component {
         errors: {},
         success: '',
       });
-      let userId = e.target.value;
+      const userId = e.target.userId.value;
+      const username = e.target.username.value;
+      const userEmail = e.target.userEmail.value;
+      const userPhone = e.target.userPhone.value;
+      const currentSearchedUser = {
+        id: userId,
+        username: username,
+        email: userEmail,
+        phone: userPhone
+      }
       this.props.addUserToGroups(this.props.groupId,{userId: userId}).then(
         ({data}) => {
+          const {usersInGroup} = this.props.group;
+          const newSearchedUser = usersInGroup.concat(currentSearchedUser);
+          this.props.getUsersInGroupAction(newSearchedUser);
           this.setState({
             success: 'User added successfully',
             isLoading: false
@@ -70,7 +82,7 @@ class SearchMember extends Component {
   }
 
   render(){
-    const {groups, groupsByUser, searchedUsers} = this.props.group
+    const {groups, groupsByUser, searchedUsers} = this.props.group;
     const { errors, success } = this.state;
 
     if(!groups || !groupsByUser) {
@@ -84,10 +96,20 @@ class SearchMember extends Component {
     if(searchedUsers){
         returnedUsers = searchedUsers.map((user) => {
           return (
-            <p className='' key={user.id}>
-                {user.username}
-                <span className='pull-right'><button value={user.id} onClick={this.addUser} className=''>Add</button></span>
-            </p>)
+            <form onSubmit={this.addUser} key={user.id}>
+            <div className='row'>
+              <p className='' >
+                  <span className='pull-left'>{user.username}</span>
+                  <span className='pull-right'>
+                      <input type='hidden' name='userId' value={user.id} />
+                      <input type='hidden' name='username' value={user.username} />
+                      <input type='hidden' name='userEmail' value={user.email} />
+                      <input type='hidden' name='userPhone' value={user.phone} />
+                      <button type='submit' className=''>Add</button>
+                  </span>
+              </p>
+            </div>
+          </form>)
       });
     }
 
@@ -113,7 +135,7 @@ SearchMember.propTypes = {
   getUserInfo: React.PropTypes.func.isRequired,
   searchAllUsers: React.PropTypes.func.isRequired,
   addUserToGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  getUsersInGroupAction: React.PropTypes.func.isRequired,
   auth: React.PropTypes.object.isRequired,
 }
 function mapStateToProps(state) {
@@ -122,4 +144,4 @@ function mapStateToProps(state) {
     auth: state.userLoginReducer,
   }
 }
-export default connect(mapStateToProps, {getUserGroups, searchAllUsers, getUserInfo, addUserToGroups, getGroupsCreatedByUser})(SearchMember);
+export default connect(mapStateToProps, {getUserGroups, searchAllUsers, getUserInfo, addUserToGroups, getUsersInGroupAction})(SearchMember);

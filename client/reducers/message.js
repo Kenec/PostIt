@@ -7,9 +7,11 @@
 export default function message(state = {}, action) {
   switch (action.type) {
     case 'COMPOSE_MESSAGE':
-      return Object.assign({}, state, { messageData: action.messageData })
+      return Object.assign({}, state, { messageData: action.messageData });
     case 'RETRIEVE_MESSAGE':
-      return Object.assign({}, state, { messageData: action.retrieveMessages })
+      return Object.assign({}, state, { messageData: action.retrieveMessages });
+    case 'CLEAR_RETRIEVED_MESSAGE':
+      return Object.assign({}, state, { messageData: action.messageData });
     default:
       return state;
   }

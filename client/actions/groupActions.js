@@ -1,103 +1,172 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 
+/**
+ * Represents a book.
+ * @constructor
+ * @param {object} groupData - The group data return from creating a group.
+ *
+ */
 export function createGroupAction(groupData) {
   return {
-    type: "CREATE_GROUP",
+    type: 'CREATE_GROUP',
     groupData
-  }
-}
-
-export function getuserGroupsAction(groupData) {
-  return {
-    type: "GET_USER_GROUPS",
-    groups: groupData
-  }
-}
-
-export function searchAllUsersAction(usersData) {
-  return {
-    type: "SEARCH_ALL_USERS",
-    users: usersData
-  }
-}
-
-export function getGroupsCreatedByUserAction(data) {
-  return {
-    type: "GET_GROUPS_CREATED_BY_USER",
-    groupsByUser: data
-  }
-}
-
-export function getUsersInGroupAction(data) {
-  return {
-    type: "GET_USERS_IN_GROUP",
-    usersInGroup: data
-  }
-}
-
-export function addUserToGroupsAction(data) {
-  return {
-    type: "ADD_USER_TO_GROUPS",
-    userData: data
-  }
+  };
 }
 
 /**
  * Represents a book.
  * @constructor
+ * @param {object} groupData - The group data return from creating a group.
+ *
+ */
+export function getuserGroupsAction(groupData) {
+  return {
+    type: 'GET_USER_GROUPS',
+    groups: groupData
+  };
+}
+/**
+ * Represents a book.
+ * @constructor
+ * @param {object} usersData - The user data retur
+ * n from searching all user from a group.
+ *
+ */
+export function searchAllUsersAction(usersData) {
+  return {
+    type: 'SEARCH_ALL_USERS',
+    users: usersData
+  };
+}
+/**
+ * Represents a book.
+ * @constructor
+ * @param {object} data - data of groups created by a particular user
+ * .
+ *
+ */
+export function getGroupsCreatedByUserAction(data) {
+  return {
+    type: 'GET_GROUPS_CREATED_BY_USER',
+    groupsByUser: data
+  };
+}
+/**
+ * Represents a book.
+ * @constructor
+ * @param {object} data - data of users in a group
+ * .
+ *
+ */
+export function getUsersInGroupAction(data) {
+  return {
+    type: 'GET_USERS_IN_GROUP',
+    usersInGroup: data
+  };
+}
+/**
+ * Add user to a group action.
+ * @constructor
+ * @param {object} data - data of user to be added in a group
+ * .
+ *
+ */
+export function addUserToGroupsAction(data) {
+  return {
+    type: 'ADD_USER_TO_GROUPS',
+    userData: data
+  };
+}
+
+/**
+ * Search for all user where a username is LIKE.
+ * @constructor
  * @param {string} username - The is the username of the user being searhed.
- * 
+ *
  */
 export function searchAllUsers(username) {
-    return dispatch => {
-      return axios.post('/api/users',username).then(res => {
-        dispatch(searchAllUsersAction(res.data))
-      });
-
-    }
+  return (dispatch) => {
+    return axios.post('/api/users', username).then((res) => {
+      dispatch(searchAllUsersAction(res.data));
+    });
+  };
 }
 
-export function getUsersInGroup (groupId) {
-    return dispatch => {
-      return axios.get('/api/groups/'+groupId+'/users');
-
-    }
+/**
+ * Search for all user in a group.
+ * @constructor
+ * @param {string} groupId - The is the groupid.
+ *
+ */
+export function getUsersInGroup(groupId) {
+  return () => {
+    return axios.get(`/api/groups/${groupId}/users`);
+  };
 }
 
-export function addUserToGroups (groupId,userId) {
-    return dispatch => {
-      return axios.post('/api/group/'+groupId+'/user',userId);
-    }
+/**
+ * Search for all user in a group.
+ * @constructor
+ * @param {string} groupId - The is the groupid.
+ * @param {string} userId - The is the userId.
+ *
+ */
+export function addUserToGroups(groupId, userId) {
+  return () => {
+    return axios.post(`/api/group/${groupId}/user`, userId);
+  };
 }
 
+/**
+ * Search for all user in a group.
+ * @constructor
+ * @param {string} data - The is the userInfo data.
+ *
+ */
 export function getUserInfo(data) {
-    return dispatch => {
-      return axios.post('/api/users/username',data)
+  return () => {
+    return axios.post('/api/users/username', data);
+  };
+}
+
+/**
+ * Create group function.
+ * @constructor
+ * @param {string} groupData - The is the group data for creating group.
+ *
+ */
+export function createGroup(groupData) {
+  return (dispatch) => {
+    return axios.post('/api/group', groupData).then(() => {
+      dispatch(createGroupAction(groupData));
     }
+    );
+  };
 }
-
-export function createGroup (groupData) {
-    return dispatch => {
-      return axios.post('/api/group',groupData).then( res => {
-          dispatch(createGroupAction(groupData));
-        }
-      );
-    }
-}
-
-export function getUserGroups (user) {
-  return dispatch => {
-    return axios.post('/api/users/me',user).then( res => {
-        dispatch(getuserGroupsAction(res.data));
+/**
+ * Get users in group function.
+ * @constructor
+ * @param {string} user - The is the user whose group  which he belongs to
+ * is fetched.
+ *
+ */
+export function getUserGroups(user) {
+  return (dispatch) => {
+    return axios.post('/api/users/me', user).then((res) => {
+      dispatch(getuserGroupsAction(res.data));
     });
-  }
+  };
 }
-
-export function getGroupsCreatedByUser (user) {
-  return dispatch => {
-    return axios.post('/api/group/creator',user).then( res => {
-        dispatch(getGroupsCreatedByUserAction(res.data));
+/**
+ * Get groups created by a user function.
+ * @constructor
+ * @param {string} user - The is the user whose group is fetched.
+ *
+ */
+export function getGroupsCreatedByUser(user) {
+  return (dispatch) => {
+    return axios.post('/api/group/creator', user).then((res) => {
+      dispatch(getGroupsCreatedByUserAction(res.data));
     });
-  }
+  };
 }
