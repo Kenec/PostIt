@@ -11,7 +11,7 @@
   "test": {
     "username": "postgres",
     "password": "kene",
-    "database": "postit",
+    "database": "postit-test",
     "host": "127.0.0.1",
     "port":"5000",
     "dialect": "postgres"

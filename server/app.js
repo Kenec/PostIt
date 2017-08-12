@@ -44,3 +44,5 @@ app.use((req, res, next) => {
 
 // Listen
 app.listen(process.env.PORT || 3000);
+
+export default app;

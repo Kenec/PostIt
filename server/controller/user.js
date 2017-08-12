@@ -1,6 +1,6 @@
-import { Users } from '../models';
 import jwt from 'jsonwebtoken';
 import md5 from 'md5';
+import { Users } from '../models';
 import config from '../config';
 import validateInput from '../shared/validations/signup';
 
@@ -24,10 +24,12 @@ export default {
         username: user.username,
         email: user.email
       }))
-      .catch(error => res.status(400).json({
-        message: 'Account Already Exists!',
-        success: false
-      }));
+      .catch(() => {
+        res.status(400).json({
+          message: 'Account Already Exists!',
+          success: false
+        });
+      });
   },
   list(req, res) {
     Users
@@ -82,7 +84,7 @@ export default {
           message: 'User not found',
         });
       })
-      .catch((error) => {
+      .catch(() => {
         res.status(400).send({
           message: 'User does not exist'
         });
@@ -90,7 +92,7 @@ export default {
   },
 
   getAllUsers(req, res) {
-    return models.Users
+    return Users
       .findAll()
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
