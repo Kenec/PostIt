@@ -5,8 +5,8 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup } from '../actions/groupActions';
 import { composeMessage } from '../actions/messageActions';
-import { sendMail } from '../utils/sendMail';
-import { sendSMS } from '../utils/sendSMS';
+import  sendMail from '../utils/sendMail';
+import  sendSMS  from '../utils/sendSMS';
 import { retrieveMessage, retrieveMessageAction, clearRetrievedMessageAction } from '../actions/messageActions';
 
 
@@ -56,7 +56,7 @@ class GroupBoard extends Component {
   onSubmit(e) {
     e.preventDefault();
     if(this.props.groupName !== 'No Group Found'){
-      if(this.state.Message && this.state.priority_level && this.state.sentBy){
+      if(typeof(this.state.Message) == 'string' && this.state.priority_level && this.state.sentBy){
         this.setState({ errors: {}, success: '', isLoading:true });
         const messageSentData = {
           message: this.state.Message,
@@ -86,8 +86,8 @@ class GroupBoard extends Component {
                   sendMail(usersArray);
                 } else if(this.state.priority_level === 'Critical') {
                   const usersArray = data.users;
-                  sendMail(usersArray);
-                  sendSMS(usersArray);
+                  sendSMS(usersArray, updateMessageStore.message);
+                  sendMail(usersArray, updateMessageStore.message);
                 }
                 this.setState({
                   success: 'Sent!',
@@ -97,13 +97,23 @@ class GroupBoard extends Component {
                 });
               },
               ({response}) => {
-                  this.setState({ errors: response.data});
+                  this.setState({
+                    errors: response.data,
+                    isLoading: false,
+                    Message: '',
+                    priority_level: 'Normal',
+                  });
               }
             );
 
           },
           ({response}) => {
-            this.setState({ errors: response.data});
+            this.setState({
+              errors: response.data,
+              isLoading: false,
+              Message: '',
+              priority_level: 'Normal',
+            });
           }
         ).catch((error) => {});
       }
@@ -189,7 +199,10 @@ class GroupBoard extends Component {
               </select>
               <textarea onChange={this.onChange} value={this.state.Message} name="Message" placeholder="Type your message" className="form-control" id="message"></textarea>
               <button type="submit" disabled={this.state.isLoading} className="btn btn-primary">Send Message</button>
-              <p>{success && <span className="help-block green-text"><b>{success}</b></span>}</p>
+              <p>
+                {success && <span className="help-block green-text"><b>{success}</b></span>}
+                {errors.status && <span className="help-block red-text"><b>{errors.status}</b></span>}
+              </p>
             </form>
           </div>
         </div>

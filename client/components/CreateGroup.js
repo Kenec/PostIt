@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import NavigationBarMenu from './NavigationBarMenu';
 import LeftSideGroupMenu from './LeftSideGroupMenu';
-import GroupList from './GroupList';
 import CreateGroupBoard from './CreateGroupBoard';
 
 class CreateGroup extends Component {
@@ -24,7 +23,7 @@ class CreateGroup extends Component {
                     <CreateGroupBoard />
                   </div>
                   <div className="col-md-2">
-                  
+
                 </div>
               </div>
           </div>

@@ -1,4 +1,4 @@
-import { Messages, Groups, Users } from '../models';
+import { Messages, Users } from '../models';
 
 export default {
   create(req, res) {
@@ -9,16 +9,18 @@ export default {
         groupId: req.params.groupid,
         sentBy: req.body.sentBy,
       })
-      .then(message => res.status(201).send({
-        status: 'Message sent successfully',
-        message: message.message,
-        priority_level: message.priority_level,
-        group: message.groupId,
-        sentBy: message.sentBy,
-        id: message.id,
-        createdAt: message.createdAt,
-      }))
-      .catch(error => res.status(400).send({
+      .then((message) => {
+        res.status(201).send({
+          status: 'Message sent successfully',
+          message: message.message,
+          priority_level: message.priority_level,
+          group: message.groupId,
+          sentBy: message.sentBy,
+          id: message.id,
+          createdAt: message.createdAt,
+        });
+      })
+      .catch(() => res.status(400).send({
         status: 'message cannot be sent'
       }));
   },
@@ -45,6 +47,6 @@ export default {
 
         return res.status(200).send(user);
       })
-      .catch((error) => { console.log(error); res.status(400).send(error); });
+      .catch((error) => { res.status(400).send(error); });
   },
 };

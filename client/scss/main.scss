@@ -18,6 +18,20 @@ $message_board_height: 400px;
   margin-bottom: 2px;
 
 }
+
+.remove-bottom-padding{
+  padding-bottom: 0px
+}
+
+.bottom-align{
+  position: relative;
+  min-height: 100px;
+}
+
+.space_link{
+  word-spacing: 10px;
+}
+
 .collection {
   .collection-item{
     .avatar {

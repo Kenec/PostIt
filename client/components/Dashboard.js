@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import NavigationBarMenu from './NavigationBarMenu';
 import LeftSideGroupMenu from './LeftSideGroupMenu';
-import GroupList from './GroupList';
 import DashboardComponent from './DashboardComponent';
 
-class MessageBoard extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
   }
@@ -33,4 +32,4 @@ class MessageBoard extends Component {
   }
 }
 
-export default MessageBoard;
+export default Dashboard;
