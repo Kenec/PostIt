@@ -3,11 +3,18 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import { Link } from 'react-router';
 import moment from 'moment';
-import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup } from '../actions/groupActions';
+import { getUserGroups,
+         getGroupsCreatedByUser,
+         getUsersInGroup
+       } from '../actions/groupActions';
 import { composeMessage } from '../actions/messageActions';
-import  sendMail from '../utils/sendMail';
-import  sendSMS  from '../utils/sendSMS';
-import { retrieveMessage, retrieveMessageAction, clearRetrievedMessageAction } from '../actions/messageActions';
+import { retrieveMessage,
+        retrieveMessageAction,
+        clearRetrievedMessageAction,
+        addNotification,
+        updateNotification,
+        getNotification
+      } from '../actions/messageActions';
 
 
 class GroupBoard extends Component {
@@ -56,7 +63,8 @@ class GroupBoard extends Component {
   onSubmit(e) {
     e.preventDefault();
     if(this.props.groupName !== 'No Group Found'){
-      if(typeof(this.state.Message) == 'string' && this.state.priority_level && this.state.sentBy){
+      if(typeof(this.state.Message) == 'string' && this.state.priority_level &&
+          this.state.sentBy){
         this.setState({ errors: {}, success: '', isLoading:true });
         const messageSentData = {
           message: this.state.Message,
@@ -71,6 +79,7 @@ class GroupBoard extends Component {
               message: data.message,
               groupId: data.group,
               sentBy: data.sentBy,
+              priority_level: data.priority_level,
               createdAt: data.createdAt,
               Users: {
                 id: jwt.decode(localStorage.getItem('jwtToken')).id,
@@ -81,15 +90,23 @@ class GroupBoard extends Component {
             this.props.retrieveMessageAction(newMessageData);
             this.props.getUsersInGroup(this.props.groupSelectedId).then(
               ({data}) => {
-                if(this.state.priority_level === 'Urgent') {
-                  const usersArray = data.users;
-                  sendMail(usersArray);
-                } else if(this.state.priority_level === 'Critical') {
-                  const usersArray = data.users;
-                  sendSMS(usersArray, updateMessageStore.message);
-                  sendMail(usersArray, updateMessageStore.message);
-                }
-                this.setState({
+                const usersArray = data.users;
+                const sender = jwt.decode(localStorage.getItem('jwtToken')).id;
+                usersArray.map(user => {
+                  let readStatus = 0;
+                  if (user.id === sender){
+                    readStatus = 1;
+                  }
+                  this.props.addNotification(updateMessageStore.id,
+                    {
+                      userId: user.id,
+                      readStatus: readStatus,
+                    });
+                  });
+                  this.props.getNotification(
+                    {userId: jwt.decode(localStorage.getItem('jwtToken')).id}
+                  );
+                  this.setState({
                   success: 'Sent!',
                   isLoading: false,
                   Message: '',
@@ -161,12 +178,21 @@ class GroupBoard extends Component {
               <div key={groupMessage.id}>
                 <div className="well well-sm no_spacing">
                   <p id={groupMessage.id}>
-                    <span className='left cyan lighten-5'><i>{groupMessage.Users.username}</i></span>
-                    <span className='right red-text lighten-5'>{moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}</span>
+                    <span className='left cyan span_spacing lighten-5'>
+                      <i>{groupMessage.Users.username}</i>
+                    </span>
+                    <span className='left yellow lighten-5'>
+                      <i>{groupMessage.priority_level}</i>
+                    </span>
+                    <span className='right red-text lighten-5'>
+                    {moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}
+                    </span>
                   </p>
                   <div>
                     <hr/>
-                    <p className='blue-text lighten-3' id={groupMessage.id}>{groupMessage.message}</p>
+                    <p className='blue-text lighten-3' id={groupMessage.id}>
+                      {groupMessage.message}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -186,13 +212,17 @@ class GroupBoard extends Component {
         <div className="row">
           <div className="well well-sm group_board no_spacing">
             <div className="">
-              {retrieveMessageError && <span className="help-block red-text"><b>{retrieveMessageError}</b></span>}
+              {retrieveMessageError && <span className="help-block red-text">
+                <b>{retrieveMessageError}</b></span>}
               {groupsMessagesList && groupsMessagesList}
             </div>
           </div>
           <div className="well well-sm">
             <form onSubmit={this.onSubmit} className="" action="" method="">
-              <select onChange={this.onChange} value={this.state.priority_level} className="form-control" name="priority_level">
+              <select onChange={this.onChange}
+                value={this.state.priority_level}
+                className="form-control"
+                name="priority_level">
                   <option value="Normal" defaultValue>Normal</option>
                   <option value="Urgent">Urgent</option>
                   <option value="Critical">Critical</option>
@@ -216,6 +246,9 @@ GroupBoard.propTypes = {
   auth: React.PropTypes.object.isRequired,
   retrieveMessage: React.PropTypes.func.isRequired,
   clearRetrievedMessageAction: React.PropTypes.func.isRequired,
+  addNotification: React.PropTypes.func.isRequired,
+  updateNotification: React.PropTypes.func.isRequired,
+  getNotification: React.PropTypes.func.isRequired,
 }
 function mapStateToProps(state) {
   return {
@@ -224,4 +257,15 @@ function mapStateToProps(state) {
     message: state.message
   }
 }
-export default connect(mapStateToProps, {getUserGroups, clearRetrievedMessageAction, getGroupsCreatedByUser, retrieveMessageAction, composeMessage, getUsersInGroup, retrieveMessage})(GroupBoard);
+export default connect(mapStateToProps,
+  {addNotification,
+  getUserGroups,
+  clearRetrievedMessageAction,
+  getGroupsCreatedByUser,
+  retrieveMessageAction,
+  composeMessage,
+  getUsersInGroup,
+  retrieveMessage,
+  updateNotification,
+  getNotification
+})(GroupBoard);

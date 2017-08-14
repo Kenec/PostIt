@@ -8,6 +8,7 @@ module.exports = {
     },
     messageId: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: 'Messages',
         key: 'id',
@@ -19,6 +20,10 @@ module.exports = {
         model: 'Users',
         key: 'id',
       },
+    },
+    read: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,

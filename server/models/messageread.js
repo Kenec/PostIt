@@ -21,9 +21,16 @@ export default (sequelize, DataTypes) => {
         key: 'id'
       },
     },
+    read: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   MessageReads.associate = (models) => {
-
+    MessageReads.belongsTo(models.Messages, {
+      foreignKey: 'messageId',
+      as: 'Messages'
+    });
   };
   return MessageReads;
 };
