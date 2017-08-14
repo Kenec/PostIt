@@ -8,7 +8,7 @@ import ForgotPassword from '../components/ForgotPassword';
 import CreateGroup from '../components/CreateGroup';
 import Dashboard from '../components/Dashboard';
 import Group from '../components/Group';
-
+import MessageBoard from '../components/MessageBoard';
 import requireAuth from '../utils/requireAuth';
 
 export default (
@@ -20,6 +20,6 @@ export default (
       <Route path='/dashboard' component={requireAuth(Dashboard)} />
       <Route path='/group/:groupid' component={requireAuth(Group)} />
       <Route path='/createGroup' component={requireAuth(CreateGroup)} />
-      
+      <Route path='/group/:groupid/:messageid' component={requireAuth(MessageBoard)} />
   </Route>
 )

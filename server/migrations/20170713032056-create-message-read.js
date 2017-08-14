@@ -21,6 +21,20 @@ module.exports = {
         key: 'id',
       },
     },
+    senderId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
+    groupId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Groups',
+        key: 'id',
+      },
+    },
     read: {
       type: Sequelize.INTEGER,
       allowNull: false,

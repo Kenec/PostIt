@@ -60,7 +60,10 @@ router.get('/dashboard', (req, res) => {
 router.get('/group/:groupid', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
-
+// ** /groups **
+router.get('/group/:groupid/:messageid', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
 // ** /addUser **
 router.get('/addUser', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
@@ -152,5 +155,9 @@ router.post('/api/user/notifications',
 // api route to update notification when a message is sent
 router.post('/api/user/:messageid/notification',
   messageController.updateMessageNotification);
+
+// api route to update notification when a message is sent
+router.post('/api/users/:messageid/read',
+  messageController.getUsersWhoReadMessagesInGroup);
 
 module.exports = router;

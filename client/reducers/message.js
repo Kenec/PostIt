@@ -21,6 +21,9 @@ export default function message(state = {}, action) {
     case 'CLEAR_NOTIFICATION':
       return Object.assign({}, state,
         { notificationData: action.notificationData });
+    case 'USERS_WHO_HAVE_READ_MESSAGE':
+      return Object.assign({}, state,
+        { usersWhoHaveReadMessage: action.usersWhoHaveReadMessage });
     default:
       return state;
   }
