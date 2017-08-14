@@ -14,6 +14,20 @@ export function composeMessageAction(messageData) {
     messageData
   };
 }
+
+/**
+ * addNotificationAction - description
+ *
+ * @param  {object} notificationData description
+ * @return {type}                  description
+ */
+export function getNotificationAction(notificationData) {
+  return {
+    type: 'GET_NOTIFICATION',
+    notificationData
+  };
+}
+
 /**
  * Add user to a group action.
  * @constructor
@@ -78,4 +92,43 @@ export function clearRetrievedMessage() {
   return (dispatch) => {
     dispatch(clearRetrievedMessageAction());
   };
+}
+
+/**
+ * addNotification - description
+ *@param  {INTEGER} messageId the message id
+ * @param  {object} notificationObj notification object
+ * @return {type}                  description
+ */
+export function addNotification(messageId, notificationObj) {
+  return () =>
+    // make a post request to add a notification
+    axios.post(`/api/group/${messageId}/notification`, notificationObj);
+}
+
+/**
+ * getNotification - description
+ * @param {userId} userId user id to be used in fetching notification
+ * @return {type} description
+ */
+export function getNotification(userId) {
+  return dispatch =>
+    // make a post request to get current notification
+    axios.post('/api/user/notifications', userId)
+      .then((res) => {
+        // dispatch the notification action to the store
+        dispatch(getNotificationAction(res.data));
+      });
+}
+
+/**
+ * addNotification - description
+ *@param  {INTEGER} messageId the message id
+ * @param  {object} notificationObj notification object
+ * @return {type}                  description
+ */
+export function updateNotification(messageId, notificationObj) {
+  return () =>
+    // make a post request to update the notification table
+    axios.post(`/api/user/${messageId}/notification`, notificationObj);
 }

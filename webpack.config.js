@@ -4,12 +4,6 @@ const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-// const extractSass = new ExtractTextPlugin({
-//     filename: "client/scss/main.css",
-//     disable: process.env.NODE_ENV === "development"
-// });
-
-
 module.exports = {
   devtool: debug ? 'inline-sourcemap' : false,
   entry: [
@@ -24,22 +18,11 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           presets: ['react', 'es2015', 'react-hmre'],
-
         }
-
       },
       {
         test: /\.scss$/,
         loader: 'style-loader!css-loader!sass-loader',
-        // use: extractSass.extract({
-        //         use: [{
-        //             loader: "css-loader"
-        //         }, {
-        //             loader: "sass-loader"
-        //         }],
-        //         // use style-loader in development
-        //         fallback: "style-loader"
-        //     })
       },
       { test: /\.css$/,
         loaders: [
@@ -48,10 +31,6 @@ module.exports = {
           'font-loader?format[]=truetype' +
           '&format[]=woff&format[]=embedded-opentype'
         ],
-        //   use: ExtractTextPlugin.extract({
-        //   fallback: 'style-loader',
-        //   use: 'css-loader'
-        // }),
       },
       { test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]'
@@ -81,12 +60,12 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
-      sourcemap: true,
-      warnings: false,
-      comments: false
-    }),
-
+    // new webpack.optimize.UglifyJsPlugin(
+    //   // compress: {
+    //   //   // mangle: false,
+    //   //   // warnings: false,
+    //   //   // comments: false
+    //   // }
+    // ),
   ],
 };

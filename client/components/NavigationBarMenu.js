@@ -21,7 +21,7 @@ class NavigationBarMenu extends Component {
   render(){
     const { isAuthenticated, user } = this.props.auth;
     return(
-      <div className="well container-fluid ">
+      <div className="well well-sm container-fluid ">
           <div className="row">
               <div className="col-md-8 my_title">
                 <img src="/images/postit.png" width="50px" height="50px"/>
@@ -37,10 +37,9 @@ class NavigationBarMenu extends Component {
                 </div>
                 <div className="col-md-6 right-align">
                   <div className="btn-group">
-                    <button type="button" className=""><Link to="message"><span className="glyphicon glyphicon-envelope"></span><b> Message </b></Link></button>
-                    <button type="button" className=""><Link to="archiveMessage"><span className="glyphicon glyphicon-trash"></span><b> Archive </b></Link></button>
-                    <button type="button" className=""><Link to="createGroup"><span className="glyphicon glyphicon-lock"></span><b> Create Group </b></Link></button>
-                    <button type="button" className=""><Link to="addUser"><span className="glyphicon glyphicon-plus"></span><b> Add Member </b></Link></button>
+                    <Link className='space_link' to="/dashboard"><span className=""></span><b>DASHBOARD </b></Link>
+                    <span className="space_link"><b> | </b></span>
+                    <Link className="" to="/createGroup"><span className=""></span><b> CREATE GROUP</b></Link>
                   </div>
                 </div>
               </div>

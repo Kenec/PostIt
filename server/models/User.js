@@ -46,20 +46,6 @@ export default (sequelize, DataTypes) => {
       }
     }
   }
-  // ,{
-  //   classMethods: {
-  //    associate(models) {
-  //     //  Users.hasMany(models.Messages, {
-  //     //      foreignKey: 'sentBy',
-  //     //   });
-  //       Users.belongsToMany(models.Groups, {
-  //         through: 'userGroups',
-  //         as: 'groups',
-  //         foreignKey: 'userId',
-  //       });
-  //    }
-  //  },
-  // }
   );
 
   Users.associate = (models) => {

@@ -109,7 +109,6 @@ export default {
       .catch(error => res.status(400).send(error));
   },
 
-  /** This method searches for a user from the Users DB where a user is LIKE the input field * */
   searchUser(req, res) {
     return Users.findAll({
       where: { username: { $like: `%${req.body.username}%` } },

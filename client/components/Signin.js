@@ -93,7 +93,7 @@ class Signin extends Component {
                       <div className="panel-body">
                           <div className='row'>
                             {errors.message && <div className="alert alert-danger">{errors.message}</div>}
-                              <form onSubmit={this.onSubmit} className="" action="" method="">
+                              <form onSubmit={this.onSubmit} className="">
                                 <div className='row'>
                                   <div className="input-field">
                                       <input type="text" className="validate" onChange={this.onChange} value={this.state.username} name="username" placeholder="Enter your username"  id="username" required/>

@@ -12,6 +12,15 @@ export default function message(state = {}, action) {
       return Object.assign({}, state, { messageData: action.retrieveMessages });
     case 'CLEAR_RETRIEVED_MESSAGE':
       return Object.assign({}, state, { messageData: action.messageData });
+    case 'GET_NOTIFICATION':
+      return Object.assign({}, state,
+        { notificationData: action.notificationData });
+    case 'UPDATE_NOTIFICATION':
+      return Object.assign({}, state,
+        { notificationData: action.notificationData });
+    case 'CLEAR_NOTIFICATION':
+      return Object.assign({}, state,
+        { notificationData: action.notificationData });
     default:
       return state;
   }

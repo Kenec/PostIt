@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
-import controller from '../controller';
 import jwt from 'jsonwebtoken';
+import controller from '../controller';
 import config from '../config';
 
 const router = express.Router();
@@ -141,5 +141,16 @@ router.post('/api/group/:groupid/message', messageController.create);
 // ** /api/group/:groupid/messages **
 router.get('/api/group/:groupid/messages', messageController.retrieve);
 
+// api route to add notification when a message is sent
+router.post('/api/group/:messageid/notification',
+  messageController.addMessageNotification);
+
+// api route to get notification when a message is sent
+router.post('/api/user/notifications',
+  messageController.getMessageNotification);
+
+// api route to update notification when a message is sent
+router.post('/api/user/:messageid/notification',
+  messageController.updateMessageNotification);
 
 module.exports = router;
