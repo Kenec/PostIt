@@ -202,6 +202,13 @@ export default {
   },
   getUsersWhoReadMessagesInGroup(req, res) {
     return MessageReads.findAll({
+      include: [
+        {
+          model: Users,
+          as: 'Reader',
+          attributes:
+          ['id', 'username', 'phone', 'email'],
+        }],
       where: {
         read: 1,
         messageId: req.params.messageid

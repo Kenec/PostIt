@@ -48,6 +48,10 @@ export default (sequelize, DataTypes) => {
       as: 'Messages'
     });
     MessageReads.belongsTo(models.Users, {
+      foreignKey: 'userId',
+      as: 'Reader'
+    });
+    MessageReads.belongsTo(models.Users, {
       foreignKey: 'senderId',
       as: 'User'
     });

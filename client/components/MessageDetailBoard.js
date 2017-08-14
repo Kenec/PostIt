@@ -94,12 +94,15 @@ class MessageDetailBoard extends Component {
     if(!groups ||
        !groupsByUser ||
        groupName === 'No Group Found' ||
-       !messageData) {
+       !messageData || !usersWhoHaveReadMessage) {
       return (
         <h4>Loading ...</h4>
       )
     }
-    let messageUserReaders
+    let allUsersWhoReadMessages = '';
+    usersWhoHaveReadMessage.messageReadUsers.map((user) => {
+      allUsersWhoReadMessages +=  `${user.Reader.username}, `;
+    });
     let singleReturnedMessage = ''
     singleReturnedMessage = messageData.map((groupMessage) => {
         if(groupMessage.id == this.props.messageId){
@@ -126,6 +129,7 @@ class MessageDetailBoard extends Component {
                   </p>
                 </div>
               </div>
+              <p><em><b>Read By: </b></em>{allUsersWhoReadMessages}</p>
             </div>
           );
         }
