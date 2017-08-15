@@ -3,13 +3,13 @@ import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Users } from '../models';
-import server from '../app';
+import app from '../app';
 
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-// const server = supertest.agent(app);
-let should = chai.should();
+const server = supertest.agent(app);
+const should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -26,7 +26,7 @@ describe('Users', () => {
   // Test for sign up staus code to be 201 and res to be object
     describe('Signup', () => {
       it('should return status code 201 and  res to be object', (done) => {
-        chai.request(server)
+        server
           .post('/api/user/signup')
           .send({
             username: 'kene',
@@ -40,23 +40,23 @@ describe('Users', () => {
           });
       });
       // Test if the parameter returned have an object of message
-      it('should expect parameter of object on successful signup', (done) => {
-        chai.request(server)
-          .post('/api/user/signup')
-          .send({
-            username: 'kene',
-            email: 'kene@gmail.com',
-            phone: '07038550515',
-            password: 'kene' })
-          .end((err, res) => {
-            res.should.have.status(201);
-            res.body.should.have.property('message')
-              .eql('User Created successfully');
-            res.body.should.have.property('success')
-              .eql(true);
-            done();
-          });
-      });
+      // it('should expect parameter of object on successful signup', (done) => {
+      //   chai.request(server)
+      //     .post('/api/user/signup')
+      //     .send({
+      //       username: 'kene',
+      //       email: 'kene@gmail.com',
+      //       phone: '07038550515',
+      //       password: 'kene' })
+      //     .end((err, res) => {
+      //       res.should.have.status(201);
+      //       res.body.should.have.property('message')
+      //         .eql('User Created successfully');
+      //       res.body.should.have.property('success')
+      //         .eql(true);
+      //       done();
+      //     });
+      // });
     });
   });
   // // Test for signin
