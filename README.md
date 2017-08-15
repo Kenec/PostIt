@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Kenec/PostIt.svg?branch=master)](https://travis-ci.org/Kenec/PostIt)
 # PostIt
 
 PostIt is a messenger app that allow users to create groups and send messages to the created groups. 
