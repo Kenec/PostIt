@@ -19,6 +19,12 @@ router.get('/', (req, res) => {
 router.get('/signup', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
+
+// routes to change password
+router.get('/recoverpassword/:token', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
 // ** /recoverpassword **
 router.get('/recoverpassword', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
@@ -60,7 +66,10 @@ router.get('/dashboard', (req, res) => {
 router.get('/group/:groupid', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
-
+// ** /groups **
+router.get('/group/:groupid/:messageid', (req, res) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
 // ** /addUser **
 router.get('/addUser', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
@@ -71,15 +80,26 @@ router.get('/groupInfo', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
 
-// ******************************************************************************** //
-// ******************************* api routes ************************************* //
-// ******************************************************************************* //
+// ************************************************************************* //
+// ******************************* api routes ****************************** //
+// ************************************************************************* //
 
 // ** /api/user/signup **
 router.post('/api/user/signup', userController.create);
 
 // ** /api/user/signin **
 router.post('/api/user/signin', userController.list);
+
+// routes for request password reset mail
+router.post('/api/user/resetpassword', userController.resetPassword);
+
+// api route to check for valid token for resetting password
+router.get('/api/user/resetpassword/:token',
+  userController.checkValidTokenForPasswordReset);
+
+// routes to reset password od a user
+router.post('/api/user/resetpassword/:token', userController.updatePassword);
+
 
 let token;
 // setting a middleware to protect all other routes
@@ -152,5 +172,9 @@ router.post('/api/user/notifications',
 // api route to update notification when a message is sent
 router.post('/api/user/:messageid/notification',
   messageController.updateMessageNotification);
+
+// api route to update notification when a message is sent
+router.post('/api/users/:messageid/read',
+  messageController.getUsersWhoReadMessagesInGroup);
 
 module.exports = router;

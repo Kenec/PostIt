@@ -44,6 +44,14 @@ export default (sequelize, DataTypes) => {
           msg: 'Not a valid Email'
         }
       }
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpiryTime: {
+      type: DataTypes.STRING,
+      allowNull: true,
     }
   }
   );
@@ -57,6 +65,10 @@ export default (sequelize, DataTypes) => {
       through: 'userGroups',
       as: 'groups',
       foreignKey: 'userId',
+    });
+    Users.hasMany(models.MessageReads, {
+      foreignKey: 'messageId',
+      onDelete: 'CASCADE',
     });
   };
 

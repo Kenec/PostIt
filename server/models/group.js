@@ -45,6 +45,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'groupId',
       onDelete: 'CASCADE',
     });
+    Groups.hasMany(models.MessageReads, {
+      foreignKey: 'groupId',
+      onDelete: 'CASCADE',
+    });
   };
   return Groups;
 };

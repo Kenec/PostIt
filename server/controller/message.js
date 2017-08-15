@@ -93,7 +93,9 @@ export default {
                 .create({
                   messageId: req.params.messageid,
                   userId: req.body.userId,
-                  read: req.body.readStatus
+                  read: req.body.readStatus,
+                  senderId: req.body.senderId,
+                  groupId: req.body.groupId,
                 })
                 .then(() => res.status(201).send({
                   message: 'Notification Added',
@@ -121,23 +123,37 @@ export default {
         as: 'Messages',
         attributes:
         ['id', 'message', 'priority_level', 'groupId', 'sentBy', 'createdAt'],
-      }],
+      },
+      {
+        model: Users,
+        as: 'User',
+        attributes:
+        ['id', 'username', 'phone', 'email'],
+      },
+      {
+        model: Groups,
+        as: 'Group',
+        attributes:
+        ['id', 'groupName'],
+      }
+      ],
       where: {
         userId: req.body.userId,
         read: 0
       },
       attributes: [
-        'id', 'messageId', 'userId', 'read', 'createdAt']
+        'id', 'messageId', 'userId', 'groupId', 'senderId', 'read', 'createdAt']
     })
       .then((messageRes) => {
         if (messageRes.length !== 0) {
           res.status(200).send({
             messageRes
           });
+        } else {
+          res.status(200).send({
+            messageRes: [],
+          });
         }
-        res.status(400).send({
-          messageRes: 'No Notification'
-        });
       })
       .catch(error => res.status(400).send(error));
   },
@@ -183,5 +199,34 @@ export default {
         }
       })
       .catch(error => res.status(400).send(error));
-  }
+  },
+  getUsersWhoReadMessagesInGroup(req, res) {
+    return MessageReads.findAll({
+      include: [
+        {
+          model: Users,
+          as: 'Reader',
+          attributes:
+          ['id', 'username', 'phone', 'email'],
+        }],
+      where: {
+        read: 1,
+        messageId: req.params.messageid
+      },
+      attributes: [
+        'id', 'messageId', 'userId', 'read', 'createdAt']
+    })
+      .then((messageReadUsers) => {
+        if (messageReadUsers.length !== 0) {
+          res.status(200).send({
+            messageReadUsers
+          });
+        } else {
+          res.status(200).send({
+            messageReadUsers: [],
+          });
+        }
+      })
+      .catch(error => res.status(400).send(error));
+  },
 };

@@ -101,6 +101,8 @@ class GroupBoard extends Component {
                     {
                       userId: user.id,
                       readStatus: readStatus,
+                      senderId: sender,
+                      groupId: updateMessageStore.groupId,
                     });
                   });
                   this.props.getNotification(
@@ -176,10 +178,11 @@ class GroupBoard extends Component {
         if(groupName !== 'No Group Found') {
           return(
               <div key={groupMessage.id}>
-                <div className="well well-sm no_spacing">
+              <Link to={`/group/${this.props.groupSelectedId}/${groupMessage.id}`}>
+                <div className="well well-sm white no_spacing">
                   <p id={groupMessage.id}>
-                    <span className='left cyan span_spacing lighten-5'>
-                      <i>{groupMessage.Users.username}</i>
+                    <span className='left black-text cyan span_spacing lighten-5'>
+                      <i><b>{groupMessage.Users.username}</b></i>
                     </span>
                     <span className='left yellow lighten-5'>
                       <i>{groupMessage.priority_level}</i>
@@ -190,11 +193,12 @@ class GroupBoard extends Component {
                   </p>
                   <div>
                     <hr/>
-                    <p className='blue-text lighten-3' id={groupMessage.id}>
+                    <p className='black-text lighten-3' id={groupMessage.id}>
                       {groupMessage.message}
                     </p>
                   </div>
                 </div>
+                </Link>
               </div>
             )
           }
@@ -204,7 +208,11 @@ class GroupBoard extends Component {
     return(
       <div className="row">
         <div className="blue-text text-darken-2">
-        <div className="well well-sm no_spacing"><b>Group: {groupName}</b></div>
+        <div className="well well-sm no_spacing">
+          <b>Group:
+            <Link to={`/group/${this.props.groupSelectedId}`}>{' '+groupName}</Link>
+          </b>
+        </div>
         <span className="pull-right">
 
         </span>

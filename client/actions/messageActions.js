@@ -56,6 +56,20 @@ export function retrieveMessageAction(retrieveMessages) {
     retrieveMessages
   };
 }
+/**
+ * get users who have read message action.
+ * @constructor
+ * @param {INTEGER} usersWhoHaveReadMessage - users id of those who have
+ * read messages
+ * .
+ *
+ */
+export function getUsersWhoReadMessageAction(usersWhoHaveReadMessage) {
+  return {
+    type: 'USERS_WHO_HAVE_READ_MESSAGE',
+    usersWhoHaveReadMessage
+  };
+}
 
 /**
  * compose messge action.
@@ -131,4 +145,18 @@ export function updateNotification(messageId, notificationObj) {
   return () =>
     // make a post request to update the notification table
     axios.post(`/api/user/${messageId}/notification`, notificationObj);
+}
+
+/**
+ * getUsersWhoReadMessage - description
+ *@param  {INTEGER} messageId the message id
+ * @return {type}                  description
+ */
+export function getUsersWhoReadMessage(messageId) {
+  return dispatch =>
+    // make a post request to update the notification table
+    axios.post(`/api/users/${messageId}/read`)
+      .then((res) => {
+        dispatch(getUsersWhoReadMessageAction(res.data));
+      });
 }

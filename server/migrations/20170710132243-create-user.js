@@ -36,6 +36,14 @@ module.exports = {
         isEmail: true
       }
     },
+    resetPasswordToken: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpiryTime: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
