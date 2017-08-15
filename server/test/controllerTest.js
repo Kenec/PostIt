@@ -16,9 +16,7 @@ chai.use(chaiHttp);
 describe('Users', () => {
   beforeEach((done) => { // Before each test we empty the database
     Users.sync({ force: true })
-      .then(() => {
-        done(null);
-      })
+      .then(() => done())
       .catch((error) => {
         done(error);
       });
