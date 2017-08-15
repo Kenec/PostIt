@@ -1,6 +1,7 @@
 
 // *** main dependencies *** //
 import express from 'express';
+import flash from 'express-flash';
 import path from 'path';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
@@ -34,6 +35,9 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // *** main routes *** //
 app.use('/', routes);
+
+// use express flash message
+app.use(flash());
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

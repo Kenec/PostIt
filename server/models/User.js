@@ -44,6 +44,14 @@ export default (sequelize, DataTypes) => {
           msg: 'Not a valid Email'
         }
       }
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpiryTime: {
+      type: DataTypes.STRING,
+      allowNull: true,
     }
   }
   );
