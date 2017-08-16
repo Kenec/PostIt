@@ -1,6 +1,6 @@
 engines:
   duplication:
-      enabled: true
+      enabled: false
       checks:
         Similar code:
           enabled: false
@@ -17,4 +17,4 @@ ratings:
     - "server/tests/"
     - node_modules/
     - bower_components/
-    - "client/dist/"
+    - "client/dist/*.js"
