@@ -40,23 +40,24 @@ describe('Users', () => {
           });
       });
       // Test if the parameter returned have an object of message
-      // it('should expect parameter of object on successful signup', (done) => {
-      //   chai.request(server)
-      //     .post('/api/user/signup')
-      //     .send({
-      //       username: 'kene',
-      //       email: 'kene@gmail.com',
-      //       phone: '07038550515',
-      //       password: 'kene' })
-      //     .end((err, res) => {
-      //       res.should.have.status(201);
-      //       res.body.should.have.property('message')
-      //         .eql('User Created successfully');
-      //       res.body.should.have.property('success')
-      //         .eql(true);
-      //       done();
-      //     });
-      // });
+      it('should expect parameter of object returned on successful signup',
+        (done) => {
+          server
+            .post('/api/user/signup')
+            .send({
+              username: 'kene',
+              email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(201);
+              res.body.should.have.property('message')
+                .eql('User Created successfully');
+              res.body.should.have.property('success')
+                .eql(true);
+              done();
+            });
+        });
     });
   });
   // // Test for signin
