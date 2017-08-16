@@ -7,7 +7,9 @@ import config from '../config';
 import validateInput from '../shared/validations/signup';
 
 export default {
+  // function to create a new user
   create(req, res) {
+    // call the validateInput input function for validations
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
@@ -33,6 +35,7 @@ export default {
         });
       });
   },
+  // function for loggging a user in
   list(req, res) {
     Users
       .findAll({
@@ -47,7 +50,7 @@ export default {
           const token = jwt.sign({
             id: user[0].id,
             username: user[0].username
-          }, config.jwtSecret, { expiresIn: '2h' });
+          }, config.jwtSecret, { expiresIn: '2h' }); // token expires in 2h
 
           res
             .status(202)
@@ -117,28 +120,27 @@ export default {
                   });
               });
             })
-            .catch(() => {
-              return res.status(400).send({
-                message: 'Cannot send Mail'
-              });
-            });
+            .catch(() => res.status(400).send({
+              message: 'Cannot send Mail'
+            })
+            );
         } else {
           return res.status(400).send({
             message: 'Invalid email address!'
           });
         }
       })
-      .catch(() => {
-        return res.status(400).send({
-          message: 'Error !!'
-        });
-      });
+      .catch(() => res.status(400).send({
+        message: 'Error !!'
+      })
+      );
   },
+  // update password function
   updatePassword(req, res) {
     return Users.update({
       password: md5(req.body.password),
-      resetPasswordToken: '',
-      resetPasswordExpiryTime: ''
+      resetPasswordToken: '', // resetPasswordToken set to empty
+      resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
     }, {
       where: {
         resetPasswordToken: req.params.token
@@ -180,7 +182,7 @@ export default {
           });
         }
       })
-      .catch((error) => {
+      .catch(() => {
         res.status(400).send({
           message: 'Unable to search for token',
         });
@@ -212,7 +214,7 @@ export default {
         });
       });
   },
-
+  // get All users I have in the database
   getAllUsers(req, res) {
     return Users
       .findAll()

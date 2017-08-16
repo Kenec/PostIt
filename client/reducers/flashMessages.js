@@ -1,9 +1,18 @@
 import shortid from 'shortid';
 import findIndex from 'lodash/findIndex';
+import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
 
+/**
+ * flashMessages - description
+ *
+ * @param  {type} state = []  state of the flash message reducer
+ * @param  {type} action = {} action dispatched
+ * @return {type}             description
+ */
 export default function flashMessages(state = [], action = {}) {
   switch (action.type) {
-    case 'ADD_FLASH_MESSAGE':
+    // add flash messgae reducer
+    case ADD_FLASH_MESSAGE: {
       return [
         ...state,
         {
@@ -12,9 +21,9 @@ export default function flashMessages(state = [], action = {}) {
           text: action.message.text
         }
       ];
-      break;
-
-    case 'DELETE_FLASH_MESSAGE':
+    }
+    // delete flash message reducer
+    case DELETE_FLASH_MESSAGE: {
       const index = findIndex(state, { id: action.id });
       if (index >= 0) {
         return [
@@ -23,8 +32,7 @@ export default function flashMessages(state = [], action = {}) {
         ];
       }
       return state;
-      break;
-
+    }
     default:
       return state;
   }

@@ -13,15 +13,13 @@ export default function sendSMS(userArraysOfObj, message) {
     apiSecret: '44c5683af64ddc78'
   });
   userArraysOfObj.map((user) => {
-    nexmo.message.sendSms(
-      'PostIT', 2347038550515, message,
-      (err, responseData) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.dir(responseData);
-        }
-      }
+    nexmo.message.sendSms('PostIT', user.phone, message, () => {
+      // if (err) {
+      //  console.log(err);
+      // } else {
+      //   console.dir(responseData);
+      // }
+    }
     );
   });
 }

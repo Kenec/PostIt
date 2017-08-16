@@ -19,22 +19,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }
-  // ,{
-  //   classMethods: {
-  //     associate: (models) => {
-  //       // Groups.hasMany(models.Messages, {
-  //       //   onDelete: 'CASCADE'
-  //       // });
-  //       // Groups.belongsToMany(models.Users, {
-  //       //   through: models.userGroups,
-  //       //   as: 'users',
-  //       //   foreignKey: 'groupId'
-  //       // });
-  //     },
-  //   },
-  // }
-  );
+  });
   Groups.associate = (models) => {
     Groups.belongsToMany(models.Users, {
       through: 'userGroups',

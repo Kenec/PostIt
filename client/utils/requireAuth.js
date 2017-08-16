@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+/**
+ * export default - component for Authenticate to disallow unauthenticated
+ * user from accessing certain routes
+ *
+ * @param  {type} ComposedComponent description
+ * @return {type}                   description
+ */
 export default function(ComposedComponent) {
   class Authenticate extends Component {
     componentWillMount () {

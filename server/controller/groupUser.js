@@ -1,6 +1,7 @@
 import { userGroups, Groups, Users } from '../models';
 
 export default {
+  // function to add a member to a group
   create(req, res) {
     userGroups.findAll({
       where: {
@@ -14,12 +15,12 @@ export default {
             userId: req.body.userId,
             groupId: req.params.groupid,
           })
-          .then(userGroup => res.status(201).send({
+          .then(() => res.status(201).send({
             message: 'User Added',
             groupId: userGroups.groupid,
             success: true
           }))
-          .catch(error => res.status(400).send({
+          .catch(() => res.status(400).send({
             message: 'Cannot add a user who does not exist to a group',
           }));
       }
@@ -55,12 +56,13 @@ export default {
         }
         return res.status(200).send(user);
       })
-      .catch((error) => {
+      .catch(() => {
         res.status(400).send({
           message: 'User does not exist'
         });
       });
   },
+  // function to fetch all members from the same group by the groupid
   fetchMembersOfGroup(req, res) {
     const id = req.params.id;
 
@@ -84,14 +86,14 @@ export default {
         }
         return res.status(200).send(group);
       })
-      .catch((error) => {
+      .catch(() => {
         res.status(400).send({
           message: 'Group does not exist'
         });
       });
   },
 
-  // Get group by id
+  // retrieve members from a group by the groupId
   retrieveMembers(req, res) {
     return userGroups
       .findAll({ where: { groupId: req.params.id } })
@@ -101,14 +103,14 @@ export default {
       });
   },
 
-  // list all group by its id
+  // list all groups
   list(req, res) {
     return Groups
       .findAll()
       .then(group => res.status(200).send(group))
       .catch(error => res.status(400).send(error));
   },
-
+  // search users by where username is LIKE $username
   searchUser(req, res) {
     return Users.findAll({
       where: { username: { $like: `%${req.body.username}%` } },

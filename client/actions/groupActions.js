@@ -1,14 +1,21 @@
 import axios from 'axios';
+import { CREATE_GROUP,
+  GET_USER_GROUPS, SEARCH_ALL_USERS,
+  GET_GROUPS_CREATED_BY_USER,
+  ADD_USER_TO_GROUPS,
+  GET_USERS_IN_GROUP
+
+} from './types';
 
 /**
- * Represents a book.
+ * Create Group Action method.
  * @constructor
  * @param {object} groupData - The group data return from creating a group.
  *
  */
 export function createGroupAction(groupData) {
   return {
-    type: 'CREATE_GROUP',
+    type: CREATE_GROUP,
     groupData
   };
 }
@@ -21,10 +28,11 @@ export function createGroupAction(groupData) {
  */
 export function getuserGroupsAction(groupData) {
   return {
-    type: 'GET_USER_GROUPS',
+    type: GET_USER_GROUPS,
     groups: groupData
   };
 }
+
 /**
  * Represents a book.
  * @constructor
@@ -34,10 +42,11 @@ export function getuserGroupsAction(groupData) {
  */
 export function searchAllUsersAction(usersData) {
   return {
-    type: 'SEARCH_ALL_USERS',
+    type: SEARCH_ALL_USERS,
     users: usersData
   };
 }
+
 /**
  * Represents a book.
  * @constructor
@@ -47,7 +56,7 @@ export function searchAllUsersAction(usersData) {
  */
 export function getGroupsCreatedByUserAction(data) {
   return {
-    type: 'GET_GROUPS_CREATED_BY_USER',
+    type: GET_GROUPS_CREATED_BY_USER,
     groupsByUser: data
   };
 }
@@ -60,7 +69,7 @@ export function getGroupsCreatedByUserAction(data) {
  */
 export function getUsersInGroupAction(data) {
   return {
-    type: 'GET_USERS_IN_GROUP',
+    type: GET_USERS_IN_GROUP,
     usersInGroup: data
   };
 }
@@ -73,7 +82,7 @@ export function getUsersInGroupAction(data) {
  */
 export function addUserToGroupsAction(data) {
   return {
-    type: 'ADD_USER_TO_GROUPS',
+    type: ADD_USER_TO_GROUPS,
     userData: data
   };
 }

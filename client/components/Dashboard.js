@@ -5,10 +5,11 @@ import LeftSideGroupMenu from './LeftSideGroupMenu';
 import DashboardComponent from './DashboardComponent';
 
 class Dashboard extends Component {
+  // constructor
   constructor(props) {
     super(props);
   }
-
+  // render method
   render(){
     return (
       <div className="content">

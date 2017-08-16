@@ -14,7 +14,7 @@ export function forgotPasswordRequest(email) {
 /**
  * ChangePasswordWithValidToken - description
  *
- * @param  {string} token description
+ * @param  {string} token token
  * @return {type}       description
  */
 export function checkForValidToken(token) {

@@ -1,7 +1,10 @@
 import axios from 'axios';
-
+import { COMPOSE_MESSAGE,
+  GET_NOTIFICATION, RETRIEVE_MESSAGE,
+  USERS_WHO_HAVE_READ_MESSAGE
+} from './types';
 /**
- * Add user to a group action.
+ * compose message action.
  * @constructor
  * @param {object} messageData - data of message to be added to the message
  * board
@@ -10,7 +13,7 @@ import axios from 'axios';
  */
 export function composeMessageAction(messageData) {
   return {
-    type: 'COMPOSE_MESSAGE',
+    type: COMPOSE_MESSAGE,
     messageData
   };
 }
@@ -23,13 +26,13 @@ export function composeMessageAction(messageData) {
  */
 export function getNotificationAction(notificationData) {
   return {
-    type: 'GET_NOTIFICATION',
+    type: GET_NOTIFICATION,
     notificationData
   };
 }
 
 /**
- * Add user to a group action.
+ * clear retrieved message.
  * @constructor
  * @param {object} messageData - data of message to be added to the message
  * board
@@ -38,7 +41,7 @@ export function getNotificationAction(notificationData) {
  */
 export function clearRetrievedMessageAction() {
   return {
-    type: 'COMPOSE_MESSAGE',
+    type: COMPOSE_MESSAGE,
     messageData: []
   };
 }
@@ -52,7 +55,7 @@ export function clearRetrievedMessageAction() {
  */
 export function retrieveMessageAction(retrieveMessages) {
   return {
-    type: 'RETRIEVE_MESSAGE',
+    type: RETRIEVE_MESSAGE,
     retrieveMessages
   };
 }
@@ -66,7 +69,7 @@ export function retrieveMessageAction(retrieveMessages) {
  */
 export function getUsersWhoReadMessageAction(usersWhoHaveReadMessage) {
   return {
-    type: 'USERS_WHO_HAVE_READ_MESSAGE',
+    type: USERS_WHO_HAVE_READ_MESSAGE,
     usersWhoHaveReadMessage
   };
 }

@@ -1,15 +1,29 @@
 import axios from 'axios';
-import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
-import SET_CURRENT_USER from './types';
+import setAuthorizationToken from '../utils/setAuthorizationToken';
+import { SET_CURRENT_USER } from './types';
 
+
+/**
+ * setCurrentUser - sets the current user
+ *
+ * @param  {object} user description
+ * @return {type}      description
+ */
 export function setCurrentUser(user) {
   return {
-    type: 'SET_CURRENT_USER',
+    type: SET_CURRENT_USER,
     user
   };
 }
 
+
+/**
+ * logout - description
+ *
+ * @return {type}  description
+ */
+/*eslint-disable*/ 
 export function logout() {
   return (dispatch) => {
     localStorage.removeItem('jwtToken');
@@ -18,6 +32,13 @@ export function logout() {
   };
 }
 
+
+/**
+ * userSigninRequestAction - description
+ *
+ * @param  {object} data userdata for firing signin action
+ * @return {type}      description
+ */
 export function userSigninRequestAction(data) {
   return dispatch => axios.post('/api/user/signin', data).then((res) => {
     const token = res.data.token;

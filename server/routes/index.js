@@ -20,12 +20,11 @@ router.get('/signup', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
 
-// routes to change password
+// routes to change password with valid token
 router.get('/recoverpassword/:token', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
-
-// ** /recoverpassword **
+// display the recover password
 router.get('/recoverpassword', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });

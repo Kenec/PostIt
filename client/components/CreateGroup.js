@@ -4,7 +4,9 @@ import NavigationBarMenu from './NavigationBarMenu';
 import LeftSideGroupMenu from './LeftSideGroupMenu';
 import CreateGroupBoard from './CreateGroupBoard';
 
+// CreateGroup Component
 class CreateGroup extends Component {
+  // constructor
   constructor(props) {
     super(props);
   }

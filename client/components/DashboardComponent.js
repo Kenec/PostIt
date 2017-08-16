@@ -3,13 +3,18 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import { Link } from 'react-router';
-import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
-import { retrieveMessage, getNotification } from '../actions/messageActions';
+import { getUserGroups,
+          getGroupsCreatedByUser } from '../actions/groupActions';
+import { retrieveMessage,
+         getNotification } from '../actions/messageActions';
 
+// DashboardComponent Component
 class DashboardComponent extends Component {
-
+  // componet will mount method
   componentWillMount() {
+    // deconstruct variable from the props.auth
     const { isAuthenticated, user } = this.props.auth;
+    // dispatch and action to get Notification
     this.props.getNotification(
       {userId: jwt.decode(localStorage.getItem('jwtToken')).id}
     );
@@ -17,6 +22,7 @@ class DashboardComponent extends Component {
   }
 
   render(){
+    // deconstruct variable from props
     const {groups, groupsByUser} = this.props.group;
     const {notificationData} = this.props.message;
 
@@ -25,12 +31,7 @@ class DashboardComponent extends Component {
         <h4>Loading ...</h4>
       )
     }
-    // const groupsCreatedList = groupsByUser.map((group) => {
-    //   return <li key={group.id} value={group.id}><a href="#">{group.groupName}</a></li>
-    // });
-    // const groupsBelongedList = groups.groups.map((group) => {
-    //   return <option key={group.id} value={group.id}>{group.groupName}</option>
-    // });
+
     let unreadMessagesList = '';
     let noOfUnreadMessages = notificationData.messageRes.length;
     if (notificationData.messageRes !== 'undefined' &&
