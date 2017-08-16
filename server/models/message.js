@@ -41,16 +41,7 @@ export default (sequelize, DataTypes) => {
         },
       },
     }
-  }
-  );
-  // ,{
-  //   classMethods: {
-  //     associate: (models) => {
-  //       Messages.belongsTo(models.Users);
-  //       Messages.belongsTo(models.Groups);
-  //     },
-  //   },
-  // });
+  });
   Messages.associate = (models) => {
     Messages.belongsTo(models.Users, {
       foreignKey: 'sentBy',

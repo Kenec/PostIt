@@ -32,7 +32,7 @@ export default function sendMail(userArraysOfObj, message) {
   };
 
     // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, (error) => {
     if (error) {
       // return console.log(error);
     }

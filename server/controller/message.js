@@ -5,6 +5,7 @@ import sendSMS from '../utils/sendSMS';
  *  Message controller functions
  */
 export default {
+  // function to create a new message
   create(req, res) {
     return Messages
       .create({
@@ -25,10 +26,13 @@ export default {
           where: { id: message.groupId },
           attributes: ['id', 'groupName', 'createdby']
         }).then((group) => {
+          // send email and sms when message is delivered successfully
           if (group.length !== 0) {
             if (message.priority_level === 'Urgent') {
+              // send mail
               sendMail(group.users, message.message);
             } else if (message.priority_level === 'Critical') {
+              // send mail and sms
               sendMail(group.users, message.message);
               sendSMS(group.users, message.message);
             }
@@ -48,7 +52,8 @@ export default {
         status: 'message cannot be sent'
       }));
   },
-
+  // get messages from a particular group
+  // Message group associated to Users group with the message sender
   retrieve(req, res) {
     return Messages
       .findAll({
@@ -74,13 +79,18 @@ export default {
       })
       .catch((error) => { res.status(400).send(error); });
   },
+  // add notification to the notification table when a message is sent
+  // the notification is sent to all users that belong to that particular
+  // group at the moment the message is sent
   addMessageNotification(req, res) {
+    // find a message where message id
     Messages.find({
       where: {
         id: req.params.messageid,
       }
     })
       .then((messageRes) => {
+        // if message is found, add notification
         if (messageRes.length !== 0) {
           MessageReads.findAll({
             where: {
@@ -116,6 +126,7 @@ export default {
       })
       .catch(error => res.status(400).send(error));
   },
+  // get notification fom the message notification table
   getMessageNotification(req, res) {
     return MessageReads.findAll({
       include: [{
@@ -157,6 +168,8 @@ export default {
       })
       .catch(error => res.status(400).send(error));
   },
+  // update notification table
+  // this is called when a user reads message
   updateMessageNotification(req, res) {
     Messages.find({
       where: {
@@ -200,6 +213,7 @@ export default {
       })
       .catch(error => res.status(400).send(error));
   },
+  // get Users who have read a message from a group
   getUsersWhoReadMessagesInGroup(req, res) {
     return MessageReads.findAll({
       include: [

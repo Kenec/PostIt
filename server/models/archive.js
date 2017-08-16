@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
       },
     },
   });
-  Archives.associate = (models) => {
+  Archives.associate = () => {
 
   };
   return Archives;

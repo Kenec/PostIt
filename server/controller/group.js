@@ -1,6 +1,7 @@
 import { Groups, userGroups } from '../models';
 
 export default {
+  // function to create group
   create(req, res) {
     return Groups
       .create({
@@ -22,6 +23,7 @@ export default {
         success: false,
       }));
   },
+  // function to retrieve group by groupid
   retrieve(req, res) {
     return Groups
       .findAll({
@@ -35,6 +37,7 @@ export default {
         });
       });
   },
+  // function to fetch group by the group creator
   fetchGroupByCreator(req, res) {
     return Groups
       .findAll({
@@ -46,6 +49,4 @@ export default {
         res.status(400).send(error);
       });
   },
-
-
 };
