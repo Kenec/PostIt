@@ -13,8 +13,10 @@ ratings:
   paths:
     - "server/*.js"
     - "server/**/*.js"
+    - "client/*.js"
+    - "client/**/*.js"
   exclude_paths:
     - "server/tests/"
     - node_modules/
     - bower_components/
-    - "client/dist/*.js"
+    - "client/dist/bundle.min.js"
