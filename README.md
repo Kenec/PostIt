@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Kenec/PostIt.svg?branch=master)](https://travis-ci.org/Kenec/PostIt)
 [![Coverage Status](https://coveralls.io/repos/github/Kenec/PostIt/badge.svg?branch=master)](https://coveralls.io/github/Kenec/PostIt?branch=master)
 [![Code Climate](https://codeclimate.com/github/Kenec/PostIt/badges/gpa.svg)](https://codeclimate.com/github/Kenec/PostIt)
-[![Issue Count](https://codeclimate.com/github/Kenec/PostIt/badges/issue_count.svg)](https://codeclimate.com/github/Kenec/PostIt)
+
 # PostIt
 
 PostIt is a messenger app that allow users to create groups and send messages to the created groups. 
