@@ -63,7 +63,7 @@ and send messages. User can also recover password when lost.
 * Push the file to heroku and set up the enviroment variables 
 
 ### Documentation
-The Documentation for the Restful API: 
+The Documentation for the PostIt Restful API: 
 [PostIt Restful API Documentation](http://docs.postit4.apiary.io)
 
 
