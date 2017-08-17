@@ -64,7 +64,7 @@ and send messages. User can also recover password when lost.
 
 ### Documentation
 The Documentation for the Restful API: 
-[PostIt Restful API Documentation](https://docs.postit4.apiary.io)
+[PostIt Restful API Documentation](http://docs.postit4.apiary.io)
 
 
 ## Authors
