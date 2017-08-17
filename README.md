@@ -62,6 +62,11 @@ and send messages. User can also recover password when lost.
 * Create a db with ElephantSQL
 * Push the file to heroku and set up the enviroment variables 
 
+### Documentation
+The Documentation for the Restful API: 
+[PostIt Restful API Documentation](https://app.apiary.io/postit4)
+
+
 ## Authors
 
 #### * Nnamani Kenechukwu Charles 
