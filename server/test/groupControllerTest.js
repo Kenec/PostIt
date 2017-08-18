@@ -56,7 +56,6 @@ describe('Groups', () => {
               done();
             });
         });
-        
       // Return 400 status code if while creating a group
       // the creator was not added to the groupUser Table
       it(`should return status code 400 and  res
