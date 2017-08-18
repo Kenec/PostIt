@@ -7,7 +7,7 @@ node_js:
 install:
   - npm install
 script:
-  - npm run test
+  - npm run test-prod
 services:
   - postgresql
 cache:
