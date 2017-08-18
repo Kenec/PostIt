@@ -214,12 +214,6 @@ export default {
         });
       });
   },
-  // get All users I have in the database
-  getAllUsers(req, res) {
-    return Users
-      .findAll()
-      .then(users => res.status(200).send(users))
-      .catch(error => res.status(400).send(error));
-  },
+
 
 };

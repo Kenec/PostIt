@@ -99,7 +99,6 @@ router.get('/api/user/resetpassword/:token',
 // routes to reset password od a user
 router.post('/api/user/resetpassword/:token', userController.updatePassword);
 
-
 let token;
 // setting a middleware to protect all other routes
 router.use((req, res, next) => {

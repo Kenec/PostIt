@@ -27,7 +27,8 @@ export default {
   retrieve(req, res) {
     return Groups
       .findAll({
-        where: { id: req.params.id }
+        where: { id: req.params.groupid },
+        attributes: ['id', 'groupName', 'createdby', 'createdAt']
       })
       .then(groups => res.status(200).send(groups))
       .catch((error) => {

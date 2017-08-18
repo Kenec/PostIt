@@ -7,7 +7,7 @@ node_js:
 install:
   - npm install
 script:
-  - npm run test-prod
+  - npm run test
 services:
   - postgresql
 cache:
@@ -15,6 +15,6 @@ cache:
 before_script:
   - npm install sequelize-cli -g
 after_success:
-  - nyc npm run test-prod && nyc report --reporter=text-lcov | coveralls
+  - nyc npm run test && nyc report --reporter=text-lcov | coveralls
 notifications:
   webhooks: https://coveralls.io/webhook?repo_token=artvBsERwCEJSNnZhixehgHIoRaBl3EYo
