@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getUserGroups, getUsersInGroupAction, getUsersInGroup, getuserGroupsAction } from '../actions/groupActions';
+import { getUserGroups,
+         getUsersInGroupAction,
+         getUsersInGroup,
+         getuserGroupsAction } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 class GroupMembers extends Component {
@@ -73,4 +76,10 @@ function mapStateToProps(state) {
     message: state.message
   }
 }
-export default connect(mapStateToProps, {getUserGroups, getUsersInGroupAction, getuserGroupsAction, getUsersInGroup, retrieveMessage})(GroupMembers);
+export default connect(mapStateToProps,
+                      {getUserGroups,
+                      getUsersInGroupAction,
+                      getuserGroupsAction,
+                      getUsersInGroup,
+                      retrieveMessage})
+                      (GroupMembers);

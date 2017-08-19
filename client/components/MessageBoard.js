@@ -8,7 +8,9 @@ import SearchMember from './SearchMember';
 import GroupMembers from './GroupMembers';
 import { retrieveMessage } from '../actions/messageActions';
 import jwt from 'jsonwebtoken';
-import { getUserGroups, getGroupsCreatedByUser, getUsersInGroup } from '../actions/groupActions';
+import { getUserGroups,
+         getGroupsCreatedByUser,
+         getUsersInGroup } from '../actions/groupActions';
 
 class MessageBoard extends Component {
   constructor(props) {
@@ -99,4 +101,8 @@ function mapStateToProps(state) {
     message: state.message,
   }
 }
-export default connect(mapStateToProps, {getUserGroups, getGroupsCreatedByUser, retrieveMessage})(MessageBoard);
+export default connect(mapStateToProps,
+                      {getUserGroups,
+                       getGroupsCreatedByUser,
+                       retrieveMessage})
+                       (MessageBoard);

@@ -50,11 +50,14 @@ class Signup extends Component {
           () => {
             this.props.addFlashMessage({
               type: 'success',
-              text: 'You signed up successfully. Enter your username and password to login'
+              text: `You signed up successfully.
+                      Enter your username and password to login`
             });
             this.context.router.push('/');
           },
-          ( {response} ) => this.setState({ errors: response.data, isLoading: false })
+          ( {response} ) => this.setState({
+                errors: response.data, isLoading: false
+              })
         )
         .catch((error) => {});
     }
@@ -77,9 +80,14 @@ class Signup extends Component {
                     <div className="row">
                       <h3 className="">Welcome To PostIt App<hr/></h3>
                       <div>
-                          <img src="/images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
+                          <img src="/images/postman.gif"
+                            className="image"
+                            alt="Postman"
+                            width="180px"
+                            height="190px"/>
                           <span className="big-font">
-                            PostIt is a messenger application that allows you post messages to your created group.
+                            PostIt is a messenger application that allows you
+                            post messages to your created group.
                             <b>PostIt </b>
                             always deliver your messages on time.
                           </span><hr/>
@@ -98,47 +106,116 @@ class Signup extends Component {
                     </div>
                       <div className="panel-heading"><h4>Signup</h4></div>
                       <div className="panel-body">
-                          {errors.message && <span className="help-block red-text"><b>{errors.message}</b></span>}
+                          {errors.message && <span
+                                className="help-block red-text">
+                                <b>{errors.message}</b>
+                                </span>}
                           <div className='row'>
-                            <form onSubmit={this.onSubmit} className="" action="" method="">
+                            <form onSubmit={this.onSubmit}
+                                  className="" action="" method="">
                                 <div className='row'>
                                   <div className="input-field">
-                                      <input type="text" className="validate" name="username" onChange={this.onChange} value={this.props.username} placeholder="Enter your username"  id="username" required/>
-                                      <label htmlFor="username">Username:</label>
-                                      {errors.username && <span className="help-block red-text">{errors.username}</span>}
+                                      <input type="text"
+                                              className="validate"
+                                              name="username"
+                                              onChange={this.onChange}
+                                              value={this.props.username}
+                                              placeholder="Enter your username"
+                                              id="username" required/>
+                                      <label htmlFor="username">
+                                        Username:
+                                      </label>
+                                      {errors.username &&
+                                        <span className="help-block red-text">
+                                          {errors.username}
+                                        </span>}
                                   </div>
 
                                   <div className="input-field">
-                                      <input type="email" className="validate" name="email" onChange={this.onChange} value={this.props.email} placeholder="Enter your email"  id="email" required/>
+                                      <input type="email"
+                                              className="validate"
+                                              name="email"
+                                              onChange={this.onChange}
+                                              value={this.props.email}
+                                              placeholder="Enter your email"
+                                              id="email" required/>
                                       <label htmlFor="email">Email:</label>
-                                      {errors.email && <span className="help-block red-text">{errors.email}</span>}
+                                      {errors.email && <span
+                                          className="help-block red-text">
+                                          {errors.email}
+                                        </span>}
                                   </div>
 
                                   <div className="input-field">
-                                      <input type="text" className="validate" name="phone" onChange={this.onChange} value={this.props.phone} placeholder="Enter your phone"  id="phone" required/>
+                                      <input type="text"
+                                            className="validate"
+                                            name="phone"
+                                            onChange={this.onChange}
+                                            value={this.props.phone}
+                                            placeholder="Enter your phone"
+                                            id="phone" required/>
                                       <label htmlFor="phone">Phone:</label>
-                                      {errors.phone && <span className="help-block red-text">{errors.phone}</span>}
+                                      {errors.phone && <span
+                                            className="help-block red-text">
+                                            {errors.phone}
+                                            </span>}
                                   </div>
 
                                   <div className="input-field">
-                                      <input type="password" name="password" onChange={this.onChange} value={this.props.password} placeholder="Enter your password" className="validate" id="pwd" required/>
+                                      <input type="password"
+                                              name="password"
+                                              onChange={this.onChange}
+                                              value={this.props.password}
+                                              placeholder="Enter your password"
+                                              className="validate"
+                                              id="pwd" required/>
                                       <label htmlFor="pwd">Password:</label>
-                                      {errors.password && <span className="help-block red-text">{errors.password}</span>}
+                                      {errors.password &&
+                                            <span
+                                              className="help-block red-text">
+                                              {errors.password}
+                                            </span>}
                                   </div>
 
                                   <div className="input-field">
-                                      <input type="password" name="repassword" onChange={this.onChange} value={this.props.repassword} placeholder="Enter your password again" className="validate" id="repwd" required/>
-                                      <label htmlFor="repwd">Confirm Password:</label>
-                                      {errors.confirmPassword && <span className="help-block red-text">{errors.confirmPassword}</span>}
+                                      <input type="password"
+                                        name="repassword"
+                                        onChange={this.onChange}
+                                        value={this.props.repassword}
+                                        placeholder="Enter your password again"
+                                        className="validate"
+                                        id="repwd" required/>
+
+                                      <label htmlFor="repwd">
+                                        Confirm Password:
+                                      </label>
+                                      {errors.confirmPassword && <span
+                                          className="help-block red-text">
+                                            {errors.confirmPassword}
+                                        </span>}
                                   </div>
-                                  <button type="submit" disabled={this.state.isLoading} name="signup_btn" className="btn btn-primary">Signup</button>
+                                  <button
+                                    type="submit"
+                                    disabled={this.state.isLoading}
+                                    name="signup_btn"
+                                    className="btn btn-primary">
+                                    Signup
+                                  </button>
                                 </div>
                               </form>
                           </div>
                           <div  className="text-primary">
 
-                            <div><Link to="/">Already have an account? Sign in</Link></div>
-                            <div><Link to="recoverpassword">Forgot Password?</Link></div>
+                            <div>
+                              <Link to="/">
+                                Already have an account? Sign in
+                              </Link>
+                            </div>
+                            <div>
+                              <Link to="recoverpassword">
+                                Forgot Password?
+                              </Link>
+                            </div>
                           </div>
                       </div>
                   </div>

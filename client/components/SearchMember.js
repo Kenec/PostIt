@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
-import { getUserGroups, getUserInfo, addUserToGroups, getUsersInGroupAction, searchAllUsers } from '../actions/groupActions';
+import { getUserGroups,
+         getUserInfo,
+         addUserToGroups,
+         getUsersInGroupAction,
+         searchAllUsers } from '../actions/groupActions';
 
 class SearchMember extends Component {
   constructor(props) {
@@ -91,39 +95,50 @@ class SearchMember extends Component {
       )
     }
 
-    //Iterated over the array of objects of the users returned. This is coming from the store
-    let returnedUsers;
-    if(searchedUsers){
-        returnedUsers = searchedUsers.map((user) => {
-          return (
-            <form onSubmit={this.addUser} key={user.id}>
-            <div className='row'>
-              <p className='' >
-                  <span className='pull-left'>{user.username}</span>
-                  <span className='pull-right'>
-                      <input type='hidden' name='userId' value={user.id} />
-                      <input type='hidden' name='username' value={user.username} />
-                      <input type='hidden' name='userEmail' value={user.email} />
-                      <input type='hidden' name='userPhone' value={user.phone} />
-                      <button type='submit' className=''>Add</button>
-                  </span>
-              </p>
-            </div>
-          </form>)
+    //Iterated over the array of objects of
+    // the users returned. This is coming from the store
+let returnedUsers;
+if(searchedUsers){
+returnedUsers = searchedUsers.map((user) => {
+  return (
+     <form onSubmit={this.addUser} key={user.id}>
+        <div className='row'>
+          <p className='' >
+            <span className='pull-left'>{user.username}</span>
+            <span className='pull-right'>
+                <input type='hidden' name='userId' value={user.id} />
+                <input type='hidden' name='username' value={user.username} />
+                <input type='hidden' name='userEmail' value={user.email} />
+                <input type='hidden' name='userPhone' value={user.phone} />
+                <button type='submit' className=''>Add</button>
+            </span>
+          </p>
+        </div>
+      </form>)
       });
     }
 
-    return(
-      <div className="row">
-        <div className="well well-sm blue-text text-darken-2 no_spacing"><b>ADD USER TO GROUP</b></div>
+  return(
+    <div className="row">
+      <div className="well well-sm blue-text text-darken-2 no_spacing">
+        <b>ADD USER TO GROUP</b>
+      </div>
         <form onSubmit={this.onSubmit} className="" action="" method="">
             <div className="form-group browser-default">
-                <input onChange={this.onChange} value={this.state.username} type="text" placeholder="Type username" className="form-control browser-default" name="username"/>
+                <input onChange={this.onChange}
+                       value={this.state.username}
+                       type="text" placeholder="Type username"
+                       className="form-control browser-default"
+                       name="username"/>
             </div>
         </form>
         <div>
-          {errors.message && <span className="help-block red-text"><b>{errors.message}</b></span>}
-          {success && <span className="help-block green-text"><b>{success}</b></span>}
+          {errors.message && <span className="help-block red-text">
+            <b>{errors.message}</b>
+          </span>}
+          {success && <span className="help-block green-text">
+            <b>{success}</b>
+          </span>}
           {returnedUsers && returnedUsers}
         </div>
       </div>
@@ -144,4 +159,10 @@ function mapStateToProps(state) {
     auth: state.userLoginReducer,
   }
 }
-export default connect(mapStateToProps, {getUserGroups, searchAllUsers, getUserInfo, addUserToGroups, getUsersInGroupAction})(SearchMember);
+export default connect(mapStateToProps,
+                      {getUserGroups,
+                       searchAllUsers,
+                       getUserInfo,
+                       addUserToGroups,
+                       getUsersInGroupAction})
+                       (SearchMember);

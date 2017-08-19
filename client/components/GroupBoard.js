@@ -72,7 +72,8 @@ class GroupBoard extends Component {
           sentBy: this.state.sentBy
         }
         const { messageData } = this.props.message;
-        this.props.composeMessage(this.props.groupSelectedId, messageSentData).then(
+        this.props.composeMessage(this.props.groupSelectedId, messageSentData)
+        .then(
           ({data}) => {
             const updateMessageStore = {
               id: data.id,
@@ -172,20 +173,20 @@ class GroupBoard extends Component {
     if(!groups.groups) {
         this.context.router.push('/dashboard')
     }
-    let groupsMessagesList;
-    if(messageData){
-      groupsMessagesList = messageData.map((groupMessage) => {
-        if(groupName !== 'No Group Found') {
-          return(
-              <div key={groupMessage.id}>
-              <Link to={`/group/${this.props.groupSelectedId}/${groupMessage.id}`}>
-                <div className="well well-sm white no_spacing">
-                  <p id={groupMessage.id}>
-                    <span className='left black-text cyan span_spacing lighten-5'>
-                      <i><b>{groupMessage.Users.username}</b></i>
-                    </span>
-                    <span className='left yellow lighten-5'>
-                      <i>{groupMessage.priority_level}</i>
+  let groupsMessagesList;
+  if(messageData){
+    groupsMessagesList = messageData.map((groupMessage) => {
+      if(groupName !== 'No Group Found') {
+        return(
+          <div key={groupMessage.id}>
+          <Link to={`/group/${this.props.groupSelectedId}/${groupMessage.id}`}>
+            <div className="well well-sm white no_spacing">
+                <p id={groupMessage.id}>
+                <span className='left black-text cyan span_spacing lighten-5'>
+                  <i><b>{groupMessage.Users.username}</b></i>
+                  </span>
+                  <span className='left yellow lighten-5'>
+                    <i>{groupMessage.priority_level}</i>
                     </span>
                     <span className='right red-text lighten-5'>
                     {moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}
@@ -210,7 +211,9 @@ class GroupBoard extends Component {
         <div className="blue-text text-darken-2">
         <div className="well well-sm no_spacing">
           <b>Group:
-            <Link to={`/group/${this.props.groupSelectedId}`}>{' '+groupName}</Link>
+            <Link to={`/group/${this.props.groupSelectedId}`}>
+              {' '+groupName}
+            </Link>
           </b>
         </div>
         <span className="pull-right">
@@ -235,11 +238,25 @@ class GroupBoard extends Component {
                   <option value="Urgent">Urgent</option>
                   <option value="Critical">Critical</option>
               </select>
-              <textarea onChange={this.onChange} value={this.state.Message} name="Message" placeholder="Type your message" className="form-control" id="message"></textarea>
-              <button type="submit" disabled={this.state.isLoading} className="btn btn-primary">Send Message</button>
+              <textarea onChange={this.onChange}
+                        value={this.state.Message}
+                        name="Message"
+                        placeholder="Type your message"
+                        className="form-control"
+                        id="message">
+              </textarea>
+              <button type="submit"
+                      disabled={this.state.isLoading}
+                      className="btn btn-primary">
+                      Send Message
+              </button>
               <p>
-                {success && <span className="help-block green-text"><b>{success}</b></span>}
-                {errors.status && <span className="help-block red-text"><b>{errors.status}</b></span>}
+                {success && <span className="help-block green-text">
+                  <b>{success}</b>
+                </span>}
+                {errors.status && <span className="help-block red-text">
+                  <b>{errors.status}</b>
+                </span>}
               </p>
             </form>
           </div>

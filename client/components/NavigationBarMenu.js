@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../actions/signinActions';
-import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
+import { getUserGroups,
+         getGroupsCreatedByUser } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 class NavigationBarMenu extends Component {
@@ -28,8 +29,13 @@ class NavigationBarMenu extends Component {
                 <strong className="text-info"><b>POSTIT</b></strong>
               </div>
               <div className="col-md-4 right-align">
-                <a href="#"><span className="glyphicon glyphicon-user">&nbsp;</span>Welcome {isAuthenticated &&  user.username  }!</a>
-                <a href="" onClick={this.logout.bind(this)}>&nbsp;&nbsp;&nbsp;Logout</a>
+                <a href="#">
+                  <span className="glyphicon glyphicon-user">&nbsp;</span>
+                    Welcome {isAuthenticated &&  user.username  }!
+                </a>
+                <a href="" onClick={this.logout.bind(this)}>
+                    &nbsp;&nbsp;&nbsp;Logout
+                </a>
               </div>
               <div className="row">
                 <div className="col-md-6">
@@ -37,9 +43,13 @@ class NavigationBarMenu extends Component {
                 </div>
                 <div className="col-md-6 right-align">
                   <div className="btn-group">
-                    <Link className='space_link' to="/dashboard"><span className=""></span><b>DASHBOARD </b></Link>
+                    <Link className='space_link' to="/dashboard">
+                          <span className=""></span><b>DASHBOARD </b>
+                    </Link>
                     <span className="space_link"><b> | </b></span>
-                    <Link className="" to="/createGroup"><span className=""></span><b> CREATE GROUP</b></Link>
+                    <Link className="" to="/createGroup">
+                          <span className=""></span><b> CREATE GROUP</b>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -64,4 +74,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {logout, getUserGroups, getGroupsCreatedByUser })(NavigationBarMenu);
+export default connect(mapStateToProps,
+                      {logout,
+                       getUserGroups,
+                       getGroupsCreatedByUser })
+                      (NavigationBarMenu);
