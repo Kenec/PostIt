@@ -2,7 +2,7 @@
 import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { userGroups } from '../models';
+import { Groups, userGroups } from '../models';
 import app from '../app';
 
 // During the test the env variable is set to test
@@ -85,53 +85,77 @@ describe('userGroups', () => {
               done();
             });
         });
-      
-      // // Test for retrieving group by its id
-      // it(`should return status code 200 and a group array
-      //    when retrieving group by its creator id`,
-      //   (done) => {
-      //     server
-      //       .post('/api/group/creator')
-      //       .send({
-      //         token,
-      //         userId: '1'
-      //       })
-      //       .end((err, res) => {
-      //         res.should.have.status(200);
-      //         res.body.should.be.a('array');
-      //         done();
-      //       });
-      //   });
-      // // Test for retrieving group by its id
-      // it(`should return status code 200 and a group array
-      //    when retrieving group by its id`,
-      //   (done) => {
-      //     const groupId = '1';
-      //     server
-      //       .get(`/api/group/${groupId}`)
-      //       .set({ 'x-access-token': token })
-      //       .end((err, res) => {
-      //         res.should.have.status(200);
-      //         res.body.should.be.a('array');
-      //         done();
-      //       });
-      //   });
-      // // Test for an 400 status error when group could
-      // // not be retrieved by creator
-      // it(`should return status code 400 and a group object
-      //      when error occurs while retrieving group by its creator id`,
-      //   (done) => {
-      //     server
-      //       .post('/api/group/creator')
-      //       .send({
-      //         token,
-      //         userId: 3
-      //       })
-      //       .end((err, res) => {
-      //         res.should.have.status(400);
-      //         done();
-      //       });
-      //   });
+      it(`should return status code 200 and  res
+           of object of users from the DB when a request
+           is made`,
+        (done) => {
+          server
+            .post('/api/users')
+            .send({
+              token,
+              username: 'k',
+            })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('array');
+              done();
+            });
+        });
+      it(`should return status code 400 and  res
+             of object of users cannot be fetched from the DB`,
+        (done) => {
+          server
+            .post('/api/users')
+            .send({
+              // token, // token is not available
+              username: '3',
+            })
+            .end((err, res) => {
+              res.should.have.status(401);
+              res.body.should.be.a('object');
+              done();
+            });
+        });
+      it(`should return status code 200 and  res
+            an array of objects of all groups`,
+        (done) => {
+          server
+            .get('/api/group')
+            .send({
+              token,
+            })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('array');
+              done();
+            });
+        });
+      it(`should return status code 200 and  res
+              an object of users in a group by groupId`,
+        (done) => {
+          server
+            .get(`/api/groups/${groupId}/users`)
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              done();
+            });
+        });
+      it(`should return status code 404 and  res
+          an object of error message when an invalid groupId is passed`,
+        (done) => {
+          server
+            .get('/api/groups/100/users')
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Group does not exist');
+              done();
+            });
+        });
     });
   });
 });

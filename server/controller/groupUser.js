@@ -93,20 +93,22 @@ export default {
       });
   },
 
-  // retrieve members from a group by the groupId
-  retrieveMembers(req, res) {
-    return userGroups
-      .findAll({ where: { groupId: req.params.id } })
-      .then(groups => res.status(200).send(groups))
-      .catch((error) => {
-        res.status(400).send(error);
-      });
-  },
+  // // retrieve members from a group by the groupId
+  // retrieveMembers(req, res) {
+  //   return userGroups
+  //     .findAll({ where: { groupId: req.params.id } })
+  //     .then(groups => res.status(200).send(groups))
+  //     .catch((error) => {
+  //       res.status(400).send(error);
+  //     });
+  // },
 
   // list all groups
   list(req, res) {
     return Groups
-      .findAll()
+      .findAll({
+        attributes: ['id', 'groupName', 'createdby']
+      })
       .then(group => res.status(200).send(group))
       .catch(error => res.status(400).send(error));
   },

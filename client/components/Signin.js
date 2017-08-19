@@ -16,18 +16,20 @@ class Signin extends Component {
       errors: {},
       isLoading: false
     }
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onClick = this.onClick.bind(this);
-  }
 
+    this.onClick = this.onClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+  
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
     });
   }
 
-  onClick(){
+  onClick(e){
+    e.preventDefault();
     this.props.deleteFlashMessage(this.props.messages.id);
   }
 
@@ -53,7 +55,9 @@ class Signin extends Component {
 
     const messages = this.props.messages.map(message =>
       <div className='alert alert-success' key={message.id}>
-        <button onClick={this.props.deleteFlashMessage(message.id)} className="close"><span>&times;</span></button>
+        <button onClick={this.props.deleteFlashMessage(message.id)}
+                className="close"><span>&times;</span>
+        </button>
         {message.text}
       </div>
     );
@@ -69,9 +73,13 @@ class Signin extends Component {
                     <div className="row">
                       <h3 className="">Welcome To PostIt App<hr/></h3>
                       <div>
-                          <img src="/images/postman.gif" className="image" alt="Postman" width="180px" height="190px"/>
+                          <img src="/images/postman.gif"
+                               className="image"
+                               alt="Postman"
+                               width="180px" height="190px"/>
                           <span className="big-font">
-                            PostIt is a messenger application that allows you post messages to your created group.
+                            PostIt is a messenger application that allows
+                            you post messages to your created group.
                             <b>PostIt </b>
                             always deliver your messages on time.
                           </span><hr/>
@@ -92,26 +100,54 @@ class Signin extends Component {
                       <div className="panel-heading"><h4>Login</h4></div>
                       <div className="panel-body">
                           <div className='row'>
-                            {errors.message && <div className="alert alert-danger">{errors.message}</div>}
+                            {errors.message &&
+                                <div className="alert alert-danger">
+                                  {errors.message}
+                                </div>}
                               <form onSubmit={this.onSubmit} className="">
                                 <div className='row'>
                                   <div className="input-field">
-                                      <input type="text" className="validate" onChange={this.onChange} value={this.state.username} name="username" placeholder="Enter your username"  id="username" required/>
-                                      <label htmlFor="username">Username:</label>
+                                    <input type="text" className="validate"
+                                          onChange={this.onChange}
+                                          value={this.state.username}
+                                          name="username"
+                                          placeholder="Enter your username"
+                                          id="username" required/>
+                                      <label htmlFor="username">
+                                        Username:
+                                      </label>
                                   </div>
 
                                   <div className="input-field">
-                                      <input type="password" name="password" onChange={this.onChange} value={this.state.password} placeholder="Enter your password" className="validate" id="pwd" required/>
+                                      <input type="password"
+                                            name="password"
+                                            onChange={this.onChange}
+                                            value={this.state.password}
+                                            placeholder="Enter your password"
+                                            className="validate"
+                                            id="pwd" required/>
                                       <label htmlFor="pwd">Password:</label>
                                   </div>
-                                  <button type="submit" name="signin_btn" disabled={isLoading} className="btn btn-primary">Login</button>
+                                  <button type="submit"
+                                          disabled={isLoading}
+                                          className="btn btn-primary">
+                                        Login
+                                  </button>
                                 </div>
                               </form>
                           </div>
                           <div  className="text-primary">
                             <br/>
-                            <div><Link to="signup">Dont have an account? Sign up</Link></div>
-                            <div><Link to="recoverpassword">Forgot Password?</Link></div>
+                            <div>
+                              <Link to="signup">
+                                Dont have an account? Sign up
+                              </Link>
+                            </div>
+                            <div>
+                              <Link to="recoverpassword">
+                                Forgot Password?
+                              </Link>
+                            </div>
                           </div>
                       </div>
                   </div>
@@ -139,4 +175,8 @@ function mapStateToProps(state) {
     group: state.group
   }
 }
-export default connect(mapStateToProps, { userSigninRequestAction, deleteFlashMessage, getUserGroups })(Signin);
+export default connect(mapStateToProps,
+                      { userSigninRequestAction,
+                        deleteFlashMessage,
+                        getUserGroups })
+                      (Signin);

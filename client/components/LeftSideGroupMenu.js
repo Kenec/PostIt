@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getUserGroups, getGroupsCreatedByUser } from '../actions/groupActions';
+import { getUserGroups,
+         getGroupsCreatedByUser } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 class LeftSideGroupMenu extends Component {
@@ -20,7 +21,9 @@ class LeftSideGroupMenu extends Component {
       )
     }
     const groupsCreatedList = groupsByUser.map((group) => {
-      return <li key={group.id} value={group.id}><a href="#">{group.groupName}</a></li>
+      return <li key={group.id} value={group.id}>
+                  <a href="#">{group.groupName}</a>
+              </li>
     });
     const groupsBelongedList = groups.groups.map((group) => {
       return(
@@ -36,7 +39,11 @@ class LeftSideGroupMenu extends Component {
       <div className="row">
           <div className="well well-sm blue lighten-2 no_spacing">
             <span className="white-text"><b>Groups</b></span>
-            <span className="right"><Link to="/createGroup"><b>Add New</b></Link></span>
+            <span className="right">
+              <Link to="/createGroup">
+                <b>Add New</b>
+              </Link>
+            </span>
           </div>
           <div className="well well-sm group_board">
             <ul>
@@ -59,4 +66,8 @@ function mapStateToProps(state) {
     auth: state.userLoginReducer,
   }
 }
-export default connect(mapStateToProps, {getUserGroups, getGroupsCreatedByUser, retrieveMessage})(LeftSideGroupMenu);
+export default connect(mapStateToProps,
+                      {getUserGroups,
+                       getGroupsCreatedByUser,
+                       retrieveMessage})
+                      (LeftSideGroupMenu);
