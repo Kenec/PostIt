@@ -9,17 +9,10 @@ import Nexmo from 'nexmo';
  */
 export default function sendSMS(userArraysOfObj, message) {
   const nexmo = new Nexmo({
-    apiKey: '1c60dba3',
-    apiSecret: '44c5683af64ddc78'
+    apiKey: process.env.SMS_API_KEY,
+    apiSecret: process.env.SMS_API_SECRET
   });
   userArraysOfObj.map((user) => {
-    nexmo.message.sendSms('PostIT', user.phone, message, () => {
-      // if (err) {
-      //  console.log(err);
-      // } else {
-      //   console.dir(responseData);
-      // }
-    }
-    );
+    nexmo.message.sendSms('PostIT', user.phone, message, () => {});
   });
 }

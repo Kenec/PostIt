@@ -17,8 +17,8 @@ export default function sendMail(userArraysOfObj, message) {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'nnamani.kenechukwu@gmail.com',
-      pass: 'jesus-mary'
+      user: process.env.EMAIL_NAME,
+      pass: process.env.EMAIL_PASSWORD
     }
   });
 
@@ -32,10 +32,5 @@ export default function sendMail(userArraysOfObj, message) {
   };
 
     // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error) => {
-    if (error) {
-      // return console.log(error);
-    }
-    // console.log('Message %s sent: %s', info.messageId, info.response);
-  });
+  transporter.sendMail(mailOptions, () => {});
 }
