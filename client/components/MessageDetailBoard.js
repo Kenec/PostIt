@@ -144,7 +144,9 @@ class MessageDetailBoard extends Component {
         <div className="blue-text text-darken-2">
         <div className="well well-sm no_spacing">
           <b>Group:
-          <Link to={`/group/${this.props.groupSelectedId}`}>{' '+groupName}</Link>
+          <Link to={`/group/${this.props.groupSelectedId}`}>
+            {' '+groupName}
+          </Link>
           </b>
         </div>
         <span className="pull-right">

@@ -1,8 +1,16 @@
 const debug = process.env.NODE_ENV !== 'production';
 const webpack = require('webpack');
 const path = require('path');
-
+const env = require('node-env-file');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+try {
+  env(path.join(__dirname, './.env'));
+} catch (error) {
+  /**/
+}
 
 module.exports = {
   devtool: debug ? 'inline-sourcemap' : false,
@@ -60,16 +68,14 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   mangle: false,
-    //   // warnings: false,
-    //   // comments: false
-    // }),
-    // new webpack.DefinePlugin({
-    //   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV
-    //   || 'development'),
-    // }),
-    // new webpack.EnvironmentPlugin([process.env.NODE_ENV
-    // || 'development']),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        SMS_API_KEY: JSON.stringify(process.env.SMS_API_KEY),
+        SMS_API_SECRET: JSON.stringify(process.env.SMS_API_SECRET),
+        EMAIL_NAME: JSON.stringify(process.env.EMAIL_NAME),
+        EMAIL_PASSWORD: JSON.stringify(process.env.EMAIL_PASSWORD)
+      },
+    })
   ],
 };
