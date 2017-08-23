@@ -122,20 +122,25 @@ a:hover{
 
   }
 }
-html,
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
    margin:0;
    padding:0;
    height:$hundred;
 }
 .content{
-   min-height:$hundred;
+   min-height: 100%;
+   height:$hundred;
    position:relative;
    padding-bottom: $padding_bottom;
 }
 .footer{
     bottom: 0;
-    position: absolute;
+    position: fixed;
     width:$hundred;
     height:$footer_height;
     background:$footer_background;
