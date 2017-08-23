@@ -60,13 +60,11 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    // new webpack.optimize.UglifyJsPlugin(
-    // //   // compress: {
-    // //   //   // mangle: false,
-    // //   //   // warnings: false,
-    // //   //   // comments: false
-    // //   // }
-    // ),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   mangle: false,
+    //   // warnings: false,
+    //   // comments: false
+    // }),
     // new webpack.DefinePlugin({
     //   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV
     //   || 'development'),

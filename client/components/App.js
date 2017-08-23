@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import Footer from './Footer';
-
-require('../scss/main.scss');
+import '../scss/main.scss';
 
 class App extends Component {
 
   render(){
     return(
-      <div>
-        <div className='content'>
+      <div className='content'>
+        <div>
             {this.props.children}
-            <Footer />
         </div>
+        <Footer />
       </div>
     );
   }

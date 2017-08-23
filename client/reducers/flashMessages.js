@@ -11,12 +11,12 @@ import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
  */
 export default function flashMessages(state = [], action = {}) {
   switch (action.type) {
-    // add flash messgae reducer
+    // add flash message reducer
     case ADD_FLASH_MESSAGE: {
       return [
         ...state,
         {
-          id: shortid.generate(),
+          id: 1, // shortid.generate(),
           type: action.message.type,
           text: action.message.text
         }
