@@ -20,16 +20,19 @@ export default {
             groupId: userGroups.groupid,
             success: true
           }))
-          .catch(() => res.status(400).send({
+          .catch(() => res.status(404).send({
             message: 'Cannot add a user who does not exist to a group',
           }));
       }
-      res.status(400).send({
+      res.status(409).send({
         message: 'User  Already Exist',
         success: false
       });
     })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: 'Error occured while trying to add user',
+        error
+      }));
   },
 
   // retreive a user and all the group he belongs to
@@ -88,7 +91,7 @@ export default {
       })
       .catch(() => {
         res.status(400).send({
-          message: 'Group does not exist'
+          message: 'Error occured while fetching members in a Group'
         });
       });
   },
@@ -99,7 +102,10 @@ export default {
         attributes: ['id', 'groupName', 'createdby']
       })
       .then(group => res.status(200).send(group))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        error,
+        message: 'Error occured while trying to find Groups'
+      }));
   },
   // search users by where username is LIKE $username
   searchUser(req, res) {
@@ -110,7 +116,10 @@ export default {
       attributes: ['id', 'username', 'email', 'phone'],
     })
       .then(users => res.status(200).send(users))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        error,
+        message: 'Error occured while trying to find User'
+      }));
   }
 
 };
