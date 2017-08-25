@@ -142,7 +142,7 @@ router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
 router.post('/api/users/username', userController.FetchMemberByName);
 
 // *** api route to get all users *** //
-router.post('/api/users', groupUserController.searchUser);
+router.post('/api/users/:offset', groupUserController.searchUser);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupController.retrieve);

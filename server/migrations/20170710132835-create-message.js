@@ -41,6 +41,9 @@ module.exports = {
         key: 'id',
       },
     },
+    ReadBy: {
+      type: Sequelize.STRING
+    },
   }),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Messages')
 };

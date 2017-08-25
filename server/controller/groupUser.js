@@ -92,17 +92,6 @@ export default {
         });
       });
   },
-
-  // // retrieve members from a group by the groupId
-  // retrieveMembers(req, res) {
-  //   return userGroups
-  //     .findAll({ where: { groupId: req.params.id } })
-  //     .then(groups => res.status(200).send(groups))
-  //     .catch((error) => {
-  //       res.status(400).send(error);
-  //     });
-  // },
-
   // list all groups
   list(req, res) {
     return Groups
@@ -115,6 +104,8 @@ export default {
   // search users by where username is LIKE $username
   searchUser(req, res) {
     return Users.findAll({
+      offset: req.params.offset * 5,
+      limit: 5,
       where: { username: { $like: `%${req.body.username}%` } },
       attributes: ['id', 'username', 'email', 'phone'],
     })

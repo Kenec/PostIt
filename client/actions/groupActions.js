@@ -91,12 +91,13 @@ export function addUserToGroupsAction(data) {
  * Search for all user where a username is LIKE.
  * @constructor
  * @param {string} username - The is the username of the user being searhed.
- *
+ *  @param {integer} offset - the offset
  */
-export function searchAllUsers(username) {
-  return dispatch => axios.post('/api/users', username).then((res) => {
-    dispatch(searchAllUsersAction(res.data));
-  });
+export function searchAllUsers(username, offset) {
+  return dispatch => axios.post(`/api/users/${offset}`, username)
+    .then((res) => {
+      dispatch(searchAllUsersAction(res.data));
+    });
 }
 
 /**

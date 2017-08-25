@@ -17,7 +17,7 @@ export default {
           success: true,
         }))
         .catch(error => res.status(400).send(error)))
-      .catch(error => res.status(400).send({
+      .catch(error => res.status(409).send({
         groupName: error.errors[0].message,
         message: 'Group Already Exists',
         success: false,
@@ -32,7 +32,7 @@ export default {
       })
       .then(groups => res.status(200).send(groups))
       .catch((error) => {
-        res.status(400).send({
+        res.status(404).send({
           error,
           message: 'Group selected not found'
         });
@@ -47,7 +47,10 @@ export default {
       })
       .then(group => res.status(200).send(group))
       .catch((error) => {
-        res.status(400).send(error);
+        res.status(400).send({
+          error,
+          message: 'Error retrieving Groups'
+        });
       });
   },
 };
