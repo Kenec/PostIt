@@ -68,13 +68,13 @@ class Group extends Component {
 
           <div className="container-fluid">
               <div className="row">
-                <div className="col-md-2">
+                <div className="col-md-3">
                   <GroupMembers groupSelectedId={id} />
                 </div>
                   <div className="col-md-6">
                     <GroupBoard groupSelectedId={id} groupName={groupName} />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <SearchMember groupId={id} />
                   </div>
               </div>

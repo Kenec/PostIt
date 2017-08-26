@@ -18,10 +18,10 @@ class CreateGroup extends Component {
 
           <div className="container-fluid">
               <div className="row">
-                <div className="col-md-2">
+                <div className="col-md-3">
                   <LeftSideGroupMenu />
                 </div>
-                  <div className="col-md-8">
+                  <div className="col-md-7">
                     <CreateGroupBoard />
                   </div>
                   <div className="col-md-2">

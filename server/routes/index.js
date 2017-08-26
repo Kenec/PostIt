@@ -163,6 +163,10 @@ router.get('/api/group/:groupid/messages', messageController.retrieve);
 router.post('/api/group/:messageid/notification',
   messageController.addMessageNotification);
 
+// api route to update readBy Column in the message table
+router.post('/api/group/:messageid/updateReadBy',
+  messageController.updateReadBy);
+
 // api route to get notification when a message is sent
 router.post('/api/user/notifications',
   messageController.getMessageNotification);

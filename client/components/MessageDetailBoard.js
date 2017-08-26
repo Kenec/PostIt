@@ -14,7 +14,8 @@ import { retrieveMessage,
         addNotification,
         updateNotification,
         getNotification,
-        getUsersWhoReadMessage
+        getUsersWhoReadMessage,
+        updateReadBy
       } from '../actions/messageActions';
 
 
@@ -38,6 +39,9 @@ class MessageDetailBoard extends Component {
   }
 
   componentDidMount(){
+    // get MessageData from the store
+    const { messageData } = this.props.message;
+    // fire an action to retrieve messages
     this.props.retrieveMessage(this.props.groupSelectedId).then(
       (messageData) => {
         this.setState({ retrievedMessages: []});
@@ -66,6 +70,23 @@ class MessageDetailBoard extends Component {
     e.preventDefault();
   }
 
+  // method to check if a user have read this message before
+  checkIfUserHaveReadMessage(existingReaders){
+      let userId;
+      let foundUser = false;
+      if( existingReaders ) {
+        existingReaders.split(",").forEach((val) => {
+          userId = parseInt(val, 10);
+          if (userId === this.state.sentBy) {
+            foundUser = true;
+          }
+        });
+      }
+
+    return foundUser
+  }
+
+  // this method will be called before component mounts
   componentWillMount() {
     const { isAuthenticated, user } = this.props.auth;
     const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
@@ -99,15 +120,23 @@ class MessageDetailBoard extends Component {
         <h4>Loading ...</h4>
       )
     }
+    // retrieve all users who have read this message
     let allUsersWhoReadMessages = '';
     usersWhoHaveReadMessage.messageReadUsers.map((user) => {
       allUsersWhoReadMessages +=  `${user.Reader.username}, `;
     });
+    // retrieve full message by id
     let singleReturnedMessage = ''
     singleReturnedMessage = messageData.map((groupMessage) => {
         if(groupMessage.id == this.props.messageId){
           this.props.updateNotification(groupMessage.id,
               {userId: this.state.sentBy, readStatus: 1 });
+          // update the ReadBy column if the user have not read this message
+          if(!this.checkIfUserHaveReadMessage(groupMessage.ReadBy)) {
+            // fire an action to update the readBy column
+            this.props.updateReadBy(groupMessage.id,
+                {readBy: this.state.sentBy });
+          }
           return (
             <div key={groupMessage.id}>
             <div className="well well-sm white no_spacing">
@@ -172,6 +201,7 @@ MessageDetailBoard.propTypes = {
   clearRetrievedMessageAction: React.PropTypes.func.isRequired,
   addNotification: React.PropTypes.func.isRequired,
   updateNotification: React.PropTypes.func.isRequired,
+  updateReadBy: React.PropTypes.func.isRequired,
   getNotification: React.PropTypes.func.isRequired,
   getUsersWhoReadMessage: React.PropTypes.func.isRequired,
 }
@@ -193,5 +223,6 @@ export default connect(mapStateToProps,
   retrieveMessage,
   getUsersWhoReadMessage,
   updateNotification,
-  getNotification
+  getNotification,
+  updateReadBy
 })(MessageDetailBoard);

@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import { Messages, Users, Groups, MessageReads } from '../models';
 import sendMail from '../utils/sendMail';
 import sendSMS from '../utils/sendSMS';
@@ -13,6 +14,7 @@ export default {
         priority_level: req.body.priority_level,
         groupId: req.params.groupid,
         sentBy: req.body.sentBy,
+        ReadBy: req.body.readBy
       })
       .then((message) => {
         Groups.find({
@@ -42,6 +44,7 @@ export default {
               priority_level: message.priority_level,
               group: message.groupId,
               sentBy: message.sentBy,
+              readBy: message.ReadBy,
               id: message.id,
               createdAt: message.createdAt,
             });
@@ -66,7 +69,8 @@ export default {
           groupId: req.params.groupid,
         },
         attributes: [
-          'id', 'message', 'priority_level', 'groupId', 'sentBy', 'createdAt']
+          'id', 'message', 'priority_level',
+          'groupId', 'sentBy', 'ReadBy', 'createdAt']
       })
       .then((user) => {
         if (user.length === 0) {
@@ -210,6 +214,36 @@ export default {
           })
             .catch(error => res.status(400).send(error));
         }
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  // update read by column in the message table
+  updateReadBy(req, res) {
+    Messages.find({
+      where: {
+        id: req.params.messageid,
+      }
+    })
+      .then((messageRes) => {
+        if (messageRes.length !== 0) {
+          const updatedReaders = `${messageRes.ReadBy}, ${req.body.readBy}`;
+          const unqiueReadersArray = _.uniq(updatedReaders.split(','));
+          return Messages
+            .update({
+              ReadBy: unqiueReadersArray.toString()
+            }, {
+              where: {
+                id: req.params.messageid
+              }
+            })
+            .then(() => res.status(201).send({
+              message: 'Message updated!',
+              success: true
+            }));
+        }
+        res.status(404).send({
+          message: 'Message not found!'
+        });
       })
       .catch(error => res.status(400).send(error));
   },
