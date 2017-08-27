@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import { Link } from 'react-router';
 import moment from 'moment';
+import FilterMessages from './FilterMessages';
 import { getUserGroups,
          getGroupsCreatedByUser,
          getUsersInGroup
@@ -13,7 +14,8 @@ import { retrieveMessage,
         clearRetrievedMessageAction,
         addNotification,
         updateNotification,
-        getNotification
+        getNotification,
+        getUsersWhoReadMessage
       } from '../actions/messageActions';
 
 
@@ -31,12 +33,32 @@ class GroupBoard extends Component {
       sentBy: '',
       retrieveMessageError: '',
       retrievedMessages: [],
+      readCheckbox: 'unread',
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.toggleReadCheckBox = this.toggleReadCheckBox.bind(this);
   }
 
+  // Before the component mounts
+  componentWillMount() {
+    const { isAuthenticated, user } = this.props.auth;
+    const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
+    const { groups, groupsByUser } = this.props.group;
+    const groupId = this.props.groupSelectedId;
+    const groupName = this.props.groupName;
+    this.props.clearRetrievedMessageAction();
+    if(isAuthenticated){
+      this.setState({
+        sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
+        priority_level: 'Normal',
+      });
+    }
+  }
+
+  // After the component have been mounted
   componentDidMount(){
+    // fire an action to get messages belonging to each user in a group
     this.props.retrieveMessage(this.props.groupSelectedId).then(
       (messageData) => {
         this.setState({ retrievedMessages: []});
@@ -52,12 +74,37 @@ class GroupBoard extends Component {
         });
       }
     );
+
   }
 
+  // method to handle when a change event occur
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+
+  // function to handle checkBox toggle
+  toggleReadCheckBox(e){
+    this.setState({
+        readCheckbox: e.target.value
+    });
+  }
+
+  // method to check if a user have read this message before
+  checkIfUserHaveReadMessage(existingReaders){
+      let userId;
+      let foundUser = false;
+      if( existingReaders ) {
+        existingReaders.split(",").forEach((val) => {
+          userId = parseInt(val, 10);
+          if (userId === this.state.sentBy) {
+            foundUser = true;
+          }
+        });
+      }
+
+    return foundUser
   }
 
   onSubmit(e) {
@@ -69,7 +116,8 @@ class GroupBoard extends Component {
         const messageSentData = {
           message: this.state.Message,
           priority_level: this.state.priority_level,
-          sentBy: this.state.sentBy
+          sentBy: this.state.sentBy,
+          readBy: this.state.sentBy
         }
         const { messageData } = this.props.message;
         this.props.composeMessage(this.props.groupSelectedId, messageSentData)
@@ -81,6 +129,7 @@ class GroupBoard extends Component {
               groupId: data.group,
               sentBy: data.sentBy,
               priority_level: data.priority_level,
+              readBy: data.readBy,
               createdAt: data.createdAt,
               Users: {
                 id: jwt.decode(localStorage.getItem('jwtToken')).id,
@@ -140,26 +189,11 @@ class GroupBoard extends Component {
     }
   }
 
-  componentWillMount() {
-    const { isAuthenticated, user } = this.props.auth;
-    const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    const {groups, groupsByUser} = this.props.group;
-    const groupId = this.props.groupSelectedId;
-    const groupName = this.props.groupName;
-    this.props.clearRetrievedMessageAction();
-    if(isAuthenticated){
-      this.setState({
-        sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-        priority_level: 'Normal',
-      });
-    }
-  }
-
-
+  // render the component
   render(){
     const { errors, success, retrieveMessageError } = this.state;
     const {groups, groupsByUser} = this.props.group;
-    const { messageData } = this.props.message;
+    const { messageData, usersWhoHaveReadMessage } = this.props.message;
     const groupName = this.props.groupName;
     const groupId = this.props.groupId;
 
@@ -169,40 +203,48 @@ class GroupBoard extends Component {
       )
     }
 
-
     if(!groups.groups) {
         this.context.router.push('/dashboard')
     }
+
   let groupsMessagesList;
   if(messageData){
     groupsMessagesList = messageData.map((groupMessage) => {
       if(groupName !== 'No Group Found') {
-        return(
-          <div key={groupMessage.id}>
-          <Link to={`/group/${this.props.groupSelectedId}/${groupMessage.id}`}>
-            <div className="well well-sm white no_spacing">
-                <p id={groupMessage.id}>
-                <span className='left black-text cyan span_spacing lighten-5'>
-                  <i><b>{groupMessage.Users.username}</b></i>
-                  </span>
-                  <span className='left yellow lighten-5'>
-                    <i>{groupMessage.priority_level}</i>
-                    </span>
-                    <span className='right red-text lighten-5'>
-                    {moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}
-                    </span>
-                  </p>
-                  <div>
-                    <hr/>
-                    <p className='black-text lighten-3' id={groupMessage.id}>
-                      {groupMessage.message}
-                    </p>
-                  </div>
+          // filter the message in the message board
+          if(this.state.readCheckbox === 'unread') {
+            if(!this.checkIfUserHaveReadMessage(groupMessage.ReadBy)){
+              return (
+                <div key={groupMessage.id}>
+                  <FilterMessages
+                    groupSelectedId={this.props.groupSelectedId}
+                    groupMessage={groupMessage}
+                  />
                 </div>
-                </Link>
+              );
+            }
+          } else if (this.state.readCheckbox === 'read'){
+            if(this.checkIfUserHaveReadMessage(groupMessage.ReadBy)){
+              return (
+                <div key={groupMessage.id}>
+                  <FilterMessages
+                    groupSelectedId={this.props.groupSelectedId}
+                    groupMessage={groupMessage}
+                  />
+                </div>
+              );
+            }
+          } else {
+            return (
+              <div key={groupMessage.id}>
+                <FilterMessages
+                  groupSelectedId={this.props.groupSelectedId}
+                  groupMessage={groupMessage}
+                />
               </div>
-            )
+            );
           }
+        }
       });
     }
 
@@ -215,10 +257,41 @@ class GroupBoard extends Component {
               {' '+groupName}
             </Link>
           </b>
-        </div>
-        <span className="pull-right">
+          <span className="pull-right">
+            <input
+              className="with-gap"
+              onClick={this.toggleReadCheckBox}
+              checked={this.state.readCheckbox === 'read'}
+              name="read"
+              type="radio"
+              value="read"
+              id="read"
+              />
+            <label htmlFor="read">Read</label>
 
-        </span>
+            <input
+              className="with-gap"
+              onChange={this.toggleReadCheckBox}
+              checked={this.state.readCheckbox === 'unread'}
+              name="read"
+              value="unread"
+              type="radio"
+              id="unread"
+              />
+            <label htmlFor="unread">Unread</label>
+
+            <input
+              className="with-gap"
+              onChange={this.toggleReadCheckBox}
+              checked={this.state.readCheckbox === 'all'}
+              name="read"
+              type="radio"
+              value="all"
+              id="all"
+              />
+            <label htmlFor="all">All</label>
+          </span>
+        </div>
         </div>
         <div className="row">
           <div className="well well-sm group_board no_spacing">
@@ -274,6 +347,7 @@ GroupBoard.propTypes = {
   addNotification: React.PropTypes.func.isRequired,
   updateNotification: React.PropTypes.func.isRequired,
   getNotification: React.PropTypes.func.isRequired,
+  getUsersWhoReadMessage: React.PropTypes.func.isRequired,
 }
 function mapStateToProps(state) {
   return {
@@ -292,5 +366,6 @@ export default connect(mapStateToProps,
   getUsersInGroup,
   retrieveMessage,
   updateNotification,
-  getNotification
+  getNotification,
+  getUsersWhoReadMessage,
 })(GroupBoard);

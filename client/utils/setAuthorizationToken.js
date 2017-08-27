@@ -4,9 +4,10 @@ import axios from 'axios';
  * setAuthorizationToken - This function sets the authorization token to the
  * header of the browser with the name x-access-token
  *
- * @param  {type} token token generated when a user provides a valid credential
+ * @param  {string} token token generated when a
+ * user provides a valid credential
  * for logging in
- * @return {type}       description
+ * @return {null}       description
  */
 export default function setAuthorizationToken(token) {
   if (token) {

@@ -53,7 +53,7 @@ describe('userGroups', () => {
               done();
             });
         });
-      it('should return status code 400 and res of object on a failure',
+      it('should return status code 404 and res of object on a failure',
         (done) => {
           server
             .post(`/api/group/${groupId}/user`)
@@ -62,7 +62,7 @@ describe('userGroups', () => {
               userId: 3
             })
             .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(404);
               res.body.should.be.a('object');
               done();
             });
@@ -90,7 +90,7 @@ describe('userGroups', () => {
            is made`,
         (done) => {
           server
-            .post('/api/users')
+            .post('/api/users/0')
             .send({
               token,
               username: 'k',
@@ -152,7 +152,7 @@ describe('userGroups', () => {
               res.should.have.status(400);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
-                .eql('Group does not exist');
+                .eql('Error occured while fetching members in a Group');
               done();
             });
         });

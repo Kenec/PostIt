@@ -40,6 +40,9 @@ export default (sequelize, DataTypes) => {
           msg: 'sentBy must not be empty'
         },
       },
+    },
+    ReadBy: {
+      type: DataTypes.STRING
     }
   });
   Messages.associate = (models) => {

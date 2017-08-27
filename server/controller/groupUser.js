@@ -2,6 +2,14 @@ import { userGroups, Groups, Users } from '../models';
 
 export default {
   // function to add a member to a group
+
+  /**
+   * create - Add user to a group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   create(req, res) {
     userGroups.findAll({
       where: {
@@ -20,19 +28,31 @@ export default {
             groupId: userGroups.groupid,
             success: true
           }))
-          .catch(() => res.status(400).send({
+          .catch(() => res.status(404).send({
             message: 'Cannot add a user who does not exist to a group',
           }));
       }
-      res.status(400).send({
+      res.status(409).send({
         message: 'User  Already Exist',
         success: false
       });
     })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: 'Error occured while trying to add user',
+        error
+      }));
   },
 
   // retreive a user and all the group he belongs to
+
+  /**
+   * fetchUserAndGroup - method to retrieve a user by username and all the
+   * Groups that he belongs to
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   fetchUserAndGroup(req, res) {
     const username = req.body.username;
 
@@ -63,6 +83,14 @@ export default {
       });
   },
   // function to fetch all members from the same group by the groupid
+
+  /**
+   * fetchMembersOfGroup - fetch members from the same group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   fetchMembersOfGroup(req, res) {
     const id = req.params.id;
 
@@ -88,38 +116,51 @@ export default {
       })
       .catch(() => {
         res.status(400).send({
-          message: 'Group does not exist'
+          message: 'Error occured while fetching members in a Group'
         });
       });
   },
-
-  // // retrieve members from a group by the groupId
-  // retrieveMembers(req, res) {
-  //   return userGroups
-  //     .findAll({ where: { groupId: req.params.id } })
-  //     .then(groups => res.status(200).send(groups))
-  //     .catch((error) => {
-  //       res.status(400).send(error);
-  //     });
-  // },
-
   // list all groups
+
+  /**
+   * list - list all the groups
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   list(req, res) {
     return Groups
       .findAll({
         attributes: ['id', 'groupName', 'createdby']
       })
       .then(group => res.status(200).send(group))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        error,
+        message: 'Error occured while trying to find Groups'
+      }));
   },
   // search users by where username is LIKE $username
+
+  /**
+   * searchUser - search for a user
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   searchUser(req, res) {
     return Users.findAll({
+      offset: req.params.offset * 5,
+      limit: 5,
       where: { username: { $like: `%${req.body.username}%` } },
       attributes: ['id', 'username', 'email', 'phone'],
     })
       .then(users => res.status(200).send(users))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        error,
+        message: 'Error occured while trying to find User'
+      }));
   }
 
 };

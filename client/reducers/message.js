@@ -5,11 +5,14 @@ import { COMPOSE_MESSAGE,
   UPDATE_NOTIFICATION,
   CLEAR_NOTIFICATION
 } from '../actions/types';
+
+
 /**
- * Represents a book.
- * @class
- * @param {objects} state - The state of the store.
- * @param {object} action - The action of the store.
+ * message - message reducer dunction
+ *
+ * @param  {object} state = {} message state
+ * @param  {object} action     action that is dispatched
+ * @return {object}            returns state object for the action type
  */
 export default function message(state = {}, action) {
   switch (action.type) {

@@ -1,26 +1,44 @@
+// define a variable debug only to be used when not in production environment
 const debug = process.env.NODE_ENV !== 'production';
+// import webpack module
 const webpack = require('webpack');
+// import path module and assign it to a variable path
 const path = require('path');
+// import node-env-file and assign to a variable env
 const env = require('node-env-file');
+// import extract-text-webpack-plugin and assign to variable ExtractTextPlugin
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+// assign process.env.NODE_ENV to the current node environment
+// or to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
+// call the .env file and pass it to the node-env-file function
+// Surround with try catch block so that it doesnt crash the app
+// when hosted on heroku
 try {
   env(path.join(__dirname, './.env'));
 } catch (error) {
   /**/
 }
 
+// export the webpack configurations
 module.exports = {
+  // if debug is in production use inline-sourcemap as a devtool else dont't
   devtool: debug ? 'inline-sourcemap' : false,
+  // define the entry point of the application.
+  // define the entry point to be used by the webpack-hot-middleware for
+  // auto bundling when changes are made
   entry: [
     'webpack-hot-middleware/client',
     './client/js/client.js'
   ],
+  // define the module loaders to be used by the webpack
   module: {
     loaders: [
       {
+        // use babel-loader for transpiling js and jsx files in es6 to es5
+        // exclude the node_modules folder
         test: /\.js?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -29,10 +47,14 @@ module.exports = {
         }
       },
       {
+        // use style-loader, css-loader, and sass-loader for .scss
+        // file extensions
         test: /\.scss$/,
         loader: 'style-loader!css-loader!sass-loader',
       },
-      { test: /\.css$/,
+      {
+        // style-loader, css-loader, font-loader for .css file extensions
+        test: /\.css$/,
         loaders: [
           'style-loader',
           'css-loader?importLoaders=1',
@@ -40,16 +62,20 @@ module.exports = {
           '&format[]=woff&format[]=embedded-opentype'
         ],
       },
-      { test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+      {
+        // use file-loader for transpiling font files
+        test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]'
       }
     ]
   },
+  // specify the output path for bundled file
   output: {
     path: path.resolve('./client/dist'),
     filename: 'bundle.min.js',
     publicPath: '/dist/'
   },
+  // assign the node files that cannot be found to empty
   node: {
     net: 'empty',
     dns: 'empty',
@@ -57,6 +83,7 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty',
   },
+  // webpack plugins
   plugins: [
     new ExtractTextPlugin('client/scss/main.css'),
     new webpack.ProvidePlugin({

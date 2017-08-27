@@ -33,6 +33,31 @@ $message_board_height: 400px;
   word-spacing: 10px;
 }
 
+.tooltipp {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+    .tooltipptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        top: 120%;
+        left: 50%;
+        margin-left: -60px;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+}
+
+.tooltipp:hover .tooltipptext {
+    visibility: visible;
+}
+
 .collection {
   .collection-item{
     .avatar {

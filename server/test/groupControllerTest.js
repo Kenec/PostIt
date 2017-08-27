@@ -58,7 +58,7 @@ describe('Groups', () => {
         });
       // Return 400 status code if while creating a group
       // the creator was not added to the groupUser Table
-      it(`should return status code 400 and  res
+      it(`should return status code 409 and  res
          of object on failure to add Group creator to its create
          Group`,
         (done) => {
@@ -69,13 +69,13 @@ describe('Groups', () => {
               groupName: 'Group',
             })
             .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(409);
               res.body.should.be.a('object');
               done();
             });
         });
       // Test for uniquness of a group
-      it(`should return status code 400 for
+      it(`should return status code 409 for
           attempting to create a group that exists`,
         (done) => {
           server
@@ -86,7 +86,7 @@ describe('Groups', () => {
               createdby: 1,
             })
             .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(409);
               res.body.should.be.a('object');
               res.body.should.have.property('groupName')
                 .eql('groupName must be unique');

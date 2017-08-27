@@ -150,6 +150,18 @@ export function updateNotification(messageId, notificationObj) {
     axios.post(`/api/user/${messageId}/notification`, notificationObj);
 }
 
+
+/**
+ * updateReadBy - this method updates the readby column in the message table
+ * @param {INTEGER} messageId the message id
+ * @param  {object} userAndMessageObj description
+ * @return {type}                   description
+ */
+export function updateReadBy(messageId, userAndMessageObj) {
+  return () =>
+    axios.post(`/api/group/${messageId}/updateReadBy`, userAndMessageObj);
+}
+
 /**
  * getUsersWhoReadMessage - description
  *@param  {INTEGER} messageId the message id

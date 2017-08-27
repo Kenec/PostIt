@@ -18,10 +18,13 @@ class SearchMember extends Component {
       errors: {},
       success: '',
       userId: '',
+      offset: 0,
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.addUser = this.addUser.bind(this);
+    this.decreaseOffset = this.decreaseOffset.bind(this);
+    this.increaseOffset = this.increaseOffset.bind(this);
   }
 
   componentWillMount() {
@@ -37,6 +40,28 @@ class SearchMember extends Component {
   onSubmit(e) {
     e.preventDefault();
   }
+  
+  // this method decrease the offset if it is greater than zero by 1
+  decreaseOffset(e){
+    e.preventDefault();
+    this.props.searchAllUsers({ username: this.state.username },
+    this.state.offset > 0 ? this.state.offset - 1 : 0);
+    this.setState({
+      errors: {},
+      offset:  this.state.offset > 0 ? this.state.offset - 1 : 0
+    });
+  }
+
+  // this method will increase the offset by 1
+  increaseOffset(e){
+    e.preventDefault();
+    this.props.searchAllUsers({ username: this.state.username },
+       this.state.offset + 1);
+    this.setState({
+      errors: {},
+      offset:  this.state.offset + 1
+    });
+  }
 
   onChange(e){
     e.preventDefault();
@@ -48,7 +73,7 @@ class SearchMember extends Component {
     let userSearchName = e.target.value;
     let userSearchInputName = e.target.name;
     // This fires a action that searches for a user and return the result
-    this.props.searchAllUsers({username: userSearchName});
+    this.props.searchAllUsers({ username: userSearchName }, this.state.offset);
   }
 
   addUser(e){
@@ -114,7 +139,8 @@ returnedUsers = searchedUsers.map((user) => {
             </span>
           </p>
         </div>
-      </form>)
+      </form>
+    )
       });
     }
 
@@ -140,6 +166,19 @@ returnedUsers = searchedUsers.map((user) => {
             <b>{success}</b>
           </span>}
           {returnedUsers && returnedUsers}
+          {returnedUsers &&
+            <ul className="pagination">
+              <li className="waves-effect">
+                <a onClick={this.decreaseOffset}href="#">Back</a>
+              </li>
+              <li className="active">
+                <a href="#">{this.state.offset + 1}</a>
+              </li>
+              <li className="waves-effect">
+                <a onClick={this.increaseOffset} href="#">Next</a>
+              </li>
+            </ul>
+          }
         </div>
       </div>
     );

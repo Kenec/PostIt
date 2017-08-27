@@ -6,11 +6,14 @@ const initialState = {
   user: {}
 };
 
+
 /**
- * Represents a book.
- * @constructor
- * @param {object} state - this is the state of the store.
- * @param {object} action - The action of the store.
+ * userLoginReducer - user login reducer methof
+ *
+ * @param  {object} state = initialState of the reducer
+ * @param  {object} action = {}          the action type that is dispatched
+ * @return {object}                      returns object of isAuthenticated
+ *                                       and user
  */
 export default function userLoginReducer(state = initialState, action = {}) {
   switch (action.type) {

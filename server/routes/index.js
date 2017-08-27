@@ -142,7 +142,7 @@ router.post('/api/users/me/', groupUserController.fetchUserAndGroup);
 router.post('/api/users/username', userController.FetchMemberByName);
 
 // *** api route to get all users *** //
-router.post('/api/users', groupUserController.searchUser);
+router.post('/api/users/:offset', groupUserController.searchUser);
 
 // ** /api/group/<group id>/user **
 router.get('/api/group/:groupid', groupController.retrieve);
@@ -162,6 +162,10 @@ router.get('/api/group/:groupid/messages', messageController.retrieve);
 // api route to add notification when a message is sent
 router.post('/api/group/:messageid/notification',
   messageController.addMessageNotification);
+
+// api route to update readBy Column in the message table
+router.post('/api/group/:messageid/updateReadBy',
+  messageController.updateReadBy);
 
 // api route to get notification when a message is sent
 router.post('/api/user/notifications',
