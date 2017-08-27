@@ -7,6 +7,14 @@ import sendSMS from '../utils/sendSMS';
  */
 export default {
   // function to create a new message
+
+  /**
+   * create - create a new message
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   create(req, res) {
     return Messages
       .create({
@@ -57,6 +65,14 @@ export default {
   },
   // get messages from a particular group
   // Message group associated to Users group with the message sender
+
+  /**
+   * retrieve - retrieve message for a particular group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   retrieve(req, res) {
     return Messages
       .findAll({
@@ -86,6 +102,15 @@ export default {
   // add notification to the notification table when a message is sent
   // the notification is sent to all users that belong to that particular
   // group at the moment the message is sent
+
+  /**
+   * addMessageNotification - Add notification to the notification table when a
+   * new message is sent
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   addMessageNotification(req, res) {
     // find a message where message id
     Messages.find({
@@ -131,6 +156,14 @@ export default {
       .catch(error => res.status(400).send(error));
   },
   // get notification fom the message notification table
+
+  /**
+   * getMessageNotification - get notification
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   getMessageNotification(req, res) {
     return MessageReads.findAll({
       include: [{
@@ -174,6 +207,15 @@ export default {
   },
   // update notification table
   // this is called when a user reads message
+
+  /**
+   * updateMessageNotification - update notification table when a user reads
+   * the notification
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   updateMessageNotification(req, res) {
     Messages.find({
       where: {
@@ -218,6 +260,15 @@ export default {
       .catch(error => res.status(400).send(error));
   },
   // update read by column in the message table
+
+  /**
+   * updateReadBy - update the ReadBy column in the message table when
+   * a user clicks on the message
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   updateReadBy(req, res) {
     Messages.find({
       where: {
@@ -248,6 +299,15 @@ export default {
       .catch(error => res.status(400).send(error));
   },
   // get Users who have read a message from a group
+
+  /**
+   * getUsersWhoReadMessagesInGroup - get users who have read the message
+   * from a group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   getUsersWhoReadMessagesInGroup(req, res) {
     return MessageReads.findAll({
       include: [

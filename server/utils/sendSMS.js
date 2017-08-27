@@ -1,7 +1,7 @@
 import Nexmo from 'nexmo';
 
 /**
- * sendSMS - description
+ * sendSMS - function to send SMS to users 
  *
  * @param  {array} userArraysOfObj array of users info
  * @param  {string} message message to be sent

@@ -123,7 +123,7 @@ class MessageDetailBoard extends Component {
     // retrieve all users who have read this message
     let allUsersWhoReadMessages = '';
     usersWhoHaveReadMessage.messageReadUsers.map((user) => {
-      allUsersWhoReadMessages +=  `${user.Reader.username}, `;
+      allUsersWhoReadMessages +=  `@${user.Reader.username} `;
     });
     // retrieve full message by id
     let singleReturnedMessage = ''
@@ -158,7 +158,13 @@ class MessageDetailBoard extends Component {
                   </p>
                 </div>
               </div>
-              <p><em><b>Read By: </b></em>{allUsersWhoReadMessages}</p>
+              <div className='tooltipp'>
+                <em><b>Message Readers</b></em>
+                <small><i>  hover here</i></small>
+                <span className="tooltipptext">
+                  {allUsersWhoReadMessages}
+                </span>
+              </div>
             </div>
           );
         }

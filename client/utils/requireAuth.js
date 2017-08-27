@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
  * export default - component for Authenticate to disallow unauthenticated
  * user from accessing certain routes
  *
- * @param  {type} ComposedComponent description
- * @return {type}                   description
+ * @param  {DOM} ComposedComponent the component to be protected
+ * @return {DOM}                   returns the protected component and its props
  */
 export default function(ComposedComponent) {
   class Authenticate extends Component {

@@ -8,6 +8,14 @@ import validateInput from '../shared/validations/signup';
 
 export default {
   // function to create a new user
+
+  /**
+   * create - create a new user
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   create(req, res) {
     // call the validateInput input function for validations
     const { errors, isValid } = validateInput(req.body);
@@ -36,6 +44,14 @@ export default {
       });
   },
   // function for loggging a user in
+
+  /**
+   * list - function to log a user in
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   list(req, res) {
     Users
       .findAll({
@@ -70,6 +86,14 @@ export default {
       });
   },
   // function to reset password
+
+  /**
+   * resetPassword - function to reset users password
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   resetPassword(req, res) {
     Users.findAll({ where: { email: req.body.email } })
       .then((user) => {
@@ -90,13 +114,13 @@ export default {
               const transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                  user: 'nnamani.kenechukwu@gmail.com',
-                  pass: 'jesus-mary'
+                  user: process.env.EMAIL_NAME,
+                  pass: process.env.EMAIL_PASSWORD
                 }
               });
               // setup email data with unicode symbols
               const mailOptions = {
-                from: 'nnamani.kenechukwu@gmail.com', // sender address
+                from: process.env.EMAIL_NAME, // sender address
                 to: req.body.email, // list of receivers
                 subject: 'PostIT Password Reset', // Subject line
                 text:
@@ -136,6 +160,14 @@ export default {
       );
   },
   // update password function
+
+  /**
+   * updatePassword - update password in the db
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   updatePassword(req, res) {
     return Users.update({
       password: md5(req.body.password),
@@ -161,6 +193,15 @@ export default {
 
   // check token passed and the one in the database. Return success
   // if token is valid and error if token is not valid
+
+  /**
+   * checkValidTokenForPasswordReset - method to check if token is
+   * still valid as of the time of changing password by the user
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   checkValidTokenForPasswordReset(req, res) {
     return Users
       .findAll({
@@ -189,6 +230,15 @@ export default {
       });
   },
   // Fetch Member by username and return its id
+
+  /**
+   * FetchMemberByName - method to fetch member by its username to return
+   * its id
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res server respose object
+   * @return {json}     returns json object
+   */
   FetchMemberByName(req, res) {
     return Users
       .findAll({ where: { username: req.body.username } })

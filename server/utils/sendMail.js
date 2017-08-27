@@ -24,7 +24,7 @@ export default function sendMail(userArraysOfObj, message) {
 
     // setup email data with unicode symbols
   const mailOptions = {
-    from: 'nnamani.kenechukwu@gmail.com', // sender address
+    from: process.env.EMAIL_NAME, // sender address
     to: emailReceivers, // list of receivers
     subject: 'PostIT Notification', // Subject line
     html: `<b>It seems you have an urgent message

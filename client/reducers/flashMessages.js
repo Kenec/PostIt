@@ -1,13 +1,13 @@
-import shortid from 'shortid';
+// import shortid from 'shortid';
 import findIndex from 'lodash/findIndex';
 import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
 
 /**
- * flashMessages - description
+ * flashMessages - flash message reducer
  *
- * @param  {type} state = []  state of the flash message reducer
- * @param  {type} action = {} action dispatched
- * @return {type}             description
+ * @param  {array} state = []  state of the flash message reducer
+ * @param  {object} action = {} action dispatched
+ * @return {array}             returns array of state object
  */
 export default function flashMessages(state = [], action = {}) {
   switch (action.type) {

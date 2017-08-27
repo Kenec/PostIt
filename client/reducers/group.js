@@ -5,7 +5,7 @@ import { CREATE_GROUP,
 
 } from '../actions/types';
 /**
- * group function reducer - description
+ * group - group reducer
  *
  * @param  {object} state the state from the store
  * @param  {object} action the action from every dispatch

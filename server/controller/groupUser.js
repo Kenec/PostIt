@@ -2,6 +2,14 @@ import { userGroups, Groups, Users } from '../models';
 
 export default {
   // function to add a member to a group
+
+  /**
+   * create - Add user to a group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   create(req, res) {
     userGroups.findAll({
       where: {
@@ -36,6 +44,15 @@ export default {
   },
 
   // retreive a user and all the group he belongs to
+
+  /**
+   * fetchUserAndGroup - method to retrieve a user by username and all the
+   * Groups that he belongs to
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   fetchUserAndGroup(req, res) {
     const username = req.body.username;
 
@@ -66,6 +83,14 @@ export default {
       });
   },
   // function to fetch all members from the same group by the groupid
+
+  /**
+   * fetchMembersOfGroup - fetch members from the same group
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   fetchMembersOfGroup(req, res) {
     const id = req.params.id;
 
@@ -96,6 +121,14 @@ export default {
       });
   },
   // list all groups
+
+  /**
+   * list - list all the groups
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   list(req, res) {
     return Groups
       .findAll({
@@ -108,6 +141,14 @@ export default {
       }));
   },
   // search users by where username is LIKE $username
+
+  /**
+   * searchUser - search for a user
+   *
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json}     returns json reponse
+   */
   searchUser(req, res) {
     return Users.findAll({
       offset: req.params.offset * 5,
