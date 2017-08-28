@@ -4,49 +4,24 @@
 
 # PostIt
 
-PostIt is a messenger app that allow users to create groups and send messages to the created groups. 
-The messages sent to the groups have the priority of Normal, Urgent and Critical. Based on the message priority, 
-each user will get SMS, Email and in App notifications. Logged in users can create new group, add members to groups,
-and send messages. User can also recover password when lost.
+PostIt is an application that allows an authenticated user create a broadcast group and add members to that group for notifications. A user can post messages to the group belonged to. Messages have priority level of Normal, Urgent and Critical. When a user post a message with priority level of Critical, all users in that group gets in-app, email and SMS notifications. When the message has the priority level of Urgent, all users in the group receive both the in-app and email notification only. Messages posted with priority level of Normal only sends in-app notification to all the users in that group.
 
 ## TECHNOLOGIES
 * #### Front-end: 
         React/Redux + SASS + Boostrap + Materialize CSS 
-* #### Back-end: 
-        Node/Expressjs + Sequelize/Postgres + 
-* #### Libraries: 
-        axios, moment, express-validator, super-test, jsonwebtoken, es6, Babel-Node, Gulp, eslint, Mocha/Chai + chai-http
-
-## Folder Structure
-* ### client
-  * actions -- this folder contains the all the redux actions
-  * components -- this contains the react components
-  * dist -- this folder contains the webpack build file
-  * images -- contains the images used in the application
-  * js -- contains the react routes and the main js file
-  * reducer -- contains all the reducers for the app
-  * scss -- folder that contains project SASS file
-  * store -- folder that has store creator file
-  * utils -- contains files that are commonly required in client folder
-
-* ### server
-  * controller -- contains the route controllers
-  * migrations -- contains the sequelize migration files
-  * models -- contain the database models and associations
-  * routes -- contains the server routes
-  * shared -- contains file that are shared between the client and the server
-  * test -- contain test files
-
-* ### template
-  * contains HTML, CSS, BOOTSTRAP Files
+* #### System Dependencies: 
+        node, axios, moment, express, express-validator, super-test, jsonwebtoken, babel, bcrypt, dotenv, lodash, nexmo, react, redux, sequelize, postgress, underscore, validator, webpack
 
 ### INSTALLATION
   * Clone the repo
   * Navigate to the location in your terminal
-  * Run $ npm install && bower install to install dependencies
-  * Setup Postgres, create a database postit and set it to port 5000
+  * Run $ npm install to install dependencies
+  * Setup Postgres, create a database postit and set it to port 5000 [Setup postgress](http://certek.com/kb4/install-server-postgresql-and-pgadmin-on-windows/)
   * Install sequelize-cli, Run $ npm install -g sequelize-cli (note: sudo install on ubuntu or MAC)
   * In terminal run $ sequelize db:migrate
+  * Run $ npm start to get the app started on your local machine
+  * To run server test run $ npm test
+  * To run client test run $ npm jest
 
 ### Contributing
 1. Fork it!
@@ -60,7 +35,7 @@ and send messages. User can also recover password when lost.
 * Run  `npm run build` to build the project
 * Create an account on heroku
 * Create a db with ElephantSQL
-* Push the file to heroku and set up the enviroment variables 
+* Push the file to heroku and set up the enviroment variables in the .env file
 
 ### Documentation
 The Documentation for the PostIt Restful API: 
@@ -70,10 +45,6 @@ The Documentation for the PostIt Restful API:
 ## Authors
 
 #### * Nnamani Kenechukwu Charles 
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
