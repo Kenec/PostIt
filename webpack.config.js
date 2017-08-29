@@ -39,7 +39,7 @@ module.exports = {
       {
         // use babel-loader for transpiling js and jsx files in es6 to es5
         // exclude the node_modules folder
-        test: /\.js?$/,
+        test: /\.(js|jsx)?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
@@ -49,25 +49,32 @@ module.exports = {
       {
         // use style-loader, css-loader, and sass-loader for .scss
         // file extensions
-        test: /\.scss$/,
-        loader: 'style-loader!css-loader!sass-loader',
+        test: /\.(scss|css)?$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          // resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', 'sass-loader']
+        })
       },
-      {
-        // style-loader, css-loader, font-loader for .css file extensions
-        test: /\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?importLoaders=1',
-          'font-loader?format[]=truetype' +
-          '&format[]=woff&format[]=embedded-opentype'
-        ],
-      },
+      // {
+      //   // style-loader, css-loader, font-loader for .css file extensions
+      //   test: /\.css$/,
+      //   loaders: [
+      //     'style-loader',
+      //     'css-loader?importLoaders=1',
+      //     'font-loader?format[]=truetype' +
+      //     '&format[]=woff&format[]=embedded-opentype'
+      //   ],
+      // },
       {
         // use file-loader for transpiling font files
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]'
       }
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   // specify the output path for bundled file
   output: {
@@ -85,7 +92,7 @@ module.exports = {
   },
   // webpack plugins
   plugins: [
-    new ExtractTextPlugin('client/scss/main.css'),
+    new ExtractTextPlugin('css/main.css'),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
