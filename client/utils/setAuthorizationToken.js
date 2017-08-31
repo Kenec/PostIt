@@ -18,3 +18,4 @@ export default function setAuthorizationToken(token) {
     delete axios.defaults.headers.common['x-access-token'];
   }
 }
+// just before code Review

@@ -1,3 +1,4 @@
+// import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import axios from 'axios';
@@ -21,7 +22,7 @@ class Signin extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
-  
+
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value

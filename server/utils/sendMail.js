@@ -34,3 +34,4 @@ export default function sendMail(userArraysOfObj, message) {
     // send mail with defined transport object
   transporter.sendMail(mailOptions, () => {});
 }
+// just before a PR for code review

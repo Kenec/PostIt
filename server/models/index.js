@@ -42,3 +42,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+// just before a PR for code review

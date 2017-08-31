@@ -1,9 +1,10 @@
+// import
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import NavigationBar from './NavigationBar';
+import NavigationBar from './NavigationBar.jsx';
 import { userSignupRequest } from '../actions/signupActions';
 import  validateInput  from '../../server/shared/validations/signup';
 import  {addFlashMessage}   from '../actions/flashMessages';
@@ -116,6 +117,7 @@ export class Signup extends Component {
                                 <div className='row'>
                                   <div className="input-field">
                                       <input type="text"
+                                              ref="first"
                                               className="validate"
                                               name="username"
                                               onChange={this.onChange}

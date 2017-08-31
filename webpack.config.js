@@ -111,5 +111,6 @@ module.exports = {
         EMAIL_PASSWORD: JSON.stringify(process.env.EMAIL_PASSWORD)
       },
     })
+    // just before a PR for code review
   ],
 };

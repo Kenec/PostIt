@@ -1,3 +1,4 @@
+// import
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
@@ -23,7 +24,7 @@ export function setCurrentUser(user) {
  *
  * @return {type}  description
  */
-/*eslint-disable*/ 
+/*eslint-disable*/
 export function logout() {
   return (dispatch) => {
     localStorage.removeItem('jwtToken');

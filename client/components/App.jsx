@@ -1,3 +1,4 @@
+// import
 import React, { Component } from 'react';
 import Footer from './Footer';
 import '../scss/main.scss';

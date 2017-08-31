@@ -1,3 +1,4 @@
+// import
 import React, { Component } from 'react';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -40,7 +41,7 @@ class SearchMember extends Component {
   onSubmit(e) {
     e.preventDefault();
   }
-  
+
   // this method decrease the offset if it is greater than zero by 1
   decreaseOffset(e){
     e.preventDefault();

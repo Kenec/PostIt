@@ -45,3 +45,4 @@ export default function(ComposedComponent) {
 
   return connect(mapStateToProps)(Authenticate);
 }
+// just before code Review

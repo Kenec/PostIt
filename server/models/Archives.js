@@ -27,3 +27,4 @@ export default (sequelize, DataTypes) => {
   };
   return Archives;
 };
+// just before a PR for code review

@@ -1,3 +1,4 @@
+// import
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 

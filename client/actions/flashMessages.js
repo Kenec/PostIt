@@ -1,3 +1,4 @@
+// import
 import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from './types';
 /**
  * addFlashMessage - description

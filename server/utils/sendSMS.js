@@ -1,7 +1,7 @@
 import Nexmo from 'nexmo';
 
 /**
- * sendSMS - function to send SMS to users 
+ * sendSMS - function to send SMS to users
  *
  * @param  {array} userArraysOfObj array of users info
  * @param  {string} message message to be sent
@@ -16,3 +16,4 @@ export default function sendSMS(userArraysOfObj, message) {
     nexmo.message.sendSms('PostIT', user.phone, message, () => {});
   });
 }
+// just before a PR for code review

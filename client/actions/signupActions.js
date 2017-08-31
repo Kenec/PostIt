@@ -1,3 +1,4 @@
+// import
 import axios from 'axios';
 
 /**
@@ -6,7 +7,7 @@ import axios from 'axios';
  * @param  {type} userData userdata to signup
  * @return {type}          description
  */
-/*eslint-disable*/ 
+/*eslint-disable*/
 export function userSignupRequest(userData) {
   return () => axios.post('/api/user/signup', userData);
 }

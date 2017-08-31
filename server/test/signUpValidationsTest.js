@@ -57,17 +57,6 @@ describe('SignupValidation', () => {
           .eql(false);
       }
     );
-    // it('should return error if username number is empty',
-    //   () => {
-    //     data.username = '';
-    //     validateInput(data).should.have.property('errors')
-    //       .eql({ email: 'Email is invalid',
-    //         confirmPassword: 'Password did not match',
-    //         phone: 'Phone number is invalid',
-    //         username: 'Username is required' });
-    //     validateInput(data).should.have.property('isValid')
-    //       .eql(false);
-    //   }
-    // );
   });
 });
+// just before a PR for code review
