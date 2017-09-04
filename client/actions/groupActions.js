@@ -125,7 +125,7 @@ export function addUserToGroups(groupId, userId) {
 /**
  * Search for all user in a group.
  * @constructor
- * @param {string} data - The is the userInfo data.
+ * @param {string} data - This is the userInfo data.
  *
  */
 export function getUserInfo(data) {

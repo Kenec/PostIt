@@ -42,7 +42,6 @@ describe("<Signup />", () => {
     // test if isValid function checks for valid input
     wrapper.find('[type="submit"]').at(0).simulate('click'); //.simulate('click');
     expect(isValid.calledOnce).toEqual(true);
-    expect().toCon
   });
 
 });

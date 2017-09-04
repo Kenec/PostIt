@@ -4,7 +4,7 @@ import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from './types';
  * addFlashMessage - description
  *
  * @param  {string} message message to be added
- * @return {object}         id and types
+ * @return {object}         message and types
  */
 export function addFlashMessage(message) {
   return {

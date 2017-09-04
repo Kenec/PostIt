@@ -2,13 +2,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import axios from 'axios';
-import NavigationBar from './NavigationBar';
+import NavigationBar from './NavigationBar.jsx';
 import { connect } from 'react-redux';
 import { userSigninRequestAction } from '../actions/signinActions';
 import { deleteFlashMessage }  from '../actions/flashMessages';
 import { getUserGroups } from '../actions/groupActions';
 
-class Signin extends Component {
+export class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {

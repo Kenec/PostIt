@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { SET_CURRENT_USER } from './types';
 
-
 /**
  * setCurrentUser - sets the current user
  *
