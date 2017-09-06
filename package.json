@@ -16,7 +16,8 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test-prod",
     "build": "webpack ./client/js/client.js",
-    "jest": "jest"
+    "jest": "jest",
+    "e2e":  "nightwatch"
   },
   "author": "Kene",
   "license": "ISC",
@@ -116,6 +117,7 @@
     "jsdom-global": "3.0.2",
     "jshint": "^2.9.5",
     "mocha": "^3.4.2",
+    "nightwatch": "^0.9.16",
     "nock": "^9.0.14",
     "react-addons-test-utils": "^15.6.0",
     "react-test-renderer": "^15.6.1",
