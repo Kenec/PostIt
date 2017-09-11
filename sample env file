@@ -1,0 +1,7 @@
+DATABASE_URL=your_db_url
+DATABASE_PASSWORD=db_password
+DATABASE_DEFAULT=db_password
+SMS_API_KEY=sms_api_key
+SMS_API_SECRET=sms_api_secret
+EMAIL_NAME=email_name
+EMAIL_PASSWORD=email_password
