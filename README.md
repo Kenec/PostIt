@@ -4,13 +4,22 @@
 
 # PostIt
 
-PostIt is an application that allows an authenticated user create a broadcast group and add members to that group for notifications. A user can post messages to the group belonged to. Messages have priority level of Normal, Urgent and Critical. When a user post a message with priority level of Critical, all users in that group gets in-app, email and SMS notifications. When the message has the priority level of Urgent, all users in the group receive both the in-app and email notification only. Messages posted with priority level of Normal only sends in-app notification to all the users in that group.
+PostIt is an application that allows an authenticated user create a broadcast group and add members to that group for notifications. 
+####Features:
+- User can signup and signin to the application
+- User can create a new group and be added to other groups
+- User can post messages to groups belonged to
+- Messages have priority of `Normal`, `Urgent`, `Critical`
+- User will receive notifications for messages posted to the groups belonged to 
+- Notification can be in-app notification, email and/or SMS based on the message priority
 
 ## TECHNOLOGIES
 * #### Front-end: 
-        React/Redux + SASS + Boostrap + Materialize CSS 
+        React/Redux + SASS + Boostrap + Materialize CSS
+* #### Back-end:
+        node, axios, moment, express, express-validator, jsonwebtoken, bcrypt, dotenv, lodash, nexmo sequelize
 * #### System Dependencies: 
-        node, axios, moment, express, express-validator, super-test, jsonwebtoken, babel, bcrypt, dotenv, lodash, nexmo, react, redux, sequelize, postgress, underscore, validator, webpack
+        Postgress
 
 ### INSTALLATION
   * Clone the repo
@@ -33,9 +42,9 @@ PostIt is an application that allows an authenticated user create a broadcast gr
 ## Deployment
 
 * Run  `npm run build` to build the project
-* Create an account on heroku
-* Create a db with ElephantSQL
-* Push the file to heroku and set up the enviroment variables in the .env file
+* Create an account on heroku [Create heroku account](https://www.heroku.com/)
+* Create a db with ElephantSQL [Create Account with ELephantSQL](https://www.elephantsql.com/docs/)
+* Push the file to heroku and set up the enviroment variables in the .env file eg: DATABASE_URL=your_database_url
 
 ### Documentation
 The Documentation for the PostIt Restful API: 
@@ -45,6 +54,8 @@ The Documentation for the PostIt Restful API:
 ## Authors
 
 #### * Nnamani Kenechukwu Charles 
+
+### Licence [Licence]()
 
 ## Acknowledgments
 
