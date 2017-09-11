@@ -23,7 +23,7 @@ Features:
         Postgress
 
 ### INSTALLATION
-  * Clone the repo
+  * Clone the [repo](https://github.com/Kenec/PostIt.git)
   * Navigate to the location in your terminal
   * Run $ npm install to install dependencies
   * Setup Postgres, create a database postit and set it to port 5000 [Setup postgress](http://certek.com/kb4/install-server-postgresql-and-pgadmin-on-windows/)
