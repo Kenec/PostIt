@@ -56,7 +56,7 @@ The Documentation for the PostIt Restful API:
 
 #### * Nnamani Kenechukwu Charles 
 
-## Licence [Licence]()
+## Licence [Licence](https://github.com/Kenec/PostIt/blob/master/LICENSE)
 
 ## Acknowledgments
 
