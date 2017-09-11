@@ -45,7 +45,7 @@ Features:
 * Run  `npm run build` to build the project
 * Create an account on heroku [Create heroku account](https://www.heroku.com/)
 * Create a db with ElephantSQL [Create Account with ELephantSQL](https://www.elephantsql.com/docs/)
-* Push the file to heroku and set up the enviroment variables in the .env file eg: DATABASE_URL=your_database_url
+* Push the file to heroku and set up the enviroment variables in the .env file eg: `DATABASE_URL=your_database_url`
 
 ### Documentation
 The Documentation for the PostIt Restful API: 
