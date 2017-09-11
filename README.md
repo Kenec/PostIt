@@ -5,7 +5,8 @@
 # PostIt
 
 PostIt is an application that allows an authenticated user create a broadcast group and add members to that group for notifications. 
-####Features:
+
+Features:
 - User can signup and signin to the application
 - User can create a new group and be added to other groups
 - User can post messages to groups belonged to
