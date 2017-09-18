@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { Users } from '../models';
 import config from '../config';
-import validateInput from '../shared/validations/signup';
+import validateInput from '../shared/validations/validateInput';
 
 export default {
   // function to create a new user

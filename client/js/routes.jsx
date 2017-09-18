@@ -12,19 +12,17 @@ import MessageBoard from '../components/MessageBoard';
 import ChangePassword from '../components/ChangePassword';
 import requireAuth from '../utils/requireAuth';
 
-
 export default (
-  <Route path='/' component={App} >
-      <IndexRoute component={Signin} />
-      <Route path='signup' component={Signup} />
-      <Route path='recoverpassword' component={ForgotPassword} />
-      <Route path='/recoverpassword/:token' component={ChangePassword} />
+  <Route path="/" component={App} >
+    <IndexRoute component={Signin} />
+    <Route path="signup" component={Signup} />
+    <Route path="recoverpassword" component={ForgotPassword} />
+    <Route path="/recoverpassword/:token" component={ChangePassword} />
 
-      <Route path='/dashboard' component={requireAuth(Dashboard)} />
-      <Route path='/group/:groupid' component={requireAuth(Group)} />
-      <Route path='/createGroup' component={requireAuth(CreateGroup)} />
-      <Route path='/group/:groupid/:messageid' component={requireAuth(MessageBoard)} />
+    <Route path="/dashboard" component={requireAuth(Dashboard)} />
+    <Route path="/group/:groupid" component={requireAuth(Group)} />
+    <Route path="/createGroup" component={requireAuth(CreateGroup)} />
+    <Route path="/group/:groupid/:messageid" component={requireAuth(MessageBoard)} />
 
   </Route>
-)
-// just before code Review
+);

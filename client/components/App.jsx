@@ -1,20 +1,27 @@
 // import
-import React, { Component } from 'react';
+import React from 'react';
 import Footer from './Footer';
 import '../scss/main.scss';
 
-class App extends Component {
-
-  render(){
-    return(
-      <div className='content'>
-        <div>
-            {this.props.children}
-        </div>
-        <Footer />
+/**
+ * 
+ * @function App 
+ * @param {*} props
+ * @return {DOM} DOM element 
+ */
+function App({ children }) {
+  return (
+    <div className="content">
+      <div>
+        { children }
       </div>
-    );
-  }
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+App.propTypes = {
+  children: React.PropTypes.node.isRequired,
+};
+
+export default App;

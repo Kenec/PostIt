@@ -10,7 +10,6 @@ const groupController = controller.group;
 const groupUserController = controller.groupUser;
 const messageController = controller.message;
 
-// This is the general route for the react components //
 router.get('/', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));
 });
@@ -180,4 +179,3 @@ router.post('/api/users/:messageid/read',
   messageController.getUsersWhoReadMessagesInGroup);
 
 module.exports = router;
-// just before a PR for code review

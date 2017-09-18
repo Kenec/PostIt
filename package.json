@@ -17,7 +17,7 @@
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test-prod",
     "build": "webpack ./client/js/client.js",
     "jest": "jest",
-    "e2e":  "nightwatch"
+    "e2e": "nightwatch"
   },
   "author": "Kene",
   "license": "ISC",

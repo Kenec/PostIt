@@ -33,6 +33,14 @@ $message_board_height: 400px;
   word-spacing: 10px;
 }
 
+.space {
+  margin-right: 5px;
+}
+
+.blue{
+  color: #039be5
+}
+
 .tooltipp {
   position: relative;
   display: inline-block;
@@ -200,4 +208,28 @@ body {
   height:100px;
   position: absolute;
 }
-// just before code Review
+
+.padding-right{
+  padding-right: 30px;
+}
+
+#snackbar{
+  visibility: hidden; 
+  min-width: 150px; 
+  // margin-left: -125px; 
+  background-color: #333; 
+  color: #fff; 
+  text-align: center; 
+  border-radius: 10px;
+  padding: 10px; 
+  position: fixed; 
+  z-index: 1; 
+  // left: 50%; 
+  // bottom: 5px; 
+}
+
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+}
+
+

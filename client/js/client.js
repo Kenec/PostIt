@@ -1,3 +1,5 @@
+/* global localStorage */
+/* global document */
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
@@ -5,15 +7,15 @@ import { Provider } from 'react-redux';
 import jwt from 'jsonwebtoken';
 
 import routes from './routes';
-import configureStore from '../store/store'
+import configureStore from '../store/store';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
-import {setCurrentUser} from '../actions/signinActions'
+import { setCurrentUser } from '../actions/signinActions';
 
-let initialState = {};
+const initialState = {};
 
-let store = configureStore(initialState)
+const store = configureStore(initialState);
 
-if(localStorage.jwtToken) {
+if (localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken);
   store.dispatch(setCurrentUser(jwt.decode(localStorage.jwtToken)));
 }
@@ -21,8 +23,7 @@ if(localStorage.jwtToken) {
 
 render(
   <Provider store={store}>
-    <Router history={ browserHistory } routes={ routes } />
+    <Router history={browserHistory} routes={routes} />
   </Provider>,
   document.getElementById('app')
-)
-// just before code Review
+);

@@ -1,3 +1,4 @@
+/* global expect */
 // import
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -14,7 +15,7 @@ import * as types from '../actions/types';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const mock = new MockAdapter(axios);
-const localStorage = window.localStorage;
+// const localStorage = window.localStorage;
 // flashmessage action
 describe('Flashmessage Action', () => {
   // should have addFlashmessage action creator
