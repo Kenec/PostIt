@@ -14,6 +14,11 @@ Features:
 - User will receive notifications for messages posted to the groups belonged to 
 - Notification can be in-app notification, email and/or SMS based on the message priority
 
+
+### Documentation
+The Documentation for the PostIt Restful API: 
+[PostIt Restful API Documentation](http://docs.postit4.apiary.io)
+
 ## TECHNOLOGIES
 * #### Front-end: 
         React/Redux + SASS + Boostrap + Materialize CSS
@@ -47,10 +52,8 @@ Features:
 * Create a db with ElephantSQL [Create Account with ELephantSQL](https://www.elephantsql.com/docs/)
 * Push the file to heroku and set up the enviroment variables in the .env file eg: [sample .env file](https://github.com/Kenec/PostIt/blob/master/sample%20env%20file)
 
-### Documentation
-The Documentation for the PostIt Restful API: 
-[PostIt Restful API Documentation](http://docs.postit4.apiary.io)
-
+## FAQ
+FAQ [Feeback and FAQ](https://github.com/Kenec/PostIt/issues)
 
 ## Authors
 
