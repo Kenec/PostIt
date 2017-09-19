@@ -104,6 +104,12 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         SMS_API_KEY: JSON.stringify(process.env.SMS_API_KEY),
         SMS_API_SECRET: JSON.stringify(process.env.SMS_API_SECRET),
@@ -111,6 +117,5 @@ module.exports = {
         EMAIL_PASSWORD: JSON.stringify(process.env.EMAIL_PASSWORD)
       },
     })
-    // just before a PR for code review
   ],
 };

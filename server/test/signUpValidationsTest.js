@@ -1,7 +1,7 @@
 // Require the dev-dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import validateInput from '../shared/validations/signup';
+import validateInput from '../shared/validations/validateInput';
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
@@ -59,4 +59,3 @@ describe('SignupValidation', () => {
     );
   });
 });
-// just before a PR for code review

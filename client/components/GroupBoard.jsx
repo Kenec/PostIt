@@ -344,7 +344,7 @@ class GroupBoard extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="well well-sm group_board no_spacing">
+          <div className="well well-sm message_board no_spacing">
             <div className="">
               {retrieveMessageError && <span className="help-block red-text">
                 <b>{retrieveMessageError}</b></span>}

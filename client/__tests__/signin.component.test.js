@@ -1,21 +1,22 @@
+/* global expect */
 // import
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import ConnectedSignin, { Signin } from '../components/Signin.jsx';
+import { Signin } from '../components/Signin.jsx';
 
-describe("<Signin />", () => {
-  const form = sinon.spy(); // spy on the Signin button
+describe('<Signin />', () => {
+  // const form = sinon.spy(); // spy on the Signin button
   const userSigninRequestAction = sinon.spy(); // spy on the userSigninRequest props
   const messages = []; // spy on message props
   const deleteFlashMessage = sinon.spy(); // spy on the deleteFlashMessage props
   const getUserGroups = sinon.spy(); // spy on getUserGroup props
-  const router = sinon.spy();
-  const onSubmit = sinon.spy(Signin.prototype, "onSubmit");
-  const onChange = sinon.spy(Signin.prototype, "onChange");
+  const auth = {};
+  const onSubmit = sinon.spy(Signin.prototype, 'onSubmit');
+  const onChange = sinon.spy(Signin.prototype, 'onChange');
   // assign all props to a varibale props
-  const props = { userSigninRequestAction, deleteFlashMessage, getUserGroups, messages};
+  const props = { userSigninRequestAction, auth, deleteFlashMessage, getUserGroups, messages };
   // assign context to a variables
   Signin.contextTypes = { router: PropTypes.func };
   // assign mounting Signin component to a variable
@@ -32,12 +33,12 @@ describe("<Signin />", () => {
   });
   it('should call onSubmit method when signin button is clicked', () => {
     // test if onSubmit is called each time the signin btn is clicked
-    wrapper.find('[type="submit"]').get(0).click(); //.simulate('click');
+    wrapper.find('[type="submit"]').get(0).click(); // .simulate('click');
     expect(onSubmit.calledOnce).toEqual(true);
   });
   it('should call onChange method when an input state is changed', () => {
     // test if onChange is called when a change event occurs
-    wrapper.find('[type="text"]').at(0).simulate('change'); //.simulate('click');
+    wrapper.find('[type="text"]').at(0).simulate('change'); // .simulate('click');
     expect(onChange.calledOnce).toEqual(true);
   });
   // it('should call isValid function when a form is submitted', () => {
@@ -45,5 +46,4 @@ describe("<Signin />", () => {
   //   wrapper.find('[type="submit"]').at(0).simulate('click'); //.simulate('click');
   //   expect(isValid.calledOnce).toEqual(true);
   // });
-
 });

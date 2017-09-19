@@ -4,55 +4,55 @@ import isEmpty from 'lodash/isEmpty';
 /**
  * validateInput - description
  *
- * @param  {object} data the form data to be validated
+ * @param  {object} inputData the form data to be validated
  * @return {object}  {} containing error and isValid
  */
-export default function validateInput(data) {
+export default function validateInput(inputData) {
   const errors = {};
 
   // validate username field
-  if (data.username) {
-    if (Validator.isEmpty(data.username)) {
+  if (inputData.username) {
+    if (Validator.isEmpty(inputData.username)) {
       errors.username = 'Username is required';
     }
   }
 
   // validate phone field
-  if (data.phone) {
-    if (Validator.isEmpty(data.phone)) {
+  if (inputData.phone) {
+    if (Validator.isEmpty(inputData.phone)) {
       errors.phone = 'Phone number is required';
     }
   }
 
   // validation for valid phone number
-  if (data.phone) {
-    if (!Validator.isMobilePhone(data.phone, 'any')) {
+  if (inputData.phone) {
+    if (!Validator.isMobilePhone(inputData.phone, 'any')) {
       errors.phone = 'Phone number is invalid';
     }
   }
 
   // validation for valid email
-  if (data.email) {
-    if (Validator.isEmpty(data.email)) {
+  if (inputData.email) {
+    if (Validator.isEmpty(inputData.email)) {
       errors.email = 'Email is required';
     }
-    if (!Validator.isEmail(data.email)) {
+    if (!Validator.isEmail(inputData.email)) {
       errors.email = 'Email is invalid';
     }
   }
 
   // validation for empty password
-  if (data.password) {
-    if (Validator.isEmpty(data.password)) {
+  if (inputData.password) {
+    if (Validator.isEmpty(inputData.password)) {
       errors.password = 'Password is required';
     }
   }
   // check if password and retype password is the same
-  if (data.repassword) {
-    if (Validator.isEmpty(data.repassword)) {
+  if (inputData.repassword) {
+    if (Validator.isEmpty(inputData.repassword)) {
       errors.confirmPassword = 'Confirm Password';
     }
-    if (!Validator.equals(data.password, data.repassword)) {
+    if (!Validator.equals(inputData.password, inputData.repassword)) {
       errors.confirmPassword = 'Password did not match';
     }
   }

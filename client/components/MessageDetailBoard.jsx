@@ -136,7 +136,7 @@ class MessageDetailBoard extends Component {
        groupName === 'No Group Found' ||
        !messageData || !usersWhoHaveReadMessage) {
       return (
-        <h4>Loading ...</h4>
+        <h4>Loading....</h4>
       );
     }
     // retrieve all users who have read this message
@@ -205,7 +205,7 @@ class MessageDetailBoard extends Component {
           <span className="pull-right" />
         </div>
         <div className="row">
-          <div className="well well-sm group_board no_spacing">
+          <div className="well well-sm message_board no_spacing">
             <div className="">
               {singleReturnedMessage}
             </div>
@@ -229,6 +229,9 @@ MessageDetailBoard.propTypes = {
   message: React.PropTypes.object.isRequired,
   messageId: React.PropTypes.string.isRequired,
   // groupId: React.PropTypes.string.isRequired,
+};
+MessageDetailBoard.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 /**
  * 

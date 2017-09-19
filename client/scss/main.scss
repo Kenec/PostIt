@@ -155,6 +155,7 @@ a:hover{
 
   }
 }
+
 html {
     position: relative;
     min-height: 100%;
@@ -165,12 +166,14 @@ body {
    padding:0;
    height:$hundred;
 }
+
 .content{
    min-height: 100%;
    height:$hundred;
    position:relative;
    padding-bottom: $padding_bottom;
 }
+
 .footer{
     bottom: 0;
     position: fixed;
@@ -178,26 +181,39 @@ body {
     height:$footer_height;
     background:$footer_background;
 }
+
 .side-menu{
   padding: 0px 0px 5px 0px;
 }
+
 .page-title{
   background-color: $page_title_background_color;
   padding: 5px 8px 5px 8px;
   margin-bottom: $margin-bottom;
   font-weight: bold;
 }
+
 .message_board{
   height:$message_board_height;
   line-height:2em;
   overflow: auto ;
   padding:5px;
 }
+
 .group{
   position: relative;
 }
-.group_board{
+
+.message_board{
   height:300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.group_board{
+  max-height:300px;
+  min-height: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
@@ -230,6 +246,11 @@ body {
 
 #snackbar.show {
   visibility: visible; /* Show the snackbar */
+}
+
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label {
+  margin-right: 1rem;
+  padding-left: 25px;
 }
 
 

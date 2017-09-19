@@ -75,7 +75,7 @@ class DashboardComponent extends Component {
           </div>
           <span className="pull-right" />
         </div>
-        <div className="row well well-sm group_board ">
+        <div className="row well well-sm message_board ">
           <div className="">
             <div className="row">
               {unreadMessagesList}
