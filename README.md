@@ -53,7 +53,7 @@ The Documentation for the PostIt Restful API:
 * Push the file to heroku and set up the enviroment variables in the .env file eg: [sample .env file](https://github.com/Kenec/PostIt/blob/master/sample%20env%20file)
 
 ## FAQ
-FAQ [Feeback and FAQ](https://github.com/Kenec/PostIt/issues)
+[Feeback and FAQ](https://github.com/Kenec/PostIt/issues)
 
 ## Authors
 
