@@ -370,6 +370,7 @@ class GroupBoard extends Component {
                 placeholder="Type your message"
                 className="form-control"
                 id="message"
+                required
               />
               <button
                 type="submit"
@@ -383,7 +384,7 @@ class GroupBoard extends Component {
                   <span id="snackbar"><b>{success}</b></span>
                 </span>}
                 {errors.status && <span className="help-block red-text">
-                  <b>{errors.status}</b>
+                  <span id="snackbar"><b>{errors.status}</b></span>
                 </span>}
               </p>
             </form>

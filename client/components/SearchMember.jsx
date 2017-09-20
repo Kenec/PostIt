@@ -29,6 +29,7 @@ class SearchMember extends Component {
       success: '',
       userId: '',
       offset: 0,
+      togglePrevent: 'auto',
     };
     // this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -85,9 +86,11 @@ class SearchMember extends Component {
     event.preventDefault();
     this.props.searchAllUsers({ username: this.state.username },
       this.state.offset > 0 ? this.state.offset - 1 : 0);
+    const usersCount = this.props.group.searchedUsers.count;
     this.setState({
       errors: {},
-      offset: this.state.offset > 0 ? this.state.offset - 1 : 0
+      offset: this.state.offset > 0 ? this.state.offset - 1 : 0,
+      togglePrevent: (usersCount / 5) < this.state.offset ? 'none' : 'auto',
     });
   }
 
@@ -100,9 +103,12 @@ class SearchMember extends Component {
     event.preventDefault();
     this.props.searchAllUsers({ username: this.state.username },
       this.state.offset + 1);
+    // const { searchedUsers } = this.props.group;
+    const usersCount = this.props.group.searchedUsers.count;
     this.setState({
       errors: {},
-      offset: this.state.offset + 1
+      offset: this.state.offset < (usersCount / 5) ? this.state.offset + 1 : this.state.offset,
+      togglePrevent: (usersCount / 5) - 1 <= (this.state.offset + 1) ? 'none' : 'auto',
     });
   }
 
@@ -147,7 +153,7 @@ class SearchMember extends Component {
  * @return {DOM} DOM Component
  */
   render() {
-    const { groups, groupsByUser, searchedUsers } = this.props.group;
+    const { groups, groupsByUser, searchedUsers, usersInGroup } = this.props.group;
     const { errors, success } = this.state;
 
     if (!groups || !groupsByUser) {
@@ -160,7 +166,7 @@ class SearchMember extends Component {
     // the users returned. This is coming from the store
     let returnedUsers;
     if (searchedUsers) {
-      returnedUsers = searchedUsers.map(user => (
+      returnedUsers = searchedUsers.rows.map(user => (
         <form onSubmit={this.addUser} key={user.id}>
           <div className="row">
             <p className="" >
@@ -170,7 +176,10 @@ class SearchMember extends Component {
                 <input type="hidden" name="username" value={user.username} />
                 <input type="hidden" name="userEmail" value={user.email} />
                 <input type="hidden" name="userPhone" value={user.phone} />
-                <button type="submit" className="">Add</button>
+                {(usersInGroup.filter(e => e.username === user.username).length > 0) ?
+                  <button type="" disabled>Already a member</button> :
+                  <button type="submit">Add</button>
+                }
               </span>
             </p>
           </div>
@@ -202,19 +211,26 @@ class SearchMember extends Component {
           {success && <span className="help-block green-text">
             <b>{success}</b>
           </span>}
-          {returnedUsers && returnedUsers}
-          {returnedUsers &&
-          <ul className="pagination">
-            <li className="waves-effect">
-              <Link to="#" onClick={this.decreaseOffset}>Back</Link>
-            </li>
-            <li className="active">
-              <Link to="#">{this.state.offset + 1}</Link>
-            </li>
-            <li className="waves-effect">
-              <Link to="#" onClick={this.increaseOffset} >Next</Link>
-            </li>
-          </ul>
+          {(this.state.username === '' || !returnedUsers) ? '' : returnedUsers }
+          {/* {returnedUsers && returnedUsers} */}
+          {(this.state.username === '' || !returnedUsers) ? '' :
+            (<ul className="pagination">
+              <li className="waves-effect">
+                <Link to="#" onClick={this.decreaseOffset}>Back</Link>
+              </li>
+              <li className="active">
+                <Link to="#">{this.state.offset + 1}</Link>
+              </li>
+              <li className="waves-effect">
+                <Link
+                  to="#"
+                  onClick={this.increaseOffset}
+                  style={{ pointerEvents: this.state.togglePrevent }}
+                >
+                  Next
+                </Link>
+              </li>
+            </ul>)
           }
         </div>
       </div>

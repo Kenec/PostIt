@@ -86,7 +86,8 @@ export default {
         },
         attributes: [
           'id', 'message', 'priority_level',
-          'groupId', 'sentBy', 'ReadBy', 'createdAt']
+          'groupId', 'sentBy', 'ReadBy', 'createdAt'],
+        order: [['id']]
       })
       .then((user) => {
         if (user.length === 0) {
