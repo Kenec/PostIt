@@ -1,14 +1,16 @@
+/* global localStorage */
+// import
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import config from '../../server/config';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { SET_CURRENT_USER } from './types';
-
 
 /**
  * setCurrentUser - sets the current user
  *
  * @param  {object} user description
- * @return {type}      description
+ * @return {object}      user object
  */
 export function setCurrentUser(user) {
   return {
@@ -21,9 +23,8 @@ export function setCurrentUser(user) {
 /**
  * logout - description
  *
- * @return {type}  description
+ * @return {object}  description
  */
-/*eslint-disable*/ 
 export function logout() {
   return (dispatch) => {
     localStorage.removeItem('jwtToken');
@@ -32,6 +33,19 @@ export function logout() {
   };
 }
 
+/**
+ * logout - description
+ *
+ * @return {object}  description
+ */
+export function isLoggedIn() {
+  let isUserLoggedIn = false;
+  const localJWT = localStorage.getItem('jwtToken');
+  if (localJWT && jwt.verify(localJWT, config.jwtSecret)) {
+    isUserLoggedIn = true;
+  }
+  return isUserLoggedIn;
+}
 
 /**
  * userSigninRequestAction - description

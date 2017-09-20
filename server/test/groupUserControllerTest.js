@@ -97,7 +97,7 @@ describe('userGroups', () => {
             })
             .end((err, res) => {
               res.should.have.status(200);
-              res.body.should.be.a('array');
+              res.body.should.be.a('object');
               done();
             });
         });
@@ -105,7 +105,7 @@ describe('userGroups', () => {
              of object of users cannot be fetched from the DB`,
         (done) => {
           server
-            .post('/api/users')
+            .post('/api/users/0')
             .send({
               // token, // token is not available
               username: '3',
@@ -159,3 +159,4 @@ describe('userGroups', () => {
     });
   });
 });
+// just before a PR for code review

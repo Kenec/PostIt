@@ -24,3 +24,4 @@ const finalCreateStore = composeEnhancers(
 export default function configureStore(initialState = {}) {
   return finalCreateStore(rootReducer, initialState);
 }
+// just before code Review

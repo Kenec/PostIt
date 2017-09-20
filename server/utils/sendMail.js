@@ -22,7 +22,7 @@ export default function sendMail(userArraysOfObj, message) {
     }
   });
 
-    // setup email data with unicode symbols
+  // setup email data with unicode symbols
   const mailOptions = {
     from: process.env.EMAIL_NAME, // sender address
     to: emailReceivers, // list of receivers

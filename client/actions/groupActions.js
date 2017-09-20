@@ -1,3 +1,4 @@
+// import
 import axios from 'axios';
 import { CREATE_GROUP,
   GET_USER_GROUPS, SEARCH_ALL_USERS,
@@ -124,7 +125,7 @@ export function addUserToGroups(groupId, userId) {
 /**
  * Search for all user in a group.
  * @constructor
- * @param {string} data - The is the userInfo data.
+ * @param {string} data - This is the userInfo data.
  *
  */
 export function getUserInfo(data) {

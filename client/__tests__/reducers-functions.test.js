@@ -1,19 +1,10 @@
+// import
 import flashMessages from '../reducers/flashMessages';
-import userLoginReducer from '../reducers/users';
+// import userLoginReducer from '../reducers/users';
 import group from '../reducers/group';
 import message from '../reducers/message';
-import { ADD_FLASH_MESSAGE,
-  DELETE_FLASH_MESSAGE,
-  CREATE_GROUP,
-  GET_USER_GROUPS,
-  GET_GROUPS_CREATED_BY_USER,
-  GET_USERS_IN_GROUP,
-  SEARCH_ALL_USERS,
-  COMPOSE_MESSAGE,
-  RETRIEVE_MESSAGE,
-  CLEAR_RETRIEVED_MESSAGE,
-  GET_NOTIFICATION
-} from '../actions/types';
+import userLoginReducer from '../reducers/users';
+import * as types from '../actions/types';
 
 // Test flashmessage reducer
 describe('FlashMessage reducers', () => {
@@ -22,7 +13,7 @@ describe('FlashMessage reducers', () => {
     it('should add message to the store', () => {
       const state = [];
       const action = {
-        type: ADD_FLASH_MESSAGE,
+        type: types.ADD_FLASH_MESSAGE,
         message: {
           type: 'success',
           text: 'This is a success message!'
@@ -39,7 +30,7 @@ describe('FlashMessage reducers', () => {
     it('should remove message from the store', () => {
       const state = [];
       const action = {
-        type: DELETE_FLASH_MESSAGE,
+        type: types.DELETE_FLASH_MESSAGE,
         id: 1
       };
       expect(flashMessages(state, action)).toEqual([]);
@@ -62,7 +53,7 @@ describe('Group reducers', () => {
     it('group should be created and pushed to the group store', () => {
       const state = {};
       const action = {
-        type: CREATE_GROUP,
+        type: types.CREATE_GROUP,
         groupData: {
           groupName: 'Group',
           createdby: 1
@@ -76,7 +67,7 @@ describe('Group reducers', () => {
     it('groups a user belonged to should be added to the store', () => {
       const state = {};
       const action = {
-        type: GET_USER_GROUPS,
+        type: types.GET_USER_GROUPS,
         groups: {
           id: 1,
           groupName: 'Group'
@@ -92,7 +83,7 @@ describe('Group reducers', () => {
       it('groups a user created should be added to the store', () => {
         const state = {};
         const action = {
-          type: GET_GROUPS_CREATED_BY_USER,
+          type: types.GET_GROUPS_CREATED_BY_USER,
           groupsByUser: {
             id: 1,
             groupName: 'Group'
@@ -109,7 +100,7 @@ describe('Group reducers', () => {
       it('users in a group should be added to the store', () => {
         const state = {};
         const action = {
-          type: GET_USERS_IN_GROUP,
+          type: types.GET_USERS_IN_GROUP,
           usersInGroup: {
             id: 1,
             username: 'Kene',
@@ -128,7 +119,7 @@ describe('Group reducers', () => {
       it('all users should be added to the store', () => {
         const state = {};
         const action = {
-          type: SEARCH_ALL_USERS,
+          type: types.SEARCH_ALL_USERS,
           users: [
             {
               id: 1,
@@ -167,7 +158,7 @@ describe('Message reducers', () => {
     it('message should be added to the message store', () => {
       const state = {};
       const action = {
-        type: COMPOSE_MESSAGE,
+        type: types.COMPOSE_MESSAGE,
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
@@ -186,7 +177,7 @@ describe('Message reducers', () => {
     it('messages should be retrieved from the store', () => {
       const state = {};
       const action = {
-        type: RETRIEVE_MESSAGE,
+        type: types.RETRIEVE_MESSAGE,
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
@@ -207,7 +198,7 @@ describe('Message reducers', () => {
       it('messages from the store should be cleared', () => {
         const state = {};
         const action = {
-          type: CLEAR_RETRIEVED_MESSAGE,
+          type: types.CLEAR_RETRIEVED_MESSAGE,
           messageData: []
         };
         expect(message(state, action))
@@ -221,7 +212,7 @@ describe('Message reducers', () => {
       it('notification should be retrieved from the store', () => {
         const state = {};
         const action = {
-          type: GET_NOTIFICATION,
+          type: types.GET_NOTIFICATION,
           notificationData: {
             id: 1,
             message: 'Hello Obi! Welcome',
@@ -235,4 +226,53 @@ describe('Message reducers', () => {
           .toEqual({ notificationData: action.notificationData });
       });
     });
+  // Test UPDATE_NOTIFICATION action for updating
+  // message notification in the store
+  describe(`When UPDATE_NOTIFICATION
+  action type is fired from action`, () => {
+      it('notification should be updated in the store', () => {
+        const state = {};
+        const action = {
+          type: types.UPDATE_NOTIFICATION,
+          messageData: {
+            id: 1,
+            message: 'Hello Obi! Welcome',
+            priority_level: 'Normal',
+            groupId: 1,
+            sentBy: 1,
+            createdAt: '2017-08-15T11:10:50.743Z'
+          }
+        };
+        expect(message(state, action))
+          .toEqual({ messageData: action.messageData });
+      });
+    });
+});
+
+// User reducer
+describe('User reducers', () => {
+  // test create user reducers for adding logged in users to the store
+  describe('When SET_CURRENT_USER action type is fired from an action', () => {
+    it('current user should be added to the user store', () => {
+      const state = {};
+      const action = {
+        type: types.SET_CURRENT_USER,
+        isAuthenticated: true,
+        user: { id: 1, username: 'Kene' }
+      };
+      expect(userLoginReducer(state, action))
+        .toEqual(
+          { isAuthenticated: true, user: { id: 1, username: 'Kene' } }
+        );
+    });
+  });
+  // test create user reducers for returning default state when no action is fired
+  describe('When No action type is fired from an action', () => {
+    it('default state of user store returned', () => {
+      const state = {};
+      const action = {};
+      expect(userLoginReducer(state, action))
+        .toEqual({});
+    });
+  });
 });

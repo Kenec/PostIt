@@ -1,63 +1,83 @@
+// import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../actions/signinActions';
 import { getUserGroups,
-         getGroupsCreatedByUser } from '../actions/groupActions';
-import { retrieveMessage } from '../actions/messageActions';
+  getGroupsCreatedByUser } from '../actions/groupActions';
+// import { retrieveMessage } from '../actions/messageActions';
 
+/**
+ * @class NavigationBarMenu
+ */
 class NavigationBarMenu extends Component {
-  componentWillMount() {
-    const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    const { isAuthenticated, user } = this.props.auth
-
-    this.props.getUserGroups({username: user.username});
-    this.props.getGroupsCreatedByUser({userId: user.id});
-
+  /**
+   * 
+   * @param {*} props 
+   */
+  constructor(props) {
+    super(props);
+    this.logout = this.logout.bind(this);
   }
-  logout(e){
-    e.preventDefault;
+  /**
+   * @return{void} void
+   */
+  componentWillMount() {
+    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
+    const { /* isAuthenticated, */ user } = this.props.auth;
+    // if (!isAuthenticated) {
+    //   this.context.router.push('/');
+    // }
+    this.props.getUserGroups({ username: user.username });
+    this.props.getGroupsCreatedByUser({ userId: user.id });
+  }
+  /**
+   * 
+   * @param {event} event
+   * @return {void} void 
+   */
+  logout(event) {
+    event.preventDefault();
     this.props.logout();
   }
-  render(){
+  /**
+   * @return{DOM} DOM Component
+   */
+  render() {
     const { isAuthenticated, user } = this.props.auth;
-    return(
+    return (
       <div className="well well-sm container-fluid ">
+        <div className="row">
+          <div className="col-md-6 my_title">
+            <img alt="" src="/images/postit.png" width="50px" height="50px" />
+            <strong className="text-info"><b>POSTIT</b></strong>
+          </div>
+          <div className="col-md-6 right-align">
+            <div className="btn-group col-md-6">
+              <Link className="space_link" to="/dashboard">
+                <span className="" /><b>DASHBOARD </b>
+              </Link>
+              <span className="space_link"><b> | </b></span>
+              <Link className="" to="/createGroup">
+                <span className="" /><b> CREATE GROUP</b>
+              </Link>
+            </div>
+            <div className="col-md-6">
+              <span className="glyphicon glyphicon-user space blue-text" />
+              <span className="blue-text">
+                <b className="space">Welcome {isAuthenticated && user.username }!</b>
+              </span>
+              <Link to="" className="space" onClick={this.logout}>
+                    Logout
+              </Link>
+            </div>
+          </div>
           <div className="row">
-              <div className="col-md-6 my_title">
-                <img src="/images/postit.png" width="50px" height="50px"/>
-                <strong className="text-info"><b>POSTIT</b></strong>
-              </div>
-              <div className="col-md-6 right-align">
-                <div className="btn-group col-md-6">
-                  <Link className='space_link' to="/dashboard">
-                        <span className=""></span><b>DASHBOARD </b>
-                  </Link>
-                  <span className="space_link"><b> | </b></span>
-                  <Link className="" to="/createGroup">
-                        <span className=""></span><b> CREATE GROUP</b>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <a href="#">
-                    <span className="glyphicon glyphicon-user">&nbsp;</span>
-                      Welcome {isAuthenticated &&  user.username  }!
-                  </a>
-                  <a href="" onClick={this.logout.bind(this)}>
-                      &nbsp;&nbsp;&nbsp;Logout
-                  </a>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
-
-                </div>
-                <div className="col-md-6 right-align">
-
-                </div>
-              </div>
+            <div className="col-md-6" />
+            <div className="col-md-6 right-align" />
           </div>
         </div>
+      </div>
     );
   }
 }
@@ -68,8 +88,15 @@ NavigationBarMenu.propTypes = {
   getUserGroups: React.PropTypes.func.isRequired,
   getGroupsCreatedByUser: React.PropTypes.func.isRequired,
 
-}
-
+};
+NavigationBarMenu.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+/**
+ * 
+ * @param {object} state
+ * @return {object} state object 
+ */
 function mapStateToProps(state) {
   return {
     auth: state.userLoginReducer,
@@ -78,7 +105,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps,
-                      {logout,
-                       getUserGroups,
-                       getGroupsCreatedByUser })
-                      (NavigationBarMenu);
+  { logout,
+    getUserGroups,
+    getGroupsCreatedByUser })(NavigationBarMenu);

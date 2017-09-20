@@ -150,7 +150,7 @@ export default {
    * @return {json}     returns json reponse
    */
   searchUser(req, res) {
-    return Users.findAll({
+    return Users.findAndCountAll({
       offset: req.params.offset * 5,
       limit: 5,
       where: { username: { $like: `%${req.body.username}%` } },

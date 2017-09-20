@@ -62,3 +62,4 @@ export default (sequelize, DataTypes) => {
   };
   return MessageReads;
 };
+// just before a PR for code review

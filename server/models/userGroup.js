@@ -40,3 +40,4 @@ export default (sequelize, DataTypes) => {
   });
   return userGroups;
 };
+// just before a PR for code review

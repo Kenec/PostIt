@@ -1,7 +1,7 @@
 // Require the dev-dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import validateInput from '../shared/validations/signup';
+import validateInput from '../shared/validations/validateInput';
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
@@ -57,17 +57,5 @@ describe('SignupValidation', () => {
           .eql(false);
       }
     );
-    // it('should return error if username number is empty',
-    //   () => {
-    //     data.username = '';
-    //     validateInput(data).should.have.property('errors')
-    //       .eql({ email: 'Email is invalid',
-    //         confirmPassword: 'Password did not match',
-    //         phone: 'Phone number is invalid',
-    //         username: 'Username is required' });
-    //     validateInput(data).should.have.property('isValid')
-    //       .eql(false);
-    //   }
-    // );
   });
 });
