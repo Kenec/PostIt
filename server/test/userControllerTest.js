@@ -30,7 +30,7 @@ describe('Users', () => {
       it('should return status code 201 and  res of object on signup',
         (done) => {
           server
-            .post('/api/user/signup')
+            .post('/api/v1/user/signup')
             .send({
               username: 'kene',
               email: 'kene@gmail.com',
@@ -51,7 +51,7 @@ describe('Users', () => {
       it('should expect error status to be 400',
         (done) => {
           server
-            .post('/api/user/signup')
+            .post('/api/v1/user/signup')
             .send({
               email: 'kene@gmail.com',
               phone: '07038550515',
@@ -72,7 +72,7 @@ describe('Users', () => {
     let token = '';
     it('should return status code 201 and  res to be object', (done) => {
       server
-        .post('/api/user/signin')
+        .post('/api/v1/user/signin')
         .send({
           username: 'kene',
           password: 'kene' })
@@ -87,7 +87,7 @@ describe('Users', () => {
     it('should expect parameter of object returned on successful signin',
       (done) => {
         server
-          .post('/api/user/signin')
+          .post('/api/v1/user/signin')
           .send({
             username: 'kene',
             password: 'kene' })
@@ -108,7 +108,7 @@ describe('Users', () => {
     it('should expect error status to be 401',
       (done) => {
         server
-          .post('/api/user/signin')
+          .post('/api/v1/user/signin')
           .send({
             username: 'paul',
             password: 'kene' })
@@ -122,7 +122,7 @@ describe('Users', () => {
     it('should return user details when searched by username',
       (done) => {
         server
-          .post('/api/users/username')
+          .post('/api/v1/users/username')
           .send({
             token,
             username: 'kene' })
@@ -139,7 +139,7 @@ describe('Users', () => {
         details is not found when searched by username`,
       (done) => {
         server
-          .post('/api/users/username')
+          .post('/api/v1/users/username')
           .send({
             token,
             username: 'keneM' })
@@ -154,7 +154,7 @@ describe('Users', () => {
         username query errored`,
       (done) => {
         server
-          .post('/api/users/username')
+          .post('/api/v1/users/username')
           .send({
             // token, // when token is not available
             username: 'kene' })
@@ -171,7 +171,7 @@ describe('Users', () => {
         when password is updated`,
       (done) => {
         server
-          .post(`/api/user/resetpassword/${token}`)
+          .post(`/api/v1/user/resetpassword/${token}`)
           .send({
             password: 'kene',
             email: 'kene@gmail.com' })
@@ -188,7 +188,7 @@ describe('Users', () => {
       (done) => {
         const inValidToken = 'thisisaninvalidtoken';
         server
-          .get(`/api/user/resetpassword/${inValidToken}`)
+          .get(`/api/v1/user/resetpassword/${inValidToken}`)
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
@@ -199,4 +199,3 @@ describe('Users', () => {
       });
   });
 });
-// just before a PR for code review

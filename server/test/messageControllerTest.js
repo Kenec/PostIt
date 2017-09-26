@@ -17,7 +17,7 @@ describe('Messages', () => {
   let token = '';
   before((done) => { // Before each test we empty the database
     server
-      .post('/api/user/signin')
+      .post('/api/v1/user/signin')
       .send({
         username: 'kene',
         password: 'kene' })
@@ -42,7 +42,7 @@ describe('Messages', () => {
           in the group`,
         (done) => {
           server
-            .get(`/api/group/${groupId}/messages`)
+            .get(`/api/v1/group/${groupId}/messages`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(404);
@@ -56,7 +56,7 @@ describe('Messages', () => {
           sent and an object return`,
         (done) => {
           server
-            .post(`/api/group/${groupId}/message`)
+            .post(`/api/v1/group/${groupId}/message`)
             .send({
               token,
               message: 'This is a sample message',
@@ -77,7 +77,7 @@ describe('Messages', () => {
           is sent successfully to a group`,
         (done) => {
           server
-            .get(`/api/group/${groupId}/messages`)
+            .get(`/api/v1/group/${groupId}/messages`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
@@ -93,7 +93,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/group/${messageId}/notification`)
+            .post(`/api/v1/group/${messageId}/notification`)
             .send({
               token,
               userId: 1,
@@ -117,7 +117,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/group/${messageId}/notification`)
+            .post(`/api/v1/group/${messageId}/notification`)
             .send({
               token,
               userId: 1,
@@ -140,7 +140,7 @@ describe('Messages', () => {
           that exists`,
         (done) => {
           server
-            .post('/api/user/notifications')
+            .post('/api/v1/user/notifications')
             .send({
               token,
               userId: 1,
@@ -157,7 +157,7 @@ describe('Messages', () => {
             notification`,
         (done) => {
           server
-            .post('/api/user/notifications')
+            .post('/api/v1/user/notifications')
             .send({
               token,
               userId: 3,
@@ -175,7 +175,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/users/${messageId}/read`)
+            .post(`/api/v1/users/${messageId}/read`)
             .send({
               token,
             })
@@ -193,7 +193,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/user/${messageId}/notification`)
+            .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
               userId: 1,
@@ -215,7 +215,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/user/${messageId}/notification`)
+            .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
               userId: 2,
@@ -235,7 +235,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/user/${messageId}/notification`)
+            .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
               userId: 2,
@@ -255,7 +255,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/users/${messageId}/read`)
+            .post(`/api/v1/users/${messageId}/read`)
             .send({
               token,
             })
@@ -269,4 +269,3 @@ describe('Messages', () => {
     });
   });
 });
-// just before a PR for code review

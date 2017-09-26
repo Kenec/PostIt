@@ -1,7 +1,7 @@
 // Require the dev-dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import sendMail from '../utils/sendMail'
+import sendMail from '../utils/sendMail';
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 

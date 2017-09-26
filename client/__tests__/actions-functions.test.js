@@ -49,7 +49,7 @@ describe('Forgot Password Action', () => {
   it('should have forgotPasswordRequest return result of an async action of post request', () => {
     const store = mockStore({});
     const email = 'email@email.com';
-    mock.onPost('/api/user/resetpassword', email)
+    mock.onPost('/api/v1/user/resetpassword', email)
       .reply(200, { message: 'password reset link sent to your email' });
     return store.dispatch(forgotPassword.forgotPasswordRequest(email)).then((message) => {
       // return of async actions
@@ -67,7 +67,7 @@ describe('Forgot Password Action', () => {
   it('should have checkForValidToken return result of an async action of get request', () => {
     const store = mockStore({});
     const token = 'thisisgibrishtoken';
-    mock.onGet(`/api/user/resetpassword/${token}`)
+    mock.onGet(`/api/v1/user/resetpassword/${token}`)
       .reply(200, { message: true });
     return store.dispatch(forgotPassword.checkForValidToken(token)).then((message) => {
       // return of async actions
@@ -87,7 +87,7 @@ describe('Forgot Password Action', () => {
     const store = mockStore({});
     const token = 'thisisgibrishtoken';
     const newPassword = 'this is a new password';
-    mock.onPost(`/api/user/resetpassword/${token}`, newPassword)
+    mock.onPost(`/api/v1/user/resetpassword/${token}`, newPassword)
       .reply(200, { message: 'password updated successfully!' });
     return store.dispatch(forgotPassword.updatePassword(token, newPassword)).then((message) => {
       // return of async actions
@@ -161,7 +161,7 @@ describe('Group Action', () => {
     const store = mockStore({});
     const username = 'Kene';
     const offset = 1;
-    mock.onPost(`/api/users/${offset}`, username)
+    mock.onPost(`/api/v1/users/${offset}`, username)
       .reply(200, usersData);
     return store.dispatch(group.searchAllUsers(username, offset)).then(() => {
       // return of async actions
@@ -175,7 +175,7 @@ describe('Group Action', () => {
   it('should have getUsersInGroup return result of get request', () => {
     const store = mockStore({});
     const groupId = 1;
-    mock.onGet(`/api/groups/${groupId}/users`)
+    mock.onGet(`/api/v1/groups/${groupId}/users`)
       .reply(200, usersData);
     return store.dispatch(group.getUsersInGroup(groupId)).then((groupMembers) => {
       // return of async actions
@@ -187,7 +187,7 @@ describe('Group Action', () => {
     const store = mockStore({});
     const groupId = 1;
     const newUser = { id: 3, username: 'john' };
-    mock.onPost(`/api/group/${groupId}/user`, newUser.id)
+    mock.onPost(`/api/v1/group/${groupId}/user`, newUser.id)
       .reply(200, usersData.push(newUser));
     return store.dispatch(group.addUserToGroups(groupId, newUser.id)).then((newGroupMembers) => {
       // return of async actions
@@ -198,7 +198,7 @@ describe('Group Action', () => {
   it('should have getUserInfo return result of post request', () => {
     const store = mockStore({});
     const userId = 1;
-    mock.onPost('/api/users/username', userId)
+    mock.onPost('/api/v1/users/username', userId)
       .reply(200, usersData[0].username);
     return store.dispatch(group.getUserInfo(userId)).then((username) => {
       // return of async actions
@@ -212,7 +212,7 @@ describe('Group Action', () => {
       groupId: 1,
       groupName: 'Random',
       createdBy: 'Kene' };
-    mock.onPost('/api/group', newGroup)
+    mock.onPost('/api/v1/group', newGroup)
       .reply(200, newGroup);
     return store.dispatch(group.createGroup(newGroup)).then(() => {
       // return of async actions
@@ -228,7 +228,7 @@ describe('Group Action', () => {
     const usersGroup = {
       username: 'Kene',
       groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
-    mock.onPost('/api/users/me', usersGroup.username)
+    mock.onPost('/api/v1/users/me', usersGroup.username)
       .reply(200, usersGroup);
     return store.dispatch(group.getUserGroups(usersGroup.username)).then(() => {
       // return of async actions
@@ -244,7 +244,7 @@ describe('Group Action', () => {
     const usersGroup = {
       username: 'Kene',
       groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
-    mock.onPost('/api/group/creator', usersGroup.username)
+    mock.onPost('/api/v1/group/creator', usersGroup.username)
       .reply(200, usersGroup);
     return store.dispatch(group.getGroupsCreatedByUser(usersGroup.username)).then(() => {
       // return of async actions
@@ -266,7 +266,7 @@ describe('Signup Action', () => {
   };
   // should have userSignupRequest method
   it('should have userSignupRequest action creator return the result of a post request', () => {
-    mock.onPost('/api/user/signup', userData)
+    mock.onPost('/api/v1/user/signup', userData)
       .reply(200, { message: 'User created successfully' });
     return store.dispatch(signup.userSignupRequest(userData)).then((message) => {
     // return of async actions
@@ -335,7 +335,7 @@ describe('Message Action', () => {
   it('should dispatch an async action when composeMessage is called', () => {
     const store = mockStore({});
     const groupId = 1;
-    mock.onPost(`/api/group/${groupId}/message`, messageData)
+    mock.onPost(`/api/v1/group/${groupId}/message`, messageData)
       .reply(200, { message: 'sent!' });
     return store.dispatch(message.composeMessage(groupId, messageData)).then((message) => {
       // return of async actions
@@ -348,7 +348,7 @@ describe('Message Action', () => {
   it('should have retrieveMessage return result of get request', () => {
     const store = mockStore({});
     const groupId = 1;
-    mock.onGet(`/api/group/${groupId}/messages`)
+    mock.onGet(`/api/v1/group/${groupId}/messages`)
       .reply(200, retrieveMessages);
     return store.dispatch(message.retrieveMessage(groupId)).then((messagesResult) => {
       // return of async actions
@@ -371,7 +371,7 @@ describe('Message Action', () => {
       sentBy: 'Kene',
       readStatus: 1
     };
-    mock.onPost(`/api/group/${newNotificationData.messageId}/notification`, newNotificationData)
+    mock.onPost(`/api/v1/group/${newNotificationData.messageId}/notification`, newNotificationData)
       .reply(200, notificationData.push(newNotificationData));
     return store.dispatch(message.addNotification(newNotificationData.messageId, newNotificationData))
       .then((notificationResult) => {
@@ -383,7 +383,7 @@ describe('Message Action', () => {
   it('should dispatch an async action when getNotification is called', () => {
     const store = mockStore({});
     const userId = 1;
-    mock.onPost('/api/user/notifications', userId)
+    mock.onPost('/api/v1/user/notifications', userId)
       .reply(200, notificationData);
     return store.dispatch(message.getNotification(userId)).then(() => {
       // return of async actions
@@ -401,7 +401,7 @@ describe('Message Action', () => {
       sentBy: 'Kene',
       readStatus: 0
     };
-    mock.onPost(`/api/user/${updateNotificationData.messageId}/notification`, updateNotificationData)
+    mock.onPost(`/api/v1/user/${updateNotificationData.messageId}/notification`, updateNotificationData)
       .reply(200, updateNotificationData);
     return store.dispatch(message.updateNotification(updateNotificationData.messageId, updateNotificationData))
       .then((result) => {
@@ -413,7 +413,7 @@ describe('Message Action', () => {
   it('should dispatch an async action when updateReadBy is called', () => {
     const store = mockStore({});
     const readBy = 'Kene, Francis, Love';
-    mock.onPost(`/api/group/${messageData[0].messageId}/updateReadBy`, readBy)
+    mock.onPost(`/api/v1/group/${messageData[0].messageId}/updateReadBy`, readBy)
       .reply(200, messageData[0].readBy = readBy);
     return store.dispatch(message.updateReadBy(messageData[0].messageId, readBy))
       .then((result) => {
@@ -424,7 +424,7 @@ describe('Message Action', () => {
   // should have dispatch an async action when getUsersWhoReadMessage method is called
   it('should dispatch an async action when getUsersWhoReadMessage is called', () => {
     const store = mockStore({});
-    mock.onPost(`/api/users/${messageData[0].messageId}/read`)
+    mock.onPost(`/api/v1/users/${messageData[0].messageId}/read`)
       .reply(200, messageData[0].readBy);
     return store.dispatch(message.getUsersWhoReadMessage(messageData[0].messageId))
       .then(() => {

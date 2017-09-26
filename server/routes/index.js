@@ -18,79 +18,89 @@ router.get('/', (req, res) => {
 // ************************************************************************* //
 
 // ** /api/user/signup **
-router.post('/api/user/signup', userController.create);
+router.post('/api/v1/user/signup', userController.create);
 
 // ** /api/user/signin **
-router.post('/api/user/signin', userController.list);
+router.post('/api/v1/user/signin', userController.list);
 
 // routes for request password reset mail
-router.post('/api/user/resetpassword', userController.resetPassword);
+router.post('/api/v1/user/resetpassword', userController.resetPassword);
 
 // api route to check for valid token for resetting password
-router.get('/api/user/resetpassword/:token',
+router.get('/api/v1/user/resetpassword/:token',
   userController.checkValidTokenForPasswordReset);
 
 // routes to reset password od a user
-router.post('/api/user/resetpassword/:token', userController.updatePassword);
+router.post('/api/v1/user/resetpassword/:token',
+  userController.updatePassword);
 
 // protected routes
 
 // ** /api/group **
-router.post('/api/group', jwtAuth, groupController.create);
+router.post('/api/v1/group', jwtAuth, groupController.create);
 
 // ** /api/group/<group id>/user **
-router.post('/api/group/:groupid/user', jwtAuth, groupUserController.create);
+router.post('/api/v1/group/:groupid/user',
+  jwtAuth, groupUserController.create);
 
 // ** /api/group/<group id>/user **
-router.post('/api/group/creator', jwtAuth, groupController.fetchGroupByCreator);
+router.post('/api/v1/group/creator', jwtAuth,
+  groupController.fetchGroupByCreator);
 
 // *** To get the groups of a looged in user
-router.post('/api/users/me/', jwtAuth, groupUserController.fetchUserAndGroup);
+router.post('/api/v1/users/me/', jwtAuth,
+  groupUserController.fetchUserAndGroup);
 
 // *** To get the groups of a looged in user
-router.post('/api/users/username', jwtAuth, userController.FetchMemberByName);
+router.post('/api/v1/users/username', jwtAuth,
+  userController.FetchMemberByName);
 
 // *** api route to get all users *** //
-router.post('/api/users/:offset', jwtAuth, groupUserController.searchUser);
+router.post('/api/v1/users/:offset', jwtAuth,
+  groupUserController.searchUser);
 
 // ** /api/group/:groupid **
-router.get('/api/group/:groupid', jwtAuth, groupController.retrieve);
+router.get('/api/v1/group/:groupid', jwtAuth,
+  groupController.retrieve);
 
 // *** /api/groups/:id/users
-router.get('/api/groups/:id/users', jwtAuth,
+router.get('/api/v1/groups/:id/users', jwtAuth,
   groupUserController.fetchMembersOfGroup);
 
 // ** /api/group **
-router.get('/api/group', jwtAuth, groupUserController.list);
+router.get('/api/v1/group', jwtAuth,
+  groupUserController.list);
 
 // api route to remove user from the group
-router.post('/api/group/:id/removeuser', jwtAuth,
+router.post('/api/v1/group/:id/removeuser', jwtAuth,
   groupUserController.removeUserFromGroup);
 
 // ** /api/group/:groupid/messages **
-router.post('/api/group/:groupid/message', jwtAuth, messageController.create);
+router.post('/api/v1/group/:groupid/message',
+  jwtAuth, messageController.create);
 
 // ** /api/group/:groupid/messages **
-router.get('/api/group/:groupid/messages', jwtAuth, messageController.retrieve);
+router.get('/api/v1/group/:groupid/messages',
+  jwtAuth, messageController.retrieve);
 
 // api route to add notification when a message is sent
-router.post('/api/group/:messageid/notification', jwtAuth,
+router.post('/api/v1/group/:messageid/notification', jwtAuth,
   messageController.addMessageNotification);
 
 // api route to update readBy Column in the message table
-router.post('/api/group/:messageid/updateReadBy', jwtAuth,
+router.post('/api/v1/group/:messageid/updateReadBy', jwtAuth,
   messageController.updateReadBy);
 
 // api route to get notification when a message is sent
-router.post('/api/user/notifications', jwtAuth,
+router.post('/api/v1/user/notifications', jwtAuth,
   messageController.getMessageNotification);
 
 // api route to update notification when a message is sent
-router.post('/api/user/:messageid/notification', jwtAuth,
+router.post('/api/v1/user/:messageid/notification', jwtAuth,
   messageController.updateMessageNotification);
 
 // api route to update notification when a message is sent
-router.post('/api/users/:messageid/read', jwtAuth,
+router.post('/api/v1/users/:messageid/read', jwtAuth,
   messageController.getUsersWhoReadMessagesInGroup);
 
 // ** /groupInfo **

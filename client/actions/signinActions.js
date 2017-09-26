@@ -54,7 +54,7 @@ export function isLoggedIn() {
  * @return {type}      description
  */
 export function userSigninRequestAction(data) {
-  return dispatch => axios.post('/api/user/signin', data).then((res) => {
+  return dispatch => axios.post('/api/v1/user/signin', data).then((res) => {
     const token = res.data.token;
     localStorage.setItem('jwtToken', token);
     setAuthorizationToken(token);
