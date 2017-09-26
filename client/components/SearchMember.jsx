@@ -195,6 +195,7 @@ class SearchMember extends Component {
         <form onSubmit={this.onSubmit} className="" action="" method="">
           <div className="form-group browser-default">
             <input
+              autoComplete="off"
               onChange={this.onChange}
               value={this.state.username}
               type="text"

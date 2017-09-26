@@ -1,11 +1,15 @@
+/* global confirm alert */
+/* global localStorage */
 // import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import jwt from 'jsonwebtoken';
 import { getUserGroups,
   getUsersInGroupAction,
   getUsersInGroup,
-  getuserGroupsAction } from '../actions/groupActions';
+  getuserGroupsAction,
+  removeUserFromGroup } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 /**
@@ -21,13 +25,21 @@ class GroupMembers extends Component {
     this.state = {
       errors: {},
       groupMembers: [],
+      removalApproval: false,
+      message: ''
     };
+    this.confirmAndRemoveUser = this.confirmAndRemoveUser.bind(this);
   }
   /**
    * @return {void}
    */
   componentWillMount() {
-    // const { isAuthenticated, user } = this.props.auth;
+    this.getUser();
+  }
+  /**
+   * @return{void}
+   */
+  getUser() {
     this.props.getUsersInGroup(this.props.groupSelectedId).then(
       ({ data }) => {
         this.props.getUsersInGroupAction(data.users);
@@ -37,6 +49,42 @@ class GroupMembers extends Component {
         this.setState({ errors: response.data });
       }
     );
+  }
+  /**
+   * 
+   * @param {number} id 
+   * @param {object} payload
+   * @return {void}  
+   */
+  removeUser(id, payload) {
+    this.props.removeUserFromGroup(id, payload).then(
+      ({ data }) => {
+        this.setState({ message: data.message });
+        this.getUser();
+      },
+      ({ response }) => {
+        this.setState({ message: response.data.message });
+        alert(response.data.message);
+      },
+    );
+  }
+  /**
+   * 
+   * @param {Event} event
+   * @return {void}
+   */
+  confirmAndRemoveUser(event) {
+    event.preventDefault();
+    const username = event.target.name;
+    const userId = event.target.id;
+    if (confirm(`Do you want to remove ${username} from the Group`)) {
+      const groupid = this.props.groupSelectedId;
+      const removalPayLoad = {
+        admin: jwt.decode(localStorage.getItem('jwtToken')).id,
+        user: parseInt(userId, 10),
+      };
+      this.removeUser(groupid, removalPayLoad);
+    }
   }
 
   /**
@@ -52,9 +100,18 @@ class GroupMembers extends Component {
     }
 
     const groupsMemberList = usersInGroup.map(groupMember => (
-      <Link to={`/user/${groupMember.id}`} key={groupMember.id}>
+      <Link key={groupMember.id}>
         <div className="well well-sm no_spacing">
           <span id={groupMember.id}>{groupMember.username}</span>
+          <span className="pull-right">
+            <input
+              onClick={this.confirmAndRemoveUser}
+              type="button"
+              name={groupMember.username}
+              id={groupMember.id}
+              value="x"
+            />
+          </span>
         </div>
       </Link>
     ));
@@ -79,11 +136,12 @@ GroupMembers.propTypes = {
   getUsersInGroupAction: React.PropTypes.func.isRequired,
   groupSelectedId: React.PropTypes.string.isRequired,
   group: React.PropTypes.object.isRequired,
+  removeUserFromGroup: React.PropTypes.func.isRequired,
 };
 
 /**
  * 
- * @param {*} state
+ * @param {object} state
  * @return {object} state object 
  */
 function mapStateToProps(state) {
@@ -98,4 +156,5 @@ export default connect(mapStateToProps,
     getUsersInGroupAction,
     getuserGroupsAction,
     getUsersInGroup,
-    retrieveMessage })(GroupMembers);
+    retrieveMessage,
+    removeUserFromGroup })(GroupMembers);

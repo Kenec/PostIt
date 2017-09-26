@@ -167,3 +167,13 @@ export function getGroupsCreatedByUser(user) {
     dispatch(getGroupsCreatedByUserAction(res.data));
   });
 }
+
+/**
+ * 
+ * @param {integer} id 
+ * @param {object} payLoad
+ * @return {void}
+ */
+export function removeUserFromGroup(id, payLoad) {
+  return () => axios.post(`/api/group/${id}/removeuser`, payLoad);
+}

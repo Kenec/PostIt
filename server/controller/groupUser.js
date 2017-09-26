@@ -161,6 +161,73 @@ export default {
         error,
         message: 'Error occured while trying to find User'
       }));
+  },
+
+  removeUserFromGroup(req, res) {
+    const groupid = req.params.id;
+    const removalAdmin = req.body.admin;
+    const userToBeRemoved = req.body.user;
+    if (removalAdmin && userToBeRemoved && groupid) {
+      Groups.find({
+        where: { id: groupid, createdby: removalAdmin },
+        attributes: ['id', 'groupName', 'createdby']
+      })
+        .then((searchResult) => {
+          if (searchResult) {
+            if (removalAdmin !== userToBeRemoved) {
+              userGroups.find({
+                where: { userId: userToBeRemoved, groupId: groupid },
+                attributes: ['id', 'groupId', 'userId']
+              }).then((userInGroup) => {
+                if (userInGroup) {
+                  userGroups.destroy({
+                    where: { userId: userToBeRemoved, groupId: groupid }
+                  })
+                    .then((deletedUser) => {
+                      if (deletedUser === 1) {
+                        res.status(200).send({
+                          message: 'User Removed From Group'
+                        });
+                      } else {
+                        res.status(501).send({
+                          message: 'User not Deleted From Group'
+                        });
+                      }
+                    })
+                    .catch(error => res.status(500).send({
+                      error,
+                      message: 'Internal Server Error'
+                    }));
+                } else {
+                  res.status(404).send({
+                    message: 'User not found!'
+                  });
+                }
+              })
+                .catch(error => res.status(500).send({
+                  error,
+                  message: 'Internal Server Error'
+                }));
+            } else {
+              res.status(401).send({
+                message: 'Cannot remove yourself from the Group you created'
+              });
+            }
+          } else {
+            res.status(401).send({
+              message: 'Incomplete Action!. Only the Group Admin can remove a user'
+            });
+          }
+        })
+        .catch(error => res.status(500).send({
+          error,
+          message: 'Internal Server Error'
+        }));
+    } else {
+      res.status(400).send({
+        message: 'Incomplete payload'
+      });
+    }
   }
 
 };

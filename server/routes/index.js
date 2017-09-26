@@ -53,14 +53,19 @@ router.post('/api/users/username', jwtAuth, userController.FetchMemberByName);
 // *** api route to get all users *** //
 router.post('/api/users/:offset', jwtAuth, groupUserController.searchUser);
 
-// ** /api/group/<group id>/user **
+// ** /api/group/:groupid **
 router.get('/api/group/:groupid', jwtAuth, groupController.retrieve);
 
 // *** /api/groups/:id/users
-router.get('/api/groups/:id/users', jwtAuth, groupUserController.fetchMembersOfGroup);
+router.get('/api/groups/:id/users', jwtAuth,
+  groupUserController.fetchMembersOfGroup);
 
-// ** /api/group/<group id>/user **
+// ** /api/group **
 router.get('/api/group', jwtAuth, groupUserController.list);
+
+// api route to remove user from the group
+router.post('/api/group/:id/removeuser', jwtAuth,
+  groupUserController.removeUserFromGroup);
 
 // ** /api/group/:groupid/messages **
 router.post('/api/group/:groupid/message', jwtAuth, messageController.create);
