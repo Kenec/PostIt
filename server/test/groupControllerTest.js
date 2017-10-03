@@ -17,7 +17,7 @@ describe('Groups', () => {
   let token = '';
   before((done) => { // Before each test we empty the database
     server
-      .post('/api/user/signin')
+      .post('/api/v1/user/signin')
       .send({
         username: 'kene',
         password: 'kene' })
@@ -40,7 +40,7 @@ describe('Groups', () => {
       it('should return status code 201 and  res of object on success',
         (done) => {
           server
-            .post('/api/group')
+            .post('/api/v1/group')
             .send({
               token,
               groupName: 'Group',
@@ -63,7 +63,7 @@ describe('Groups', () => {
          Group`,
         (done) => {
           server
-            .post('/api/group')
+            .post('/api/v1/group')
             .send({
               token,
               groupName: 'Group',
@@ -79,7 +79,7 @@ describe('Groups', () => {
           attempting to create a group that exists`,
         (done) => {
           server
-            .post('/api/group')
+            .post('/api/v1/group')
             .send({
               token,
               groupName: 'Group',
@@ -102,7 +102,7 @@ describe('Groups', () => {
          when retrieving group by its creator id`,
         (done) => {
           server
-            .post('/api/group/creator')
+            .post('/api/v1/group/creator')
             .send({
               token,
               userId: '1'
@@ -119,7 +119,7 @@ describe('Groups', () => {
         (done) => {
           const groupId = '1';
           server
-            .get(`/api/group/${groupId}`)
+            .get(`/api/v1/group/${groupId}`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
@@ -133,7 +133,7 @@ describe('Groups', () => {
            when error occurs while retrieving group by its creator id`,
         (done) => {
           server
-            .post('/api/group/creator')
+            .post('/api/v1/group/creator')
             .send({
               token,
               userId: 3
@@ -146,4 +146,3 @@ describe('Groups', () => {
     });
   });
 });
-// just before a PR for code review

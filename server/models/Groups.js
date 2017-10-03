@@ -37,4 +37,3 @@ export default (sequelize, DataTypes) => {
   };
   return Groups;
 };
-// just before a PR for code review

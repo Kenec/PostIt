@@ -85,7 +85,7 @@ export function getUsersWhoReadMessageAction(usersWhoHaveReadMessage) {
  *
  */
 export function composeMessage(groupId, messageData) {
-  return () => axios.post(`/api/group/${groupId}/message`, messageData);
+  return () => axios.post(`/api/v1/group/${groupId}/message`, messageData);
 }
 
 /**
@@ -97,7 +97,7 @@ export function composeMessage(groupId, messageData) {
  *
  */
 export function retrieveMessage(groupId) {
-  return () => axios.get(`/api/group/${groupId}/messages`);
+  return () => axios.get(`/api/v1/group/${groupId}/messages`);
 }
 
 
@@ -121,7 +121,7 @@ export function clearRetrievedMessage() {
 export function addNotification(messageId, notificationObj) {
   return () =>
     // make a post request to add a notification
-    axios.post(`/api/group/${messageId}/notification`, notificationObj);
+    axios.post(`/api/v1/group/${messageId}/notification`, notificationObj);
 }
 
 /**
@@ -132,7 +132,7 @@ export function addNotification(messageId, notificationObj) {
 export function getNotification(userId) {
   return dispatch =>
     // make a post request to get current notification
-    axios.post('/api/user/notifications', userId)
+    axios.post('/api/v1/user/notifications', userId)
       .then((res) => {
         // dispatch the notification action to the store
         dispatch(getNotificationAction(res.data));
@@ -148,7 +148,7 @@ export function getNotification(userId) {
 export function updateNotification(messageId, notificationObj) {
   return () =>
     // make a post request to update the notification table
-    axios.post(`/api/user/${messageId}/notification`, notificationObj);
+    axios.post(`/api/v1/user/${messageId}/notification`, notificationObj);
 }
 
 
@@ -160,7 +160,7 @@ export function updateNotification(messageId, notificationObj) {
  */
 export function updateReadBy(messageId, userAndMessageObj) {
   return () =>
-    axios.post(`/api/group/${messageId}/updateReadBy`, userAndMessageObj);
+    axios.post(`/api/v1/group/${messageId}/updateReadBy`, userAndMessageObj);
 }
 
 /**
@@ -171,7 +171,7 @@ export function updateReadBy(messageId, userAndMessageObj) {
 export function getUsersWhoReadMessage(messageId) {
   return dispatch =>
     // make a post request to update the notification table
-    axios.post(`/api/users/${messageId}/read`)
+    axios.post(`/api/v1/users/${messageId}/read`)
       .then((res) => {
         dispatch(getUsersWhoReadMessageAction(res.data));
       });

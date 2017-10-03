@@ -17,6 +17,12 @@
 .space_link {
   word-spacing: 10px; }
 
+.space {
+  margin-right: 5px; }
+
+.blue {
+  color: #039be5; }
+
 .tooltipp {
   position: relative;
   display: inline-block;
@@ -144,8 +150,15 @@ body {
 .group {
   position: relative; }
 
-.group_board {
+.message_board {
   height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative; }
+
+.group_board {
+  max-height: 300px;
+  min-height: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative; }
@@ -154,5 +167,27 @@ body {
   bottom: 0px;
   height: 100px;
   position: absolute; }
+
+.padding-right {
+  padding-right: 30px; }
+
+#snackbar {
+  visibility: hidden;
+  min-width: 150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px;
+  position: fixed;
+  z-index: 1; }
+
+#snackbar.show {
+  visibility: visible;
+  /* Show the snackbar */ }
+
+[type="radio"]:not(:checked) + label, [type="radio"]:checked + label {
+  margin-right: 1rem;
+  padding-left: 25px; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJjc3MvbWFpbi5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/

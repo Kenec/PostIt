@@ -17,7 +17,7 @@ describe('userGroups', () => {
   let token = '';
   before((done) => { // Before each test we empty the database
     server
-      .post('/api/user/signin')
+      .post('/api/v1/user/signin')
       .send({
         username: 'kene',
         password: 'kene' })
@@ -38,7 +38,7 @@ describe('userGroups', () => {
       it('should return status code 201 and  res of object on sucess',
         (done) => {
           server
-            .post(`/api/group/${groupId}/user`)
+            .post(`/api/v1/group/${groupId}/user`)
             .send({
               token,
               userId: '1'
@@ -56,7 +56,7 @@ describe('userGroups', () => {
       it('should return status code 404 and res of object on a failure',
         (done) => {
           server
-            .post(`/api/group/${groupId}/user`)
+            .post(`/api/v1/group/${groupId}/user`)
             .send({
               token,
               userId: 3
@@ -74,7 +74,7 @@ describe('userGroups', () => {
          by a user`,
         (done) => {
           server
-            .post('/api/users/me')
+            .post('/api/v1/users/me')
             .send({
               token,
               username: 'kene',
@@ -90,7 +90,7 @@ describe('userGroups', () => {
            is made`,
         (done) => {
           server
-            .post('/api/users/0')
+            .post('/api/v1/users/0')
             .send({
               token,
               username: 'k',
@@ -101,11 +101,11 @@ describe('userGroups', () => {
               done();
             });
         });
-      it(`should return status code 400 and  res
+      it(`should return status code 401 and  res
              of object of users cannot be fetched from the DB`,
         (done) => {
           server
-            .post('/api/users/0')
+            .post('/api/v1/users/0')
             .send({
               // token, // token is not available
               username: '3',
@@ -120,7 +120,7 @@ describe('userGroups', () => {
             an array of objects of all groups`,
         (done) => {
           server
-            .get('/api/group')
+            .get('/api/v1/group')
             .send({
               token,
             })
@@ -134,7 +134,7 @@ describe('userGroups', () => {
               an object of users in a group by groupId`,
         (done) => {
           server
-            .get(`/api/groups/${groupId}/users`)
+            .get(`/api/v1/groups/${groupId}/users`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
@@ -146,7 +146,7 @@ describe('userGroups', () => {
           an object of error message when an invalid groupId is passed`,
         (done) => {
           server
-            .get('/api/groups/100/users')
+            .get('/api/v1/groups/100/users')
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(400);
@@ -159,4 +159,3 @@ describe('userGroups', () => {
     });
   });
 });
-// just before a PR for code review

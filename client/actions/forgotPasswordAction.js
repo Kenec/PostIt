@@ -9,7 +9,7 @@ import axios from 'axios';
  * @return {type}          description
  */
 export function forgotPasswordRequest(email) {
-  return () => axios.post('/api/user/resetpassword', email);
+  return () => axios.post('/api/v1/user/resetpassword', email);
 }
 
 /**
@@ -19,7 +19,7 @@ export function forgotPasswordRequest(email) {
  * @return {type}       description
  */
 export function checkForValidToken(token) {
-  return () => axios.get(`/api/user/resetpassword/${token}`);
+  return () => axios.get(`/api/v1/user/resetpassword/${token}`);
 }
 
 /**
@@ -30,6 +30,6 @@ export function checkForValidToken(token) {
  * @return {type}       description
  */
 export function updatePassword(token, updatePasswordDetail) {
-  return () => axios.post(`/api/user/resetpassword/${token}`,
+  return () => axios.post(`/api/v1/user/resetpassword/${token}`,
     updatePasswordDetail);
 }
