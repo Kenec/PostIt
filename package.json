@@ -5,7 +5,7 @@
   "main": "server/app.js",
   "scripts": {
     "start": "nodemon --watch server --exec babel-node server/app.js --ignore client",
-    "test-run": "nyc --reporter=html --reporter=text mocha --compilers js:babel-register --require babel-polyfill --recursive server/test --timeout 10000",
+    "test-run": "nyc --reporter=html --reporter=text mocha --compilers js:babel-register --require babel-polyfill --recursive server/test --timeout 30000",
     "migrate-undo": "node_modules/.bin/ sequelize db:migrate:undo:all",
     "migrate": "node_modules/.bin/ sequelize db:migrate",
     "test-prep": "npm run undo && npm run migrate && npm run test-run",

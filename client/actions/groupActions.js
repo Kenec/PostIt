@@ -167,9 +167,7 @@ export function getGroupsCreatedByUser(user) {
     dispatch(getGroupsCreatedByUserAction(res.data));
   });
 }
-
-/**
- * 
+/** 
  * @param {integer} id 
  * @param {object} payLoad
  * @return {void}

@@ -51,7 +51,6 @@ class GroupMembers extends Component {
     );
   }
   /**
-   * 
    * @param {number} id 
    * @param {object} payload
    * @return {void}  
@@ -69,7 +68,6 @@ class GroupMembers extends Component {
     );
   }
   /**
-   * 
    * @param {Event} event
    * @return {void}
    */

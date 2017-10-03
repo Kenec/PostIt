@@ -101,7 +101,7 @@ describe('userGroups', () => {
               done();
             });
         });
-      it(`should return status code 400 and  res
+      it(`should return status code 401 and  res
              of object of users cannot be fetched from the DB`,
         (done) => {
           server

@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 // declare the redux devtool dependencies
 /*eslint-disable*/
@@ -11,7 +11,7 @@ const composeEnhancers =
     }) : compose;
 
 const finalCreateStore = composeEnhancers(
-  applyMiddleware(createLogger(), thunk)
+  applyMiddleware(thunk)
 )(createStore);
 
 

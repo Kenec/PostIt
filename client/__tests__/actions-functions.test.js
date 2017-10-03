@@ -371,9 +371,12 @@ describe('Message Action', () => {
       sentBy: 'Kene',
       readStatus: 1
     };
-    mock.onPost(`/api/v1/group/${newNotificationData.messageId}/notification`, newNotificationData)
+    mock
+      .onPost(`/api/v1/group/${newNotificationData.messageId}/notification`,
+        newNotificationData)
       .reply(200, notificationData.push(newNotificationData));
-    return store.dispatch(message.addNotification(newNotificationData.messageId, newNotificationData))
+    return store.dispatch(message.addNotification(newNotificationData.messageId,
+      newNotificationData))
       .then((notificationResult) => {
       // return of async actions
         expect(notificationResult.data).toEqual(notificationData.length);
@@ -401,9 +404,13 @@ describe('Message Action', () => {
       sentBy: 'Kene',
       readStatus: 0
     };
-    mock.onPost(`/api/v1/user/${updateNotificationData.messageId}/notification`, updateNotificationData)
+    mock
+      .onPost(`/api/v1/user/${updateNotificationData.messageId}/notification`,
+        updateNotificationData)
       .reply(200, updateNotificationData);
-    return store.dispatch(message.updateNotification(updateNotificationData.messageId, updateNotificationData))
+    return store
+      .dispatch(message.updateNotification(updateNotificationData.messageId,
+        updateNotificationData))
       .then((result) => {
       // return of async actions
         expect(result.data).toEqual(updateNotificationData);
@@ -413,9 +420,13 @@ describe('Message Action', () => {
   it('should dispatch an async action when updateReadBy is called', () => {
     const store = mockStore({});
     const readBy = 'Kene, Francis, Love';
-    mock.onPost(`/api/v1/group/${messageData[0].messageId}/updateReadBy`, readBy)
+    mock
+      .onPost(`/api/v1/group/${messageData[0].messageId}/updateReadBy`,
+        readBy)
       .reply(200, messageData[0].readBy = readBy);
-    return store.dispatch(message.updateReadBy(messageData[0].messageId, readBy))
+    return store
+      .dispatch(message.updateReadBy(messageData[0].messageId,
+        readBy))
       .then((result) => {
       // return of async actions
         expect(result.data).toEqual(messageData[0].readBy);
