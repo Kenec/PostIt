@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { logout } from '../actions/signinActions';
 import { getUserGroups,
   getGroupsCreatedByUser } from '../actions/groupActions';
-// import { retrieveMessage } from '../actions/messageActions';
 
 /**
  * @class NavigationBarMenu
@@ -23,11 +22,7 @@ class NavigationBarMenu extends Component {
    * @return{void} void
    */
   componentWillMount() {
-    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    const { /* isAuthenticated, */ user } = this.props.auth;
-    // if (!isAuthenticated) {
-    //   this.context.router.push('/');
-    // }
+    const { user } = this.props.auth;
     this.props.getUserGroups({ username: user.username });
     this.props.getGroupsCreatedByUser({ userId: user.id });
   }

@@ -56,16 +56,6 @@ module.exports = {
           use: ['css-loader', 'sass-loader']
         })
       },
-      // {
-      //   // style-loader, css-loader, font-loader for .css file extensions
-      //   test: /\.css$/,
-      //   loaders: [
-      //     'style-loader',
-      //     'css-loader?importLoaders=1',
-      //     'font-loader?format[]=truetype' +
-      //     '&format[]=woff&format[]=embedded-opentype'
-      //   ],
-      // },
       {
         // use file-loader for transpiling font files
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,

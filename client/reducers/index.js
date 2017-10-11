@@ -13,4 +13,3 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
-// just before code Review

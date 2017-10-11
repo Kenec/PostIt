@@ -339,4 +339,3 @@ export default {
       .catch(error => res.status(400).send(error));
   },
 };
-// just before a PR for code review

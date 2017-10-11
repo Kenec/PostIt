@@ -19,9 +19,8 @@ const finalCreateStore = composeEnhancers(
  * configureStore - configure store for redux
  *
  * @param  {object} initialState = {} this returns an object
- * @return {method}                   returns the finalCreateStore method
+ * @return {method} returns the finalCreateStore method
  */
 export default function configureStore(initialState = {}) {
   return finalCreateStore(rootReducer, initialState);
 }
-// just before code Review

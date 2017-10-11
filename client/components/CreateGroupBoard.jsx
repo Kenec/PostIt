@@ -43,7 +43,7 @@ class CreateGroupBoard extends Component {
 
   /**
    * 
-   * @param {*} event 
+   * @param {Event} event 
    * @return {void}
    */
   onChange(event) {
@@ -55,7 +55,7 @@ class CreateGroupBoard extends Component {
 
   /**
    * 
-   * @param {*} event
+   * @param {Event} event
    * @return {void}
    */
   onSubmit(event) {

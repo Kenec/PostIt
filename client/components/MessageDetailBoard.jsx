@@ -42,7 +42,6 @@ class MessageDetailBoard extends Component {
       retrieveMessageError: '',
       retrievedMessages: [],
     };
-    // this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -51,10 +50,6 @@ class MessageDetailBoard extends Component {
    */
   componentWillMount() {
     const { isAuthenticated } = this.props.auth;
-    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    // const { groups, groupsByUser } = this.props.group;
-    // const groupId = this.props.groupSelectedId;
-    // const groupName = this.props.groupName;
     this.props.getUsersWhoReadMessage(this.props.messageId);
     this.props.clearRetrievedMessageAction();
     if (isAuthenticated) {
@@ -69,9 +64,6 @@ class MessageDetailBoard extends Component {
    * @return {void}
    */
   componentDidMount() {
-    // get MessageData from the store
-    // const { messageData } = this.props.message;
-    // fire an action to retrieve messages
     this.props.retrieveMessage(this.props.groupSelectedId).then(
       (messageData) => {
         this.setState({ retrievedMessages: [] });
@@ -125,11 +117,9 @@ class MessageDetailBoard extends Component {
    * @return {DOM} DOM Component
    */
   render() {
-    // const { errors, success, retrieveMessageError } = this.state;
     const { groups, groupsByUser } = this.props.group;
     const { messageData, usersWhoHaveReadMessage } = this.props.message;
     const groupName = this.props.groupName;
-    // const groupId = this.props.groupId;
 
     if (!groups ||
        !groupsByUser ||
@@ -228,7 +218,6 @@ MessageDetailBoard.propTypes = {
   getUsersWhoReadMessage: React.PropTypes.func.isRequired,
   message: React.PropTypes.object.isRequired,
   messageId: React.PropTypes.string.isRequired,
-  // groupId: React.PropTypes.string.isRequired,
 };
 MessageDetailBoard.contextTypes = {
   router: React.PropTypes.object.isRequired

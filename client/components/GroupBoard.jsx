@@ -55,10 +55,6 @@ class GroupBoard extends Component {
    */
   componentWillMount() {
     const { isAuthenticated } = this.props.auth;
-    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    // const { groups, groupsByUser } = this.props.group;
-    // const groupId = this.props.groupSelectedId;
-    // const groupName = this.props.groupName;
     this.props.clearRetrievedMessageAction();
     if (isAuthenticated) {
       this.setState({

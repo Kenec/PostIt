@@ -57,10 +57,8 @@ export default function validateInput(inputData) {
     }
   }
 
-
   return {
     errors,
     isValid: isEmpty(errors)
   };
 }
-// just before a PR for code review

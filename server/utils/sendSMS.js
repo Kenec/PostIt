@@ -16,4 +16,3 @@ export default function sendSMS(userArraysOfObj, message) {
     nexmo.message.sendSms('PostIT', user.phone, message, () => {});
   });
 }
-// just before a PR for code review

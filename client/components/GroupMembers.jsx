@@ -129,7 +129,6 @@ class GroupMembers extends Component {
   }
 }
 GroupMembers.propTypes = {
-  // getUserGroups: React.PropTypes.func.isRequired,
   getUsersInGroup: React.PropTypes.func.isRequired,
   getUsersInGroupAction: React.PropTypes.func.isRequired,
   groupSelectedId: React.PropTypes.string.isRequired,

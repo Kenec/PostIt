@@ -31,7 +31,6 @@ class SearchMember extends Component {
       offset: 0,
       togglePrevent: 'auto',
     };
-    // this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.addUser = this.addUser.bind(this);
     this.decreaseOffset = this.decreaseOffset.bind(this);
@@ -51,15 +50,6 @@ class SearchMember extends Component {
     }
   }
 
-  // /**
-  //  * 
-  //  * @param {Event} event
-  //  * @return {void} void 
-  //  */
-  // onSubmit(event) {
-  //   event.preventDefault();
-  // }
-
   /**
    * 
    * @param {Event} event
@@ -73,7 +63,6 @@ class SearchMember extends Component {
       success: '',
     });
     const userSearchName = event.target.value;
-    // const userSearchInputName = event.target.name;
     // This fires a action that searches for a user and return the result
     this.props.searchAllUsers({ username: userSearchName }, this.state.offset);
   }
@@ -213,7 +202,6 @@ class SearchMember extends Component {
             <b>{success}</b>
           </span>}
           {(this.state.username === '' || !returnedUsers) ? '' : returnedUsers }
-          {/* {returnedUsers && returnedUsers} */}
           {(this.state.username === '' || !returnedUsers) ? '' :
             (<ul className="pagination">
               <li className="waves-effect">

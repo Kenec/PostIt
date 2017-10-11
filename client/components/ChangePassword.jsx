@@ -30,7 +30,7 @@ class ChangePassword extends Component {
   }
   /**
     * @function componentWillMount
-    * @return {*} void
+    * @return {void} void
     */
   componentWillMount() {
     // get token from the params and check if it a vdlid token
@@ -48,8 +48,8 @@ class ChangePassword extends Component {
   }
   /**
    * 
-   * @param {*} event 
-   * @return {*} void
+   * @param {Event} event 
+   * @return {void} void
    */
   onChange(event) {
     // reset state when a element changes its state
@@ -60,8 +60,8 @@ class ChangePassword extends Component {
 
   /**
  * 
- * @param {*} event
- * @return {*} void 
+ * @param {Event} event
+ * @return {void} void 
  */
   onSubmit(event) {
     // prevent the browser from refreshing or carrying out another action

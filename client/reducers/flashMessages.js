@@ -37,4 +37,3 @@ export default function flashMessages(state = [], action = {}) {
       return state;
   }
 }
-// just before code Review

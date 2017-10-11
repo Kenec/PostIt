@@ -79,7 +79,6 @@ export class Signin extends Component {
       this.context.router.push('/dashboard');
     }
     const { errors, isLoading } = this.state;
-    // const { getUserGroups } = this.props;
 
     const messages = this.props.messages.map(message =>
       (<div className="alert alert-success" key={message.id}>
