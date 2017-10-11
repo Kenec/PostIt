@@ -11,9 +11,8 @@ export default {
 
   /**
    * create - create a new user
-   *
    * @param  {object} req incoming request object
-   * @param  {object} res server respose object
+   * @param  {object} res server response object
    * @return {json}     returns json object
    */
   create(req, res) {
@@ -89,7 +88,6 @@ export default {
 
   /**
    * resetPassword - function to reset users password
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
    * @return {json}     returns json object
@@ -163,7 +161,6 @@ export default {
 
   /**
    * updatePassword - update password in the db
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
    * @return {json}     returns json object
@@ -264,6 +261,5 @@ export default {
         });
       });
   },
-
-
 };
+
