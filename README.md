@@ -21,20 +21,24 @@ The Documentation for the PostIt Restful API:
 
 ## TECHNOLOGIES
 * #### Front-end: 
-        React/Redux + SASS + Boostrap + Materialize CSS
-* #### Back-end:
-        node, axios, moment, express, express-validator, jsonwebtoken, bcrypt, dotenv, lodash, nexmo sequelize
+        * React/Redux + SASS + Boostrap + Materialize CSS
+* #### Back-end
+        * axios, moment, jsonwebtoken, bcrypt, dotenv, lodash, nexmo, nodemailer
 * #### System Dependencies: 
-        Postgress
+        * Node/Express + Sequelize/Postgres
 
 ### INSTALLATION
-  * Clone the [repo](https://github.com/Kenec/PostIt.git)
+  * install [Node js](https://nodejs.org/en/) and [Postgress](https://www.postgresql.org/)
+  * Clone the repository `git clone https://github.com/Kenec/PostIt.git`
   * Navigate to the location in your terminal
   * Run $ npm install to install dependencies
   * Setup Postgres, create a database postit and set it to port 5000 [Setup postgress](http://certek.com/kb4/install-server-postgresql-and-pgadmin-on-windows/)
   * Install sequelize-cli, Run $ npm install -g sequelize-cli (note: sudo install on ubuntu or MAC)
   * In terminal run $ sequelize db:migrate
+  * Create a .env file in your root directory and follow the pattern in the [.env.sample](https://github.com/Kenec/PostIt/blob/master/sample%20env%20file) file to create environmental variables
   * Run $ npm start to get the app started on your local machine
+  
+  ## TESTING
   * To run server test run $ npm test
   * To run client test run $ npm jest
 
@@ -45,23 +49,15 @@ The Documentation for the PostIt Restful API:
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## Deployment
-
-* Run  `npm run build` to build the project
-* Create an account on heroku [Create heroku account](https://www.heroku.com/)
-* Create a db with ElephantSQL [Create Account with ELephantSQL](https://www.elephantsql.com/docs/)
-* Push the file to heroku and set up the enviroment variables in the .env file eg: [sample .env file](https://github.com/Kenec/PostIt/blob/master/sample%20env%20file)
-
 ## FAQ
-[Feeback and FAQ](https://github.com/Kenec/PostIt/issues)
+[Feedback and FAQ](https://github.com/Kenec/PostIt/issues)
 
 ## Authors
+* Nnamani Kenechukwu Charles
 
-#### * Nnamani Kenechukwu Charles 
-
-## Licence [Licence](https://github.com/Kenec/PostIt/blob/master/LICENSE)
+## Licence 
+[MIT License](https://github.com/Kenec/PostIt/blob/master/LICENSE)
 
 ## Acknowledgments
-
 * Andela Talent Accelerator Team
 
