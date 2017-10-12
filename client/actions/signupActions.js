@@ -8,5 +8,5 @@ import axios from 'axios';
  */
 /*eslint-disable*/
 export function userSignupRequest(userData) {
-  return () => axios.post('/api/v1/user/signup', userData);
+  return () => axios.post('/api/v1/users/signup', userData);
 }

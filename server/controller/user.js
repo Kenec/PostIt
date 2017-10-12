@@ -135,7 +135,7 @@ export default {
               transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                   return res.status(400).send(
-                    { message: 'Unable to send Link to email' });
+                    { error, message: 'Unable to send Link to email' });
                 }
                 return res.status(200).send(
                   { message: 'Password reset link has been sent to your email'

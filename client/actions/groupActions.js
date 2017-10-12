@@ -101,7 +101,7 @@ export function getUsersInGroup(groupId) {
  * @return {json} - axios post response
  */
 export function addUserToGroups(groupId, userId) {
-  return () => axios.post(`/api/v1/group/${groupId}/user`, userId);
+  return () => axios.post(`/api/v1/groups/${groupId}/user`, userId);
 }
 /**
  * @function getUserInfo
@@ -117,7 +117,7 @@ export function getUserInfo(user) {
  * @return {json} - axios post response
  */
 export function createGroup(groupData) {
-  return dispatch => axios.post('/api/v1/group', groupData).then(() => {
+  return dispatch => axios.post('/api/v1/groups', groupData).then(() => {
     dispatch(createGroupAction(groupData));
   }
   );
@@ -128,7 +128,7 @@ export function createGroup(groupData) {
  * @return {json} - axios post response
  */
 export function getUserGroups(user) {
-  return dispatch => axios.post('/api/v1/users/me', user).then((res) => {
+  return dispatch => axios.post('/api/v1/user/groups', user).then((res) => {
     dispatch(getuserGroupsAction(res.data));
   });
 }
@@ -138,7 +138,7 @@ export function getUserGroups(user) {
  * @return {json} - axios post response
  */
 export function getAdminGroups(user) {
-  return dispatch => axios.post('/api/v1/group/creator', user).then((res) => {
+  return dispatch => axios.post('/api/v1/groups/creator', user).then((res) => {
     dispatch(getAdminGroupsAction(res.data));
   });
 }
@@ -149,5 +149,5 @@ export function getAdminGroups(user) {
  * @return {json} - axios post response
  */
 export function removeUserFromGroup(id, payLoad) {
-  return () => axios.post(`/api/v1/group/${id}/removeuser`, payLoad);
+  return () => axios.post(`/api/v1/groups/${id}/users`, payLoad);
 }

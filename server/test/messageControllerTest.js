@@ -17,7 +17,7 @@ describe('Messages', () => {
   let token = '';
   before((done) => { // Before each test we empty the database
     server
-      .post('/api/v1/user/signin')
+      .post('/api/v1/users/signin')
       .send({
         username: 'kene',
         password: 'kene' })
@@ -42,7 +42,7 @@ describe('Messages', () => {
           in the group`,
         (done) => {
           server
-            .get(`/api/v1/group/${groupId}/messages`)
+            .get(`/api/v1/groups/${groupId}/messages`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(404);
@@ -56,7 +56,7 @@ describe('Messages', () => {
           sent and an object return`,
         (done) => {
           server
-            .post(`/api/v1/group/${groupId}/message`)
+            .post(`/api/v1/groups/${groupId}/message`)
             .send({
               token,
               message: 'This is a sample message',
@@ -77,7 +77,7 @@ describe('Messages', () => {
           is sent successfully to a group`,
         (done) => {
           server
-            .get(`/api/v1/group/${groupId}/messages`)
+            .get(`/api/v1/groups/${groupId}/messages`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
@@ -93,7 +93,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/v1/group/${messageId}/notification`)
+            .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
               userId: 1,
@@ -117,7 +117,7 @@ describe('Messages', () => {
         (done) => {
           const messageId = 1;
           server
-            .post(`/api/v1/group/${messageId}/notification`)
+            .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
               userId: 1,

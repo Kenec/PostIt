@@ -68,7 +68,7 @@ export function readByAction(readBy) {
  * @return {json} - axios post respose 
  */
 export function composeMessage(groupId, messageData) {
-  return () => axios.post(`/api/v1/group/${groupId}/message`, messageData);
+  return () => axios.post(`/api/v1/groups/${groupId}/message`, messageData);
 }
 /**
  * @function retrieveMessage
@@ -76,7 +76,7 @@ export function composeMessage(groupId, messageData) {
  * @return {json} - axios post response
  */
 export function retrieveMessage(groupId) {
-  return () => axios.get(`/api/v1/group/${groupId}/messages`);
+  return () => axios.get(`/api/v1/groups/${groupId}/messages`);
 }
 /**
  * @function clearRetrievedMessage
@@ -96,7 +96,7 @@ export function clearRetrievedMessage() {
 export function addNotification(messageId, notificationObj) {
   return () =>
     // make a post request to add a notification
-    axios.post(`/api/v1/group/${messageId}/notification`, notificationObj);
+    axios.post(`/api/v1/groups/${messageId}/notification`, notificationObj);
 }
 /**
  * @function getNotification
@@ -131,7 +131,7 @@ export function updateNotification(messageId, notificationObj) {
  */
 export function updateReadBy(messageId, userAndMessageObj) {
   return () =>
-    axios.post(`/api/v1/group/${messageId}/updateReadBy`, userAndMessageObj);
+    axios.post(`/api/v1/groups/${messageId}/updateReadBy`, userAndMessageObj);
 }
 /**
  * @function getReadBy

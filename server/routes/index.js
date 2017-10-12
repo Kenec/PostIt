@@ -17,78 +17,78 @@ router.get('/', (req, res) => {
 // ******************************* api routes ****************************** //
 // ************************************************************************* //
 
-// ** /api/user/signup **
-router.post('/api/v1/user/signup', userController.create);
+// signup a new user
+router.post('/api/v1/users/signup', userController.create);
 
-// ** /api/user/signin **
-router.post('/api/v1/user/signin', userController.list);
+// signin an existing user
+router.post('/api/v1/users/signin', userController.list);
 
-// routes for request password reset mail
-router.post('/api/v1/user/resetpassword', userController.resetPassword);
+// existing user request for password reset
+router.post('/api/v1/users/resetpassword', userController.resetPassword);
 
 // api route to check for valid token for resetting password
-router.get('/api/v1/user/resetpassword/:token',
+router.get('/api/v1/users/resetpassword/:token',
   userController.checkValidTokenForPasswordReset);
 
-// routes to reset password od a user
-router.post('/api/v1/user/resetpassword/:token',
+// routes to reset password of a user
+router.post('/api/v1/users/resetpassword/:token',
   userController.updatePassword);
 
-// protected routes
+// ****  protected routes ***** //
 
-// ** /api/group **
-router.post('/api/v1/group', jwtAuth, groupController.create);
+// create group
+router.post('/api/v1/groups', jwtAuth, groupController.create);
 
-// ** /api/group/<group id>/user **
-router.post('/api/v1/group/:groupid/user',
+// add user to a group
+router.post('/api/v1/groups/:groupid/user',
   jwtAuth, groupUserController.create);
 
-// ** /api/group/<group id>/user **
-router.post('/api/v1/group/creator', jwtAuth,
+// api route to remove user from the group
+router.post('/api/v1/groups/:id/users', jwtAuth,
+  groupUserController.removeUserFromGroup);
+
+// fetch all group created by a user
+router.post('/api/v1/groups/creator', jwtAuth,
   groupController.fetchGroupByCreator);
 
-// *** To get the groups of a looged in user
-router.post('/api/v1/users/me/', jwtAuth,
-  groupUserController.fetchUserAndGroup);
+// retrieve all groups a user belonged to
+router.post('/api/v1/user/groups', jwtAuth,
+  groupUserController.fetchUsersGroup);
 
-// *** To get the groups of a looged in user
+// retrieve a user by username
 router.post('/api/v1/users/username', jwtAuth,
   userController.FetchMemberByName);
 
-// *** api route to get all users *** //
+// search users
 router.post('/api/v1/users/:offset', jwtAuth,
   groupUserController.searchUser);
 
-// ** /api/group/:groupid **
-router.get('/api/v1/group/:groupid', jwtAuth,
+// fetch a group by group id
+router.get('/api/v1/groups/:groupid', jwtAuth,
   groupController.retrieve);
 
-// *** /api/groups/:id/users
+// fetch members of a group
 router.get('/api/v1/groups/:id/users', jwtAuth,
   groupUserController.fetchMembersOfGroup);
 
-// ** /api/group **
-router.get('/api/v1/group', jwtAuth,
+// get all groups
+router.get('/api/v1/groups', jwtAuth,
   groupUserController.list);
 
-// api route to remove user from the group
-router.post('/api/v1/group/:id/removeuser', jwtAuth,
-  groupUserController.removeUserFromGroup);
-
-// ** /api/group/:groupid/messages **
-router.post('/api/v1/group/:groupid/message',
+// create new message
+router.post('/api/v1/groups/:groupid/message',
   jwtAuth, messageController.create);
 
-// ** /api/group/:groupid/messages **
-router.get('/api/v1/group/:groupid/messages',
+// get messages in a group
+router.get('/api/v1/groups/:groupid/messages',
   jwtAuth, messageController.retrieve);
 
 // api route to add notification when a message is sent
-router.post('/api/v1/group/:messageid/notification', jwtAuth,
+router.post('/api/v1/groups/:messageid/notification', jwtAuth,
   messageController.addMessageNotification);
 
 // api route to update readBy Column in the message table
-router.post('/api/v1/group/:messageid/updateReadBy', jwtAuth,
+router.post('/api/v1/groups/:messageid/updateReadBy', jwtAuth,
   messageController.updateReadBy);
 
 // api route to get notification when a message is sent

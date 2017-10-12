@@ -97,7 +97,7 @@ class MessageDetailBoard extends Component {
    * @param {array} existingReaders  
    * @return {boolean} foundUser
    */
-  checkIfUserHaveReadMessage(existingReaders) {
+  readBy(existingReaders) {
     let userId;
     let foundUser = false;
     if (existingReaders) {
@@ -141,7 +141,7 @@ class MessageDetailBoard extends Component {
         this.props.updateNotification(groupMessage.id,
           { userId: this.state.sentBy, readStatus: 1 });
         // update the ReadBy column if the user have not read this message
-        if (!this.checkIfUserHaveReadMessage(groupMessage.ReadBy)) {
+        if (!this.readBy(groupMessage.ReadBy)) {
           // fire an action to update the readBy column
           this.props.updateReadBy(groupMessage.id,
             { readBy: this.state.sentBy });

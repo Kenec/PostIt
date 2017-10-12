@@ -17,7 +17,7 @@ describe('userGroups', () => {
   let token = '';
   before((done) => { // Before each test we empty the database
     server
-      .post('/api/v1/user/signin')
+      .post('/api/v1/users/signin')
       .send({
         username: 'kene',
         password: 'kene' })
@@ -38,7 +38,7 @@ describe('userGroups', () => {
       it('should return status code 201 and  res of object on sucess',
         (done) => {
           server
-            .post(`/api/v1/group/${groupId}/user`)
+            .post(`/api/v1/groups/${groupId}/user`)
             .send({
               token,
               userId: '1'
@@ -56,7 +56,7 @@ describe('userGroups', () => {
       it('should return status code 404 and res of object on a failure',
         (done) => {
           server
-            .post(`/api/v1/group/${groupId}/user`)
+            .post(`/api/v1/groups/${groupId}/user`)
             .send({
               token,
               userId: 3
@@ -74,7 +74,7 @@ describe('userGroups', () => {
          by a user`,
         (done) => {
           server
-            .post('/api/v1/users/me')
+            .post('/api/v1/users/groups')
             .send({
               token,
               username: 'kene',
@@ -120,7 +120,7 @@ describe('userGroups', () => {
             an array of objects of all groups`,
         (done) => {
           server
-            .get('/api/v1/group')
+            .get('/api/v1/groups')
             .send({
               token,
             })
@@ -134,7 +134,7 @@ describe('userGroups', () => {
               an object of users in a group by groupId`,
         (done) => {
           server
-            .get(`/api/v1/groups/${groupId}/users`)
+            .get(`/api/v1/groupss/${groupId}/users`)
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
@@ -146,7 +146,7 @@ describe('userGroups', () => {
           an object of error message when an invalid groupId is passed`,
         (done) => {
           server
-            .get('/api/v1/groups/100/users')
+            .get('/api/v1/groupss/100/users')
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(400);

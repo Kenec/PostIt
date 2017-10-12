@@ -46,14 +46,14 @@ export default {
   // retreive a user and all the group he belongs to
 
   /**
-   * fetchUserAndGroup - method to retrieve a user by username and all the
+   * fetchUsersGroup - method to retrieve a user by username and all the
    * Groups that he belongs to
    *
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
    * @return {json}     returns json reponse
    */
-  fetchUserAndGroup(req, res) {
+  fetchUsersGroup(req, res) {
     const username = req.body.username;
 
     return Users
