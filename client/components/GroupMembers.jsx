@@ -89,9 +89,9 @@ class GroupMembers extends Component {
    * @return {void}
    */
   render() {
-    const { groups, groupsByUser, usersInGroup } = this.props.group;
+    const { groups, groupsBelonged, usersInGroup } = this.props.group;
 
-    if (!groups || !groupsByUser || !usersInGroup) {
+    if (!groups || !groupsBelonged || !usersInGroup) {
       return (
         <h4>Loading ...</h4>
       );
@@ -144,7 +144,7 @@ GroupMembers.propTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message
   };
 }

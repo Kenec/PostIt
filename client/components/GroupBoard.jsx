@@ -9,7 +9,7 @@ import { Link } from 'react-router';
 // import moment from 'moment';
 import FilterMessages from './FilterMessages';
 import { getUserGroups,
-  getGroupsCreatedByUser,
+  getAdminGroups,
   getUsersInGroup
 } from '../actions/groupActions';
 import { retrieveMessage,
@@ -19,7 +19,7 @@ import { retrieveMessage,
   addNotification,
   updateNotification,
   getNotification,
-  getUsersWhoReadMessage
+  getReadBy
 } from '../actions/messageActions';
 
 /**
@@ -238,12 +238,12 @@ class GroupBoard extends Component {
    */
   render() {
     const { errors, success, retrieveMessageError } = this.state;
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
     const { messageData } = this.props.message;
     const groupName = this.props.groupName;
     // const groupId = this.props.groupId;
 
-    if (!groups || !groupsByUser || groupName === 'No Group Found') {
+    if (!groups || !groupsBelonged || groupName === 'No Group Found') {
       return (
         <h4>Loading ...</h4>
       );
@@ -413,7 +413,7 @@ GroupBoard.propTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message
   };
 }
@@ -422,12 +422,12 @@ export default connect(mapStateToProps,
   { addNotification,
     getUserGroups,
     clearRetrievedMessageAction,
-    getGroupsCreatedByUser,
+    getAdminGroups,
     retrieveMessageAction,
     composeMessage,
     getUsersInGroup,
     retrieveMessage,
     updateNotification,
     getNotification,
-    getUsersWhoReadMessage,
+    getReadBy,
   })(GroupBoard);

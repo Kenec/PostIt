@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../actions/signinActions';
 import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+  getAdminGroups } from '../actions/groupActions';
 
 /**
  * @class NavigationBarMenu
@@ -24,7 +24,7 @@ class NavigationBarMenu extends Component {
   componentWillMount() {
     const { user } = this.props.auth;
     this.props.getUserGroups({ username: user.username });
-    this.props.getGroupsCreatedByUser({ userId: user.id });
+    this.props.getAdminGroups({ userId: user.id });
   }
   /**
    * 
@@ -81,7 +81,7 @@ NavigationBarMenu.propTypes = {
   auth: React.PropTypes.object.isRequired,
   logout: React.PropTypes.func.isRequired,
   getUserGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  getAdminGroups: React.PropTypes.func.isRequired,
 
 };
 NavigationBarMenu.contextTypes = {
@@ -94,7 +94,7 @@ NavigationBarMenu.contextTypes = {
  */
 function mapStateToProps(state) {
   return {
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     group: state.group
   };
 }
@@ -102,4 +102,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps,
   { logout,
     getUserGroups,
-    getGroupsCreatedByUser })(NavigationBarMenu);
+    getAdminGroups })(NavigationBarMenu);

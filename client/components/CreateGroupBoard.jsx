@@ -148,7 +148,7 @@ CreateGroupBoard.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     group: state.group
   };
 }

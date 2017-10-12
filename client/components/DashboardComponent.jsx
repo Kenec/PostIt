@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import { Link } from 'react-router';
 import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+  getAdminGroups } from '../actions/groupActions';
 import { retrieveMessage,
   getNotification } from '../actions/messageActions';
 
@@ -28,10 +28,10 @@ class DashboardComponent extends Component {
    */
   render() {
     // deconstruct variable from props
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
     const { notificationData } = this.props.message;
 
-    if (!groups || !groupsByUser || !notificationData) {
+    if (!groups || !groupsBelonged || !notificationData) {
       return (
         <h4>Loading ...</h4>
       );
@@ -100,12 +100,12 @@ DashboardComponent.propTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message
   };
 }
 export default connect(mapStateToProps,
   { getNotification,
     getUserGroups,
-    getGroupsCreatedByUser,
+    getAdminGroups,
     retrieveMessage })(DashboardComponent);

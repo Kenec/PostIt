@@ -76,21 +76,21 @@ describe('Group reducers', () => {
       expect(group(state, action)).toEqual({ groups: action.groups });
     });
   });
-  // Test GET_GROUPS_CREATED_BY_USER
+  // Test GET_ADMIN_GROUPS
   // action for getting groups created by a user
-  describe(`When GET_GROUPS_CREATED_BY_USER
+  describe(`When GET_ADMIN_GROUPS
               action type is fired from action`, () => {
       it('groups a user created should be added to the store', () => {
         const state = {};
         const action = {
-          type: types.GET_GROUPS_CREATED_BY_USER,
-          groupsByUser: {
+          type: types.GET_ADMIN_GROUPS,
+          groupsBelonged: {
             id: 1,
             groupName: 'Group'
           }
         };
         expect(group(state, action))
-          .toEqual({ groupsByUser: action.groupsByUser });
+          .toEqual({ groupsBelonged: action.groupsBelonged });
       });
     });
   // Test GET_USERS_IN_GROUP

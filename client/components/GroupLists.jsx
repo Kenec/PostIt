@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+  getAdminGroups } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
 
 /**
- * @class LeftSideGroupMenu
+ * @class GroupLists
  */
-class LeftSideGroupMenu extends Component {
+class GroupLists extends Component {
   /**
    * @return {void}
    */
@@ -20,18 +20,18 @@ class LeftSideGroupMenu extends Component {
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
 
-    if (!groups || !groupsByUser) {
+    if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
       );
     }
-    groupsByUser.map(group => (
+    groupsBelonged.map(group => (
       <li key={group.id} value={group.id}>
         <Link to="#">{group.groupName}</Link>
       </li>));
-    const groupsBelongedList = groups.groups.map(group => (
+    const userGroups = groups.groups.map(group => (
       <Link to={`/group/${group.id}`} key={group.id}>
         <div className="well well-sm no_spacing">
           <span id={group.id}>{group.groupName}</span>
@@ -51,14 +51,14 @@ class LeftSideGroupMenu extends Component {
         </div>
         <div className="well well-sm group_board">
           <ul>
-            {groupsBelongedList}
+            {userGroups}
           </ul>
         </div>
       </div>
     );
   }
 }
-LeftSideGroupMenu.propTypes = {
+GroupLists.propTypes = {
   group: React.PropTypes.object.isRequired
 };
 /**
@@ -69,10 +69,10 @@ LeftSideGroupMenu.propTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
   };
 }
 export default connect(mapStateToProps,
   { getUserGroups,
-    getGroupsCreatedByUser,
-    retrieveMessage })(LeftSideGroupMenu);
+    getAdminGroups,
+    retrieveMessage })(GroupLists);

@@ -2,32 +2,26 @@
 import axios from 'axios';
 
 /**
- * forgotPasswordRequest - description
- *
- * @param  {string} email The email of the user requesting for change
- * of password
- * @return {type}          description
+ * @function forgotPasswordRequest
+ * @param  {string} email - user email requesting password reset
+ * @return {json} - axios post response
  */
 export function forgotPasswordRequest(email) {
   return () => axios.post('/api/v1/user/resetpassword', email);
 }
-
 /**
- * ChangePasswordWithValidToken - description
- *
- * @param  {string} token token
- * @return {type}       description
+ * @function isValidToken
+ * @param  {string} token - token generated for the user for password reset
+ * @return {json} - axios post response
  */
-export function checkForValidToken(token) {
+export function isValidToken(token) {
   return () => axios.get(`/api/v1/user/resetpassword/${token}`);
 }
-
 /**
- * updatePassword - update password
- *
- * @param  {string} token description
- * @param {object} updatePasswordDetail contains the email and the new password
- * @return {type}       description
+ * @function updatePassword
+ * @param  {string} token - token generated for the user for password reset
+ * @param {object} updatePasswordDetail - contains the email and the new password
+ * @return {json} - axios post response
  */
 export function updatePassword(token, updatePasswordDetail) {
   return () => axios.post(`/api/v1/user/resetpassword/${token}`,

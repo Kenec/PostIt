@@ -3,8 +3,7 @@ import findIndex from 'lodash/findIndex';
 import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
 
 /**
- * flashMessages - flash message reducer
- *
+ * @function flashMessages
  * @param  {array} state = []  state of the flash message reducer
  * @param  {object} action = {} action dispatched
  * @return {array}             returns array of state object

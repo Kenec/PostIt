@@ -1,16 +1,15 @@
 // import
 import axios from 'axios';
 import { COMPOSE_MESSAGE,
-  GET_NOTIFICATION, RETRIEVE_MESSAGE,
-  USERS_WHO_HAVE_READ_MESSAGE
+  GET_NOTIFICATION,
+  RETRIEVE_MESSAGE,
+  READ_BY
 } from './types';
+
 /**
- * compose message action.
- * @constructor
- * @param {object} messageData - data of message to be added to the message
- * board
- * .
- *
+ * @function composeMessageAction
+ * @param {object} messageData - message to be added
+ * @return {object} - object of type COMPOSE_MESSAGE and messageData
  */
 export function composeMessageAction(messageData) {
   return {
@@ -18,12 +17,10 @@ export function composeMessageAction(messageData) {
     messageData
   };
 }
-
 /**
- * addNotificationAction - description
- *
- * @param  {object} notificationData description
- * @return {type}                  description
+ * @function getNotificationAction
+ * @param  {object} notificationData - notification
+ * @return {object} return object of type GET_NOTIFICATION and notificationData
  */
 export function getNotificationAction(notificationData) {
   return {
@@ -31,14 +28,10 @@ export function getNotificationAction(notificationData) {
     notificationData
   };
 }
-
 /**
- * clear retrieved message.
- * @constructor
- * @param {object} messageData - data of message to be added to the message
- * board
- * .
- *
+ * @function clearRetrievedMessageAction
+ * @param {object} messageData - messageData of  to be cleared
+ * @return {object} - object of type COMPOSE_MESSAGE and messageData
  */
 export function clearRetrievedMessageAction() {
   return {
@@ -47,12 +40,9 @@ export function clearRetrievedMessageAction() {
   };
 }
 /**
- * retrieve message action.
- * @constructor
- * @param {object} retrieveMessages - data of message to retrieved
- * board
- * .
- *
+ * @function retrieveMessageAction
+ * @param {object} retrieveMessages - message to retrieved board
+ * @return {object} - object of type RETRIEVE_MESSAGE
  */
 export function retrieveMessageAction(retrieveMessages) {
   return {
@@ -61,73 +51,57 @@ export function retrieveMessageAction(retrieveMessages) {
   };
 }
 /**
- * get users who have read message action.
- * @constructor
- * @param {INTEGER} usersWhoHaveReadMessage - users id of those who have
- * read messages
- * .
- *
+ * @function readByAction
+ * @param {integer} readBy - users ids of message readers
+ * @return {object} object of type READ_BY and readBy
  */
-export function getUsersWhoReadMessageAction(usersWhoHaveReadMessage) {
+export function readByAction(readBy) {
   return {
-    type: USERS_WHO_HAVE_READ_MESSAGE,
-    usersWhoHaveReadMessage
+    type: READ_BY,
+    readBy
   };
 }
-
 /**
- * compose messge action.
- * @constructor
+ * @function composeMessage
  * @param {string} groupId - group Id
- * @param {object} messageData - message data from the UI
- * board
- * .
- *
+ * @param {object} messageData - message to be posted
+ * @return {json} - axios post respose 
  */
 export function composeMessage(groupId, messageData) {
   return () => axios.post(`/api/v1/group/${groupId}/message`, messageData);
 }
-
 /**
- * compose messge action.
- * @constructor
+ * @function retrieveMessage
  * @param {string} groupId - group Id
- * board
- * .
- *
+ * @return {json} - axios post response
  */
 export function retrieveMessage(groupId) {
   return () => axios.get(`/api/v1/group/${groupId}/messages`);
 }
-
-
 /**
- * clearRetrievedMessage - description
- *
- * @return {function}  description
+ * @function clearRetrievedMessage
+ * @return {object} - returns empty messageData object
  */
 export function clearRetrievedMessage() {
   return (dispatch) => {
     dispatch(clearRetrievedMessageAction());
   };
 }
-
 /**
- * addNotification - description
- *@param  {INTEGER} messageId the message id
+ * @function addNotification
+ * @param  {integer} messageId the message id
  * @param  {object} notificationObj notification object
- * @return {type}                  description
+ * @return {type} description
  */
 export function addNotification(messageId, notificationObj) {
   return () =>
     // make a post request to add a notification
     axios.post(`/api/v1/group/${messageId}/notification`, notificationObj);
 }
-
 /**
- * getNotification - description
+ * @function getNotification
  * @param {userId} userId user id to be used in fetching notification
- * @return {type} description
+ * @return {object} notification object
  */
 export function getNotification(userId) {
   return dispatch =>
@@ -138,41 +112,37 @@ export function getNotification(userId) {
         dispatch(getNotificationAction(res.data));
       });
 }
-
 /**
- * addNotification - description
- *@param  {INTEGER} messageId the message id
+ * @function updateNotification
+ * @param  {integer} messageId the message id
  * @param  {object} notificationObj notification object
- * @return {type}                  description
+ * @return {json}  axios post response
  */
 export function updateNotification(messageId, notificationObj) {
   return () =>
     // make a post request to update the notification table
     axios.post(`/api/v1/user/${messageId}/notification`, notificationObj);
 }
-
-
 /**
- * updateReadBy - this method updates the readby column in the message table
- * @param {INTEGER} messageId the message id
- * @param  {object} userAndMessageObj description
- * @return {type}                   description
+ * @function updateReadBy
+ * @param {integer} messageId the message id
+ * @param  {object} userAndMessageObj object of user nd message
+ * @return {json} axios post response
  */
 export function updateReadBy(messageId, userAndMessageObj) {
   return () =>
     axios.post(`/api/v1/group/${messageId}/updateReadBy`, userAndMessageObj);
 }
-
 /**
- * getUsersWhoReadMessage - description
- *@param  {INTEGER} messageId the message id
- * @return {type}                  description
+ * @function getReadBy
+ * @param  {integer} messageId the message id
+ * @return {object} description
  */
-export function getUsersWhoReadMessage(messageId) {
+export function getReadBy(messageId) {
   return dispatch =>
     // make a post request to update the notification table
     axios.post(`/api/v1/users/${messageId}/read`)
       .then((res) => {
-        dispatch(getUsersWhoReadMessageAction(res.data));
+        dispatch(readByAction(res.data));
       });
 }

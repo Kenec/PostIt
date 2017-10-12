@@ -9,7 +9,7 @@ import SearchMember from './SearchMember';
 import GroupMembers from './GroupMembers';
 import { retrieveMessage } from '../actions/messageActions';
 import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+  getAdminGroups } from '../actions/groupActions';
 
 /**
  * @class Group
@@ -20,27 +20,25 @@ class Group extends Component {
    */
   componentWillMount() {
     const { user } = this.props.auth;
-    // if (isAuthenticated) {
     this.setState({
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
+      sentBy: user.id, // jwt.decode(localStorage.getItem('jwtToken')).id,
       priority_level: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
-    this.props.getGroupsCreatedByUser({ userId: user.id });
-    // }
+    this.props.getAdminGroups({ userId: user.id });
   }
 
   /**
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
     const id = this.props.params.groupid;
 
     let groupName;
     let found = false;
 
-    if (!groups || !groupsByUser) {
+    if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
       );
@@ -56,15 +54,12 @@ class Group extends Component {
 
     if (!found) {
       groupName = 'No Group Found';
-      return (
-        this.context.router.push('/dashboard')
-      );
+      this.context.router.push('/notFound');
     }
 
     return (
       <div className="content">
         <NavigationBarMenu />
-
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
@@ -78,14 +73,13 @@ class Group extends Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }
 }
 Group.propTypes = {
   getUserGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  getAdminGroups: React.PropTypes.func.isRequired,
   auth: React.PropTypes.object.isRequired,
   group: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired
@@ -101,11 +95,11 @@ Group.contextTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message,
   };
 }
 export default connect(mapStateToProps,
   { getUserGroups,
-    getGroupsCreatedByUser,
+    getAdminGroups,
     retrieveMessage })(Group);

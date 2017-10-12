@@ -29,10 +29,19 @@ export class Signin extends Component {
     this.onChange = this.onChange.bind(this);
   }
   /**
- * 
- * @param {Event} event
- * @return {void}
- */
+   * @return {void} void
+   */
+  componentWillMount() {
+    const { isAuthenticated } = this.props.auth;
+    if (isAuthenticated) {
+      this.context.router.push('/dashboard');
+    }
+  }
+  /**
+   * 
+   * @param {Event} event
+   * @return {void}
+   */
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -74,12 +83,7 @@ export class Signin extends Component {
    * @return {DOM} DOM Component
    */
   render() {
-    const { isAuthenticated } = this.props.auth;
-    if (isAuthenticated) {
-      this.context.router.push('/dashboard');
-    }
     const { errors, isLoading } = this.state;
-
     const messages = this.props.messages.map(message =>
       (<div className="alert alert-success" key={message.id}>
         <button
@@ -203,7 +207,6 @@ Signin.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 /**
- * 
  * @param {object} state
  * @return {object} state object 
  */
@@ -211,7 +214,7 @@ function mapStateToProps(state) {
   return {
     messages: state.flashMessages,
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
   };
 }
 export default connect(mapStateToProps,

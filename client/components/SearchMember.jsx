@@ -142,10 +142,10 @@ class SearchMember extends Component {
  * @return {DOM} DOM Component
  */
   render() {
-    const { groups, groupsByUser, searchedUsers, usersInGroup } = this.props.group;
+    const { groups, groupsBelonged, searchedUsers, usersInGroup } = this.props.group;
     const { errors, success } = this.state;
 
-    if (!groups || !groupsByUser) {
+    if (!groups || !groupsBelonged) {
       return (
         <h2>Loading ...</h2>
       );
@@ -242,7 +242,7 @@ SearchMember.propTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
   };
 }
 export default connect(mapStateToProps,

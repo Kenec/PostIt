@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { Link } from 'react-router';
 import moment from 'moment';
 import { getUserGroups,
-  getGroupsCreatedByUser,
+  getAdminGroups,
   getUsersInGroup
 } from '../actions/groupActions';
 import { retrieveMessage,
@@ -16,7 +16,7 @@ import { retrieveMessage,
   addNotification,
   updateNotification,
   getNotification,
-  getUsersWhoReadMessage,
+  getReadBy,
   updateReadBy
 } from '../actions/messageActions';
 
@@ -50,7 +50,7 @@ class MessageDetailBoard extends Component {
    */
   componentWillMount() {
     const { isAuthenticated } = this.props.auth;
-    this.props.getUsersWhoReadMessage(this.props.messageId);
+    this.props.getReadBy(this.props.messageId);
     this.props.clearRetrievedMessageAction();
     if (isAuthenticated) {
       this.setState({
@@ -117,21 +117,21 @@ class MessageDetailBoard extends Component {
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
-    const { messageData, usersWhoHaveReadMessage } = this.props.message;
+    const { groups, groupsBelonged } = this.props.group;
+    const { messageData, readBy } = this.props.message;
     const groupName = this.props.groupName;
 
     if (!groups ||
-       !groupsByUser ||
+       !groupsBelonged ||
        groupName === 'No Group Found' ||
-       !messageData || !usersWhoHaveReadMessage) {
+       !messageData || !readBy) {
       return (
         <h4>Loading....</h4>
       );
     }
     // retrieve all users who have read this message
     let allUsersWhoReadMessages = '';
-    usersWhoHaveReadMessage.messageReadUsers.map((user) => {
+    readBy.messageReadUsers.map((user) => {
       allUsersWhoReadMessages += `@${user.Reader.username} `;
     });
     // retrieve full message by id
@@ -215,7 +215,7 @@ MessageDetailBoard.propTypes = {
   updateNotification: React.PropTypes.func.isRequired,
   updateReadBy: React.PropTypes.func.isRequired,
   retrieveMessageAction: React.PropTypes.func.isRequired,
-  getUsersWhoReadMessage: React.PropTypes.func.isRequired,
+  getReadBy: React.PropTypes.func.isRequired,
   message: React.PropTypes.object.isRequired,
   messageId: React.PropTypes.string.isRequired,
 };
@@ -230,7 +230,7 @@ MessageDetailBoard.contextTypes = {
 function mapStateToProps(state) {
   return {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message
   };
 }
@@ -238,12 +238,12 @@ export default connect(mapStateToProps,
   { addNotification,
     getUserGroups,
     clearRetrievedMessageAction,
-    getGroupsCreatedByUser,
+    getAdminGroups,
     retrieveMessageAction,
     composeMessage,
     getUsersInGroup,
     retrieveMessage,
-    getUsersWhoReadMessage,
+    getReadBy,
     updateNotification,
     getNotification,
     updateReadBy

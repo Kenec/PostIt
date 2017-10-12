@@ -67,7 +67,7 @@ export default function (ComposedComponent) {
  */
   function mapStateToProps(state) {
     return {
-      isAuthenticated: state.userLoginReducer.isAuthenticated,
+      isAuthenticated: state.userLogin.isAuthenticated,
     };
   }
 

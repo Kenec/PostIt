@@ -4,7 +4,6 @@ import Footer from './Footer';
 import '../scss/main.scss';
 
 /**
- * 
  * @function App 
  * @param {*} props
  * @return {DOM} DOM element 

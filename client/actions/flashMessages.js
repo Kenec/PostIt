@@ -1,10 +1,10 @@
 // import
 import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from './types';
+
 /**
- * addFlashMessage - description
- *
- * @param  {string} message message to be added
- * @return {object}         message and types
+ * @function addFlashMessage
+ * @param  {string} message - message to be added
+ * @return {object} - message and types
  */
 export function addFlashMessage(message) {
   return {
@@ -12,11 +12,9 @@ export function addFlashMessage(message) {
     message
   };
 }
-
 /**
- * deleteFlashMessage - description
- *
- * @param  {integer} id message id
+ * @function deleteFlashMessage
+ * @param  {number} id  - message id
  * @return {object}  id and type
  */
 export function deleteFlashMessage(id) {

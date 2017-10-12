@@ -4,16 +4,14 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import NavigationBar from './NavigationBar';
 import validateInput from '../../server/shared/validations/validateInput';
-import { checkForValidToken,
+import { isValidToken,
   updatePassword } from '../actions/forgotPasswordAction';
 
 /**
  * @class ChangePassword
- * 
  */
 class ChangePassword extends Component {
   /**
-   * 
    * @param {*} props 
    */
   constructor(props) {
@@ -36,7 +34,7 @@ class ChangePassword extends Component {
     // get token from the params and check if it a vdlid token
     const token = this.props.params.token;
     // dispatch an action to check for a valid token
-    this.props.checkForValidToken(token).then(
+    this.props.isValidToken(token).then(
       () => {
         // do nothing if the token is valid
       },
@@ -47,7 +45,6 @@ class ChangePassword extends Component {
     );
   }
   /**
-   * 
    * @param {Event} event 
    * @return {void} void
    */
@@ -59,10 +56,9 @@ class ChangePassword extends Component {
   }
 
   /**
- * 
- * @param {Event} event
- * @return {void} void 
- */
+   * @param {Event} event
+   * @return {void} void 
+   */
   onSubmit(event) {
     // prevent the browser from refreshing or carrying out another action
     event.preventDefault();
@@ -73,12 +69,12 @@ class ChangePassword extends Component {
       // get token from the props.params
       const token = this.props.params.token;
       // create a variable for updating password
-      const passwordUpdateDetails = {
+      const NewPassword = {
         password: this.state.password,
         token,
       };
       // dispatch updatePassword action with token and update password detail
-      this.props.updatePassword(token, passwordUpdateDetails)
+      this.props.updatePassword(token, NewPassword)
         .then(
           // if it return a success
           ({ data }) => {
@@ -95,22 +91,17 @@ class ChangePassword extends Component {
         });
     }
   }
-
-
   /**
    * @function isValid
    * @return { boolean } isValid
    */
   isValid() {
     const { errors, isValid } = validateInput(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
-
   /**
    * @return {DOM} DOM component
    */
@@ -211,7 +202,7 @@ class ChangePassword extends Component {
   }
 }
 ChangePassword.propTypes = {
-  checkForValidToken: React.PropTypes.func.isRequired,
+  isValidToken: React.PropTypes.func.isRequired,
   updatePassword: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
 };
@@ -220,4 +211,4 @@ ChangePassword.contextTypes = {
 };
 
 export default connect(null,
-  { checkForValidToken, updatePassword })(ChangePassword);
+  { isValidToken, updatePassword })(ChangePassword);

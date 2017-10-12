@@ -58,18 +58,18 @@ describe('Forgot Password Action', () => {
       });
     });
   });
-  // should have checkForValidToken method
-  it('should have checkForValidToken action creator', () => {
+  // should have isValidToken method
+  it('should have isValidToken action creator', () => {
     const token = 'gibrishastoken';
-    expect((typeof forgotPassword.checkForValidToken(token))).toEqual('function');
+    expect((typeof forgotPassword.isValidToken(token))).toEqual('function');
   });
-  // should have checkForValidToken method return an asyn action of get request
-  it('should have checkForValidToken return result of an async action of get request', () => {
+  // should have isValidToken method return an asyn action of get request
+  it('should have isValidToken return result of an async action of get request', () => {
     const store = mockStore({});
     const token = 'thisisgibrishtoken';
     mock.onGet(`/api/v1/user/resetpassword/${token}`)
       .reply(200, { message: true });
-    return store.dispatch(forgotPassword.checkForValidToken(token)).then((message) => {
+    return store.dispatch(forgotPassword.isValidToken(token)).then((message) => {
       // return of async actions
       expect(message.data).toEqual({
         message: true
@@ -129,11 +129,11 @@ describe('Group Action', () => {
       users: usersData
     });
   });
-  // should have getGroupsCreatedByUserAction method
-  it('should have getGroupsCreatedByUserAction action creator', () => {
-    expect((group.getGroupsCreatedByUserAction(usersData))).toEqual({
-      type: types.GET_GROUPS_CREATED_BY_USER,
-      groupsByUser: usersData
+  // should have getAdminGroupsAction method
+  it('should have getAdminGroupsAction action creator', () => {
+    expect((group.getAdminGroupsAction(usersData))).toEqual({
+      type: types.GET_ADMIN_GROUPS,
+      groupsBelonged: usersData
     });
   });
   // should have getUsersInGroupAction method
@@ -238,19 +238,19 @@ describe('Group Action', () => {
       }]);
     });
   });
-  // should have dispatch an async action when getGroupsCreatedByUser method is called
-  it('should dispatch an async action when getGroupsCreatedByUser is called', () => {
+  // should have dispatch an async action when getAdminGroups method is called
+  it('should dispatch an async action when getAdminGroups is called', () => {
     const store = mockStore({});
     const usersGroup = {
       username: 'Kene',
       groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
     mock.onPost('/api/v1/group/creator', usersGroup.username)
       .reply(200, usersGroup);
-    return store.dispatch(group.getGroupsCreatedByUser(usersGroup.username)).then(() => {
+    return store.dispatch(group.getAdminGroups(usersGroup.username)).then(() => {
       // return of async actions
       expect(store.getActions()).toEqual([{
-        type: types.GET_GROUPS_CREATED_BY_USER,
-        groupsByUser: usersGroup
+        type: types.GET_ADMIN_GROUPS,
+        groupsBelonged: usersGroup
       }]);
     });
   });
@@ -324,10 +324,10 @@ describe('Message Action', () => {
       retrieveMessages
     });
   });
-  // should have getUsersWhoReadMessageAction method
-  it('should have getUsersWhoReadMessageAction action creator', () => {
-    expect((message.getUsersWhoReadMessageAction(usersWhoHaveReadMessage))).toEqual({
-      type: types.USERS_WHO_HAVE_READ_MESSAGE,
+  // should have readByAction method
+  it('should have readByAction action creator', () => {
+    expect((message.readByAction(usersWhoHaveReadMessage))).toEqual({
+      type: types.READ_BY,
       usersWhoHaveReadMessage
     });
   });
@@ -432,16 +432,16 @@ describe('Message Action', () => {
         expect(result.data).toEqual(messageData[0].readBy);
       });
   });
-  // should have dispatch an async action when getUsersWhoReadMessage method is called
-  it('should dispatch an async action when getUsersWhoReadMessage is called', () => {
+  // should have dispatch an async action when getReadBy method is called
+  it('should dispatch an async action when getReadBy is called', () => {
     const store = mockStore({});
     mock.onPost(`/api/v1/users/${messageData[0].messageId}/read`)
       .reply(200, messageData[0].readBy);
-    return store.dispatch(message.getUsersWhoReadMessage(messageData[0].messageId))
+    return store.dispatch(message.getReadBy(messageData[0].messageId))
       .then(() => {
       // return of async actions
         expect(store.getActions()).toEqual([{
-          type: types.USERS_WHO_HAVE_READ_MESSAGE,
+          type: types.READ_BY,
           usersWhoHaveReadMessage: 'Kene, Francis, Love'
         }]);
       });

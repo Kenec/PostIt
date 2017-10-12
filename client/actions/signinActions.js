@@ -7,10 +7,9 @@ import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { SET_CURRENT_USER } from './types';
 
 /**
- * setCurrentUser - sets the current user
- *
+ * @function setCurrentUser
  * @param  {object} user description
- * @return {object}      user object
+ * @return {object} - object of type SET_CURRENT_USER and user
  */
 export function setCurrentUser(user) {
   return {
@@ -18,12 +17,9 @@ export function setCurrentUser(user) {
     user
   };
 }
-
-
 /**
- * logout - description
- *
- * @return {object}  description
+ * @function logout
+ * @return {object} - object user
  */
 export function logout() {
   return (dispatch) => {
@@ -32,11 +28,9 @@ export function logout() {
     dispatch(setCurrentUser({}));
   };
 }
-
 /**
- * logout - description
- *
- * @return {object}  description
+ * @function isLoggedIn
+ * @return {boolean} - isUserLoggedIn
  */
 export function isLoggedIn() {
   let isUserLoggedIn = false;
@@ -46,15 +40,13 @@ export function isLoggedIn() {
   }
   return isUserLoggedIn;
 }
-
 /**
- * userSigninRequestAction - description
- *
- * @param  {object} data userdata for firing signin action
- * @return {type}      description
+ * @function userSigninRequestAction
+ * @param  {object} userData userdata for firing signin action
+ * @return {object} - user
  */
-export function userSigninRequestAction(data) {
-  return dispatch => axios.post('/api/v1/user/signin', data).then((res) => {
+export function userSigninRequestAction(userData) {
+  return dispatch => axios.post('/api/v1/user/signin', userData).then((res) => {
     const token = res.data.token;
     localStorage.setItem('jwtToken', token);
     setAuthorizationToken(token);

@@ -12,14 +12,12 @@ import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { setCurrentUser } from '../actions/signinActions';
 
 const initialState = {};
-
 const store = configureStore(initialState);
 
 if (localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken);
   store.dispatch(setCurrentUser(jwt.decode(localStorage.jwtToken)));
 }
-
 
 render(
   <Provider store={store}>

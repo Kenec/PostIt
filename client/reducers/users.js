@@ -5,17 +5,13 @@ const initialState = {
   isAuthenticated: false,
   user: {}
 };
-
-
 /**
- * userLoginReducer - user login reducer methof
- *
+ * @function userLogin
  * @param  {object} state = initialState of the reducer
- * @param  {object} action = {}          the action type that is dispatched
- * @return {object}                      returns object of isAuthenticated
- *                                       and user
+ * @param  {object} action = {} the action type that is dispatched
+ * @return {object}  returns object of isAuthenticated and user
  */
-export default function userLoginReducer(state = initialState, action = {}) {
+export default function userLogin(state = initialState, action = {}) {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {

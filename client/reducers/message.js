@@ -1,18 +1,18 @@
-import { COMPOSE_MESSAGE,
-  GET_NOTIFICATION, RETRIEVE_MESSAGE,
-  USERS_WHO_HAVE_READ_MESSAGE,
+import {
+  COMPOSE_MESSAGE,
+  GET_NOTIFICATION,
+  RETRIEVE_MESSAGE,
+  READ_BY,
   CLEAR_RETRIEVED_MESSAGE,
   UPDATE_NOTIFICATION,
   CLEAR_NOTIFICATION
 } from '../actions/types';
 
-
 /**
- * message - message reducer dunction
- *
+ * @function message
  * @param  {object} state = {} message state
- * @param  {object} action     action that is dispatched
- * @return {object}            returns state object for the action type
+ * @param  {object} action action that is dispatched
+ * @return {object} returns state object for the action type
  */
 export default function message(state = {}, action) {
   switch (action.type) {
@@ -31,9 +31,9 @@ export default function message(state = {}, action) {
     case CLEAR_NOTIFICATION:
       return Object.assign({}, state,
         { notificationData: action.notificationData });
-    case USERS_WHO_HAVE_READ_MESSAGE:
+    case READ_BY:
       return Object.assign({}, state,
-        { usersWhoHaveReadMessage: action.usersWhoHaveReadMessage });
+        { readBy: action.readBy });
     default:
       return state;
   }

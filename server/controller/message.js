@@ -302,14 +302,14 @@ export default {
   // get Users who have read a message from a group
 
   /**
-   * getUsersWhoReadMessagesInGroup - get users who have read the message
+   * getReadBysInGroup - get users who have read the message
    * from a group
    *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
    * @return {json}     returns json object
    */
-  getUsersWhoReadMessagesInGroup(req, res) {
+  getReadBysInGroup(req, res) {
     return MessageReads.findAll({
       include: [
         {

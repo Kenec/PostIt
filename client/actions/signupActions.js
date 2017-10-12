@@ -2,10 +2,9 @@
 import axios from 'axios';
 
 /**
- * userSignupRequest - signup request action
- *
- * @param  {type} userData userdata to signup
- * @return {type}          description
+ * @function userSignupRequest
+ * @param  {object} userData - user data to signup
+ * @return {json} - json response from the server
  */
 /*eslint-disable*/
 export function userSignupRequest(userData) {

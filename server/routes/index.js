@@ -101,7 +101,7 @@ router.post('/api/v1/user/:messageid/notification', jwtAuth,
 
 // api route to update notification when a message is sent
 router.post('/api/v1/users/:messageid/read', jwtAuth,
-  messageController.getUsersWhoReadMessagesInGroup);
+  messageController.getReadBysInGroup);
 
 // ** /groupInfo **
 router.get('*', (req, res) => {

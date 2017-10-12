@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import NavigationBarMenu from './NavigationBarMenu';
-import LeftSideGroupMenu from './LeftSideGroupMenu';
+import GroupLists from './GroupLists';
 import DashboardComponent from './DashboardComponent';
 
 /**
@@ -27,7 +27,7 @@ export class Dashboard extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
-              <LeftSideGroupMenu />
+              <GroupLists />
             </div>
             <div className="col-md-7">
               <DashboardComponent />
@@ -53,7 +53,7 @@ Dashboard.contextTypes = {
  */
 function mapStateToProps(state) {
   return {
-    isAuthenticated: state.userLoginReducer.isAuthenticated
+    isAuthenticated: state.userLogin.isAuthenticated
   };
 }
 export default connect(mapStateToProps)(Dashboard);
