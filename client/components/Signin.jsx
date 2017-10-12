@@ -12,7 +12,7 @@ import { getUserGroups } from '../actions/groupActions';
  */
 export class Signin extends Component {
   /**
-   * 
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -29,6 +29,7 @@ export class Signin extends Component {
     this.onChange = this.onChange.bind(this);
   }
   /**
+   * @function componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -38,7 +39,7 @@ export class Signin extends Component {
     }
   }
   /**
-   * 
+   * @function onChange
    * @param {Event} event
    * @return {void}
    */
@@ -49,7 +50,7 @@ export class Signin extends Component {
   }
 
   /**
-   * 
+   * @function onClick
    * @param {Event} event
    * @return {void} 
    */
@@ -59,7 +60,7 @@ export class Signin extends Component {
   }
 
   /**
-   * 
+   * @function onSubmit
    * @param {Event} event
    * @return {void} 
    */
@@ -80,6 +81,7 @@ export class Signin extends Component {
   }
 
   /**
+   * @function render
    * @return {DOM} DOM Component
    */
   render() {
@@ -207,6 +209,7 @@ Signin.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 /**
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */

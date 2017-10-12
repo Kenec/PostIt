@@ -15,15 +15,20 @@ import {
 export default function group(state = {}, action) {
   switch (action.type) {
     case CREATE_GROUP:
-      return Object.assign({}, state, { groupData: action.groupData });
+      return Object.assign({}, state,
+        { groupData: action.groupData });
     case GET_USER_GROUPS:
-      return Object.assign({}, state, { groups: action.groups });
+      return Object.assign({}, state,
+        { groups: action.groups });
     case GET_ADMIN_GROUPS:
-      return Object.assign({}, state, { groupsBelonged: action.groupsBelonged });
+      return Object.assign({}, state,
+        { groupsBelonged: action.groupsBelonged });
     case GET_USERS_IN_GROUP:
-      return Object.assign({}, state, { usersInGroup: action.usersInGroup });
+      return Object.assign({}, state,
+        { usersInGroup: action.usersInGroup });
     case SEARCH_ALL_USERS:
-      return Object.assign({}, state, { searchedUsers: action.users });
+      return Object.assign({}, state,
+        { searchedUsers: action.users });
     default:
       return state;
   }

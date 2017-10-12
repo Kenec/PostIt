@@ -20,7 +20,7 @@ export function isValidToken(token) {
 /**
  * @function updatePassword
  * @param  {string} token - token generated for the user for password reset
- * @param {object} updatePasswordDetail - contains the email and the new password
+ * @param {object} updatePasswordDetail - the email and the new password
  * @return {json} - axios post response
  */
 export function updatePassword(token, updatePasswordDetail) {

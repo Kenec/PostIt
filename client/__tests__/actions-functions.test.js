@@ -20,11 +20,11 @@ const mock = new MockAdapter(axios);
 describe('Flashmessage Action', () => {
   // should have addFlashmessage action creator
   it('should have addFlasmessage action creator', () => {
-    const message = {
+    const myMessage = {
       type: 'success',
       message: 'This is a success message'
     };
-    expect(flashmessage.addFlashMessage(message)).toEqual({
+    expect(flashmessage.addFlashMessage(myMessage)).toEqual({
       type: types.ADD_FLASH_MESSAGE,
       message
     });
@@ -43,20 +43,23 @@ describe('Forgot Password Action', () => {
   // should have forgotPasswordRequest method
   it('should have forgotPassword action creator', () => {
     const email = 'email@email.com';
-    expect((typeof forgotPassword.forgotPasswordRequest(email))).toEqual('function');
+    expect((typeof forgotPassword.forgotPasswordRequest(email)))
+      .toEqual('function');
   });
-  // should have forgotPasswordRequest method return an asyn action of post request
-  it('should have forgotPasswordRequest return result of an async action of post request', () => {
+  // should have forgotPasswordRequest method return
+  // an asyn action of post request
+  it('should have forgotPasswordRequest return json response', () => {
     const store = mockStore({});
     const email = 'email@email.com';
     mock.onPost('/api/v1/users/resetpassword', email)
       .reply(200, { message: 'password reset link sent to your email' });
-    return store.dispatch(forgotPassword.forgotPasswordRequest(email)).then((message) => {
-      // return of async actions
-      expect(message.data).toEqual({
-        message: 'password reset link sent to your email'
+    return store.dispatch(forgotPassword.forgotPasswordRequest(email))
+      .then((messages) => {
+        // return of async actions
+        expect(messages.data).toEqual({
+          message: 'password reset link sent to your email'
+        });
       });
-    });
   });
   // should have isValidToken method
   it('should have isValidToken action creator', () => {
@@ -64,37 +67,40 @@ describe('Forgot Password Action', () => {
     expect((typeof forgotPassword.isValidToken(token))).toEqual('function');
   });
   // should have isValidToken method return an asyn action of get request
-  it('should have isValidToken return result of an async action of get request', () => {
+  it('should have isValidToken return json request', () => {
     const store = mockStore({});
     const token = 'thisisgibrishtoken';
     mock.onGet(`/api/v1/users/resetpassword/${token}`)
       .reply(200, { message: true });
-    return store.dispatch(forgotPassword.isValidToken(token)).then((message) => {
-      // return of async actions
-      expect(message.data).toEqual({
-        message: true
+    return store.dispatch(forgotPassword.isValidToken(token))
+      .then((messages) => {
+        // return of async actions
+        expect(messages.data).toEqual({
+          message: true
+        });
       });
-    });
   });
   // should have updatePassword method
   it('should have updatePassword action creator', () => {
     const token = 'gibrishastoken';
     const password = 'newpassword';
-    expect((typeof forgotPassword.updatePassword(token, password))).toEqual('function');
+    expect((typeof forgotPassword.updatePassword(token, password)))
+      .toEqual('function');
   });
   // should have updatePassword method return an asyn action of post request
-  it('should have updatePassword return result of an async action of post request', () => {
+  it('should have updatePassword return json response', () => {
     const store = mockStore({});
     const token = 'thisisgibrishtoken';
     const newPassword = 'this is a new password';
     mock.onPost(`/api/v1/users/resetpassword/${token}`, newPassword)
       .reply(200, { message: 'password updated successfully!' });
-    return store.dispatch(forgotPassword.updatePassword(token, newPassword)).then((message) => {
-      // return of async actions
-      expect(message.data).toEqual({
-        message: 'password updated successfully!'
+    return store.dispatch(forgotPassword.updatePassword(token, newPassword))
+      .then((messages) => {
+        // return of async actions
+        expect(messages.data).toEqual({
+          message: 'password updated successfully!'
+        });
       });
-    });
   });
 });
 // group action creator
@@ -177,10 +183,11 @@ describe('Group Action', () => {
     const groupId = 1;
     mock.onGet(`/api/v1/groupss/${groupId}/users`)
       .reply(200, usersData);
-    return store.dispatch(group.getUsersInGroup(groupId)).then((groupMembers) => {
+    return store.dispatch(group.getUsersInGroup(groupId))
+      .then((groupMembers) => {
       // return of async actions
-      expect(groupMembers.data).toEqual(usersData);
-    });
+        expect(groupMembers.data).toEqual(usersData);
+      });
   });
   // should have addUserToGroups method 
   it('should have addUserToGroups return result of post request', () => {
@@ -189,10 +196,11 @@ describe('Group Action', () => {
     const newUser = { id: 3, username: 'john' };
     mock.onPost(`/api/v1/groups/${groupId}/user`, newUser.id)
       .reply(200, usersData.push(newUser));
-    return store.dispatch(group.addUserToGroups(groupId, newUser.id)).then((newGroupMembers) => {
+    return store.dispatch(group.addUserToGroups(groupId, newUser.id))
+      .then((newGroupMembers) => {
       // return of async actions
-      expect(newGroupMembers.data).toEqual(usersData.length);
-    });
+        expect(newGroupMembers.data).toEqual(usersData.length);
+      });
   });
   // should have getUserInfo method 
   it('should have getUserInfo return result of post request', () => {
@@ -246,13 +254,14 @@ describe('Group Action', () => {
       groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
     mock.onPost('/api/v1/groups/creator', usersGroup.username)
       .reply(200, usersGroup);
-    return store.dispatch(group.getAdminGroups(usersGroup.username)).then(() => {
+    return store.dispatch(group.getAdminGroups(usersGroup.username))
+      .then(() => {
       // return of async actions
-      expect(store.getActions()).toEqual([{
-        type: types.GET_ADMIN_GROUPS,
-        groupsBelonged: usersGroup
-      }]);
-    });
+        expect(store.getActions()).toEqual([{
+          type: types.GET_ADMIN_GROUPS,
+          groupsBelonged: usersGroup
+        }]);
+      });
   });
 });
 // signup action creator
@@ -265,15 +274,16 @@ describe('Signup Action', () => {
     phone: 123
   };
   // should have userSignupRequest method
-  it('should have userSignupRequest action creator return the result of a post request', () => {
+  it('should have userSignupRequest action return json repsonse', () => {
     mock.onPost('/api/v1/users/signup', userData)
       .reply(200, { message: 'User created successfully' });
-    return store.dispatch(signup.userSignupRequest(userData)).then((message) => {
-    // return of async actions
-      expect(message.data).toEqual({
-        message: 'User created successfully'
+    return store.dispatch(signup.userSignupRequest(userData))
+      .then((messages) => {
+        // return of async actions
+        expect(messages.data).toEqual({
+          message: 'User created successfully'
+        });
       });
-    });
   });
 });
 // message action creator
@@ -337,12 +347,13 @@ describe('Message Action', () => {
     const groupId = 1;
     mock.onPost(`/api/v1/groups/${groupId}/message`, messageData)
       .reply(200, { message: 'sent!' });
-    return store.dispatch(message.composeMessage(groupId, messageData)).then((message) => {
+    return store.dispatch(message.composeMessage(groupId, messageData))
+      .then((messages) => {
       // return of async actions
-      expect(message.data).toEqual({
-        message: 'sent!'
+        expect(messages.data).toEqual({
+          message: 'sent!'
+        });
       });
-    });
   });
   // should have retrieveMessage method 
   it('should have retrieveMessage return result of get request', () => {
@@ -350,10 +361,11 @@ describe('Message Action', () => {
     const groupId = 1;
     mock.onGet(`/api/v1/groups/${groupId}/messages`)
       .reply(200, retrieveMessages);
-    return store.dispatch(message.retrieveMessage(groupId)).then((messagesResult) => {
+    return store.dispatch(message.retrieveMessage(groupId))
+      .then((messagesResult) => {
       // return of async actions
-      expect(messagesResult.data).toEqual(messageData.length);
-    });
+        expect(messagesResult.data).toEqual(messageData.length);
+      });
   });
   // should have clearRetrievedMessage method 
   it('should have clearRetrievedMessage return async action', () => {
@@ -396,8 +408,9 @@ describe('Message Action', () => {
       }]);
     });
   });
-  // should have dispatch an async action when updateNotification method is called
-  it('should dispatch an async action when updateNotification is called', () => {
+  // should have dispatch an async action when
+  // updateNotification method is called
+  it('should dispatch an action when updateNotification is called', () => {
     const store = mockStore({});
     const updateNotificationData = {
       messageId: 1,
@@ -412,7 +425,7 @@ describe('Message Action', () => {
       .dispatch(message.updateNotification(updateNotificationData.messageId,
         updateNotificationData))
       .then((result) => {
-      // return of async actions
+        // return of async actions
         expect(result.data).toEqual(updateNotificationData);
       });
   });
@@ -460,23 +473,5 @@ describe('Signin Action', () => {
       user
     });
   });
-  // // should have dispatch an async action when userSigninRequestAction method is called
-  // it('should dispatch an async action when userSigninRequestAction is called', () => {
-  //   const store = mockStore({});
-  //   const signCredential = {
-  //     username: 'Kene',
-  //     password: 'randomPassword'
-  //   };
-  //   mock.onPost('api/user/signin', signCredential)
-  //     .reply(200, { message: 'Signed in successfully' });
-  //   return store.dispatch(signin.userSigninRequestAction(signCredential))
-  //     .then((result) => {
-  //     // return of async actions
-  //       expect(result.data).toEqual({ message: 'Signed in successfully' });
-  //       expect(store.getActions()).toEqual(
-  //         signin.setCurrentUser(signCredential)
-  //       );
-  //     });
-  // });
 });
 

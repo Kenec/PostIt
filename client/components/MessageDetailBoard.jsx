@@ -133,6 +133,7 @@ class MessageDetailBoard extends Component {
     let allUsersWhoReadMessages = '';
     readBy.messageReadUsers.map((user) => {
       allUsersWhoReadMessages += `@${user.Reader.username} `;
+      return true;
     });
     // retrieve full message by id
     let singleReturnedMessage = '';

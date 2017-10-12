@@ -15,8 +15,7 @@ ratings:
     - "server/**/*.js"
     - "client/*.js"
     - "client/**/*.js"
-  exclude_paths:
-    - "server/tests/"
-    - node_modules/
-    - bower_components/
-    - "client/dist/bundle.min.js"
+exclude_paths:
+  - "node_modules/"
+  - "client/dist/bundle.min.js"
+  - ".idea"

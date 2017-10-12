@@ -10,7 +10,7 @@ import { createGroup, getUserGroups } from '../actions/groupActions';
  */
 class CreateGroupBoard extends Component {
   /**
-   * 
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -28,6 +28,7 @@ class CreateGroupBoard extends Component {
   }
 
   /**
+   * @function componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -42,7 +43,7 @@ class CreateGroupBoard extends Component {
   }
 
   /**
-   * 
+   * @function onChange
    * @param {Event} event 
    * @return {void}
    */
@@ -54,7 +55,7 @@ class CreateGroupBoard extends Component {
   }
 
   /**
-   * 
+   * @function onSubmit
    * @param {Event} event
    * @return {void}
    */
@@ -93,6 +94,7 @@ class CreateGroupBoard extends Component {
   }
 
   /**
+   * @function render
    * @return {DOM} DOM Component
    */
   render() {
@@ -142,7 +144,7 @@ CreateGroupBoard.propTypes = {
   auth: React.PropTypes.object.isRequired,
 };
 /**
- * 
+ * @function mapStateToProps
  * @param {*} state 
  * @return {object} state object
  */

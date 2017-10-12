@@ -12,6 +12,7 @@ import { isValidToken,
  */
 class ChangePassword extends Component {
   /**
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -45,6 +46,7 @@ class ChangePassword extends Component {
     );
   }
   /**
+   * @function onChange
    * @param {Event} event 
    * @return {void} void
    */
@@ -54,8 +56,8 @@ class ChangePassword extends Component {
       [event.target.name]: event.target.value
     });
   }
-
   /**
+   * @function onSubmit
    * @param {Event} event
    * @return {void} void 
    */
@@ -103,6 +105,7 @@ class ChangePassword extends Component {
     return isValid;
   }
   /**
+   * @function render
    * @return {DOM} DOM component
    */
   render() {

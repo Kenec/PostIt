@@ -26,6 +26,7 @@ import { retrieveMessage,
  */
 class GroupBoard extends Component {
   /**
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -49,6 +50,7 @@ class GroupBoard extends Component {
   }
 
   /**
+   * @function componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -56,8 +58,9 @@ class GroupBoard extends Component {
   }
 
   /**
-  * @return {void}
-  */
+   * @function componentDidMount
+   * @return {void}
+   */
   componentDidMount() {
     // fire an action to get messages belonging to each user in a group
     this.props.retrieveMessage(this.props.groupSelectedId).then(
@@ -77,6 +80,7 @@ class GroupBoard extends Component {
     );
   }
   /**
+   * @function onChange
    * @param {event} event 
    * @return {void}
    */
@@ -86,7 +90,7 @@ class GroupBoard extends Component {
     });
   }
   /**
-   * 
+   * @function onSubmit
    * @param {event} event
    * @return {void} void
    */
@@ -174,8 +178,8 @@ class GroupBoard extends Component {
       }
     }
   }
-
   /**
+   * @function readBy
    * @param {array} existingReaders
    * @return {boolean} foundUser 
    */
@@ -193,6 +197,7 @@ class GroupBoard extends Component {
     return foundUser;
   }
   /**
+   * @function toastMessage
    * @return {void}
    */
   toastMessage() {
@@ -207,9 +212,8 @@ class GroupBoard extends Component {
         this.toastMessage.className.replace('show', '');
       }, 2000);
   }
-
   /**
-   * 
+   * @function toggleReadChechBox
    * @param {*} event
    * @return {void} 
    */
@@ -220,6 +224,7 @@ class GroupBoard extends Component {
   }
 
   /**
+   * @function render
    * @return {DOM} DOM Component
    */
   render() {
@@ -370,6 +375,7 @@ GroupBoard.propTypes = {
   group: React.PropTypes.object.isRequired
 };
 /**
+ * @function mapStateToProps
  * @param {*} state
  * @return {object} state object 
  */

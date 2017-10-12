@@ -96,8 +96,10 @@ class SearchMember extends Component {
     const usersCount = this.props.group.searchedUsers.count;
     this.setState({
       errors: {},
-      offset: this.state.offset < (usersCount / 5) ? this.state.offset + 1 : this.state.offset,
-      togglePrevent: (usersCount / 5) - 1 <= (this.state.offset + 1) ? 'none' : 'auto',
+      offset: this.state.offset < (usersCount / 5) ?
+        this.state.offset + 1 : this.state.offset,
+      togglePrevent: (usersCount / 5) - 1 <= (this.state.offset + 1) ?
+        'none' : 'auto',
     });
   }
 
@@ -142,7 +144,9 @@ class SearchMember extends Component {
  * @return {DOM} DOM Component
  */
   render() {
-    const { groups, groupsBelonged, searchedUsers, usersInGroup } = this.props.group;
+    const { groups,
+      groupsBelonged,
+      searchedUsers, usersInGroup } = this.props.group;
     const { errors, success } = this.state;
 
     if (!groups || !groupsBelonged) {
