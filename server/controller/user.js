@@ -192,14 +192,14 @@ export default {
   // if token is valid and error if token is not valid
 
   /**
-   * checkValidTokenForPasswordReset - method to check if token is
+   * isTokenValid - method to check if token is
    * still valid as of the time of changing password by the user
    *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
    * @return {json}     returns json object
    */
-  checkValidTokenForPasswordReset(req, res) {
+  isTokenValid(req, res) {
     return Users
       .findAll({
         where: {

@@ -28,7 +28,7 @@ router.post('/api/v1/users/resetpassword', userController.resetPassword);
 
 // api route to check for valid token for resetting password
 router.get('/api/v1/users/resetpassword/:token',
-  userController.checkValidTokenForPasswordReset);
+  userController.isTokenValid);
 
 // routes to reset password of a user
 router.post('/api/v1/users/resetpassword/:token',

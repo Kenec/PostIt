@@ -53,6 +53,26 @@ describe('userGroups', () => {
               done();
             });
         });
+
+      it(`should return status code 400 and res
+      an object of error message when payload
+      is not complete for removing a user`,
+        (done) => {
+          server
+            .post(`/api/v1/groups/${groupId}/users`)
+            .send({
+              token, // token is not available
+              admin: 1,
+              // user: 6
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Incomplete payload');
+              done();
+            });
+        });
       it('should return status code 404 and res of object on a failure',
         (done) => {
           server
@@ -74,7 +94,7 @@ describe('userGroups', () => {
          by a user`,
         (done) => {
           server
-            .post('/api/v1/users/groups')
+            .post('/api/v1/user/groups')
             .send({
               token,
               username: 'kene',
@@ -146,7 +166,7 @@ describe('userGroups', () => {
           an object of error message when an invalid groupId is passed`,
         (done) => {
           server
-            .get('/api/v1/groupss/100/users')
+            .get('/api/v1/groups/100/users')
             .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(400);
