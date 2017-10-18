@@ -25,7 +25,7 @@ try {
 // export the webpack configurations
 module.exports = {
   // if debug is in production use inline-sourcemap as a devtool else dont't
-  devtool: debug ? 'inline-sourcemap' : false,
+  devtool: 'inline-sourcemap',
   // define the entry point of the application.
   // define the entry point to be used by the webpack-hot-middleware for
   // auto bundling when changes are made
@@ -92,12 +92,12 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
+    // }),
+    // new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),

@@ -4,7 +4,11 @@ import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 // declare the redux devtool dependencies
 /*eslint-disable*/
-const composeEnhancers = compose;
+const composeEnhancers =
+typeof window === 'object' &&
+window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  }) : compose;
 
 const finalCreateStore = composeEnhancers(
   applyMiddleware(thunk)

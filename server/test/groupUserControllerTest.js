@@ -121,7 +121,7 @@ describe('userGroups', () => {
               done();
             });
         });
-      it(`should return status code 401 and  res
+      it(`should return status code 403 and  res
              of object of users cannot be fetched from the DB`,
         (done) => {
           server
@@ -131,7 +131,7 @@ describe('userGroups', () => {
               username: '3',
             })
             .end((err, res) => {
-              res.should.have.status(401);
+              res.should.have.status(403);
               res.body.should.be.a('object');
               done();
             });

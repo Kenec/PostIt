@@ -150,7 +150,7 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return 400 error when search user by
+    it(`should return 403 error when search user by
         username query errored`,
       (done) => {
         server
@@ -159,7 +159,7 @@ describe('Users', () => {
             // token, // when token is not available
             username: 'kene' })
           .end((err, res) => {
-            res.should.have.status(401);
+            res.should.have.status(403);
             done();
           });
       });

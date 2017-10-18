@@ -4,6 +4,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import jwt from 'jsonwebtoken';
 import * as flashmessage from '../actions/flashMessages';
 import * as forgotPassword from '../actions/forgotPasswordAction';
 import * as group from '../actions/groupActions';
@@ -26,7 +27,7 @@ describe('Flashmessage Action', () => {
     };
     expect(flashmessage.addFlashMessage(myMessage)).toEqual({
       type: types.ADD_FLASH_MESSAGE,
-      message
+      message: myMessage
     });
   });
   // should have deleteFlashmessage action creator
@@ -181,7 +182,7 @@ describe('Group Action', () => {
   it('should have getUsersInGroup return result of get request', () => {
     const store = mockStore({});
     const groupId = 1;
-    mock.onGet(`/api/v1/groupss/${groupId}/users`)
+    mock.onGet(`/api/v1/groups/${groupId}/users`)
       .reply(200, usersData);
     return store.dispatch(group.getUsersInGroup(groupId))
       .then((groupMembers) => {
@@ -236,7 +237,7 @@ describe('Group Action', () => {
     const usersGroup = {
       username: 'Kene',
       groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
-    mock.onPost('/api/v1/users/groups', usersGroup.username)
+    mock.onPost('/api/v1/user/groups', usersGroup.username)
       .reply(200, usersGroup);
     return store.dispatch(group.getUserGroups(usersGroup.username)).then(() => {
       // return of async actions
@@ -305,7 +306,7 @@ describe('Message Action', () => {
     sentBy: 'Kene',
     readBy: 'Kene',
   });
-  const usersWhoHaveReadMessage = 'Kene, Obi';
+  const readBy = 'Kene, Obi';
   // should have composeMessageAction method
   it('should have composeMessageAction action creator', () => {
     expect((message.composeMessageAction(messageData))).toEqual({
@@ -336,9 +337,9 @@ describe('Message Action', () => {
   });
   // should have readByAction method
   it('should have readByAction action creator', () => {
-    expect((message.readByAction(usersWhoHaveReadMessage))).toEqual({
+    expect((message.readByAction(readBy))).toEqual({
       type: types.READ_BY,
-      usersWhoHaveReadMessage
+      readBy
     });
   });
   // should have dispatch an async action when composeMessage method is called
@@ -455,23 +456,54 @@ describe('Message Action', () => {
       // return of async actions
         expect(store.getActions()).toEqual([{
           type: types.READ_BY,
-          usersWhoHaveReadMessage: 'Kene, Francis, Love'
+          readBy: 'Kene, Francis, Love'
         }]);
       });
   });
 });
 // signin action creator
 describe('Signin Action', () => {
+  const user = { id: 1, username: 'Kene' };
+  const token = jwt.sign({
+    id: 1,
+    username: 'Kene'
+  }, 'mynameiskenechukwu', { expiresIn: '2h' }); // token expires in 2h
+
   // should have setCurrentUser action creator
   it('should have setCurrentUser action creator', () => {
-    const user = {
-      id: 1,
-      username: 'Kene'
-    };
     expect(signin.setCurrentUser(user)).toEqual({
       type: types.SET_CURRENT_USER,
       user
     });
   });
+  // should have userSigninRequestAction action creator
+  it('should have userSigninRequestAction action creator', () => {
+    const userDetail = {
+      username: 'Kene',
+      password: 'kene'
+    };
+    const store = mockStore({});
+    mock.onPost('/api/v1/users/signin', userDetail)
+      .reply(201, { token,
+        message: 'Successfully logged in',
+        username: 'Kene',
+        success: true });
+    return store.dispatch(signin.userSigninRequestAction(userDetail))
+      .then(() => {
+      // return of async actions
+        expect(store.getActions()).toEqual([{
+          type: types.SET_CURRENT_USER,
+          user
+        }]);
+      });
+  });
+  // should return true if a user logged in 
+  // it('should log a user out when logout function is called', () => {
+  //   const store = mockStore({});
+  //   return store.dispatch(signin.logout())
+  //     .then(() => {
+  //     // return of async actions
+  //     expect(localStorage.removeItem).toHaveBeenLastCalledWith('removeItem');
+  //     });
+  // });
 });
-

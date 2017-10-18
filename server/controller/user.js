@@ -65,7 +65,7 @@ export default {
           const token = jwt.sign({
             id: user[0].id,
             username: user[0].username
-          }, config.jwtSecret, { expiresIn: '2h' }); // token expires in 2h
+          }, config.jwtSecret, { expiresIn: '48h' }); // token expires in 2h
 
           res
             .status(202)

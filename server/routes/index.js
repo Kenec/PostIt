@@ -103,6 +103,7 @@ router.post('/api/v1/user/:messageid/notification', jwtAuth,
 router.post('/api/v1/users/:messageid/read', jwtAuth,
   messageController.getReadBysInGroup);
 
+
 // ** /groupInfo **
 router.get('*', (req, res) => {
   res.sendFile(path.resolve('./client/index.html'));

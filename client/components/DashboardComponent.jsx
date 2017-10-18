@@ -18,9 +18,11 @@ class DashboardComponent extends Component {
    * @return {DOM} DOM Component
    */
   componentWillMount() {
+    // if (localStorage.getItem('jwtToken') !== null) {
     this.props.getNotification(
       { userId: jwt.decode(localStorage.getItem('jwtToken')).id }
     );
+    // }
   }
 
   /**

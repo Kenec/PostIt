@@ -14,7 +14,7 @@ import { getUserGroups,
   /**
    * @class SearchMember
    */
-class SearchMember extends Component {
+export class SearchMember extends Component {
   /**
    * 
    * @param {*} props 
