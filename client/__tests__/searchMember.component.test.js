@@ -1,49 +1,72 @@
 // import
+/* global expect */
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import ConnectedSearchMember, { SearchMember } from '../components/SearchMember.jsx';
+import { SearchMember } from '../components/SearchMember.jsx';
 
 describe('<SearchMember />', () => {
-  const form = sinon.spy(); // spy on the signup button
-  const group = sinon.spy(); // spy on the group props
-  const auth = sinon.spy(); // spy on auth props
-  const router = sinon.spy();
+  const getUserGroups = sinon.spy();
+  const searchAllUsers = sinon.spy();
+  const getUserInfo = sinon.spy();
+  const addUserToGroups = sinon.spy();
+  const getUsersInGroupAction = sinon.spy();
+  const group = {
+    groups: [],
+    groupsBelonged: [],
+    searchedUsers: { rows: [
+      {
+        id: '1',
+        username: 'Kene',
+        email: 'kene@email.com',
+        phone: '234'
+      },
+      {
+        id: '2',
+        username: 'Obi',
+        email: 'obi@email.com',
+        phone: '234'
+      }
+    ] },
+    usersInGroup: [{ username: 'Kene' }]
+  };
+  const groupId = '';
+  const auth = {};
+
+  const componentWillMount = sinon.spy(SearchMember.prototype, 'componentWillMount');
   const onChange = sinon.spy(SearchMember.prototype, 'onChange');
+  const decreaseOffset = sinon.spy(SearchMember.prototype, 'decreaseOffset');
+  const increaseOffset = sinon.spy(SearchMember.prototype, 'increaseOffset');
+  const addUser = sinon.spy(SearchMember.prototype, 'addUser');
   // assign all props to a varibale props
-  const props = { getUserGroups,
+  const props = {
+    groupId,
+    group,
+    auth,
+    getUserGroups,
     searchAllUsers,
     getUserInfo,
     addUserToGroups,
     getUsersInGroupAction };
-  // assign context to a variables
-  SearchMember.contextTypes = { router: PropTypes.func };
-  // assign mounting Signup component to a variable
   const wrapper = mount(<SearchMember {...props} />);
-  it('should have a signup form', () => {
-    // test if all the form field are available in the signup form
-    expect(wrapper.find('form').length).toEqual(1); // check if their is a form
-    expect(wrapper.find('[type="text"]').at(0).length).toEqual(1);
-    expect(wrapper.find('[type="email"]').at(0).length).toEqual(1);
-    expect(wrapper.find('[type="text"]').at(1).length).toEqual(1);
-    expect(wrapper.find('[type="password"]').at(0).length).toEqual(1);
-    expect(wrapper.find('[type="submit"]').at(0).length).toEqual(1);
+  it('should have a search user form', () => {
+    expect(wrapper.find('SearchMember').length).toEqual(1);
+    expect(wrapper.find('form').length).toEqual(1);
+    expect(wrapper.find('input').length).toEqual(1);
   });
-  it('should call onSubmit method when signup button is clicked', () => {
-    // test if onSubmit is called each time the signup btn is cliecked
-    wrapper.find('[type="submit"]').get(0).click(); //.simulate('click');
-    expect(onSubmit.calledOnce).toEqual(true);
-  });
-  it('should call onChange method when an input state is changed', () => {
-    // test if onChange is called when a change event occurs
-    wrapper.find('[type="text"]').at(0).simulate('change'); //.simulate('click');
+  it('should display users onChange of the input field', () => {
+    wrapper.find('input').simulate('change');
     expect(onChange.calledOnce).toEqual(true);
+    wrapper.setState({ username: 'Kene' });
+    expect(wrapper.find('[type="hidden"]').length).toEqual(8);
+    expect(wrapper.find('span').at(0).text()).toEqual('Kene');
+    expect(wrapper.find('span').at(2).text()).toEqual('Obi');
   });
-  it('should call isValid function when a form is submitted', () => {
-    // test if isValid function checks for valid input
-    wrapper.find('[type="submit"]').at(0).simulate('click'); //.simulate('click');
-    expect(isValid.calledOnce).toEqual(true);
+  it('should have pagination', () => {
+    wrapper.find('Link').at(0).simulate('click');
+    expect(decreaseOffset.calledOnce).toEqual(true);
+    wrapper.find('Link').at(2).simulate('click');
+    expect(increaseOffset.calledOnce).toEqual(true);
   });
-
 });

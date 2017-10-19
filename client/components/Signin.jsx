@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-// import axios from 'axios';
+import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar.jsx'; // eslint-disable-line
 import { userSigninRequestAction } from '../actions/signinActions';
 import { deleteFlashMessage } from '../actions/flashMessages';
@@ -199,14 +199,14 @@ export class Signin extends Component {
 }
 
 Signin.propTypes = {
-  userSigninRequestAction: React.PropTypes.func.isRequired,
-  messages: React.PropTypes.array.isRequired,
-  deleteFlashMessage: React.PropTypes.func.isRequired,
-  getUserGroups: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
+  userSigninRequestAction: PropTypes.func.isRequired,
+  messages: PropTypes.array.isRequired,
+  deleteFlashMessage: PropTypes.func.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 Signin.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
  * @function mapStateToProps

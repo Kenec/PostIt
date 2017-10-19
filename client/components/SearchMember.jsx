@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 // import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getUserGroups,
   getUserInfo,
@@ -231,12 +232,12 @@ export class SearchMember extends Component {
   }
 }
 SearchMember.propTypes = {
-  group: React.PropTypes.object.isRequired,
-  groupId: React.PropTypes.string.isRequired,
-  searchAllUsers: React.PropTypes.func.isRequired,
-  addUserToGroups: React.PropTypes.func.isRequired,
-  getUsersInGroupAction: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  groupId: PropTypes.string.isRequired,
+  searchAllUsers: PropTypes.func.isRequired,
+  addUserToGroups: PropTypes.func.isRequired,
+  getUsersInGroupAction: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 /**
  * 

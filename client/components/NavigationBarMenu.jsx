@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { logout } from '../actions/signinActions';
 import { getUserGroups,
   getAdminGroups } from '../actions/groupActions';
@@ -9,16 +10,17 @@ import { getUserGroups,
 /**
  * @class NavigationBarMenu
  */
-class NavigationBarMenu extends Component {
+export class NavigationBarMenu extends Component {
   /**
-   * 
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
     super(props);
-    this.logout = this.logout.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
   /**
+   * @function componentWillMount
    * @return{void} void
    */
   componentWillMount() {
@@ -27,15 +29,16 @@ class NavigationBarMenu extends Component {
     this.props.getAdminGroups({ userId: user.id });
   }
   /**
-   * 
+   * @function logout
    * @param {event} event
    * @return {void} void 
    */
-  logout(event) {
+  onLogout(event) {
     event.preventDefault();
     this.props.logout();
   }
   /**
+   * @function render
    * @return{DOM} DOM Component
    */
   render() {
@@ -62,7 +65,7 @@ class NavigationBarMenu extends Component {
               <span className="blue-text">
                 <b className="space">Welcome {isAuthenticated && user.username }!</b>
               </span>
-              <Link to="" className="space" onClick={this.logout}>
+              <Link to="" className="space" onClick={this.onLogout}>
                     Logout
               </Link>
             </div>
@@ -78,17 +81,17 @@ class NavigationBarMenu extends Component {
 }
 
 NavigationBarMenu.propTypes = {
-  auth: React.PropTypes.object.isRequired,
-  logout: React.PropTypes.func.isRequired,
-  getUserGroups: React.PropTypes.func.isRequired,
-  getAdminGroups: React.PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
 
 };
 NavigationBarMenu.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
- * 
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */

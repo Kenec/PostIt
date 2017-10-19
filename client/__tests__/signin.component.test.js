@@ -9,7 +9,10 @@ import { Signin } from '../components/Signin.jsx';
 describe('<Signin />', () => {
   // const form = sinon.spy(); // spy on the Signin button
   const userSigninRequestAction = sinon.spy(); // spy on the userSigninRequest props
-  const messages = []; // spy on message props
+  const messages = [{
+    id: '1',
+    text: 'Hello'
+  }]; // spy on message props
   const deleteFlashMessage = sinon.spy(); // spy on the deleteFlashMessage props
   const getUserGroups = sinon.spy(); // spy on getUserGroup props
   const auth = {};
@@ -21,24 +24,18 @@ describe('<Signin />', () => {
   Signin.contextTypes = { router: PropTypes.func };
   // assign mounting Signin component to a variable
   const wrapper = mount(<Signin {...props} />);
-  // test if it contains NavigationBar component
-  // it('should contain <NavigationBar /> component', () => {
-  //   expect(wrapper).toContain(<NavigationBar/>);
-  // });
-  // test if all the form field are available in the signin form
   it('should have a signin form', () => {
-    expect(wrapper.find('form').length).toEqual(1); // check if their is a form
+    expect(wrapper.find('form').length).toEqual(1);
     expect(wrapper.find('[type="password"]').at(0).length).toEqual(1);
     expect(wrapper.find('[type="submit"]').at(0).length).toEqual(1);
   });
   it('should call onSubmit method when signin button is clicked', () => {
-    // test if onSubmit is called each time the signin btn is clicked
-    wrapper.find('[type="submit"]').get(0).click(); // .simulate('click');
+    wrapper.find('[type="submit"]').get(0).click();
+    wrapper.setState({ username: 'Kene' });
     expect(onSubmit.calledOnce).toEqual(true);
   });
   it('should call onChange method when an input state is changed', () => {
-    // test if onChange is called when a change event occurs
-    wrapper.find('[type="text"]').at(0).simulate('change'); // .simulate('click');
+    wrapper.find('[type="text"]').at(0).simulate('change');
     expect(onChange.calledOnce).toEqual(true);
   });
   // it('should call isValid function when a form is submitted', () => {

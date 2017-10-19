@@ -1,9 +1,8 @@
 // import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-// import axios from 'axios';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar.jsx';// eslint-disable-line
 import { userSignupRequest } from '../actions/signupActions';
 import validateInput from '../../server/shared/validations/validateInput';
@@ -14,7 +13,7 @@ import { addFlashMessage } from '../actions/flashMessages';
  */
 export class Signup extends Component {
   /**
-   * 
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -34,7 +33,7 @@ export class Signup extends Component {
   }
 
   /**
-   * 
+   * @function onChange
    * @param {Event} event
    * @return {void}
    */
@@ -45,7 +44,7 @@ export class Signup extends Component {
   }
 
   /**
-   * 
+   * @function onSubmit
    * @param {Event} event
    * @return {void}
    */
@@ -72,6 +71,7 @@ export class Signup extends Component {
   }
 
   /**
+   * @function isValid
    * @return {boolean} isValid
    */
   isValid() {
@@ -265,10 +265,10 @@ export class Signup extends Component {
   }
 }
 Signup.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  userSignupRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 };
 Signup.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 export default connect(null, { userSignupRequest, addFlashMessage })(Signup);
