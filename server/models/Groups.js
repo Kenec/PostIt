@@ -10,6 +10,9 @@ export default (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
       validate: {
+        isAlphanumeric: {
+          msg: 'Group name must be an valid String'
+        },
         notEmpty: {
           msg: 'Group name must not be empty'
         },

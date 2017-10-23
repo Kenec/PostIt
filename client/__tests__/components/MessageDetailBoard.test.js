@@ -18,7 +18,7 @@ describe('<MessageDetailBoard />', () => {
       ReadBy: '1,2,3',
       createdAt: '2-10-2019',
       message: 'Hello Worlld',
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
       Users: { username: 'Kene' }
     }],
     readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }

@@ -42,8 +42,6 @@ describe('Users', () => {
               res.should.have.status(201);
               res.body.should.have.property('message')
                 .eql('User Created successfully');
-              res.body.should.have.property('success')
-                .eql(true);
               done();
             });
         });
@@ -94,8 +92,6 @@ describe('Users', () => {
           .end((err, res) => {
             res.should.have.status(202);
             res.body.should.have.property('token');
-            res.body.should.have.property('success')
-              .eql(true);
             res.body.should.have.property('message')
               .eql('Successfully logged in');
             res.body.should.have.property('username')

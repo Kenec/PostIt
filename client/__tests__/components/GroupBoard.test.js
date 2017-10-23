@@ -19,7 +19,7 @@ describe('<GroupBoard />', () => {
       ReadBy: '1,2,3',
       createdAt: '2-10-2019',
       message: 'Hello World',
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
       Users: { username: 'Kene' }
     }],
     readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
@@ -41,7 +41,7 @@ describe('<GroupBoard />', () => {
       message: 'Hello World',
       groupId: '1',
       sentBy: '1',
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
       readBy: '1,2,3',
       createdAt: '',
     }

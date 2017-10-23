@@ -35,7 +35,7 @@ export class MessageDetailBoard extends Component {
       groupName: '',
       groupId: '',
       Message: '',
-      priority_level: '',
+      priorityLevel: '',
       errors: {},
       success: '',
       isLoading: false,
@@ -57,7 +57,7 @@ export class MessageDetailBoard extends Component {
     if (isAuthenticated) {
       this.setState({
         sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-        priority_level: 'Normal',
+        priorityLevel: 'Normal',
       });
     }
   }
@@ -158,7 +158,7 @@ export class MessageDetailBoard extends Component {
                   <i><b>{groupMessage.Users.username}</b></i>
                 </span>
                 <span className="left yellow lighten-5">
-                  <i>{groupMessage.priority_level}</i>
+                  <i>{groupMessage.priorityLevel}</i>
                 </span>
                 <span className="right red-text lighten-5">
                   {moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}

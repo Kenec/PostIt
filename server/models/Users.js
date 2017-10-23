@@ -26,14 +26,19 @@ export default (sequelize, DataTypes) => {
       }
     },
     password: {
+      allowNull: false,
       type: DataTypes.STRING,
       validate: {
+        isAlphanumeric: {
+          msg: 'Must be an Valid String'
+        },
         notEmpty: {
           msg: 'password must not be empty'
         },
       },
     },
     email: {
+      allowNull: false,
       type: DataTypes.STRING,
       unique: true,
       validate: {

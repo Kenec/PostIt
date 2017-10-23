@@ -10,7 +10,7 @@ describe('<FilterMessages />', () => {
   const groupMessage = {
     id: '1',
     Users: { username: 'Kene' },
-    priority_level: 'Normal',
+    priorityLevel: 'Normal',
     createdAt: '',
     message: 'Hello World'
   };

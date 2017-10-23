@@ -23,7 +23,7 @@ export class Group extends Component {
     const { user } = this.props.auth;
     this.setState({
       sentBy: user.id, // jwt.decode(localStorage.getItem('jwtToken')).id,
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
     this.props.getAdminGroups({ userId: user.id });

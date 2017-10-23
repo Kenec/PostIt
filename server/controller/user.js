@@ -29,12 +29,17 @@ export default {
         email: req.body.email,
         password: md5(req.body.password)
       })
-      .then(user => res.status(201).json({
-        message: 'User Created successfully',
-        success: true,
-        username: user.username,
-        email: user.email
-      }))
+      .then((user) => {
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username
+        }, config.jwtSecret, { expiresIn: '48h' }); // token expires in 48h
+        res.status(201).json({
+          token,
+          message: 'User Created successfully',
+          username: `${user.username}`,
+        });
+      })
       .catch(() => {
         res.status(400).json({
           message: 'Account Already Exists!',
@@ -73,7 +78,6 @@ export default {
               token,
               message: 'Successfully logged in',
               username: `${user[0].username}`,
-              success: true,
             });
           return;
         }

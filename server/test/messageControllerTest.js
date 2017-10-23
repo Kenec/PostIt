@@ -60,7 +60,7 @@ describe('Messages', () => {
             .send({
               token,
               message: 'This is a sample message',
-              priority_level: 'Normal',
+              priorityLevel: 'Normal',
               groupId,
               sentBy: 1
             })

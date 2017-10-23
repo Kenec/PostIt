@@ -13,7 +13,7 @@ module.exports = {
         notEmpty: true
       }
     },
-    priority_level: {
+    priorityLevel: {
       type: Sequelize.STRING,
       allowNull: false,
     },

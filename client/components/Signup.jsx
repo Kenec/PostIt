@@ -4,9 +4,10 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar.jsx';// eslint-disable-line
-import { userSignupRequest } from '../actions/signupActions';
+import userSignupRequest from '../actions/signupActions';
 import validateInput from '../../server/shared/validations/validateInput';
 import { addFlashMessage } from '../actions/flashMessages';
+import { getUserGroups } from '../actions/groupActions';
 
 /**
  * @class Signup
@@ -55,12 +56,14 @@ export class Signup extends Component {
       this.props.userSignupRequest(this.state)
         .then(
           () => {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: `You signed up successfully.
-                      Enter your username and password to login`
-            });
-            this.context.router.push('/');
+            // this.props.addFlashMessage({
+            //   type: 'success',
+            //   text: `You signed up successfully.
+            //           Enter your username and password to login`
+            // });
+            // this.context.router.push('/');
+            this.props.getUserGroups({ username: this.state.username });
+            this.context.router.push('/dashboard');
           },
           ({ response }) => this.setState({
             errors: response.data, isLoading: false
@@ -266,9 +269,13 @@ export class Signup extends Component {
 }
 Signup.propTypes = {
   userSignupRequest: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  getUserGroups: PropTypes.func.isRequired,
+  // addFlashMessage: PropTypes.func.isRequired
 };
 Signup.contextTypes = {
   router: PropTypes.object.isRequired
 };
-export default connect(null, { userSignupRequest, addFlashMessage })(Signup);
+export default connect(null,
+  { userSignupRequest,
+    getUserGroups,
+    addFlashMessage })(Signup);

@@ -19,7 +19,7 @@ export default function FilterMessages(props) {
               <i><b>{props.groupMessage.Users.username}</b></i>
             </span>
             <span className="left yellow lighten-5">
-              <i>{props.groupMessage.priority_level}</i>
+              <i>{props.groupMessage.priorityLevel}</i>
             </span>
             <span className="right red-text lighten-5">
               {moment(props.groupMessage.createdAt, moment.ISO_8601).fromNow()}

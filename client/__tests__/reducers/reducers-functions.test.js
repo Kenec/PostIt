@@ -163,7 +163,7 @@ describe('Message reducers', () => {
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
-          priority_level: 'Normal',
+          priorityLevel: 'Normal',
           groupId: 1,
           sentBy: 1,
           createdAt: '2017-08-15T11:10:50.743Z'
@@ -182,7 +182,7 @@ describe('Message reducers', () => {
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
-          priority_level: 'Normal',
+          priorityLevel: 'Normal',
           groupId: 1,
           sentBy: 1,
           createdAt: '2017-08-15T11:10:50.743Z'
@@ -217,7 +217,7 @@ describe('Message reducers', () => {
           notificationData: {
             id: 1,
             message: 'Hello Obi! Welcome',
-            priority_level: 'Normal',
+            priorityLevel: 'Normal',
             groupId: 1,
             sentBy: 1,
             createdAt: '2017-08-15T11:10:50.743Z'
@@ -238,7 +238,7 @@ describe('Message reducers', () => {
           messageData: {
             id: 1,
             message: 'Hello Obi! Welcome',
-            priority_level: 'Normal',
+            priorityLevel: 'Normal',
             groupId: 1,
             sentBy: 1,
             createdAt: '2017-08-15T11:10:50.743Z'

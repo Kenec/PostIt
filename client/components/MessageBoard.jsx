@@ -23,7 +23,7 @@ export class MessageBoard extends Component {
     const { user } = this.props.auth;
     this.setState({
       sentBy: jwt.decode(window.localStorage.jwtToken).id,
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
     this.props.getAdminGroups({ userId: user.id });

@@ -19,7 +19,7 @@ export default {
     return Messages
       .create({
         message: req.body.message,
-        priority_level: req.body.priority_level,
+        priorityLevel: req.body.priorityLevel,
         groupId: req.params.groupid,
         sentBy: req.body.sentBy,
         ReadBy: req.body.readBy
@@ -38,10 +38,10 @@ export default {
         }).then((group) => {
           // send email and sms when message is delivered successfully
           if (group.length !== 0) {
-            if (message.priority_level === 'Urgent') {
+            if (message.priorityLevel === 'Urgent') {
               // send mail
               sendMail(group.users, message.message);
-            } else if (message.priority_level === 'Critical') {
+            } else if (message.priorityLevel === 'Critical') {
               // send mail and sms
               sendMail(group.users, message.message);
               sendSMS(group.users, message.message);
@@ -49,7 +49,7 @@ export default {
             res.status(201).send({
               status: 'Message sent successfully',
               message: message.message,
-              priority_level: message.priority_level,
+              priorityLevel: message.priorityLevel,
               group: message.groupId,
               sentBy: message.sentBy,
               readBy: message.ReadBy,
@@ -85,7 +85,7 @@ export default {
           groupId: req.params.groupid,
         },
         attributes: [
-          'id', 'message', 'priority_level',
+          'id', 'message', 'priorityLevel',
           'groupId', 'sentBy', 'ReadBy', 'createdAt'],
         order: [['id']]
       })
@@ -171,7 +171,7 @@ export default {
         model: Messages,
         as: 'Messages',
         attributes:
-        ['id', 'message', 'priority_level', 'groupId', 'sentBy', 'createdAt'],
+        ['id', 'message', 'priorityLevel', 'groupId', 'sentBy', 'createdAt'],
       },
       {
         model: Users,

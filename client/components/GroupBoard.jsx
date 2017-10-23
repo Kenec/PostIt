@@ -36,7 +36,7 @@ export class GroupBoard extends Component {
       groupName: '',
       groupId: '',
       Message: '',
-      priority_level: 'Normal',
+      priorityLevel: 'Normal',
       errors: {},
       success: '',
       isLoading: false,
@@ -99,13 +99,13 @@ export class GroupBoard extends Component {
     event.preventDefault();
     if (this.props.groupName !== 'No Group Found') {
       if (typeof (this.state.Message) === 'string'
-        && this.state.priority_level &&
+        && this.state.priorityLevel &&
           this.state.sentBy) {
         this.setState({ errors: {}, success: '', isLoading: true });
         const { messageData } = this.props.message;
         const messageSentData = {
           message: this.state.Message,
-          priority_level: this.state.priority_level,
+          priorityLevel: this.state.priorityLevel,
           sentBy: this.state.sentBy,
           readBy: this.state.sentBy
         };
@@ -117,7 +117,7 @@ export class GroupBoard extends Component {
                 message: data.message,
                 groupId: data.group,
                 sentBy: data.sentBy,
-                priority_level: data.priority_level,
+                priorityLevel: data.priorityLevel,
                 readBy: data.readBy,
                 createdAt: data.createdAt,
                 Users: {
@@ -153,7 +153,7 @@ export class GroupBoard extends Component {
                     success: 'Sent!',
                     isLoading: false,
                     Message: '',
-                    priority_level: 'Normal',
+                    priorityLevel: 'Normal',
                   });
                   this.toastMessage();
                 },
@@ -162,7 +162,7 @@ export class GroupBoard extends Component {
                     errors: response.data,
                     isLoading: false,
                     Message: '',
-                    priority_level: 'Normal',
+                    priorityLevel: 'Normal',
                   });
                 }
               );
@@ -172,7 +172,7 @@ export class GroupBoard extends Component {
                 errors: response.data,
                 isLoading: false,
                 Message: '',
-                priority_level: 'Normal',
+                priorityLevel: 'Normal',
               });
             }
           ).catch(() => {});
@@ -323,9 +323,9 @@ export class GroupBoard extends Component {
             <form onSubmit={this.onSubmit} className="" action="" method="">
               <select
                 onChange={this.onChange}
-                value={this.state.priority_level}
+                value={this.state.priorityLevel}
                 className="form-control"
-                name="priority_level"
+                name="priorityLevel"
               >
                 <option value="Normal" defaultValue>Normal</option>
                 <option value="Urgent">Urgent</option>

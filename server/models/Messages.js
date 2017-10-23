@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    priority_level: {
+    priorityLevel: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
