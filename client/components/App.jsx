@@ -1,5 +1,6 @@
 // import
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import '../scss/main.scss';
 
@@ -20,7 +21,7 @@ function App({ children }) {
 }
 
 App.propTypes = {
-  children: React.PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default App;

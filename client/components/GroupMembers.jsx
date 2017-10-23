@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import { getUserGroups,
   getUsersInGroupAction,
   getUsersInGroup,
@@ -15,7 +16,7 @@ import { retrieveMessage } from '../actions/messageActions';
 /**
  * @class GroupMembers
  */
-class GroupMembers extends Component {
+export class GroupMembers extends Component {
   /**
    * 
    * @param {*} props 
@@ -78,7 +79,7 @@ class GroupMembers extends Component {
     if (confirm(`Do you want to remove ${username} from the Group`)) {
       const groupid = this.props.groupSelectedId;
       const removalPayLoad = {
-        admin: jwt.decode(localStorage.getItem('jwtToken')).id,
+        admin: jwt.decode(localStorage.jwtToken).id,
         user: parseInt(userId, 10),
       };
       this.removeUser(groupid, removalPayLoad);
@@ -129,15 +130,15 @@ class GroupMembers extends Component {
   }
 }
 GroupMembers.propTypes = {
-  getUsersInGroup: React.PropTypes.func.isRequired,
-  getUsersInGroupAction: React.PropTypes.func.isRequired,
-  groupSelectedId: React.PropTypes.string.isRequired,
-  group: React.PropTypes.object.isRequired,
-  removeUserFromGroup: React.PropTypes.func.isRequired,
+  getUsersInGroup: PropTypes.func.isRequired,
+  getUsersInGroupAction: PropTypes.func.isRequired,
+  groupSelectedId: PropTypes.string.isRequired,
+  group: PropTypes.object.isRequired,
+  removeUserFromGroup: PropTypes.func.isRequired,
 };
 
 /**
- * 
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */

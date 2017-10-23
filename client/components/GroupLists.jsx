@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getUserGroups,
   getAdminGroups } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
@@ -9,7 +10,7 @@ import { retrieveMessage } from '../actions/messageActions';
 /**
  * @class GroupLists
  */
-class GroupLists extends Component {
+export class GroupLists extends Component {
   /**
    * @return {void}
    */
@@ -59,10 +60,10 @@ class GroupLists extends Component {
   }
 }
 GroupLists.propTypes = {
-  group: React.PropTypes.object.isRequired
+  group: PropTypes.object.isRequired
 };
 /**
- * 
+ * @function mapStateToProps
  * @param {*} state 
  * @return {object} state object
  */

@@ -2,13 +2,14 @@
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import jwt from 'jsonwebtoken';
 import { createGroup, getUserGroups } from '../actions/groupActions';
 
 /**
  * @class CreateGroupBoard
  */
-class CreateGroupBoard extends Component {
+export class CreateGroupBoard extends Component {
   /**
    * @constructor
    * @param {*} props 
@@ -20,7 +21,7 @@ class CreateGroupBoard extends Component {
       errors: {},
       success: '',
       isLoading: false,
-      username: jwt.decode(localStorage.getItem('jwtToken')).username,
+      username: jwt.decode(localStorage.jwtToken).username,
     };
     // bind the methods to this context
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,7 +38,7 @@ class CreateGroupBoard extends Component {
     // set createdby to user id from decoded token from the localStorage
     if (isAuthenticated) {
       this.setState({
-        createdby: jwt.decode(localStorage.getItem('jwtToken')).id,
+        createdby: jwt.decode(localStorage.jwtToken).id,
       });
     }
   }
@@ -139,9 +140,9 @@ class CreateGroupBoard extends Component {
   }
 }
 CreateGroupBoard.propTypes = {
-  createGroup: React.PropTypes.func.isRequired,
-  getUserGroups: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
+  createGroup: PropTypes.func.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 /**
  * @function mapStateToProps

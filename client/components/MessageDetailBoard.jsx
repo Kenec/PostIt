@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import moment from 'moment';
 import { getUserGroups,
@@ -23,9 +24,9 @@ import { retrieveMessage,
 /**
  * @class MessageDetailBoard
  */
-class MessageDetailBoard extends Component {
+export class MessageDetailBoard extends Component {
   /**
-   * 
+   * @constructor
    * @param {*} props 
    */
   constructor(props) {
@@ -46,6 +47,7 @@ class MessageDetailBoard extends Component {
   }
 
   /**
+   * @function componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -65,9 +67,9 @@ class MessageDetailBoard extends Component {
    */
   componentDidMount() {
     this.props.retrieveMessage(this.props.groupSelectedId).then(
-      (messageData) => {
+      (message) => {
         this.setState({ retrievedMessages: [] });
-        this.props.retrieveMessageAction(messageData.data);
+        this.props.retrieveMessageAction(message.data);
         const { updatedMessageData } = this.props.message;
         this.setState({
           retrievedMessages: updatedMessageData,
@@ -82,8 +84,8 @@ class MessageDetailBoard extends Component {
   }
 
   /**
-   * 
-   * @param {*} event
+   * @function onChange
+   * @param {Event} event
    * @return {void} 
    */
   onChange(event) {
@@ -93,7 +95,7 @@ class MessageDetailBoard extends Component {
   }
 
   /**
-   * 
+   * @function readBy
    * @param {array} existingReaders  
    * @return {boolean} foundUser
    */
@@ -114,6 +116,7 @@ class MessageDetailBoard extends Component {
 
 
   /**
+   * @function render
    * @return {DOM} DOM Component
    */
   render() {
@@ -130,9 +133,9 @@ class MessageDetailBoard extends Component {
       );
     }
     // retrieve all users who have read this message
-    let allUsersWhoReadMessages = '';
+    let readByUsers = '';
     readBy.messageReadUsers.map((user) => {
-      allUsersWhoReadMessages += `@${user.Reader.username} `;
+      readByUsers += `@${user.Reader.username} `;
       return true;
     });
     // retrieve full message by id
@@ -172,7 +175,7 @@ class MessageDetailBoard extends Component {
               <em><b>Message Readers</b></em>
               <small><i>  hover here</i></small>
               <span className="tooltipptext">
-                {allUsersWhoReadMessages}
+                {readByUsers}
               </span>
             </div>
           </div>
@@ -207,25 +210,25 @@ class MessageDetailBoard extends Component {
   }
 }
 MessageDetailBoard.propTypes = {
-  group: React.PropTypes.object.isRequired,
-  groupName: React.PropTypes.string.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  retrieveMessage: React.PropTypes.func.isRequired,
-  clearRetrievedMessageAction: React.PropTypes.func.isRequired,
-  groupSelectedId: React.PropTypes.string.isRequired,
-  updateNotification: React.PropTypes.func.isRequired,
-  updateReadBy: React.PropTypes.func.isRequired,
-  retrieveMessageAction: React.PropTypes.func.isRequired,
-  getReadBy: React.PropTypes.func.isRequired,
-  message: React.PropTypes.object.isRequired,
-  messageId: React.PropTypes.string.isRequired,
+  group: PropTypes.object.isRequired,
+  groupName: PropTypes.string.isRequired,
+  auth: PropTypes.object.isRequired,
+  retrieveMessage: PropTypes.func.isRequired,
+  clearRetrievedMessageAction: PropTypes.func.isRequired,
+  groupSelectedId: PropTypes.string.isRequired,
+  updateNotification: PropTypes.func.isRequired,
+  updateReadBy: PropTypes.func.isRequired,
+  retrieveMessageAction: PropTypes.func.isRequired,
+  getReadBy: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired,
+  messageId: PropTypes.string.isRequired,
 };
 MessageDetailBoard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
  * 
- * @param {*} state
+ * @param {any} state
  * @return {object} state object
  */
 function mapStateToProps(state) {

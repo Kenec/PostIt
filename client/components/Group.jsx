@@ -3,10 +3,11 @@
 import React, { Component } from 'react';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
-import NavigationBarMenu from './NavigationBarMenu';
-import GroupBoard from './GroupBoard';
-import SearchMember from './SearchMember';
-import GroupMembers from './GroupMembers';
+import PropTypes from 'prop-types';
+import NavigationBarMenu from './NavigationBarMenu.jsx';
+import GroupBoard from './GroupBoard.jsx';
+import SearchMember from './SearchMember.jsx';
+import GroupMembers from './GroupMembers.jsx';
 import { retrieveMessage } from '../actions/messageActions';
 import { getUserGroups,
   getAdminGroups } from '../actions/groupActions';
@@ -14,7 +15,7 @@ import { getUserGroups,
 /**
  * @class Group
  */
-class Group extends Component {
+export class Group extends Component {
   /**
    * @return {void} void
    */
@@ -78,14 +79,14 @@ class Group extends Component {
   }
 }
 Group.propTypes = {
-  getUserGroups: React.PropTypes.func.isRequired,
-  getAdminGroups: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  group: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired
 };
 Group.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
  * 

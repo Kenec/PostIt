@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { getUserGroups,
   getAdminGroups } from '../actions/groupActions';
@@ -13,14 +14,14 @@ import { retrieveMessage,
 /**
  * @class DashboardComponent
  */
-class DashboardComponent extends Component {
+export class DashboardComponent extends Component {
   /**
    * @return {DOM} DOM Component
    */
   componentWillMount() {
     // if (localStorage.getItem('jwtToken') !== null) {
     this.props.getNotification(
-      { userId: jwt.decode(localStorage.getItem('jwtToken')).id }
+      { userId: jwt.decode(localStorage.jwtToken).id }
     );
     // }
   }
@@ -90,9 +91,9 @@ class DashboardComponent extends Component {
   }
 }
 DashboardComponent.propTypes = {
-  getNotification: React.PropTypes.func.isRequired,
-  group: React.PropTypes.object.isRequired,
-  message: React.PropTypes.object.isRequired,
+  getNotification: PropTypes.func.isRequired,
+  group: PropTypes.object.isRequired,
+  message: PropTypes.object.isRequired,
 };
 /**
  * 

@@ -4,7 +4,7 @@ import React from 'react';
 /**
  * @return {DOM} DOM Component
  */
-function Footer() {
+export function Footer() {
   return (
     <div className="footer">
       <div className="col-md-8" />

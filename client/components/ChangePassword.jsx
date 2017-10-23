@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import NavigationBar from './NavigationBar';
+import PropTypes from 'prop-types';
+import NavigationBar from './NavigationBar.jsx';
 import validateInput from '../../server/shared/validations/validateInput';
 import { isValidToken,
   updatePassword } from '../actions/forgotPasswordAction';
@@ -10,7 +11,7 @@ import { isValidToken,
 /**
  * @class ChangePassword
  */
-class ChangePassword extends Component {
+export class ChangePassword extends Component {
   /**
    * @constructor
    * @param {*} props 
@@ -205,12 +206,12 @@ class ChangePassword extends Component {
   }
 }
 ChangePassword.propTypes = {
-  isValidToken: React.PropTypes.func.isRequired,
-  updatePassword: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired
+  isValidToken: PropTypes.func.isRequired,
+  updatePassword: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired
 };
 ChangePassword.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default connect(null,

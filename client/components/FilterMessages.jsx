@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 /**
  * 
@@ -36,6 +37,6 @@ export default function FilterMessages(props) {
   );
 }
 FilterMessages.propTypes = {
-  groupMessage: React.PropTypes.object.isRequired,
-  groupSelectedId: React.PropTypes.node.isRequired
+  groupMessage: PropTypes.object.isRequired,
+  groupSelectedId: PropTypes.node.isRequired
 };

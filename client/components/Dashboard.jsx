@@ -1,9 +1,10 @@
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import NavigationBarMenu from './NavigationBarMenu';
-import GroupLists from './GroupLists';
-import DashboardComponent from './DashboardComponent';
+import PropTypes from 'prop-types';
+import NavigationBarMenu from './NavigationBarMenu.jsx';
+import GroupLists from './GroupLists.jsx';
+import DashboardComponent from './DashboardComponent.jsx';
 
 /**
  * @class Signin
@@ -40,11 +41,11 @@ export class Dashboard extends Component {
   }
 }
 Dashboard.propTypes = {
-  isAuthenticated: React.PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 Dashboard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
  * 

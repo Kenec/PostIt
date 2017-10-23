@@ -1,12 +1,13 @@
-/* global localStorage */
+/* global window */
 // import
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
-import NavigationBarMenu from './NavigationBarMenu';
-import MessageDetailBoard from './MessageDetailBoard';
-import SearchMember from './SearchMember';
-import GroupMembers from './GroupMembers';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import NavigationBarMenu from './NavigationBarMenu.jsx';
+import MessageDetailBoard from './MessageDetailBoard.jsx';
+import SearchMember from './SearchMember.jsx';
+import GroupMembers from './GroupMembers.jsx';
 import { retrieveMessage } from '../actions/messageActions';
 import { getUserGroups,
   getAdminGroups } from '../actions/groupActions';
@@ -14,20 +15,18 @@ import { getUserGroups,
   /**
    * @class MessageBoard
    */
-class MessageBoard extends Component {
+export class MessageBoard extends Component {
   /**
    * @return {void}
    */
   componentWillMount() {
-    const { /* isAuthenticated, */ user } = this.props.auth;
-    // if (isAuthenticated) {
+    const { user } = this.props.auth;
     this.setState({
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
+      sentBy: jwt.decode(window.localStorage.jwtToken).id,
       priority_level: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
     this.props.getAdminGroups({ userId: user.id });
-    // }
   }
 
   /**
@@ -58,7 +57,7 @@ class MessageBoard extends Component {
     if (!found) {
       groupName = 'No Group Found';
       return (
-        this.context.router.push('/dashboard')
+        this.context.router.push('/NotFound')
       );
     }
 
@@ -89,17 +88,17 @@ class MessageBoard extends Component {
   }
 }
 MessageBoard.propTypes = {
-  getUserGroups: React.PropTypes.func.isRequired,
-  getAdminGroups: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  group: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 MessageBoard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 /**
- * 
+ * @function mapStateToProps
  * @param {*} state
  * @return {object} state object 
  */

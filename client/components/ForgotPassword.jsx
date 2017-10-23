@@ -2,14 +2,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import NavigationBar from './NavigationBar';
+import PropTypes from 'prop-types';
+import NavigationBar from './NavigationBar.jsx';
 import validateInput from '../../server/shared/validations/validateInput';
 import { forgotPasswordRequest } from '../actions/forgotPasswordAction';
 
 /**
  * @class ForgotPassword
  */
-class ForgotPassword extends Component {
+export class ForgotPassword extends Component {
   /**
    * 
    * @param {*} props 
@@ -65,7 +66,6 @@ class ForgotPassword extends Component {
    */
   isValid() {
     const { errors, isValid } = validateInput(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
@@ -152,7 +152,7 @@ class ForgotPassword extends Component {
   }
 }
 ForgotPassword.propTypes = {
-  forgotPasswordRequest: React.PropTypes.func.isRequired,
+  forgotPasswordRequest: PropTypes.func.isRequired,
 };
 
 export default connect(null, { forgotPasswordRequest })(ForgotPassword);

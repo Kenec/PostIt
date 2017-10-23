@@ -5,8 +5,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import FilterMessages from './FilterMessages';
+import FilterMessages from './FilterMessages.jsx';
 import { getUserGroups,
   getAdminGroups,
   getUsersInGroup
@@ -24,7 +25,7 @@ import { retrieveMessage,
 /**
  * @class GroupBoard
  */
-class GroupBoard extends Component {
+export class GroupBoard extends Component {
   /**
    * @constructor
    * @param {*} props 
@@ -39,7 +40,7 @@ class GroupBoard extends Component {
       errors: {},
       success: '',
       isLoading: false,
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
+      sentBy: jwt.decode(localStorage.jwtToken).id,
       retrieveMessageError: '',
       retrievedMessages: [],
       readCheckbox: 'unread',
@@ -120,7 +121,7 @@ class GroupBoard extends Component {
                 readBy: data.readBy,
                 createdAt: data.createdAt,
                 Users: {
-                  id: jwt.decode(localStorage.getItem('jwtToken')).id,
+                  id: jwt.decode(localStorage.jwtToken).id,
                   username: jwt.decode(localStorage
                     .getItem('jwtToken')).username,
                 }
@@ -131,7 +132,7 @@ class GroupBoard extends Component {
                 ({ data }) => {
                   const usersArray = data.users;
                   const sender = jwt.decode(
-                    localStorage.getItem('jwtToken')).id;
+                    localStorage.jwtToken).id;
                   usersArray.map((user) => {
                     let readStatus = 0;
                     if (user.id === sender) {
@@ -146,7 +147,7 @@ class GroupBoard extends Component {
                       });
                   });
                   this.props.getNotification(
-                    { userId: jwt.decode(localStorage.getItem('jwtToken')).id }
+                    { userId: jwt.decode(localStorage.jwtToken).id }
                   );
                   this.setState({
                     success: 'Sent!',
@@ -361,18 +362,17 @@ class GroupBoard extends Component {
   }
 }
 GroupBoard.propTypes = {
-  composeMessage: React.PropTypes.func.isRequired,
-  groupSelectedId: React.PropTypes.string.isRequired,
-  // auth: React.PropTypes.object.isRequired,
-  retrieveMessage: React.PropTypes.func.isRequired,
-  clearRetrievedMessageAction: React.PropTypes.func.isRequired,
-  addNotification: React.PropTypes.func.isRequired,
-  message: React.PropTypes.object.isRequired,
-  getNotification: React.PropTypes.func.isRequired,
-  retrieveMessageAction: React.PropTypes.func.isRequired,
-  getUsersInGroup: React.PropTypes.func.isRequired,
-  groupName: React.PropTypes.string.isRequired,
-  group: React.PropTypes.object.isRequired
+  composeMessage: PropTypes.func.isRequired,
+  groupSelectedId: PropTypes.string.isRequired,
+  retrieveMessage: PropTypes.func.isRequired,
+  clearRetrievedMessageAction: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired,
+  getNotification: PropTypes.func.isRequired,
+  retrieveMessageAction: PropTypes.func.isRequired,
+  getUsersInGroup: PropTypes.func.isRequired,
+  groupName: PropTypes.string.isRequired,
+  group: PropTypes.object.isRequired
 };
 /**
  * @function mapStateToProps
