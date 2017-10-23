@@ -8,7 +8,7 @@ const userController = controller.user;
 userRouter.post('/api/v1/users/signup',
   userController.create);
 userRouter.post('/api/v1/users/signin',
-  userController.list);
+  userController.signin);
 userRouter.post('/api/v1/users/resetpassword',
   userController.resetPassword);
 userRouter.get('/api/v1/users/resetpassword/:token',

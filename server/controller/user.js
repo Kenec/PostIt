@@ -51,7 +51,7 @@ export default {
    * @param  {object} res server respose object
    * @return {json}     returns json object
    */
-  list(req, res) {
+  signin(req, res) {
     Users
       .findAll({
         where: {
