@@ -5,10 +5,10 @@ import jwtAuth from '../shared/middleware/jwtAuth';
 const groupUserRouter = express.Router();
 const groupUserController = controller.groupUser;
 
-groupUserRouter.post('/api/v1/groups/:groupid/user', jwtAuth,
+groupUserRouter.post('/api/v1/groups/:groupId/user', jwtAuth,
   groupUserController.create);
 groupUserRouter.post('/api/v1/groups/:id/users', jwtAuth,
-  groupUserController.removeUserFromGroup);
+  groupUserController.removeUser);
 groupUserRouter.post('/api/v1/user/groups', jwtAuth,
   groupUserController.fetchUsersGroup);
 groupUserRouter.post('/api/v1/users/:offset', jwtAuth,

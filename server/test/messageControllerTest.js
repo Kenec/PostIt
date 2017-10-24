@@ -52,8 +52,7 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code of 201 when a message is
-          sent and an object return`,
+      it('should send message and return success',
         (done) => {
           server
             .post(`/api/v1/groups/${groupId}/message`)
@@ -62,7 +61,8 @@ describe('Messages', () => {
               message: 'This is a sample message',
               priorityLevel: 'Normal',
               groupId,
-              sentBy: 1
+              sentBy: 1,
+              readBy: '1'
             })
             .end((err, res) => {
               res.should.have.status(201);

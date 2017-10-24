@@ -25,9 +25,8 @@ describe('Users', () => {
   });
 
   describe('API Route Tests: ', () => {
-    // Test for sign up staus code to be 201 and res to be object
     describe('Signup', () => {
-      it('should return status code 201 and  res of object on signup',
+      it('should create a new user account when all conditions are met',
         (done) => {
           server
             .post('/api/v1/users/signup')
@@ -45,30 +44,59 @@ describe('Users', () => {
               done();
             });
         });
-      // Test if sigup function throws an error
-      it('should expect error status to be 400',
+      it('should throw 409 error when a duplicate account wants to be created',
         (done) => {
           server
             .post('/api/v1/users/signup')
             .send({
+              username: 'kene',
               email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(409);
+              res.body.should.have.property('message')
+                .eql('User already exist');
+              done();
+            });
+        });
+      it('should not allow user to be created when any field is invalid',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: 'Miene',
+              email: 'email',
               phone: '07038550515',
               password: 'kene' })
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
-                .eql('Account Already Exists!');
-              res.body.should.have.property('success')
-                .eql(false);
+                .eql('Email is invalid');
+              done();
+            });
+        });
+      it('should not create a new user when all field is not available',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              // username: 'kene', // ie if the validate input fails
+              email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(500);
+              res.body.should.have.property('message')
+                .eql('Cannot create your account due to some server error!');
               done();
             });
         });
     });
   });
-  // Test for signin code to be 202 and res object to be an object
   describe('Signin', () => {
     let token = '';
-    it('should return status code 201 and  res to be object', (done) => {
+    it('should sign in a user with correct credentials', (done) => {
       server
         .post('/api/v1/users/signin')
         .send({
@@ -81,7 +109,6 @@ describe('Users', () => {
           done();
         });
     });
-    // Test if the parameter returned have an object of message
     it('should expect parameter of object returned on successful signin',
       (done) => {
         server
@@ -99,9 +126,7 @@ describe('Users', () => {
             done();
           });
       });
-    // Test if sigin function throws an error when an invalid credential
-    // is provided
-    it('should expect error status to be 401',
+    it('should return 404 if a user is not found',
       (done) => {
         server
           .post('/api/v1/users/signin')
@@ -109,7 +134,7 @@ describe('Users', () => {
             username: 'paul',
             password: 'kene' })
           .end((err, res) => {
-            res.should.have.status(401);
+            res.should.have.status(404);
             res.body.should.have.property('message')
               .eql('Username not found, please register');
             done();
@@ -123,7 +148,7 @@ describe('Users', () => {
             token,
             username: 'kene' })
           .end((err, res) => {
-            res.should.have.status(202);
+            res.should.have.status(200);
             res.body.should.have.property('userid');
             res.body.should.have.property('username');
             res.body.should.have.property('phone');
@@ -131,7 +156,7 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return 400 error when user
+    it(`should return 404 error when user
         details is not found when searched by username`,
       (done) => {
         server
@@ -140,7 +165,7 @@ describe('Users', () => {
             token,
             username: 'keneM' })
           .end((err, res) => {
-            res.should.have.status(400);
+            res.should.have.status(404);
             res.body.should.have.property('message')
               .eql('User not found');
             done();
@@ -160,9 +185,8 @@ describe('Users', () => {
           });
       });
   });
-  // Test for signin code to be 202 and res object to be an object
   describe('Update Password', () => {
-    let token = 'thisisagibrishtoken';
+    const token = 'thisisagibrishtoken';
     it(`should return status code 200 and res of an object
         when password is updated`,
       (done) => {
@@ -179,14 +203,13 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return status code 400 and res of an object
-          for invalid token`,
+    it('should 404 when token does not exists',
       (done) => {
         const inValidToken = 'thisisaninvalidtoken';
         server
           .get(`/api/v1/users/resetpassword/${inValidToken}`)
           .end((err, res) => {
-            res.should.have.status(400);
+            res.should.have.status(404);
             res.body.should.be.a('object');
             res.body.should.have.property('message')
               .eql('Token not found');

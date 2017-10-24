@@ -5,19 +5,19 @@ import jwtAuth from '../shared/middleware/jwtAuth';
 const messageRouter = express.Router();
 const messageController = controller.message;
 
-messageRouter.post('/api/v1/groups/:groupid/message', jwtAuth,
+messageRouter.post('/api/v1/groups/:groupId/message', jwtAuth,
   messageController.create);
-messageRouter.get('/api/v1/groups/:groupid/messages', jwtAuth,
+messageRouter.get('/api/v1/groups/:groupId/messages', jwtAuth,
   messageController.retrieve);
-messageRouter.post('/api/v1/groups/:messageid/notification', jwtAuth,
-  messageController.addMessageNotification);
-messageRouter.post('/api/v1/groups/:messageid/updateReadBy', jwtAuth,
+messageRouter.post('/api/v1/groups/:messageId/notification', jwtAuth,
+  messageController.addNotification);
+messageRouter.post('/api/v1/groups/:messageId/updateReadBy', jwtAuth,
   messageController.updateReadBy);
 messageRouter.post('/api/v1/user/notifications', jwtAuth,
-  messageController.getMessageNotification);
-messageRouter.post('/api/v1/user/:messageid/notification', jwtAuth,
-  messageController.updateMessageNotification);
-messageRouter.post('/api/v1/users/:messageid/read', jwtAuth,
-  messageController.getReadBysInGroup);
+  messageController.getNotification);
+messageRouter.post('/api/v1/user/:messageId/notification', jwtAuth,
+  messageController.updateNotification);
+messageRouter.post('/api/v1/users/:messageId/read', jwtAuth,
+  messageController.getReadBy);
 
 export default messageRouter;

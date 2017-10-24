@@ -5,10 +5,10 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import jwt from 'jsonwebtoken';
+import userSignupRequest from '../../actions/signupActions';
 import * as flashmessage from '../../actions/flashMessages';
 import * as forgotPassword from '../../actions/forgotPasswordAction';
 import * as group from '../../actions/groupActions';
-import * as signup from '../../actions/signupActions';
 import * as signin from '../../actions/signinActions';
 import * as message from '../../actions/messageActions';
 import * as types from '../../actions/types';
@@ -267,6 +267,12 @@ describe('Group Action', () => {
 });
 // signup action creator
 describe('Signup Action', () => {
+  const user = { id: 1, username: 'Kene' };
+  const token = jwt.sign({
+    id: 1,
+    username: 'Kene'
+  }, 'mynameiskenechukwu', { expiresIn: '2h' }); // token expires in 2h
+
   const store = mockStore({});
   const userData = {
     username: 'LordLugard',
@@ -277,13 +283,17 @@ describe('Signup Action', () => {
   // should have userSignupRequest method
   it('should have userSignupRequest action return json repsonse', () => {
     mock.onPost('/api/v1/users/signup', userData)
-      .reply(200, { message: 'User created successfully' });
-    return store.dispatch(signup.userSignupRequest(userData))
-      .then((messages) => {
+      .reply(200, { token,
+        message: 'User created successfully',
+        username: 'Kene',
+        success: true });
+    return store.dispatch(userSignupRequest(userData))
+      .then(() => {
         // return of async actions
-        expect(messages.data).toEqual({
-          message: 'User created successfully'
-        });
+        expect(store.getActions()).toEqual([{
+          type: types.SET_CURRENT_USER,
+          user
+        }]);
       });
   });
 });

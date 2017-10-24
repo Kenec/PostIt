@@ -9,7 +9,7 @@ groupRouter.post('/api/v1/groups', jwtAuth,
   groupController.create);
 groupRouter.post('/api/v1/groups/creator', jwtAuth,
   groupController.fetchGroupByCreator);
-groupRouter.get('/api/v1/groups/:groupid', jwtAuth,
+groupRouter.get('/api/v1/groups/:groupId', jwtAuth,
   groupController.retrieve);
 
 export default groupRouter;

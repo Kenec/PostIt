@@ -227,7 +227,7 @@ MessageDetailBoard.contextTypes = {
   router: PropTypes.object.isRequired
 };
 /**
- * 
+ * @function mapStateToProps
  * @param {any} state
  * @return {object} state object
  */

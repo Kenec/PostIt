@@ -16,6 +16,6 @@ userRouter.get('/api/v1/users/resetpassword/:token',
 userRouter.post('/api/v1/users/resetpassword/:token',
   userController.updatePassword);
 userRouter.post('/api/v1/users/username', jwtAuth,
-  userController.FetchMemberByName);
+  userController.fetchUserByName);
 
 export default userRouter;

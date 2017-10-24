@@ -1,31 +1,35 @@
 import { userGroups, Groups, Users } from '../models';
+import validateInput from '../shared/validations/validateInput';
 
 export default {
-  // function to add a member to a group
 
   /**
    * create - Add user to a group
-   *
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
-   * @return {json}     returns json reponse
+   * @return {json}  returns json reponse
    */
   create(req, res) {
+    if (!(req.body.userId && req.params.groupId)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
+      });
+    }
     userGroups.findAll({
       where: {
         userId: req.body.userId,
-        groupId: req.params.groupid,
+        groupId: req.params.groupId,
       },
     }).then((result) => {
       if (result.length === 0) {
         return userGroups
           .create({
             userId: req.body.userId,
-            groupId: req.params.groupid,
+            groupId: req.params.groupId,
           })
           .then(() => res.status(201).send({
             message: 'User Added',
-            groupId: userGroups.groupid,
+            groupId: userGroups.groupId,
             success: true
           }))
           .catch(() => res.status(404).send({
@@ -33,67 +37,82 @@ export default {
           }));
       }
       res.status(409).send({
-        message: 'User  Already Exist',
+        message: 'User Already Exist',
         success: false
       });
     })
-      .catch(error => res.status(400).send({
+      .catch(error => res.status(500).send({
         message: 'Error occured while trying to add user',
         error
       }));
   },
 
-  // retreive a user and all the group he belongs to
-
   /**
    * fetchUsersGroup - method to retrieve a user by username and all the
    * Groups that he belongs to
-   *
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
-   * @return {json}     returns json reponse
+   * @return {json} returns json reponse
    */
   fetchUsersGroup(req, res) {
-    const username = req.body.username;
-
-    return Users
-      .find({
-        include: [{
-          model: Groups,
-          as: 'groups',
-          required: false,
-          attributes: ['id', 'groupName'],
-          through: { attributes: [] }
-        }],
-        where: { username },
-        attributes: ['id', 'email', 'phone', 'username', 'createdAt']
-      })
-      .then((user) => {
-        if (user.length === 0) {
-          return res.status(404).send({
-            message: 'User not found'
-          });
-        }
-        return res.status(200).send(user);
-      })
-      .catch(() => {
-        res.status(400).send({
-          message: 'User does not exist'
-        });
+    if (!(req.body.username)) {
+      return res.status(400).send({
+        message: 'Invalid request. Username is missing'
       });
+    }
+    // call the validateInput input function for validations
+    const { errors, isValid } = validateInput(req.body);
+
+    if (!isValid) {
+      const usernameError = errors.username;
+      res.status(400).send({
+        message: usernameError
+      });
+    } else {
+      const username = req.body.username;
+      return Users
+        .find({
+          include: [{
+            model: Groups,
+            as: 'groups',
+            required: false,
+            attributes: ['id', 'groupName'],
+            through: { attributes: [] }
+          }],
+          where: { username },
+          attributes: ['id', 'email', 'phone', 'username', 'createdAt']
+        })
+        .then((user) => {
+          if (user.length === 0) {
+            return res.status(404).send({
+              message: 'User not found'
+            });
+          }
+          return res.status(200).send(user);
+        })
+        .catch((error) => {
+          res.status(500).send({
+            error,
+            message: 'Error occured while trying' +
+            'to find User\'s Group! Try Again'
+          });
+        });
+    }
   },
-  // function to fetch all members from the same group by the groupid
 
   /**
    * fetchMembersOfGroup - fetch members from the same group
-   *
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
-   * @return {json}     returns json reponse
+   * @return {json} returns json reponse
    */
   fetchMembersOfGroup(req, res) {
+    if (!(req.params.id)) {
+      return res.status(400).send({
+        message: 'Invalid request. id is missing'
+      });
+    }
     const id = req.params.id;
-
     return Groups
       .find({
         include: [{
@@ -114,20 +133,19 @@ export default {
         }
         return res.status(200).send(group);
       })
-      .catch(() => {
-        res.status(400).send({
+      .catch((error) => {
+        res.status(500).send({
+          error,
           message: 'Error occured while fetching members in a Group'
         });
       });
   },
-  // list all groups
 
   /**
    * list - list all the groups
-   *
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
-   * @return {json}     returns json reponse
+   * @return {json}  returns json reponse
    */
   list(req, res) {
     return Groups
@@ -135,53 +153,72 @@ export default {
         attributes: ['id', 'groupName', 'createdby']
       })
       .then(group => res.status(200).send(group))
-      .catch(error => res.status(400).send({
+      .catch(error => res.status(500).send({
         error,
         message: 'Error occured while trying to find Groups'
       }));
   },
-  // search users by where username is LIKE $username
 
   /**
-   * searchUser - search for a user
-   *
+   * searchUser - search users by where username is LIKE $username
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
    * @return {json}     returns json reponse
    */
   searchUser(req, res) {
-    return Users.findAndCountAll({
-      offset: req.params.offset * 5,
-      limit: 5,
-      where: { username: { $like: `%${req.body.username}%` } },
-      attributes: ['id', 'username', 'email', 'phone'],
-    })
-      .then(users => res.status(200).send(users))
-      .catch(error => res.status(400).send({
-        error,
-        message: 'Error occured while trying to find User'
-      }));
+    if (!(req.body.username && req.params.offset)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
+      });
+    }
+    // call the validateInput input function for validations
+    const { errors, isValid } = validateInput(req.body);
+
+    if (!isValid) {
+      const usernameError = errors.username;
+      res.status(400).send({
+        message: usernameError
+      });
+    } else {
+      return Users.findAndCountAll({
+        offset: req.params.offset * 5,
+        limit: 5,
+        where: { username: { $like: `%${req.body.username}%` } },
+        attributes: ['id', 'username', 'email', 'phone'],
+      })
+        .then(users => res.status(200).send(users))
+        .catch(error => res.status(500).send({
+          error,
+          message: 'Error occured while trying to find User'
+        }));
+    }
   },
 
-  removeUserFromGroup(req, res) {
-    const groupid = req.params.id;
+  /**
+   * removeUser - remove a user from a group by the group Admin
+   * @param  {object} req incoming request object
+   * @param  {object} res response object from the server
+   * @return {json} returns json reponse
+   */
+  removeUser(req, res) {
+    const groupId = req.params.id;
     const removalAdmin = req.body.admin;
     const userToBeRemoved = req.body.user;
-    if (removalAdmin && userToBeRemoved && groupid) {
+    if (removalAdmin && userToBeRemoved && groupId) {
       Groups.find({
-        where: { id: groupid, createdby: removalAdmin },
+        where: { id: groupId, createdby: removalAdmin },
         attributes: ['id', 'groupName', 'createdby']
       })
         .then((searchResult) => {
           if (searchResult) {
             if (removalAdmin !== userToBeRemoved) {
               userGroups.find({
-                where: { userId: userToBeRemoved, groupId: groupid },
+                where: { userId: userToBeRemoved, groupId },
                 attributes: ['id', 'groupId', 'userId']
               }).then((userInGroup) => {
                 if (userInGroup) {
                   userGroups.destroy({
-                    where: { userId: userToBeRemoved, groupId: groupid }
+                    where: { userId: userToBeRemoved, groupId }
                   })
                     .then((deletedUser) => {
                       if (deletedUser === 1) {
@@ -205,8 +242,7 @@ export default {
                 }
               })
                 .catch(error => res.status(500).send({
-                  error,
-                  message: 'Internal Server Error'
+                  error
                 }));
             } else {
               res.status(401).send({
@@ -220,8 +256,7 @@ export default {
           }
         })
         .catch(error => res.status(500).send({
-          error,
-          message: 'Internal Server Error'
+          error
         }));
     } else {
       res.status(400).send({
