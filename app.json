@@ -1,0 +1,24 @@
+{
+  "name": "PostIt",
+  "scripts": {
+  },
+  "env": {
+    "DATABASE_DEFAULT": "jkodyxxz",
+    "DATABASE_PASSWORD": "dXEi1YTh-GDe7GqaXxBCJ4Bl2aLgeXpu",
+    "DATABASE_URL": "postgres://jkodyxxz:dXEi1YTh-GDe7GqaXxBCJ4Bl2aLgeXpu@pellefant.db.elephantsql.com:5432/jkodyxxz",
+    "EMAIL_NAME": "nnamani.kenechukwu@gmail.com",
+    "EMAIL_PASSWORD": "jesus-mary",
+    "SMS_API_KEY": "1c60dba3",
+    "SMS_API_SECRET": "44c5683af64ddc78"
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
