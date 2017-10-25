@@ -10,12 +10,16 @@ import { addFlashMessage } from '../actions/flashMessages';
 import { getUserGroups } from '../actions/groupActions';
 
 /**
+ * Create New Account
  * @class Signup
+ * @extends {Component}
  */
 export class Signup extends Component {
   /**
+   * Creates an instance of Signup
    * @constructor
-   * @param {*} props 
+   * @param {any} props
+   * @memberof Signup 
    */
   constructor(props) {
     super(props);
@@ -34,8 +38,9 @@ export class Signup extends Component {
   }
 
   /**
-   * @function onChange
-   * @param {Event} event
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void}
    */
   onChange(event) {
@@ -45,8 +50,9 @@ export class Signup extends Component {
   }
 
   /**
-   * @function onSubmit
-   * @param {Event} event
+   * Handles onSubmit event
+   * @method onSubmit
+   * @param {object} event
    * @return {void}
    */
   onSubmit(event) {
@@ -56,12 +62,6 @@ export class Signup extends Component {
       this.props.userSignupRequest(this.state)
         .then(
           () => {
-            // this.props.addFlashMessage({
-            //   type: 'success',
-            //   text: `You signed up successfully.
-            //           Enter your username and password to login`
-            // });
-            // this.context.router.push('/');
             this.props.getUserGroups({ username: this.state.username });
             this.context.router.push('/dashboard');
           },
@@ -74,25 +74,25 @@ export class Signup extends Component {
   }
 
   /**
-   * @function isValid
+   * Checks if the signup inputs are valid
+   * @method isValid
    * @return {boolean} isValid
    */
   isValid() {
     const { errors, isValid } = validateInput(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
     const { errors } = this.state;
-
     return (
       <div>
         <NavigationBar />
@@ -113,8 +113,7 @@ export class Signup extends Component {
                   <span className="big-font">
                      PostIt is a messenger application that allows you
                      post messages to your created group.
-                    <b> PostIt </b>
-                       always deliver your messages on time.
+                    <b> PostIt </b> always deliver your messages on time.
                   </span><hr />
                 </div>
               </div>
@@ -122,7 +121,6 @@ export class Signup extends Component {
             <div className="col-md-1" />
 
             <div className="col-md-4">
-
               <div className="panel panel-info">
                 <div className="" />
                 <div className="panel-heading"><h4>Signup</h4></div>
@@ -267,15 +265,25 @@ export class Signup extends Component {
     );
   }
 }
+
 Signup.propTypes = {
   userSignupRequest: PropTypes.func.isRequired,
   getUserGroups: PropTypes.func.isRequired,
-  // addFlashMessage: PropTypes.func.isRequired
 };
+
 Signup.contextTypes = {
   router: PropTypes.object.isRequired
 };
-export default connect(null,
-  { userSignupRequest,
-    getUserGroups,
-    addFlashMessage })(Signup);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  userSignupRequest,
+  getUserGroups,
+  addFlashMessage
+};
+
+
+export default connect(null, mapDispatchToProps)(Signup);

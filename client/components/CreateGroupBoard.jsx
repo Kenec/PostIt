@@ -7,13 +7,17 @@ import jwt from 'jsonwebtoken';
 import { createGroup, getUserGroups } from '../actions/groupActions';
 
 /**
+ * Create Group Board
  * @class CreateGroupBoard
+ * @extends {Component}
  */
 export class CreateGroupBoard extends Component {
   /**
-   * @constructor
-   * @param {*} props 
-   */
+  * Creates an instance of CreateGroupBoard
+  * @constructor
+  * @param {any} props
+  * @memberof {CreateGroupBoard} 
+  */
   constructor(props) {
     super(props);
     this.state = {
@@ -23,67 +27,53 @@ export class CreateGroupBoard extends Component {
       isLoading: false,
       username: jwt.decode(localStorage.jwtToken).username,
     };
-    // bind the methods to this context
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   /**
-   * @function componentWillMount
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
-    // deconstruct isAuthenticated and user from auth props
-    const { isAuthenticated } = this.props.auth;
-    // set createdby to user id from decoded token from the localStorage
-    if (isAuthenticated) {
-      this.setState({
-        createdby: jwt.decode(localStorage.jwtToken).id,
-      });
-    }
+    this.setState({
+      createdby: jwt.decode(localStorage.jwtToken).id,
+    });
   }
 
   /**
-   * @function onChange
-   * @param {Event} event 
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void}
    */
   onChange(event) {
-    // reset state when the element changes
     this.setState({
       [event.target.name]: event.target.value
     });
   }
 
   /**
-   * @function onSubmit
-   * @param {Event} event
-   * @return {void}
+   * Handles onSubmit event
+   * @method onSubmit
+   * @param {object} event
+   * @return {void} 
    */
   onSubmit(event) {
-    // prevent browser default action
     event.preventDefault();
-    // disable the button and set error and success to empty
     this.setState({ errors: {}, success: '', isLoading: true });
-    // dispatch createGroup action
     this.props.createGroup(this.state)
       .then(
-        // if create group is succesful, dispatch an action to get
-        // the created Group
         () => {
-          // deconstruct variable from the store
           const { user } = this.props.auth;
-          // dispatch an action to get the group created
           this.props.getUserGroups({ username: user.username });
-          // set the success state with success message
           this.setState({
             success: `${this.state.groupName} Group created successfully!`,
             isLoading: false,
             groupName: ''
           });
         },
-        // if error, then set error state with the content of the
-        // error
         ({ response }) => {
           this.setState({
             errors: response.data,
@@ -95,12 +85,12 @@ export class CreateGroupBoard extends Component {
   }
 
   /**
-   * @function render
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
     const { errors, success } = this.state;
-
     return (
 
       <div className="row">
@@ -139,21 +129,33 @@ export class CreateGroupBoard extends Component {
     );
   }
 }
+
 CreateGroupBoard.propTypes = {
   createGroup: PropTypes.func.isRequired,
   getUserGroups: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
+
 /**
+ * Map state to props
  * @function mapStateToProps
- * @param {*} state 
- * @return {object} state object
+ * @param {object} state
+ * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     auth: state.userLogin,
     group: state.group
-  };
-}
-export default connect(mapStateToProps,
-  { createGroup, getUserGroups })(CreateGroupBoard);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  createGroup,
+  getUserGroups
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateGroupBoard);

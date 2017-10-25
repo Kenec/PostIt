@@ -1,7 +1,5 @@
-/* global window */
 // import
 import React, { Component } from 'react';
-import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBarMenu from './NavigationBarMenu.jsx';
@@ -9,20 +7,23 @@ import MessageDetailBoard from './MessageDetailBoard.jsx';
 import SearchMember from './SearchMember.jsx';
 import GroupMembers from './GroupMembers.jsx';
 import { retrieveMessage } from '../actions/messageActions';
-import { getUserGroups,
-  getAdminGroups } from '../actions/groupActions';
+import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 
-  /**
-   * @class MessageBoard
-   */
+/**
+ * Message Board container
+ * @class MessageBoard
+ * @extends {Component}
+ */
 export class MessageBoard extends Component {
   /**
-   * @return {void}
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
     const { user } = this.props.auth;
     this.setState({
-      sentBy: jwt.decode(window.localStorage.jwtToken).id,
+      sentBy: user.id,
       priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
@@ -30,6 +31,8 @@ export class MessageBoard extends Component {
   }
 
   /**
+   * Display the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -47,7 +50,7 @@ export class MessageBoard extends Component {
     }
 
     groups.groups.map((group) => {
-      if (group.id == id) {
+      if (group.id === parseInt(id, 10)) {
         groupName = group.groupName;
         found = true;
       }
@@ -87,6 +90,7 @@ export class MessageBoard extends Component {
     );
   }
 }
+
 MessageBoard.propTypes = {
   getUserGroups: PropTypes.func.isRequired,
   getAdminGroups: PropTypes.func.isRequired,
@@ -94,22 +98,33 @@ MessageBoard.propTypes = {
   group: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
 };
+
 MessageBoard.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
+ * Map state to props
  * @function mapStateToProps
- * @param {*} state
+ * @param {any} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getAdminGroups,
-    retrieveMessage })(MessageBoard);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageBoard);

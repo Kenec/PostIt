@@ -1,7 +1,5 @@
-/* global localStorage */
 // import
 import React, { Component } from 'react';
-import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBarMenu from './NavigationBarMenu.jsx';
@@ -9,20 +7,24 @@ import GroupBoard from './GroupBoard.jsx';
 import SearchMember from './SearchMember.jsx';
 import GroupMembers from './GroupMembers.jsx';
 import { retrieveMessage } from '../actions/messageActions';
-import { getUserGroups,
-  getAdminGroups } from '../actions/groupActions';
+import { getUserGroups, getAdminGroups }
+  from '../actions/groupActions';
 
 /**
+ * Displays Group related components
  * @class Group
+ * @extends {Component}
  */
 export class Group extends Component {
   /**
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
     const { user } = this.props.auth;
     this.setState({
-      sentBy: user.id, // jwt.decode(localStorage.getItem('jwtToken')).id,
+      sentBy: user.id,
       priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
@@ -30,6 +32,8 @@ export class Group extends Component {
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -46,7 +50,7 @@ export class Group extends Component {
     }
 
     groups.groups.map((group) => {
-      if (group.id == id) {
+      if (group.id === parseInt(id, 10)) {
         groupName = group.groupName;
         found = true;
       }
@@ -78,6 +82,7 @@ export class Group extends Component {
     );
   }
 }
+
 Group.propTypes = {
   getUserGroups: PropTypes.func.isRequired,
   getAdminGroups: PropTypes.func.isRequired,
@@ -85,22 +90,33 @@ Group.propTypes = {
   group: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired
 };
+
 Group.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
- * 
- * @param {*} state 
- * @return {object} state object
+ * Map state to props
+ * @function mapStateToProps
+ * @param {object} state
+ * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getAdminGroups,
-    retrieveMessage })(Group);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Group);

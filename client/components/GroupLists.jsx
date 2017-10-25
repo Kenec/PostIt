@@ -3,26 +3,32 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getUserGroups,
-  getAdminGroups } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
+import { getUserGroups, getAdminGroups }
+  from '../actions/groupActions';
 
 /**
+ * List all Groups
  * @class GroupLists
+ * @extends {Component}
  */
 export class GroupLists extends Component {
   /**
-   * @return {void}
+   * Life cycle method to be called before component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
     // const { isAuthenticated, user } = this.props.auth;
   }
+
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
     const { groups, groupsBelonged } = this.props.group;
-
     if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
@@ -59,21 +65,32 @@ export class GroupLists extends Component {
     );
   }
 }
+
 GroupLists.propTypes = {
   group: PropTypes.object.isRequired
 };
+
 /**
+ * Map state to props
  * @function mapStateToProps
- * @param {*} state 
+ * @param {object} state 
  * @return {object} state object
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getAdminGroups,
-    retrieveMessage })(GroupLists);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GroupLists);

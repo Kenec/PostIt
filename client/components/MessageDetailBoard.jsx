@@ -2,32 +2,28 @@
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import moment from 'moment';
-import { getUserGroups,
-  getAdminGroups,
-  getUsersInGroup
-} from '../actions/groupActions';
-import { retrieveMessage,
-  composeMessage,
-  retrieveMessageAction,
-  clearRetrievedMessageAction,
-  addNotification,
-  updateNotification,
-  getNotification,
-  getReadBy,
-  updateReadBy
-} from '../actions/messageActions';
+import { getUserGroups, getAdminGroups, getUsersInGroup }
+  from '../actions/groupActions';
+import { retrieveMessage, composeMessage, retrieveMessageAction,
+  clearRetrievedMessageAction, addNotification, updateNotification,
+  getNotification, getReadBy, updateReadBy }
+  from '../actions/messageActions';
 
 /**
+ * Display the Full Message
  * @class MessageDetailBoard
+ * @extends {Component}
  */
 export class MessageDetailBoard extends Component {
   /**
+   * Create an instance of MessageDetailBoard
    * @constructor
-   * @param {*} props 
+   * @param {any} props
+   * @memberof {MessageDetailBoard}
    */
   constructor(props) {
     super(props);
@@ -47,23 +43,23 @@ export class MessageDetailBoard extends Component {
   }
 
   /**
-   * @function componentWillMount
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
-    const { isAuthenticated } = this.props.auth;
     this.props.getReadBy(this.props.messageId);
     this.props.clearRetrievedMessageAction();
-    if (isAuthenticated) {
-      this.setState({
-        sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-        priorityLevel: 'Normal',
-      });
-    }
+    this.setState({
+      sentBy: jwt.decode(localStorage.jwtToken).id,
+      priorityLevel: 'Normal',
+    });
   }
 
   /**
-   * @return {void}
+   * Life cycle method to be called after a component mounts
+   * @method componentDidMount
+   * @return {void} void
    */
   componentDidMount() {
     this.props.retrieveMessage(this.props.groupSelectedId).then(
@@ -84,8 +80,9 @@ export class MessageDetailBoard extends Component {
   }
 
   /**
-   * @function onChange
-   * @param {Event} event
+   * Handle onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void} 
    */
   onChange(event) {
@@ -95,7 +92,8 @@ export class MessageDetailBoard extends Component {
   }
 
   /**
-   * @function readBy
+   * Find readBy's
+   * @method readBy
    * @param {array} existingReaders  
    * @return {boolean} foundUser
    */
@@ -110,13 +108,13 @@ export class MessageDetailBoard extends Component {
         }
       });
     }
-
     return foundUser;
   }
 
 
   /**
-   * @function render
+   * Display the DOM Component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -132,16 +130,18 @@ export class MessageDetailBoard extends Component {
         <h4>Loading....</h4>
       );
     }
+
     // retrieve all users who have read this message
     let readByUsers = '';
     readBy.messageReadUsers.map((user) => {
       readByUsers += `@${user.Reader.username} `;
       return true;
     });
+
     // retrieve full message by id
     let singleReturnedMessage = '';
     singleReturnedMessage = messageData.map((groupMessage) => {
-      if (groupMessage.id == this.props.messageId) {
+      if (groupMessage.id === parseInt(this.props.messageId, 10)) {
         this.props.updateNotification(groupMessage.id,
           { userId: this.state.sentBy, readStatus: 1 });
         // update the ReadBy column if the user have not read this message
@@ -209,10 +209,10 @@ export class MessageDetailBoard extends Component {
     );
   }
 }
+
 MessageDetailBoard.propTypes = {
   group: PropTypes.object.isRequired,
   groupName: PropTypes.string.isRequired,
-  auth: PropTypes.object.isRequired,
   retrieveMessage: PropTypes.func.isRequired,
   clearRetrievedMessageAction: PropTypes.func.isRequired,
   groupSelectedId: PropTypes.string.isRequired,
@@ -223,32 +223,37 @@ MessageDetailBoard.propTypes = {
   message: PropTypes.object.isRequired,
   messageId: PropTypes.string.isRequired,
 };
+
 MessageDetailBoard.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
  * @function mapStateToProps
  * @param {any} state
  * @return {object} state object
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message
-  };
-}
-export default connect(mapStateToProps,
-  { addNotification,
-    getUserGroups,
-    clearRetrievedMessageAction,
-    getAdminGroups,
-    retrieveMessageAction,
-    composeMessage,
-    getUsersInGroup,
-    retrieveMessage,
-    getReadBy,
-    updateNotification,
-    getNotification,
-    updateReadBy
-  })(MessageDetailBoard);
+  }
+);
+
+const mapDispatchToProps = {
+  addNotification,
+  getUserGroups,
+  clearRetrievedMessageAction,
+  getAdminGroups,
+  retrieveMessageAction,
+  composeMessage,
+  getUsersInGroup,
+  retrieveMessage,
+  getReadBy,
+  updateNotification,
+  getNotification,
+  updateReadBy
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageDetailBoard);

@@ -4,7 +4,9 @@ import { Link } from 'react-router';
 import NavigationBar from './NavigationBar.jsx';
 
 /**
- * @class Signin
+ * NOT FOUND Page
+ * @method Signin
+ * @return {DOM} DOM Component
  */
 export const NotFound = () =>
   (<div className="content">

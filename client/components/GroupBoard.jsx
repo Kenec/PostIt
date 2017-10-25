@@ -1,6 +1,5 @@
 /* global localStorage */
 /* global document */
-
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -8,27 +7,24 @@ import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import FilterMessages from './FilterMessages.jsx';
-import { getUserGroups,
-  getAdminGroups,
-  getUsersInGroup
-} from '../actions/groupActions';
-import { retrieveMessage,
-  composeMessage,
-  retrieveMessageAction,
-  clearRetrievedMessageAction,
-  addNotification,
-  updateNotification,
-  getNotification,
-  getReadBy
-} from '../actions/messageActions';
+import { getUserGroups, getAdminGroups, getUsersInGroup }
+  from '../actions/groupActions';
+import { retrieveMessage, composeMessage, retrieveMessageAction,
+  clearRetrievedMessageAction, addNotification, updateNotification,
+  getNotification, getReadBy }
+  from '../actions/messageActions';
 
 /**
+ * Displays Group board with message input fields
  * @class GroupBoard
+ * @extends {Component}
  */
 export class GroupBoard extends Component {
   /**
+   * Creates an instance of GroupBoard
    * @constructor
-   * @param {*} props 
+   * @param {any} props
+   * @memberof {GroupBoard}
    */
   constructor(props) {
     super(props);
@@ -51,7 +47,8 @@ export class GroupBoard extends Component {
   }
 
   /**
-   * @function componentWillMount
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -59,7 +56,8 @@ export class GroupBoard extends Component {
   }
 
   /**
-   * @function componentDidMount
+   * Life cycle method to be called after a component mounts
+   * @method componentDidMount
    * @return {void}
    */
   componentDidMount() {
@@ -80,9 +78,11 @@ export class GroupBoard extends Component {
       }
     );
   }
+
   /**
-   * @function onChange
-   * @param {event} event 
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event 
    * @return {void}
    */
   onChange(event) {
@@ -90,9 +90,11 @@ export class GroupBoard extends Component {
       [event.target.name]: event.target.value
     });
   }
+
   /**
-   * @function onSubmit
-   * @param {event} event
+   * Handle onSubmit event
+   * @method onSubmit
+   * @param {object} event
    * @return {void} void
    */
   onSubmit(event) {
@@ -179,8 +181,10 @@ export class GroupBoard extends Component {
       }
     }
   }
+
   /**
-   * @function readBy
+   * Find readBy's
+   * @method readBy
    * @param {array} existingReaders
    * @return {boolean} foundUser 
    */
@@ -197,8 +201,10 @@ export class GroupBoard extends Component {
     }
     return foundUser;
   }
+
   /**
-   * @function toastMessage
+   * Toast message for sent message
+   * @method toastMessage
    * @return {void}
    */
   toastMessage() {
@@ -213,9 +219,11 @@ export class GroupBoard extends Component {
         this.toastMessage.className.replace('show', '');
       }, 2000);
   }
+
   /**
-   * @function toggleReadChechBox
-   * @param {*} event
+   * Toggle read and unread checkbox
+   * @method toggleReadChechBox
+   * @param {object} event
    * @return {void} 
    */
   toggleReadCheckBox(event) {
@@ -225,7 +233,8 @@ export class GroupBoard extends Component {
   }
 
   /**
-   * @function render
+   * Displays the DOM Component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -233,7 +242,6 @@ export class GroupBoard extends Component {
     const { groups, groupsBelonged } = this.props.group;
     const { messageData } = this.props.message;
     const groupName = this.props.groupName;
-    // const groupId = this.props.groupId;
 
     if (!groups || !groupsBelonged || groupName === 'No Group Found') {
       return (
@@ -361,6 +369,7 @@ export class GroupBoard extends Component {
     );
   }
 }
+
 GroupBoard.propTypes = {
   composeMessage: PropTypes.func.isRequired,
   groupSelectedId: PropTypes.string.isRequired,
@@ -374,29 +383,36 @@ GroupBoard.propTypes = {
   groupName: PropTypes.string.isRequired,
   group: PropTypes.object.isRequired
 };
+
 /**
  * @function mapStateToProps
- * @param {*} state
+ * @param {any} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message
-  };
-}
+  }
+);
 
-export default connect(mapStateToProps,
-  { addNotification,
-    getUserGroups,
-    clearRetrievedMessageAction,
-    getAdminGroups,
-    retrieveMessageAction,
-    composeMessage,
-    getUsersInGroup,
-    retrieveMessage,
-    updateNotification,
-    getNotification,
-    getReadBy,
-  })(GroupBoard);
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  addNotification,
+  getUserGroups,
+  clearRetrievedMessageAction,
+  getAdminGroups,
+  retrieveMessageAction,
+  composeMessage,
+  getUsersInGroup,
+  retrieveMessage,
+  updateNotification,
+  getNotification,
+  getReadBy,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GroupBoard);

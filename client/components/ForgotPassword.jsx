@@ -8,12 +8,16 @@ import validateInput from '../../server/shared/validations/validateInput';
 import { forgotPasswordRequest } from '../actions/forgotPasswordAction';
 
 /**
+ * Display Forgot password component
  * @class ForgotPassword
+ * @extends {Component}
  */
 export class ForgotPassword extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Creates an instance of ForgotPassword
+   * @constructor
+   * @param {any} props
+   * @memberof {ForgotPasswprd}
    */
   constructor(props) {
     super(props);
@@ -28,8 +32,9 @@ export class ForgotPassword extends Component {
   }
 
   /**
-   * 
-   * @param {*} event 
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event 
    * @return {void} void
    */
   onChange(event) {
@@ -39,8 +44,9 @@ export class ForgotPassword extends Component {
   }
 
   /**
-   * 
-   * @param {*} event
+   * Handle onSubmit event
+   * @method onSubmit
+   * @param {object} event
    * @return {void} void 
    */
   onSubmit(event) {
@@ -61,7 +67,11 @@ export class ForgotPassword extends Component {
         });
     }
   }
+
   /**
+   * Checks if input is valid
+   * @method isValid
+   * @param {object} event
    * @return {boolean} isValid
    */
   isValid() {
@@ -69,11 +79,12 @@ export class ForgotPassword extends Component {
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -129,14 +140,14 @@ export class ForgotPassword extends Component {
                       name="forgotpassword_btn"
                       className="btn btn-primary"
                     >
-                                        Recover Password
+                       Recover Password
                     </button>
                   </form>
                   <div className="text-primary">
                     <br />
                     <div>
                       <Link to="signup">
-                                Dont have an account? Sign up
+                         Dont have an account? Sign up
                       </Link>
                     </div>
                     <div><Link to="/">Sign in</Link></div>
@@ -151,6 +162,7 @@ export class ForgotPassword extends Component {
     );
   }
 }
+
 ForgotPassword.propTypes = {
   forgotPasswordRequest: PropTypes.func.isRequired,
 };

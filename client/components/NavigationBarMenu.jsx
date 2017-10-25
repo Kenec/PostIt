@@ -4,42 +4,50 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../actions/signinActions';
-import { getUserGroups,
-  getAdminGroups } from '../actions/groupActions';
+import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 
 /**
+ * Navigation Bar
  * @class NavigationBarMenu
+ * @extends {Component}
  */
 export class NavigationBarMenu extends Component {
   /**
+   * Creates an instance of NavigationBarMenu
    * @constructor
-   * @param {*} props 
+   * @param {any} props 
    */
   constructor(props) {
     super(props);
     this.onLogout = this.onLogout.bind(this);
   }
+
   /**
-   * @function componentWillMount
-   * @return{void} void
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
     const { user } = this.props.auth;
     this.props.getUserGroups({ username: user.username });
     this.props.getAdminGroups({ userId: user.id });
   }
+
   /**
-   * @function logout
-   * @param {event} event
+   * Handle User logout
+   * @method logout
+   * @param {object} event
    * @return {void} void 
    */
   onLogout(event) {
     event.preventDefault();
     this.props.logout();
   }
+
   /**
-   * @function render
-   * @return{DOM} DOM Component
+   * Displays the DOM component
+   * @method render
+   * @return {DOM} DOM Component
    */
   render() {
     const { isAuthenticated, user } = this.props.auth;
@@ -87,22 +95,32 @@ NavigationBarMenu.propTypes = {
   getAdminGroups: PropTypes.func.isRequired,
 
 };
+
 NavigationBarMenu.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
+ * Map state to props
  * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     auth: state.userLogin,
     group: state.group
-  };
-}
+  }
+);
 
-export default connect(mapStateToProps,
-  { logout,
-    getUserGroups,
-    getAdminGroups })(NavigationBarMenu);
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  logout,
+  getUserGroups,
+  getAdminGroups
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBarMenu);

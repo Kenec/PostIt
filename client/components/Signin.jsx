@@ -3,17 +3,22 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import NavigationBar from './NavigationBar.jsx'; // eslint-disable-line
+import NavigationBar from './NavigationBar.jsx';
 import { userSigninRequestAction } from '../actions/signinActions';
 import { deleteFlashMessage } from '../actions/flashMessages';
 import { getUserGroups } from '../actions/groupActions';
+
 /**
+ * Grant valid user access
  * @class Signin
+ * @extends {Component}
  */
 export class Signin extends Component {
   /**
+   * Creates an instance of Signin
    * @constructor
-   * @param {*} props 
+   * @param {any} props
+   * @memberof {Signin} 
    */
   constructor(props) {
     super(props);
@@ -28,8 +33,10 @@ export class Signin extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
+
   /**
-   * @function componentWillMount
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
@@ -38,9 +45,11 @@ export class Signin extends Component {
       this.context.router.push('/dashboard');
     }
   }
+
   /**
-   * @function onChange
-   * @param {Event} event
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void}
    */
   onChange(event) {
@@ -50,8 +59,9 @@ export class Signin extends Component {
   }
 
   /**
-   * @function onClick
-   * @param {Event} event
+   * Handles onClick event
+   * @method onClick
+   * @param {object} event
    * @return {void} 
    */
   onClick(event) {
@@ -60,8 +70,9 @@ export class Signin extends Component {
   }
 
   /**
-   * @function onSubmit
-   * @param {Event} event
+   * Handles onSubmit event
+   * @method onSubmit
+   * @param {object} event
    * @return {void} 
    */
   onSubmit(event) {
@@ -81,7 +92,8 @@ export class Signin extends Component {
   }
 
   /**
-   * @function render
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -114,10 +126,9 @@ export class Signin extends Component {
                     height="190px"
                   />
                   <span className="big-font">
-                            PostIt is a messenger application that allows
-                            you post messages to your created group.
-                    <b> PostIt </b>
-                            always deliver your messages on time.
+                    PostIt is a messenger application that allows
+                    you post messages to your created group.
+                    <b> PostIt </b> always deliver your messages on time.
                   </span><hr />
                 </div>
               </div>
@@ -125,7 +136,6 @@ export class Signin extends Component {
             <div className="col-md-1" />
 
             <div className="col-md-4">
-
               <div className="panel panel-info">
                 <div className="" />
                 {messages}
@@ -149,7 +159,7 @@ export class Signin extends Component {
                             required
                           />
                           <label htmlFor="username">
-                                        Username:
+                             Username:
                           </label>
                         </div>
 
@@ -205,24 +215,34 @@ Signin.propTypes = {
   getUserGroups: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
+
 Signin.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
+ * Map state to props
  * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     messages: state.flashMessages,
     group: state.group,
     auth: state.userLogin,
-  };
-}
-export default connect(mapStateToProps,
-  { userSigninRequestAction,
-    deleteFlashMessage,
-    getUserGroups
-  })(Signin);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  userSigninRequestAction,
+  deleteFlashMessage,
+  getUserGroups
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
 

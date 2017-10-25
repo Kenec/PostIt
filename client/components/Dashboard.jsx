@@ -2,23 +2,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import NavigationBarMenu from './NavigationBarMenu.jsx';
 import GroupLists from './GroupLists.jsx';
+import NavigationBarMenu from './NavigationBarMenu.jsx';
 import DashboardComponent from './DashboardComponent.jsx';
 
 /**
- * @class Signin
+ * Contain Dashboard sub components
+ * @class Dashboard
+ * @extends {Component}
  */
 export class Dashboard extends Component {
   /**
-     * @return {void}
-     */
+  * Life Cycle method to be called before a component mounts
+  * @method componentWillMount
+  * @return {void} void
+  */
   componentWillMount() {
     if (!this.props.isAuthenticated) {
       this.context.router.push('/');
     }
   }
+
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -40,6 +47,7 @@ export class Dashboard extends Component {
     );
   }
 }
+
 Dashboard.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired
 };
@@ -47,14 +55,17 @@ Dashboard.propTypes = {
 Dashboard.contextTypes = {
   router: PropTypes.object.isRequired
 };
+
 /**
- * 
+ * Map state to props
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     isAuthenticated: state.userLogin.isAuthenticated
-  };
-}
+  }
+);
+
 export default connect(mapStateToProps)(Dashboard);

@@ -2,23 +2,23 @@
 // import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-// import axios from 'axios';
+import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { getUserGroups,
-  getUserInfo,
-  addUserToGroups,
-  getUsersInGroupAction,
-  searchAllUsers } from '../actions/groupActions';
+import { getUserGroups, getUserInfo, addUserToGroups,
+  getUsersInGroupAction, searchAllUsers } from '../actions/groupActions';
 
-  /**
-   * @class SearchMember
-   */
+/**
+ * Search a user
+ * @class SearchMember
+ * @extends {Component}
+ */
 export class SearchMember extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Creates an instance of SearchMember
+   * @constructor
+   * @param {any} props
+   * @memberof {SearchMember}
    */
   constructor(props) {
     super(props);
@@ -39,21 +39,21 @@ export class SearchMember extends Component {
   }
 
   /**
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return{void} void
    */
   componentWillMount() {
-    const { isAuthenticated } = this.props.auth;
-    if (isAuthenticated) {
-      this.setState({
-        user: jwt.decode(localStorage.getItem('jwtToken')).username,
-        groupId: this.props.groupId
-      });
-    }
+    this.setState({
+      user: jwt.decode(localStorage.jwtToken).username,
+      groupId: this.props.groupId
+    });
   }
 
   /**
-   * 
-   * @param {Event} event
+   * Handle onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void} 
    */
   onChange(event) {
@@ -67,9 +67,11 @@ export class SearchMember extends Component {
     // This fires a action that searches for a user and return the result
     this.props.searchAllUsers({ username: userSearchName }, this.state.offset);
   }
+
   /**
-   * this method decrease the offset if it is greater than zero by 1
-   * @param {Event} event
+   * Decrease the offset if it is greater than zero by 1
+   * @method decreaseOffset
+   * @param {object} event
    * @return {void} 
    */
   decreaseOffset(event) {
@@ -85,15 +87,15 @@ export class SearchMember extends Component {
   }
 
   /**
-   * this method will increase the offset by 1
-   * @param {Event} event
+   * Increase the offset by 1
+   * @method increaseOffset
+   * @param {object} event
    * @return {void} 
    */
   increaseOffset(event) {
     event.preventDefault();
     this.props.searchAllUsers({ username: this.state.username },
       this.state.offset + 1);
-    // const { searchedUsers } = this.props.group;
     const usersCount = this.props.group.searchedUsers.count;
     this.setState({
       errors: {},
@@ -105,8 +107,9 @@ export class SearchMember extends Component {
   }
 
   /**
-   * 
-   * @param {Event} event
+   * Add a user to the group
+   * @method addUser
+   * @param {object} event
    * @return {void}
    */
   addUser(event) {
@@ -141,14 +144,16 @@ export class SearchMember extends Component {
     )
       .catch(() => {});
   }
+
   /**
- * @return {DOM} DOM Component
- */
+  * Display the DOM component
+  * @method render
+  * @return {DOM} DOM Component
+  */
   render() {
-    const { groups,
-      groupsBelonged,
-      searchedUsers, usersInGroup } = this.props.group;
     const { errors, success } = this.state;
+    const { groups, groupsBelonged, searchedUsers,
+      usersInGroup } = this.props.group;
 
     if (!groups || !groupsBelonged) {
       return (
@@ -231,28 +236,38 @@ export class SearchMember extends Component {
     );
   }
 }
+
 SearchMember.propTypes = {
   group: PropTypes.object.isRequired,
   groupId: PropTypes.string.isRequired,
   searchAllUsers: PropTypes.func.isRequired,
   addUserToGroups: PropTypes.func.isRequired,
   getUsersInGroupAction: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
 };
+
 /**
- * 
+ * Map state to props
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state objects 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    searchAllUsers,
-    getUserInfo,
-    addUserToGroups,
-    getUsersInGroupAction })(SearchMember);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  searchAllUsers,
+  getUserInfo,
+  addUserToGroups,
+  getUsersInGroupAction
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchMember);

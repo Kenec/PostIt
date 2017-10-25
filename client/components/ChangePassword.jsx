@@ -4,17 +4,22 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar.jsx';
-import validateInput from '../../server/shared/validations/validateInput';
-import { isValidToken,
-  updatePassword } from '../actions/forgotPasswordAction';
+import validateInput
+  from '../../server/shared/validations/validateInput';
+import { isValidToken, updatePassword }
+  from '../actions/forgotPasswordAction';
 
 /**
+ * Change Password Component
  * @class ChangePassword
+ * @extends {Component}
  */
 export class ChangePassword extends Component {
   /**
+   * Creates an instance of Signin
    * @constructor
-   * @param {*} props 
+   * @param {any} props
+   * @memberof {ChangePassword} 
    */
   constructor(props) {
     super(props);
@@ -28,14 +33,14 @@ export class ChangePassword extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+
   /**
-    * @function componentWillMount
-    * @return {void} void
-    */
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
+   */
   componentWillMount() {
-    // get token from the params and check if it a vdlid token
     const token = this.props.params.token;
-    // dispatch an action to check for a valid token
     this.props.isValidToken(token).then(
       () => {
         // do nothing if the token is valid
@@ -46,10 +51,12 @@ export class ChangePassword extends Component {
       }
     );
   }
+
   /**
-   * @function onChange
-   * @param {Event} event 
-   * @return {void} void
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event
+   * @return {void}
    */
   onChange(event) {
     // reset state when a element changes its state
@@ -57,45 +64,40 @@ export class ChangePassword extends Component {
       [event.target.name]: event.target.value
     });
   }
+
   /**
-   * @function onSubmit
-   * @param {Event} event
-   * @return {void} void 
+   * Handles onSubmit event
+   * @method onSubmit
+   * @param {object} event
+   * @return {void} 
    */
   onSubmit(event) {
-    // prevent the browser from refreshing or carrying out another action
     event.preventDefault();
-    // if the input field is valid
     if (this.isValid()) {
-      // disable the submit button and clear error and success state
       this.setState({ errors: {}, success: '', isLoading: true });
-      // get token from the props.params
       const token = this.props.params.token;
-      // create a variable for updating password
       const NewPassword = {
         password: this.state.password,
         token,
       };
-      // dispatch updatePassword action with token and update password detail
       this.props.updatePassword(token, NewPassword)
         .then(
-          // if it return a success
           ({ data }) => {
             this.setState({ success: data.message, isLoading: false });
           },
-          // if it returns error
           ({ response }) => {
             this.setState({ errors: response.data, isLoading: false });
           }
         )
-        // catch an exception
         .catch((error) => {
           this.setState({ errors: error, isLoading: false });
         });
     }
   }
+
   /**
-   * @function isValid
+   * Check if inputs are valid
+   * @method isValid
    * @return { boolean } isValid
    */
   isValid() {
@@ -105,9 +107,11 @@ export class ChangePassword extends Component {
     }
     return isValid;
   }
+
   /**
-   * @function render
-   * @return {DOM} DOM component
+   * Displays the DOM component
+   * @method render
+   * @return {DOM} DOM Component
    */
   render() {
     const { errors, success } = this.state;
@@ -144,7 +148,9 @@ export class ChangePassword extends Component {
                   >
 
                     <div className="form-group">
-                      <label htmlFor="password">Password:</label>
+                      <label htmlFor="password">
+                        Password:
+                      </label>
                       <input
                         type="password"
                         className="form-control"
@@ -161,7 +167,7 @@ export class ChangePassword extends Component {
 
                     <div className="form-group">
                       <label htmlFor="repassword">
-                                    Retype password:
+                          Retype password:
                       </label>
                       <input
                         type="password"
@@ -183,14 +189,14 @@ export class ChangePassword extends Component {
                       name="forgotpassword_btn"
                       className="btn btn-primary"
                     >
-                                  Change Password
+                       Change Password
                     </button>
                   </form>
                   <div className="text-primary">
                     <br />
                     <div>
                       <Link to="signup">
-                                  Dont have an account? Sign up
+                         Dont have an account? Sign up
                       </Link>
                     </div>
                     <div><Link to="/">Sign in</Link></div>
@@ -205,14 +211,23 @@ export class ChangePassword extends Component {
     );
   }
 }
+
 ChangePassword.propTypes = {
   isValidToken: PropTypes.func.isRequired,
   updatePassword: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired
 };
+
 ChangePassword.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null,
-  { isValidToken, updatePassword })(ChangePassword);
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  isValidToken, updatePassword
+};
+
+export default connect(null, mapDispatchToProps)(ChangePassword);

@@ -1,12 +1,13 @@
 // import
 import React from 'react';
-import { Link } from 'react-router';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 
 /**
- * 
- * @param {*} props 
+ * Display fitered messages
+ * @method FilterMessages
+ * @param {any} props 
  * @returns {DOM} DOM Components
  */
 export default function FilterMessages(props) {
@@ -36,6 +37,7 @@ export default function FilterMessages(props) {
     </div>
   );
 }
+
 FilterMessages.propTypes = {
   groupMessage: PropTypes.object.isRequired,
   groupSelectedId: PropTypes.node.isRequired

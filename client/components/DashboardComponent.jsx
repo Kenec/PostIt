@@ -6,27 +6,29 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { getUserGroups,
-  getAdminGroups } from '../actions/groupActions';
-import { retrieveMessage,
-  getNotification } from '../actions/messageActions';
+import { getUserGroups, getAdminGroups } from '../actions/groupActions';
+import { retrieveMessage, getNotification } from '../actions/messageActions';
 
 /**
+ * Display Dashboard
  * @class DashboardComponent
+ * @extends {Component}
  */
 export class DashboardComponent extends Component {
   /**
-   * @return {DOM} DOM Component
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
-    // if (localStorage.getItem('jwtToken') !== null) {
     this.props.getNotification(
       { userId: jwt.decode(localStorage.jwtToken).id }
     );
-    // }
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -84,31 +86,41 @@ export class DashboardComponent extends Component {
               {unreadMessagesList}
             </div>
           </div>
-
         </div>
       </div>
     );
   }
 }
+
 DashboardComponent.propTypes = {
   getNotification: PropTypes.func.isRequired,
   group: PropTypes.object.isRequired,
   message: PropTypes.object.isRequired,
 };
+
 /**
- * 
- * @param {*} state 
+ * Map state to props
+ * @function mapStateToProps
+ * @param {object} state 
  * @return {object} state objects
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message
-  };
-}
-export default connect(mapStateToProps,
-  { getNotification,
-    getUserGroups,
-    getAdminGroups,
-    retrieveMessage })(DashboardComponent);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getNotification,
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardComponent);

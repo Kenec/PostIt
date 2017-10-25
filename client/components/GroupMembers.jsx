@@ -6,20 +6,21 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
-import { getUserGroups,
-  getUsersInGroupAction,
-  getUsersInGroup,
-  getuserGroupsAction,
-  removeUserFromGroup } from '../actions/groupActions';
 import { retrieveMessage } from '../actions/messageActions';
+import { getUserGroups, getUsersInGroupAction,
+  getUsersInGroup, getuserGroupsAction, removeUserFromGroup }
+  from '../actions/groupActions';
 
 /**
+ * Display Group members
  * @class GroupMembers
+ * @extends {Component}
  */
 export class GroupMembers extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Create an instance of GroupMembers
+   * @param {any} props
+   * @memberof {GroupMembers}
    */
   constructor(props) {
     super(props);
@@ -29,16 +30,22 @@ export class GroupMembers extends Component {
       removalApproval: false,
       message: ''
     };
-    this.confirmAndRemoveUser = this.confirmAndRemoveUser.bind(this);
+    this.confirmRemoval = this.confirmRemoval.bind(this);
   }
+
   /**
-   * @return {void}
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
     this.getUser();
   }
+
   /**
-   * @return{void}
+   * Get users in a Group
+   * @method getUser
+   * @return {void}
    */
   getUser() {
     this.props.getUsersInGroup(this.props.groupSelectedId).then(
@@ -51,13 +58,16 @@ export class GroupMembers extends Component {
       }
     );
   }
+
   /**
+   * Remove user from a Group
+   * @method removeUser
    * @param {number} id 
-   * @param {object} payload
+   * @param {object} userDetail
    * @return {void}  
    */
-  removeUser(id, payload) {
-    this.props.removeUserFromGroup(id, payload).then(
+  removeUser(id, userDetail) {
+    this.props.removeUserFromGroup(id, userDetail).then(
       ({ data }) => {
         this.setState({ message: data.message });
         this.getUser();
@@ -68,43 +78,46 @@ export class GroupMembers extends Component {
       },
     );
   }
+
   /**
-   * @param {Event} event
+   * Confirm removal of a user from a Group
+   * @method confirmRemoval
+   * @param {object} event
    * @return {void}
    */
-  confirmAndRemoveUser(event) {
+  confirmRemoval(event) {
     event.preventDefault();
     const username = event.target.name;
     const userId = event.target.id;
     if (confirm(`Do you want to remove ${username} from the Group`)) {
-      const groupid = this.props.groupSelectedId;
+      const groupId = this.props.groupSelectedId;
       const removalPayLoad = {
         admin: jwt.decode(localStorage.jwtToken).id,
         user: parseInt(userId, 10),
       };
-      this.removeUser(groupid, removalPayLoad);
+      this.removeUser(groupId, removalPayLoad);
     }
   }
 
   /**
-   * @return {void}
+   * Displays the DOM component
+   * @method render
+   * @return {DOM} DOM Component
    */
   render() {
     const { groups, groupsBelonged, usersInGroup } = this.props.group;
-
     if (!groups || !groupsBelonged || !usersInGroup) {
       return (
         <h4>Loading ...</h4>
       );
     }
-
     const groupsMemberList = usersInGroup.map(groupMember => (
       <Link key={groupMember.id}>
         <div className="well well-sm no_spacing">
           <span id={groupMember.id}>{groupMember.username}</span>
           <span className="pull-right">
             <input
-              onClick={this.confirmAndRemoveUser}
+              onClick={this.confirmRemoval}
               type="button"
               name={groupMember.username}
               id={groupMember.id}
@@ -129,6 +142,7 @@ export class GroupMembers extends Component {
     );
   }
 }
+
 GroupMembers.propTypes = {
   getUsersInGroup: PropTypes.func.isRequired,
   getUsersInGroupAction: PropTypes.func.isRequired,
@@ -138,21 +152,30 @@ GroupMembers.propTypes = {
 };
 
 /**
+ * Map state to props
  * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
     auth: state.userLogin,
     message: state.message
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getUsersInGroupAction,
-    getuserGroupsAction,
-    getUsersInGroup,
-    retrieveMessage,
-    removeUserFromGroup })(GroupMembers);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getUsersInGroupAction,
+  getuserGroupsAction,
+  getUsersInGroup,
+  retrieveMessage,
+  removeUserFromGroup
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers);
