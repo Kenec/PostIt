@@ -1,20 +1,22 @@
+/* global expect */
 // import
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import ConnectedSignup, { Signup } from '../../components/Signup.jsx';
+import { Signup } from '../../components/Signup.jsx';
 
 describe("<Signup />", () => {
   const form = sinon.spy(); // spy on the signup button
   const userSignupRequest = sinon.spy(); // spy on the userSignupRequest props
   const addFlashMessage = sinon.spy(); // spy on addFlashMessage props
+  const getUserGroups = sinon.spy();
   const router = sinon.spy();
   const onSubmit = sinon.spy(Signup.prototype, "onSubmit");
   const onChange = sinon.spy(Signup.prototype, "onChange");
   const isValid = sinon.spy(Signup.prototype, "isValid");
   // assign all props to a varibale props
-  const props = { userSignupRequest, addFlashMessage };
+  const props = { userSignupRequest, addFlashMessage, getUserGroups };
   // assign context to a variables
   Signup.contextTypes = { router: PropTypes.func };
   // assign mounting Signup component to a variable

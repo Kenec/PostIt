@@ -5,6 +5,7 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { SearchMember } from '../../components/SearchMember.jsx';
+import '../../__mocks__/localStorage';
 
 describe('<SearchMember />', () => {
   const getUserGroups = sinon.spy();
@@ -17,13 +18,13 @@ describe('<SearchMember />', () => {
     groupsBelonged: [],
     searchedUsers: { rows: [
       {
-        id: '1',
+        id: 1,
         username: 'Kene',
         email: 'kene@email.com',
         phone: '234'
       },
       {
-        id: '2',
+        id: 2,
         username: 'Obi',
         email: 'obi@email.com',
         phone: '234'
@@ -49,7 +50,11 @@ describe('<SearchMember />', () => {
     getUserInfo,
     addUserToGroups,
     getUsersInGroupAction };
+
   const wrapper = mount(<SearchMember {...props} />);
+
+  wrapper.setState({ user: 'Kene' });
+  wrapper.setState({ groupId: 1 });
   it('should have a search user form', () => {
     expect(wrapper.find('SearchMember').length).toEqual(1);
     expect(wrapper.find('form').length).toEqual(1);

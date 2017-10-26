@@ -221,7 +221,7 @@ MessageDetailBoard.propTypes = {
   retrieveMessageAction: PropTypes.func.isRequired,
   getReadBy: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
-  messageId: PropTypes.string.isRequired,
+  messageId: PropTypes.number.isRequired,
 };
 
 MessageDetailBoard.contextTypes = {

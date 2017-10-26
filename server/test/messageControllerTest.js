@@ -34,12 +34,11 @@ describe('Messages', () => {
       });
   });
 
-  describe('API Route Tests: ', () => {
+  describe('Controller Tests: ', () => {
     // Test for messages
-    describe('Add Message to Group', () => {
+    describe('Message Controller: ', () => {
       const groupId = 1;
-      it(`should return status code 404 and when there is no message
-          in the group`,
+      it('should display no message when a group does not have message',
         (done) => {
           server
             .get(`/api/v1/groups/${groupId}/messages`)
@@ -52,7 +51,7 @@ describe('Messages', () => {
               done();
             });
         });
-      it('should send message and return success',
+      it('should send message',
         (done) => {
           server
             .post(`/api/v1/groups/${groupId}/message`)
@@ -69,12 +68,50 @@ describe('Messages', () => {
               res.body.should.be.a('object');
               res.body.should.have.property('status')
                 .eql('Message sent successfully');
-
               done();
             });
         });
-      it(`should return status code 200 and when a message
-          is sent successfully to a group`,
+      it('should not send a message if any paramter is missing',
+        (done) => {
+          server
+            .post(`/api/v1/groups/${groupId}/message`)
+            .send({
+              token,
+              // message: 'This is a sample message',
+              priorityLevel: 'Normal',
+              groupId,
+              sentBy: 1,
+              readBy: '1'
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it('should not send a message if any paramter is empty',
+        (done) => {
+          server
+            .post(`/api/v1/groups/${groupId}/message`)
+            .send({
+              token,
+              message: '',
+              priorityLevel: 'Normal',
+              groupId,
+              sentBy: 1,
+              readBy: '1'
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it('should display message when a group have message',
         (done) => {
           server
             .get(`/api/v1/groups/${groupId}/messages`)
@@ -82,14 +119,15 @@ describe('Messages', () => {
             .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('array');
+              res.body[0].should.have.property('message')
+                .eql('This is a sample message');
+              res.body[0].should.have.property('priorityLevel')
+                .eql('Normal');
               done();
             });
         });
-      // Return status code 200 for adding message
-      // notification
-      //
-      it(`should return status code 200 and  res
-         of object when a notification is added`,
+      it(`should add notification when a message
+          is sent`,
         (done) => {
           const messageId = 1;
           server
@@ -111,9 +149,28 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 400 and  res
-           of object when attempting to add a notification
-           that already exists`,
+      it(`should not add notification when a all required 
+        parameter is not available`,
+        (done) => {
+          const messageId = 1;
+          server
+            .post(`/api/v1/groups/${messageId}/notification`)
+            .send({
+              token,
+              // userId: 1,
+              readStatus: 0,
+              senderId: 1,
+              groupId
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request.Some column(s) column are missing');
+              done();
+            });
+        });
+      it('should not add a duplicate notification',
         (done) => {
           const messageId = 1;
           server
@@ -126,7 +183,7 @@ describe('Messages', () => {
               groupId
             })
             .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(409);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
                 .eql('Notification already exist');
@@ -135,9 +192,26 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 200 and  res
-          of object when retrieving a notification
-          that exists`,
+      it(`should not add a notification when message
+        with messageId is not found`,
+        (done) => {
+          const messageId = 10;
+          server
+            .post(`/api/v1/groups/${messageId}/notification`)
+            .send({
+              token,
+              userId: 1,
+              readStatus: 0,
+              senderId: 1,
+              groupId
+            })
+            .end((err, res) => {
+              res.should.have.status(500);
+              res.body.should.be.a('object');
+              done();
+            });
+        });
+      it('should retrieve notifications',
         (done) => {
           server
             .post('/api/v1/user/notifications')
@@ -151,10 +225,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 200 and  res
-            of object of an empty array when retrieving
-            message notifications of user with no message
-            notification`,
+      it(`should return empty array when
+          retrieving a notification of user who has no notification`,
         (done) => {
           server
             .post('/api/v1/user/notifications')
@@ -170,8 +242,7 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 200 and  res
-          of empty array no notification is found`,
+      it('should return empty array if message readers are empty',
         (done) => {
           const messageId = 1;
           server
@@ -187,9 +258,7 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 201 and  res
-           of object when a message notification
-           table is updated successfully`,
+      it('should update notification',
         (done) => {
           const messageId = 1;
           server
@@ -209,9 +278,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return status code 400 and  res
-         of object when a message notification
-         table cannot be updated`,
+      it(`should throw not found error when attempting
+          to update a notification that does not exist`,
         (done) => {
           const messageId = 1;
           server
@@ -222,33 +290,33 @@ describe('Messages', () => {
               readStatus: 1,
             })
             .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(404);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
                 .eql('Notification does not exist');
               done();
             });
         });
-      it(`should return status code 200 and  res
-          of object when getting all users that read
-          a message`,
+      it(`should not update the notification of a user
+        if userId is not found`,
         (done) => {
           const messageId = 1;
           server
             .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
-              userId: 2,
+              // userId: 2,
               readStatus: 1,
             })
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
-                .eql('Notification does not exist');
+                .eql('Invalid request.Some column are missing');
               done();
             });
         });
+
       it(`should return status code 200 and  res
           of object when getting all users that read
           a message`,

@@ -44,6 +44,24 @@ describe('Users', () => {
               done();
             });
         });
+      it('should another a new user account',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: 'Mike',
+              email: 'mike@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(201);
+              res.body.should.be.a('object');
+              res.should.have.status(201);
+              res.body.should.have.property('message')
+                .eql('User Created successfully');
+              done();
+            });
+        });
       it('should throw 409 error when a duplicate account wants to be created',
         (done) => {
           server
@@ -86,9 +104,25 @@ describe('Users', () => {
               phone: '07038550515',
               password: 'kene' })
             .end((err, res) => {
-              res.should.have.status(500);
+              res.should.have.status(400);
               res.body.should.have.property('message')
-                .eql('Cannot create your account due to some server error!');
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it('should not create a new user when any field is empty',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: '',
+              email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
               done();
             });
         });
@@ -96,16 +130,33 @@ describe('Users', () => {
   });
   describe('Signin', () => {
     let token = '';
-    it('should sign in a user with correct credentials', (done) => {
+    it('should not signin when any field is missing', (done) => {
       server
         .post('/api/v1/users/signin')
         .send({
-          username: 'kene',
+          // username: 'kene',
           password: 'kene' })
         .end((err, res) => {
           token = res.body.token;
-          res.should.have.status(202);
+          res.should.have.status(400);
           res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Invalid request. Some column(s) are missing');
+          done();
+        });
+    });
+    it('should not signin when any field is empty', (done) => {
+      server
+        .post('/api/v1/users/signin')
+        .send({
+          username: '',
+          password: 'kene' })
+        .end((err, res) => {
+          token = res.body.token;
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Invalid request. Some column(s) are missing');
           done();
         });
     });
@@ -126,6 +177,21 @@ describe('Users', () => {
             done();
           });
       });
+    it('should signin a user with correct credentials', (done) => {
+      server
+        .post('/api/v1/users/signin')
+        .send({
+          username: 'kene',
+          password: 'kene' })
+        .end((err, res) => {
+          token = res.body.token;
+          res.should.have.status(202);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Successfully logged in');
+          done();
+        });
+    });
     it('should return 404 if a user is not found',
       (done) => {
         server
@@ -184,16 +250,77 @@ describe('Users', () => {
             done();
           });
       });
+    it('should not search a user by username if username is not supplied',
+      (done) => {
+        server
+          .post('/api/v1/users/username')
+          .send({
+            token,
+            // username: 'kene' 
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property('message')
+              .eql('Invalid request. Username column is missing');
+            done();
+          });
+      });
+    it('should not search a user by username if username is empty',
+      (done) => {
+        server
+          .post('/api/v1/users/username')
+          .send({
+            token,
+            username: ''
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property('message')
+              .eql('Invalid request. Username column is missing');
+            done();
+          });
+      });
   });
   describe('Update Password', () => {
     const token = 'thisisagibrishtoken';
-    it(`should return status code 200 and res of an object
-        when password is updated`,
+    it('should not update password if new password is not available',
+      (done) => {
+        server
+          .post(`/api/v1/users/resetpassword/${token}`)
+          .send({
+            // password: 'kene',
+            email: 'kene@gmail.com' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Invalid request. Some column(s) are missing');
+            done();
+          });
+      });
+    it('should not update password if any parameter violates validation rules',
       (done) => {
         server
           .post(`/api/v1/users/resetpassword/${token}`)
           .send({
             password: 'kene',
+            confirmPassword: 'kene',
+            email: 'kene' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Email is invalid');
+            done();
+          });
+      });
+    it('should update password when all conditions are met',
+      (done) => {
+        server
+          .post(`/api/v1/users/resetpassword/${token}`)
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
             email: 'kene@gmail.com' })
           .end((err, res) => {
             res.should.have.status(200);
@@ -213,6 +340,56 @@ describe('Users', () => {
             res.body.should.be.a('object');
             res.body.should.have.property('message')
               .eql('Token not found');
+            done();
+          });
+      });
+  });
+  describe('Valid Token', () => {
+    const token = 'thisisagibrishtoken';
+    it('should check if token exist',
+      (done) => {
+        server
+          .get(`/api/v1/users/resetpassword/${token}`)
+          .set({ 'x-access-token': token })
+          .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Token not found');
+            done();
+          });
+      });
+  });
+  describe('Reset password', () => {
+    it('should not reset password if any parameter violates validation rules',
+      (done) => {
+        server
+          .post('/api/v1/users/resetpassword')
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
+            email: 'kene' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Email is invalid');
+            done();
+          });
+      });
+    it('should not update password when any field is empty',
+      (done) => {
+        server
+          .post('/api/v1/users/resetpassword')
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
+            email: '' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Invalid request. Email column is missing');
             done();
           });
       });

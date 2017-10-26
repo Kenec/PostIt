@@ -34,10 +34,10 @@ describe('Groups', () => {
       });
   });
 
-  describe('API Route Tests: ', () => {
+  describe('Controller Tests: ', () => {
     // Test for succesful group creation
-    describe('Create Group', () => {
-      it('should return status code 201 and  res of object on success',
+    describe('Group', () => {
+      it('should create a group when all parameters are supplied',
         (done) => {
           server
             .post('/api/v1/groups')
@@ -56,27 +56,44 @@ describe('Groups', () => {
               done();
             });
         });
-      // Return 400 status code if while creating a group
-      // the creator was not added to the groupUser Table
-      it(`should return status code 409 and  res
-         of object on failure to add Group creator to its create
-         Group`,
+      it('should not create a group if any field is empty',
+        (done) => {
+          server
+            .post('/api/v1/groups')
+            .send({
+              token,
+              groupName: '',
+              createdby: 1,
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it(`should not create a group when any 
+      of the required field is not available`,
         (done) => {
           server
             .post('/api/v1/groups')
             .send({
               token,
               groupName: 'Group',
+              // createdby: 1, // missing parameter
             })
             .end((err, res) => {
-              res.should.have.status(409);
+              res.should.have.status(400);
               res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
               done();
             });
         });
       // Test for uniquness of a group
-      it(`should return status code 409 for
-          attempting to create a group that exists`,
+      it(`should not create a group with a
+          group name that already exists`,
         (done) => {
           server
             .post('/api/v1/groups')
@@ -97,9 +114,7 @@ describe('Groups', () => {
               done();
             });
         });
-      // Test for retrieving group by its id
-      it(`should return status code 200 and a group array
-         when retrieving group by its creator id`,
+      it('should fetch a groups by its creator id',
         (done) => {
           server
             .post('/api/v1/groups/creator')
@@ -110,12 +125,16 @@ describe('Groups', () => {
             .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('array');
+              res.body[0].should.have.property('id')
+                .eql(1);
+              res.body[0].should.have.property('groupName')
+                .eql('Group');
+              res.body[0].should.have.property('createdAt');
               done();
             });
         });
       // Test for retrieving group by its id
-      it(`should return status code 200 and a group array
-         when retrieving group by its id`,
+      it('should return groups by its id',
         (done) => {
           const groupId = '1';
           server
@@ -124,13 +143,29 @@ describe('Groups', () => {
             .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('array');
+              res.body[0].should.have.property('id')
+                .eql(1);
+              res.body[0].should.have.property('groupName')
+                .eql('Group');
+              res.body[0].should.have.property('createdAt');
               done();
             });
         });
-      // Test for an 400 status error when group could
-      // not be retrieved by creator
-      it(`should return status code 400 and a group object
-           when error occurs while retrieving group by its creator id`,
+      it('should return 404 for group not found',
+        (done) => {
+          const groupId = null;
+          server
+            .get(`/api/v1/groups/${groupId}`)
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.have.property('message')
+                .eql('Group selected not found');
+              done();
+            });
+        });
+      it(`should not return a group when a userId passed is
+        not the creator's id`,
         (done) => {
           server
             .post('/api/v1/groups/creator')
@@ -139,7 +174,24 @@ describe('Groups', () => {
               userId: 3
             })
             .end((err, res) => {
+              res.should.have.status(500);
+              res.body.should.have.property('message')
+                .eql('Error retrieving Groups');
+              done();
+            });
+        });
+      it('should not fetch group by creator when userId is not passed',
+        (done) => {
+          server
+            .post('/api/v1/groups/creator')
+            .send({
+              token,
+              // userId: 1 // userId not passed
+            })
+            .end((err, res) => {
               res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. userId is missing');
               done();
             });
         });

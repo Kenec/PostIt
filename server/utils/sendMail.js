@@ -2,15 +2,15 @@ import nodemailer from 'nodemailer';
 /**
  * sendMail - This function send Mail notifcation for PostIT
  *
- * @param  {array} userArraysOfObj An array of users
+ * @param  {array} receivers An array of users
  * the group
  * @param  {string} message message to be sent
  * @param {string} subject title of the message to be sent
  * @return {boolean} returns true or false                  
  */
-export default function sendMail(userArraysOfObj, message, subject) {
+export default function sendMail(receivers, message, subject) {
   let emailReceivers = '';
-  userArraysOfObj.map((user) => {
+  receivers.map((user) => {
     emailReceivers = `${emailReceivers + user.email},`;
   });
 
