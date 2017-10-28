@@ -2,17 +2,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar';
 import validateInput from '../../server/shared/validations/validateInput';
 import { forgotPasswordRequest } from '../actions/forgotPasswordAction';
 
 /**
+ * Display Forgot password component
  * @class ForgotPassword
+ * @extends {Component}
  */
-class ForgotPassword extends Component {
+export class ForgotPassword extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Creates an instance of ForgotPassword
+   * @constructor
+   * @param {any} props
+   * @memberof {ForgotPasswprd}
    */
   constructor(props) {
     super(props);
@@ -27,8 +32,9 @@ class ForgotPassword extends Component {
   }
 
   /**
-   * 
-   * @param {*} event 
+   * Handles onChange event
+   * @method onChange
+   * @param {object} event 
    * @return {void} void
    */
   onChange(event) {
@@ -38,8 +44,9 @@ class ForgotPassword extends Component {
   }
 
   /**
-   * 
-   * @param {*} event
+   * Handle onSubmit event
+   * @method onSubmit
+   * @param {object} event
    * @return {void} void 
    */
   onSubmit(event) {
@@ -60,20 +67,24 @@ class ForgotPassword extends Component {
         });
     }
   }
+
   /**
+   * Checks if input is valid
+   * @method isValid
+   * @param {object} event
    * @return {boolean} isValid
    */
   isValid() {
     const { errors, isValid } = validateInput(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -129,14 +140,14 @@ class ForgotPassword extends Component {
                       name="forgotpassword_btn"
                       className="btn btn-primary"
                     >
-                                        Recover Password
+                       Recover Password
                     </button>
                   </form>
                   <div className="text-primary">
                     <br />
                     <div>
                       <Link to="signup">
-                                Dont have an account? Sign up
+                         Dont have an account? Sign up
                       </Link>
                     </div>
                     <div><Link to="/">Sign in</Link></div>
@@ -151,8 +162,9 @@ class ForgotPassword extends Component {
     );
   }
 }
+
 ForgotPassword.propTypes = {
-  forgotPasswordRequest: React.PropTypes.func.isRequired,
+  forgotPasswordRequest: PropTypes.func.isRequired,
 };
 
 export default connect(null, { forgotPasswordRequest })(ForgotPassword);

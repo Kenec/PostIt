@@ -26,7 +26,6 @@ export default (
       <Route path="/createGroup" component={requireAuth(CreateGroup)} />
       <Route path="/group/:groupid/:messageid" component={requireAuth(MessageBoard)} />
       <Route path="*" component={NotFoundPage} />
-
     </Route>
   </Router>
 );

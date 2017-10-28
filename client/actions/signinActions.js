@@ -2,62 +2,48 @@
 // import
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import config from '../../server/config';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { SET_CURRENT_USER } from './types';
 
 /**
- * setCurrentUser - sets the current user
- *
+ * Set current user in the store
+ * @function setCurrentUser
  * @param  {object} user description
- * @return {object}      user object
+ * @return {object} - object of type SET_CURRENT_USER and user
  */
-export function setCurrentUser(user) {
-  return {
+export const setCurrentUser = user => (
+  {
     type: SET_CURRENT_USER,
     user
-  };
-}
-
+  }
+);
 
 /**
- * logout - description
- *
- * @return {object}  description
+ * Logout a user 
+ * @function logout
+ * @return {object} - object user
  */
-export function logout() {
-  return (dispatch) => {
+export const logout = () => (
+  (dispatch) => {
     localStorage.removeItem('jwtToken');
     setAuthorizationToken(false);
     dispatch(setCurrentUser({}));
-  };
-}
-
-/**
- * logout - description
- *
- * @return {object}  description
- */
-export function isLoggedIn() {
-  let isUserLoggedIn = false;
-  const localJWT = localStorage.getItem('jwtToken');
-  if (localJWT && jwt.verify(localJWT, config.jwtSecret)) {
-    isUserLoggedIn = true;
   }
-  return isUserLoggedIn;
-}
+);
 
 /**
- * userSigninRequestAction - description
- *
- * @param  {object} data userdata for firing signin action
- * @return {type}      description
+ * User signin request
+ * @function userSigninRequestAction
+ * @param  {object} userData userdata for firing signin action
+ * @return {object} - user
  */
-export function userSigninRequestAction(data) {
-  return dispatch => axios.post('/api/v1/user/signin', data).then((res) => {
-    const token = res.data.token;
-    localStorage.setItem('jwtToken', token);
-    setAuthorizationToken(token);
-    dispatch(setCurrentUser(jwt.decode(token)));
-  });
-}
+export const userSigninRequestAction = userData => (
+  dispatch => axios.post('/api/v1/users/signin', userData)
+    .then((res) => {
+      const token = res.data.token;
+      localStorage.setItem('jwtToken', token);
+      setAuthorizationToken(token);
+      const { username, id } = jwt.decode(token);
+      dispatch(setCurrentUser({ username, id }));
+    })
+);

@@ -25,12 +25,11 @@ describe('Users', () => {
   });
 
   describe('API Route Tests: ', () => {
-    // Test for sign up staus code to be 201 and res to be object
     describe('Signup', () => {
-      it('should return status code 201 and  res of object on signup',
+      it('should create a new user account when all conditions are met',
         (done) => {
           server
-            .post('/api/v1/user/signup')
+            .post('/api/v1/users/signup')
             .send({
               username: 'kene',
               email: 'kene@gmail.com',
@@ -42,60 +41,135 @@ describe('Users', () => {
               res.should.have.status(201);
               res.body.should.have.property('message')
                 .eql('User Created successfully');
-              res.body.should.have.property('success')
-                .eql(true);
               done();
             });
         });
-      // Test if sigup function throws an error
-      it('should expect error status to be 400',
+      it('should another a new user account',
         (done) => {
           server
-            .post('/api/v1/user/signup')
+            .post('/api/v1/users/signup')
             .send({
+              username: 'Mike',
+              email: 'mike@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(201);
+              res.body.should.be.a('object');
+              res.should.have.status(201);
+              res.body.should.have.property('message')
+                .eql('User Created successfully');
+              done();
+            });
+        });
+      it('should throw 409 error when a duplicate account wants to be created',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: 'kene',
+              email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(409);
+              res.body.should.have.property('message')
+                .eql('User already exist');
+              done();
+            });
+        });
+      it('should not allow user to be created when any field is invalid',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: 'Miene',
+              email: 'email',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Email is invalid');
+              done();
+            });
+        });
+      it('should not create a new user when all field is not available',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              // username: 'kene', // ie if the validate input fails
               email: 'kene@gmail.com',
               phone: '07038550515',
               password: 'kene' })
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
-                .eql('Account Already Exists!');
-              res.body.should.have.property('success')
-                .eql(false);
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it('should not create a new user when any field is empty',
+        (done) => {
+          server
+            .post('/api/v1/users/signup')
+            .send({
+              username: '',
+              email: 'kene@gmail.com',
+              phone: '07038550515',
+              password: 'kene' })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
               done();
             });
         });
     });
   });
-  // Test for signin code to be 202 and res object to be an object
   describe('Signin', () => {
     let token = '';
-    it('should return status code 201 and  res to be object', (done) => {
+    it('should not signin when any field is missing', (done) => {
       server
-        .post('/api/v1/user/signin')
+        .post('/api/v1/users/signin')
         .send({
-          username: 'kene',
+          // username: 'kene',
           password: 'kene' })
         .end((err, res) => {
           token = res.body.token;
-          res.should.have.status(202);
+          res.should.have.status(400);
           res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Invalid request. Some column(s) are missing');
           done();
         });
     });
-    // Test if the parameter returned have an object of message
+    it('should not signin when any field is empty', (done) => {
+      server
+        .post('/api/v1/users/signin')
+        .send({
+          username: '',
+          password: 'kene' })
+        .end((err, res) => {
+          token = res.body.token;
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Invalid request. Some column(s) are missing');
+          done();
+        });
+    });
     it('should expect parameter of object returned on successful signin',
       (done) => {
         server
-          .post('/api/v1/user/signin')
+          .post('/api/v1/users/signin')
           .send({
             username: 'kene',
             password: 'kene' })
           .end((err, res) => {
             res.should.have.status(202);
             res.body.should.have.property('token');
-            res.body.should.have.property('success')
-              .eql(true);
             res.body.should.have.property('message')
               .eql('Successfully logged in');
             res.body.should.have.property('username')
@@ -103,17 +177,30 @@ describe('Users', () => {
             done();
           });
       });
-    // Test if sigin function throws an error when an invalid credential
-    // is provided
-    it('should expect error status to be 401',
+    it('should signin a user with correct credentials', (done) => {
+      server
+        .post('/api/v1/users/signin')
+        .send({
+          username: 'kene',
+          password: 'kene' })
+        .end((err, res) => {
+          token = res.body.token;
+          res.should.have.status(202);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message')
+            .eql('Successfully logged in');
+          done();
+        });
+    });
+    it('should return 404 if a user is not found',
       (done) => {
         server
-          .post('/api/v1/user/signin')
+          .post('/api/v1/users/signin')
           .send({
             username: 'paul',
             password: 'kene' })
           .end((err, res) => {
-            res.should.have.status(401);
+            res.should.have.status(404);
             res.body.should.have.property('message')
               .eql('Username not found, please register');
             done();
@@ -127,7 +214,7 @@ describe('Users', () => {
             token,
             username: 'kene' })
           .end((err, res) => {
-            res.should.have.status(202);
+            res.should.have.status(200);
             res.body.should.have.property('userid');
             res.body.should.have.property('username');
             res.body.should.have.property('phone');
@@ -135,7 +222,7 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return 400 error when user
+    it(`should return 404 error when user
         details is not found when searched by username`,
       (done) => {
         server
@@ -144,13 +231,13 @@ describe('Users', () => {
             token,
             username: 'keneM' })
           .end((err, res) => {
-            res.should.have.status(400);
+            res.should.have.status(404);
             res.body.should.have.property('message')
               .eql('User not found');
             done();
           });
       });
-    it(`should return 400 error when search user by
+    it(`should return 403 error when search user by
         username query errored`,
       (done) => {
         server
@@ -159,21 +246,81 @@ describe('Users', () => {
             // token, // when token is not available
             username: 'kene' })
           .end((err, res) => {
-            res.should.have.status(401);
+            res.should.have.status(403);
+            done();
+          });
+      });
+    it('should not search a user by username if username is not supplied',
+      (done) => {
+        server
+          .post('/api/v1/users/username')
+          .send({
+            token,
+            // username: 'kene' 
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property('message')
+              .eql('Invalid request. Username column is missing');
+            done();
+          });
+      });
+    it('should not search a user by username if username is empty',
+      (done) => {
+        server
+          .post('/api/v1/users/username')
+          .send({
+            token,
+            username: ''
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property('message')
+              .eql('Invalid request. Username column is missing');
             done();
           });
       });
   });
-  // Test for signin code to be 202 and res object to be an object
   describe('Update Password', () => {
-    let token = 'thisisagibrishtoken';
-    it(`should return status code 200 and res of an object
-        when password is updated`,
+    const token = 'thisisagibrishtoken';
+    it('should not update password if new password is not available',
       (done) => {
         server
-          .post(`/api/v1/user/resetpassword/${token}`)
+          .post(`/api/v1/users/resetpassword/${token}`)
+          .send({
+            // password: 'kene',
+            email: 'kene@gmail.com' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Invalid request. Some column(s) are missing');
+            done();
+          });
+      });
+    it('should not update password if any parameter violates validation rules',
+      (done) => {
+        server
+          .post(`/api/v1/users/resetpassword/${token}`)
           .send({
             password: 'kene',
+            confirmPassword: 'kene',
+            email: 'kene' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Email is invalid');
+            done();
+          });
+      });
+    it('should update password when all conditions are met',
+      (done) => {
+        server
+          .post(`/api/v1/users/resetpassword/${token}`)
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
             email: 'kene@gmail.com' })
           .end((err, res) => {
             res.should.have.status(200);
@@ -183,17 +330,66 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return status code 400 and res of an object
-          for invalid token`,
+    it('should 404 when token does not exists',
       (done) => {
         const inValidToken = 'thisisaninvalidtoken';
         server
-          .get(`/api/v1/user/resetpassword/${inValidToken}`)
+          .get(`/api/v1/users/resetpassword/${inValidToken}`)
+          .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Token not found');
+            done();
+          });
+      });
+  });
+  describe('Valid Token', () => {
+    const token = 'thisisagibrishtoken';
+    it('should check if token exist',
+      (done) => {
+        server
+          .get(`/api/v1/users/resetpassword/${token}`)
+          .set({ 'x-access-token': token })
+          .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Token not found');
+            done();
+          });
+      });
+  });
+  describe('Reset password', () => {
+    it('should not reset password if any parameter violates validation rules',
+      (done) => {
+        server
+          .post('/api/v1/users/resetpassword')
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
+            email: 'kene' })
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
             res.body.should.have.property('message')
-              .eql('Token not found');
+              .eql('Email is invalid');
+            done();
+          });
+      });
+    it('should not update password when any field is empty',
+      (done) => {
+        server
+          .post('/api/v1/users/resetpassword')
+          .send({
+            password: 'kene',
+            confirmPassword: 'kene',
+            email: '' })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message')
+              .eql('Invalid request. Email column is missing');
             done();
           });
       });

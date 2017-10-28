@@ -1,20 +1,20 @@
+/* global expect */
 // import
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import ConnectedSignup, { Signup } from '../components/Signup.jsx';
+import { Signup } from '../../components/Signup';
 
-describe("<Signup />", () => {
-  const form = sinon.spy(); // spy on the signup button
+describe('<Signup />', () => {
   const userSignupRequest = sinon.spy(); // spy on the userSignupRequest props
   const addFlashMessage = sinon.spy(); // spy on addFlashMessage props
-  const router = sinon.spy();
-  const onSubmit = sinon.spy(Signup.prototype, "onSubmit");
-  const onChange = sinon.spy(Signup.prototype, "onChange");
-  const isValid = sinon.spy(Signup.prototype, "isValid");
+  const getUserGroups = sinon.spy();
+  const onSubmit = sinon.spy(Signup.prototype, 'onSubmit');
+  const onChange = sinon.spy(Signup.prototype, 'onChange');
+  const isValid = sinon.spy(Signup.prototype, 'isValid');
   // assign all props to a varibale props
-  const props = { userSignupRequest, addFlashMessage };
+  const props = { userSignupRequest, addFlashMessage, getUserGroups };
   // assign context to a variables
   Signup.contextTypes = { router: PropTypes.func };
   // assign mounting Signup component to a variable
@@ -30,18 +30,17 @@ describe("<Signup />", () => {
   });
   it('should call onSubmit method when signup button is clicked', () => {
     // test if onSubmit is called each time the signup btn is cliecked
-    wrapper.find('[type="submit"]').get(0).click(); //.simulate('click');
+    wrapper.find('[type="submit"]').get(0).click();
     expect(onSubmit.calledOnce).toEqual(true);
   });
   it('should call onChange method when an input state is changed', () => {
     // test if onChange is called when a change event occurs
-    wrapper.find('[type="text"]').at(0).simulate('change'); //.simulate('click');
+    wrapper.find('[type="text"]').at(0).simulate('change');
     expect(onChange.calledOnce).toEqual(true);
   });
   it('should call isValid function when a form is submitted', () => {
     // test if isValid function checks for valid input
-    wrapper.find('[type="submit"]').at(0).simulate('click'); //.simulate('click');
+    wrapper.find('[type="submit"]').at(0).simulate('click');
     expect(isValid.calledOnce).toEqual(true);
   });
-
 });

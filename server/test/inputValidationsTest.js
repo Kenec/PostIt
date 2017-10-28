@@ -9,14 +9,16 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('SignupValidation', () => {
+describe('inputValidation', () => {
   // Test for Signup Validation to be a function
   const data = {
     username: 'Kene',
     phone: '07038550515',
     email: 'mail@email.com',
     password: 'kene',
-    repassword: 'kene'
+    repassword: 'kene',
+    readBy: '1',
+    sentBy: '1',
   };
   describe('function', () => {
     it('should accept two params',

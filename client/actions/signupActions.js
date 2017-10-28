@@ -1,13 +1,25 @@
+/* global localStorage */
 // import
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import setAuthorizationToken from '../utils/setAuthorizationToken';
+import { setCurrentUser } from '../actions/signinActions';
 
 /**
- * userSignupRequest - signup request action
- *
- * @param  {type} userData userdata to signup
- * @return {type}          description
+ * Signup a user
+ * @function userSignupRequest
+ * @param  {object} userData - user data to signup
+ * @return {json} - json response from the server
  */
-/*eslint-disable*/
-export function userSignupRequest(userData) {
-  return () => axios.post('/api/v1/user/signup', userData);
-}
+const userSignupRequest = userData => (
+  dispatch => axios.post('/api/v1/users/signup', userData)
+    .then((response) => {
+      const token = response.data.token;
+      localStorage.setItem('jwtToken', token);
+      setAuthorizationToken(token);
+      const { username, id } = jwt.decode(token);
+      dispatch(setCurrentUser({ username, id }));
+    })
+);
+
+export default userSignupRequest;

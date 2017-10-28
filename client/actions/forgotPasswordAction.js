@@ -2,34 +2,33 @@
 import axios from 'axios';
 
 /**
- * forgotPasswordRequest - description
- *
- * @param  {string} email The email of the user requesting for change
- * of password
- * @return {type}          description
+ * Add forgotPassword token to user's token column
+ * @function forgotPasswordRequest
+ * @param  {string} email - user email requesting password reset
+ * @return {json} - axios post response
  */
-export function forgotPasswordRequest(email) {
-  return () => axios.post('/api/v1/user/resetpassword', email);
-}
+export const forgotPasswordRequest = email => (
+  () => axios.post('/api/v1/users/resetpassword', email)
+);
 
 /**
- * ChangePasswordWithValidToken - description
- *
- * @param  {string} token token
- * @return {type}       description
+ * Check if a token is valid
+ * @function isValidToken
+ * @param  {string} token - token generated for the user for password reset
+ * @return {json} - axios post response
  */
-export function checkForValidToken(token) {
-  return () => axios.get(`/api/v1/user/resetpassword/${token}`);
-}
+export const isValidToken = token => (
+  () => axios.get(`/api/v1/users/resetpassword/${token}`)
+);
 
 /**
- * updatePassword - update password
- *
- * @param  {string} token description
- * @param {object} updatePasswordDetail contains the email and the new password
- * @return {type}       description
+ * Update users password in the database
+ * @function updatePassword
+ * @param  {string} token - token generated for the user for password reset
+ * @param {object} updatePasswordDetail - the email and the new password
+ * @return {json} - axios post response
  */
-export function updatePassword(token, updatePasswordDetail) {
-  return () => axios.post(`/api/v1/user/resetpassword/${token}`,
-    updatePasswordDetail);
-}
+export const updatePassword = (token, updatePasswordDetail) => (
+  () => axios.post(`/api/v1/users/resetpassword/${token}`,
+    updatePasswordDetail)
+);

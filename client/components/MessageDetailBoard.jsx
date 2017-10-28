@@ -2,31 +2,28 @@
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import jwt from 'jsonwebtoken';
 import { Link } from 'react-router';
+import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import moment from 'moment';
-import { getUserGroups,
-  getGroupsCreatedByUser,
-  getUsersInGroup
-} from '../actions/groupActions';
-import { retrieveMessage,
-  composeMessage,
-  retrieveMessageAction,
-  clearRetrievedMessageAction,
-  addNotification,
-  updateNotification,
-  getNotification,
-  getUsersWhoReadMessage,
-  updateReadBy
-} from '../actions/messageActions';
+import { getUserGroups, getAdminGroups, getUsersInGroup }
+  from '../actions/groupActions';
+import { retrieveMessage, composeMessage, retrieveMessageAction,
+  clearRetrievedMessageAction, addNotification, updateNotification,
+  getNotification, getReadBy, updateReadBy }
+  from '../actions/messageActions';
 
 /**
+ * Display the Full Message
  * @class MessageDetailBoard
+ * @extends {Component}
  */
-class MessageDetailBoard extends Component {
+export class MessageDetailBoard extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Create an instance of MessageDetailBoard
+   * @constructor
+   * @param {any} props
+   * @memberof {MessageDetailBoard}
    */
   constructor(props) {
     super(props);
@@ -34,7 +31,7 @@ class MessageDetailBoard extends Component {
       groupName: '',
       groupId: '',
       Message: '',
-      priority_level: '',
+      priorityLevel: '',
       errors: {},
       success: '',
       isLoading: false,
@@ -42,40 +39,33 @@ class MessageDetailBoard extends Component {
       retrieveMessageError: '',
       retrievedMessages: [],
     };
-    // this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   /**
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
-    const { isAuthenticated } = this.props.auth;
-    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    // const { groups, groupsByUser } = this.props.group;
-    // const groupId = this.props.groupSelectedId;
-    // const groupName = this.props.groupName;
-    this.props.getUsersWhoReadMessage(this.props.messageId);
+    this.props.getReadBy(parseInt(this.props.messageId, 10));
     this.props.clearRetrievedMessageAction();
-    if (isAuthenticated) {
-      this.setState({
-        sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-        priority_level: 'Normal',
-      });
-    }
+    this.setState({
+      sentBy: jwt.decode(localStorage.jwtToken).id,
+      priorityLevel: 'Normal',
+    });
   }
 
   /**
-   * @return {void}
+   * Life cycle method to be called after a component mounts
+   * @method componentDidMount
+   * @return {void} void
    */
   componentDidMount() {
-    // get MessageData from the store
-    // const { messageData } = this.props.message;
-    // fire an action to retrieve messages
     this.props.retrieveMessage(this.props.groupSelectedId).then(
-      (messageData) => {
+      (message) => {
         this.setState({ retrievedMessages: [] });
-        this.props.retrieveMessageAction(messageData.data);
+        this.props.retrieveMessageAction(message.data);
         const { updatedMessageData } = this.props.message;
         this.setState({
           retrievedMessages: updatedMessageData,
@@ -90,8 +80,9 @@ class MessageDetailBoard extends Component {
   }
 
   /**
-   * 
-   * @param {*} event
+   * Handle onChange event
+   * @method onChange
+   * @param {object} event
    * @return {void} 
    */
   onChange(event) {
@@ -101,11 +92,12 @@ class MessageDetailBoard extends Component {
   }
 
   /**
-   * 
+   * Find readBy's
+   * @method readBy
    * @param {array} existingReaders  
    * @return {boolean} foundUser
    */
-  checkIfUserHaveReadMessage(existingReaders) {
+  readBy(existingReaders) {
     let userId;
     let foundUser = false;
     if (existingReaders) {
@@ -116,42 +108,44 @@ class MessageDetailBoard extends Component {
         }
       });
     }
-
     return foundUser;
   }
 
 
   /**
+   * Display the DOM Component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
-    // const { errors, success, retrieveMessageError } = this.state;
-    const { groups, groupsByUser } = this.props.group;
-    const { messageData, usersWhoHaveReadMessage } = this.props.message;
+    const { groups, groupsBelonged } = this.props.group;
+    const { messageData, readBy } = this.props.message;
     const groupName = this.props.groupName;
-    // const groupId = this.props.groupId;
 
     if (!groups ||
-       !groupsByUser ||
+       !groupsBelonged ||
        groupName === 'No Group Found' ||
-       !messageData || !usersWhoHaveReadMessage) {
+       !messageData || !readBy) {
       return (
         <h4>Loading....</h4>
       );
     }
+
     // retrieve all users who have read this message
-    let allUsersWhoReadMessages = '';
-    usersWhoHaveReadMessage.messageReadUsers.map((user) => {
-      allUsersWhoReadMessages += `@${user.Reader.username} `;
+    let readByUsers = '';
+    readBy.messageReadUsers.map((user) => {
+      readByUsers += `@${user.Reader.username} `;
+      return true;
     });
+
     // retrieve full message by id
     let singleReturnedMessage = '';
     singleReturnedMessage = messageData.map((groupMessage) => {
-      if (groupMessage.id == this.props.messageId) {
+      if (groupMessage.id === parseInt(this.props.messageId, 10)) {
         this.props.updateNotification(groupMessage.id,
           { userId: this.state.sentBy, readStatus: 1 });
         // update the ReadBy column if the user have not read this message
-        if (!this.checkIfUserHaveReadMessage(groupMessage.ReadBy)) {
+        if (!this.readBy(groupMessage.ReadBy)) {
           // fire an action to update the readBy column
           this.props.updateReadBy(groupMessage.id,
             { readBy: this.state.sentBy });
@@ -164,7 +158,7 @@ class MessageDetailBoard extends Component {
                   <i><b>{groupMessage.Users.username}</b></i>
                 </span>
                 <span className="left yellow lighten-5">
-                  <i>{groupMessage.priority_level}</i>
+                  <i>{groupMessage.priorityLevel}</i>
                 </span>
                 <span className="right red-text lighten-5">
                   {moment(groupMessage.createdAt, moment.ISO_8601).fromNow()}
@@ -181,7 +175,7 @@ class MessageDetailBoard extends Component {
               <em><b>Message Readers</b></em>
               <small><i>  hover here</i></small>
               <span className="tooltipptext">
-                {allUsersWhoReadMessages}
+                {readByUsers}
               </span>
             </div>
           </div>
@@ -215,47 +209,51 @@ class MessageDetailBoard extends Component {
     );
   }
 }
+
 MessageDetailBoard.propTypes = {
-  group: React.PropTypes.object.isRequired,
-  groupName: React.PropTypes.string.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  retrieveMessage: React.PropTypes.func.isRequired,
-  clearRetrievedMessageAction: React.PropTypes.func.isRequired,
-  groupSelectedId: React.PropTypes.string.isRequired,
-  updateNotification: React.PropTypes.func.isRequired,
-  updateReadBy: React.PropTypes.func.isRequired,
-  retrieveMessageAction: React.PropTypes.func.isRequired,
-  getUsersWhoReadMessage: React.PropTypes.func.isRequired,
-  message: React.PropTypes.object.isRequired,
-  messageId: React.PropTypes.string.isRequired,
-  // groupId: React.PropTypes.string.isRequired,
+  group: PropTypes.object.isRequired,
+  groupName: PropTypes.string.isRequired,
+  retrieveMessage: PropTypes.func.isRequired,
+  clearRetrievedMessageAction: PropTypes.func.isRequired,
+  groupSelectedId: PropTypes.string.isRequired,
+  updateNotification: PropTypes.func.isRequired,
+  updateReadBy: PropTypes.func.isRequired,
+  retrieveMessageAction: PropTypes.func.isRequired,
+  getReadBy: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired,
+  messageId: PropTypes.string.isRequired,
 };
+
 MessageDetailBoard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
+
 /**
- * 
- * @param {*} state
+ * @function mapStateToProps
+ * @param {any} state
  * @return {object} state object
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message
-  };
-}
-export default connect(mapStateToProps,
-  { addNotification,
-    getUserGroups,
-    clearRetrievedMessageAction,
-    getGroupsCreatedByUser,
-    retrieveMessageAction,
-    composeMessage,
-    getUsersInGroup,
-    retrieveMessage,
-    getUsersWhoReadMessage,
-    updateNotification,
-    getNotification,
-    updateReadBy
-  })(MessageDetailBoard);
+  }
+);
+
+const mapDispatchToProps = {
+  addNotification,
+  getUserGroups,
+  clearRetrievedMessageAction,
+  getAdminGroups,
+  retrieveMessageAction,
+  composeMessage,
+  getUsersInGroup,
+  retrieveMessage,
+  getReadBy,
+  updateNotification,
+  getNotification,
+  updateReadBy
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageDetailBoard);

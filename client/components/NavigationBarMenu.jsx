@@ -2,46 +2,52 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { logout } from '../actions/signinActions';
-import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
-// import { retrieveMessage } from '../actions/messageActions';
+import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 
 /**
+ * Navigation Bar
  * @class NavigationBarMenu
+ * @extends {Component}
  */
-class NavigationBarMenu extends Component {
+export class NavigationBarMenu extends Component {
   /**
-   * 
-   * @param {*} props 
+   * Creates an instance of NavigationBarMenu
+   * @constructor
+   * @param {any} props 
    */
   constructor(props) {
     super(props);
-    this.logout = this.logout.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
+
   /**
-   * @return{void} void
+   * Life cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
-    // const { getUserGroups, getGroupsCreatedByUser } = this.props.group;
-    const { /* isAuthenticated, */ user } = this.props.auth;
-    // if (!isAuthenticated) {
-    //   this.context.router.push('/');
-    // }
+    const { user } = this.props.auth;
     this.props.getUserGroups({ username: user.username });
-    this.props.getGroupsCreatedByUser({ userId: user.id });
+    this.props.getAdminGroups({ userId: user.id });
   }
+
   /**
-   * 
-   * @param {event} event
+   * Handle User logout
+   * @method logout
+   * @param {object} event
    * @return {void} void 
    */
-  logout(event) {
+  onLogout(event) {
     event.preventDefault();
     this.props.logout();
   }
+
   /**
-   * @return{DOM} DOM Component
+   * Displays the DOM component
+   * @method render
+   * @return {DOM} DOM Component
    */
   render() {
     const { isAuthenticated, user } = this.props.auth;
@@ -67,7 +73,7 @@ class NavigationBarMenu extends Component {
               <span className="blue-text">
                 <b className="space">Welcome {isAuthenticated && user.username }!</b>
               </span>
-              <Link to="" className="space" onClick={this.logout}>
+              <Link to="" className="space" onClick={this.onLogout}>
                     Logout
               </Link>
             </div>
@@ -83,28 +89,38 @@ class NavigationBarMenu extends Component {
 }
 
 NavigationBarMenu.propTypes = {
-  auth: React.PropTypes.object.isRequired,
-  logout: React.PropTypes.func.isRequired,
-  getUserGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
 
 };
+
 NavigationBarMenu.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
+
 /**
- * 
+ * Map state to props
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
-    auth: state.userLoginReducer,
+const mapStateToProps = state => (
+  {
+    auth: state.userLogin,
     group: state.group
-  };
-}
+  }
+);
 
-export default connect(mapStateToProps,
-  { logout,
-    getUserGroups,
-    getGroupsCreatedByUser })(NavigationBarMenu);
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  logout,
+  getUserGroups,
+  getAdminGroups
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBarMenu);

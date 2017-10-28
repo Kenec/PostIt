@@ -12,8 +12,16 @@ chai.use(chaiHttp);
 describe('sendSMS', () => {
   // Test for SMS
   describe('function', () => {
-    it('should accept two params',
+    it('should be a function',
       () => {
+        sendSMS.should.be.a('function');
+      }
+    );
+    it('should send an SMS',
+      () => {
+        const receivers = [{ phone: 1234 }];
+        const message = 'Hello World';
+        // const smsSender = sendSMS(receivers, message);
         sendSMS.should.be.a('function');
       }
     );

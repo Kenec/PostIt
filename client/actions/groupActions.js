@@ -1,177 +1,175 @@
 // import
 import axios from 'axios';
-import { CREATE_GROUP,
-  GET_USER_GROUPS, SEARCH_ALL_USERS,
-  GET_GROUPS_CREATED_BY_USER,
-  ADD_USER_TO_GROUPS,
-  GET_USERS_IN_GROUP
-
-} from './types';
+import { CREATE_GROUP, GET_USER_GROUPS,
+  SEARCH_ALL_USERS, GET_ADMIN_GROUPS,
+  ADD_USER_TO_GROUPS, GET_USERS_IN_GROUP } from './types';
 
 /**
- * Create Group Action method.
- * @constructor
+ * Add created group to the store
+ * @function createGroupAction
  * @param {object} groupData - The group data return from creating a group.
- *
+ * @return {object} - object of type CREATE_Group and groupData
  */
-export function createGroupAction(groupData) {
-  return {
+export const createGroupAction = groupData => (
+  {
     type: CREATE_GROUP,
     groupData
-  };
-}
+  }
+);
 
 /**
- * Represents a book.
- * @constructor
+ * Get Groups from the store
+ * @function getuserGroupsAction
  * @param {object} groupData - The group data return from creating a group.
- *
+ * @return {object} - object of type GET_USER_GROUPS and groups
  */
-export function getuserGroupsAction(groupData) {
-  return {
+export const getuserGroupsAction = groupData => (
+  {
     type: GET_USER_GROUPS,
     groups: groupData
-  };
-}
+  }
+);
 
 /**
- * Represents a book.
- * @constructor
- * @param {object} usersData - The user data retur
- * n from searching all user from a group.
- *
+ * Search All user
+ * @function searchAllUsersAction
+ * @param {object} usersData - The user data from search
+ * @return {object} - object of type SEARCH_ALL_USER and users
  */
-export function searchAllUsersAction(usersData) {
-  return {
+export const searchAllUsersAction = usersData => (
+  {
     type: SEARCH_ALL_USERS,
     users: usersData
-  };
-}
+  }
+);
 
 /**
- * Represents a book.
- * @constructor
- * @param {object} data - data of groups created by a particular user
- * .
- *
+ * Get Groups created by a user
+ * @function getAdminGroupsAction
+ * @param {object} groups - data of groups created by a particular user
+ * @return {object} - object of type GET_ADMIN_GROUPS and groupBelonged
  */
-export function getGroupsCreatedByUserAction(data) {
-  return {
-    type: GET_GROUPS_CREATED_BY_USER,
-    groupsByUser: data
-  };
-}
+export const getAdminGroupsAction = groups => (
+  {
+    type: GET_ADMIN_GROUPS,
+    groupsBelonged: groups
+  }
+);
+
 /**
- * Represents a book.
- * @constructor
- * @param {object} data - data of users in a group
- * .
- *
+ * Get users in a group
+ * @function getUsersInGroupAction
+ * @param {object} users - data of users in a group
+ * @return {object} - object of type GET_USERS_IN_GROUP
  */
-export function getUsersInGroupAction(data) {
-  return {
+export const getUsersInGroupAction = users => (
+  {
     type: GET_USERS_IN_GROUP,
-    usersInGroup: data
-  };
-}
-/**
- * Add user to a group action.
- * @constructor
- * @param {object} data - data of user to be added in a group
- * .
- *
- */
-export function addUserToGroupsAction(data) {
-  return {
-    type: ADD_USER_TO_GROUPS,
-    userData: data
-  };
-}
+    usersInGroup: users
+  }
+);
 
 /**
- * Search for all user where a username is LIKE.
- * @constructor
- * @param {string} username - The is the username of the user being searhed.
- *  @param {Number} offset - the offset
+ * Add user to a group in the store
+ * @function addUserToGroupsAction
+ * @param {object} user - data of user to be added in a group
+ * @return {object} - object of type ADD_USER_TO_GROUPS and userData
  */
-export function searchAllUsers(username, offset) {
-  return dispatch => axios.post(`/api/v1/users/${offset}`, username)
+export const addUserToGroupsAction = user => (
+  {
+    type: ADD_USER_TO_GROUPS,
+    userData: user
+  }
+);
+
+/**
+ * Search user from the database
+ * @function searchAllUsers 
+ * @param {string} username - the username of the user being searched.
+ * @param {number} offset - the offset
+ * @return {json} -  axios post response
+ */
+export const searchAllUsers = (username, offset) => (
+  dispatch => axios.post(`/api/v1/users/${offset}`, username)
     .then((res) => {
       dispatch(searchAllUsersAction(res.data));
-    });
-}
+    })
+);
 
 /**
- * Search for all user in a group.
- * @constructor
- * @param {string} groupId - The is the groupid.
- *
+ * Get users in a group from the database
+ * @function getUsersInGroup
+ * @param {string} groupId - The groupid of a group.
+ * @return {json} - axios get response
  */
-export function getUsersInGroup(groupId) {
-  return () => axios.get(`/api/v1/groups/${groupId}/users`);
-}
+export const getUsersInGroup = groupId => (
+  () => axios.get(`/api/v1/groups/${groupId}/users`)
+);
 
 /**
- * Search for all user in a group.
- * @constructor
+ * Add user to a group
+ * @function addUserToGroups
  * @param {string} groupId - The is the groupid.
  * @param {string} userId - The is the userId.
- *
+ * @return {json} - axios post response
  */
-export function addUserToGroups(groupId, userId) {
-  return () => axios.post(`/api/v1/group/${groupId}/user`, userId);
-}
+export const addUserToGroups = (groupId, userId) => (
+  () => axios.post(`/api/v1/groups/${groupId}/user`, userId)
+);
 
 /**
- * Search for all user in a group.
- * @constructor
- * @param {string} data - This is the userInfo data.
- *
+ * Get user info by username from the database
+ * @function getUserInfo
+ * @param {string} user - This is the userInfo data.
+ * @return {json} - axios post response
  */
-export function getUserInfo(data) {
-  return () => axios.post('/api/v1/users/username', data);
-}
+export const getUserInfo = user => (
+  () => axios.post('/api/v1/users/username', user)
+);
 
 /**
- * Create group function.
- * @constructor
+ * create group
+ * @function createGroup
  * @param {string} groupData - The is the group data for creating group.
- *
+ * @return {json} - axios post response
  */
-export function createGroup(groupData) {
-  return dispatch => axios.post('/api/v1/group', groupData).then(() => {
+export const createGroup = groupData => (
+  dispatch => axios.post('/api/v1/groups', groupData).then(() => {
     dispatch(createGroupAction(groupData));
-  }
-  );
-}
+  })
+);
+
 /**
- * Get users in group function.
- * @constructor
- * @param {string} user - The is the user whose group  which he belongs to
- * is fetched.
- *
+ * Get users Groups
+ * @function getUserGroups
+ * @param {string} user - user whose group is fetched
+ * @return {json} - axios post response
  */
-export function getUserGroups(user) {
-  return dispatch => axios.post('/api/v1/users/me', user).then((res) => {
+export const getUserGroups = user => (
+  dispatch => axios.post('/api/v1/user/groups', user).then((res) => {
     dispatch(getuserGroupsAction(res.data));
-  });
-}
+  })
+);
+
 /**
- * Get groups created by a user function.
- * @constructor
+ * Get Groups created by a user from the database
+ * @function getAdminGroups
  * @param {string} user - The is the user whose group is fetched.
- *
+ * @return {json} - axios post response
  */
-export function getGroupsCreatedByUser(user) {
-  return dispatch => axios.post('/api/v1/group/creator', user).then((res) => {
-    dispatch(getGroupsCreatedByUserAction(res.data));
-  });
-}
-/** 
+export const getAdminGroups = user => (
+  dispatch => axios.post('/api/v1/groups/creator', user).then((res) => {
+    dispatch(getAdminGroupsAction(res.data));
+  })
+);
+
+/**
+ * Remove user from a group
+ * @function removeUserFromGroup
  * @param {integer} id 
  * @param {object} payLoad
- * @return {void}
+ * @return {json} - axios post response
  */
-export function removeUserFromGroup(id, payLoad) {
-  return () => axios.post(`/api/v1/group/${id}/removeuser`, payLoad);
-}
+export const removeUserFromGroup = (id, payLoad) => (
+  () => axios.post(`/api/v1/groups/${id}/users`, payLoad)
+);

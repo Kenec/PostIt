@@ -1,208 +1,265 @@
 import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
 import { Users } from '../models';
 import config from '../config';
+import sendMail from '../utils/sendMail';
 import validateInput from '../shared/validations/validateInput';
 
 export default {
-  // function to create a new user
-
   /**
    * create - create a new user
-   *
    * @param  {object} req incoming request object
-   * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @param  {object} res server response object
+   * @return {json}     returns json response
    */
   create(req, res) {
+    if (!(req.body.username && req.body.email
+      && req.body.phone && req.body.password)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
+      });
+    }
     // call the validateInput input function for validations
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      res.status(400).json(errors);
-    }
-    return Users
-      .create({
-        username: req.body.username,
-        phone: req.body.phone,
-        email: req.body.email,
-        password: md5(req.body.password)
-      })
-      .then(user => res.status(201).json({
-        message: 'User Created successfully',
-        success: true,
-        username: user.username,
-        email: user.email
-      }))
-      .catch(() => {
-        res.status(400).json({
-          message: 'Account Already Exists!',
-          success: false
-        });
+      const usernameError = errors.username;
+      const emailError = errors.email;
+      const phoneError = errors.phone;
+      const passwordError = errors.password;
+      const confirmPasswordError = errors.confirmPassword;
+      res.status(400).send({
+        message: usernameError ||
+        emailError || phoneError ||
+        passwordError || confirmPasswordError
       });
+    } else {
+      Users
+        .findAll({
+          where: {
+            username: [req.body.username],
+            password: md5(req.body.password)
+          }
+        })
+        .then((user) => {
+          if (user[0]) {
+            return res.status(409).send({
+              message: 'User already exist'
+            });
+          }
+          return Users
+            .create({
+              username: req.body.username,
+              phone: req.body.phone,
+              email: req.body.email,
+              password: md5(req.body.password)
+            })
+            .then((aUser) => {
+              const token = jwt.sign({
+                id: aUser.id,
+                username: aUser.username
+              }, config.jwtSecret, { expiresIn: '48h' }); // expires in 48h
+              res.status(201).json({
+                token,
+                message: 'User Created successfully',
+                username: `${aUser.username}`,
+              });
+            })
+            .catch(() => {
+              res.status(500).json({
+                message: 'Cannot create your account due to some server error!',
+              });
+            });
+        })
+        .catch(() => {
+          res.status(500).json({
+            message: 'An error has occurred trying to search for user',
+          });
+        });
+    }
   },
-  // function for loggging a user in
 
   /**
-   * list - function to log a user in
-   *
+   * signin - logs a user in to the account
    * @param  {object} req incoming request object
-   * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @param  {object} res server response object
+   * @return {json}     returns json response
    */
-  list(req, res) {
-    Users
-      .findAll({
-        where: {
-          username: [req.body.username],
-          password: md5(req.body.password)
-        }
-      })
-      .then((user) => {
-        if (user[0]) {
-          // create an authToken for the user
-          const token = jwt.sign({
-            id: user[0].id,
-            username: user[0].username
-          }, config.jwtSecret, { expiresIn: '2h' }); // token expires in 2h
-
-          res
-            .status(202)
-            .send({
-              token,
-              message: 'Successfully logged in',
-              username: `${user[0].username}`,
-              success: true,
-            });
-          return;
-        }
-
-        res.status(401)
-          .send({
-            message: 'Username not found, please register'
-          });
+  signin(req, res) {
+    if (!(req.body.username && req.body.password)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
       });
+    }
+    const { errors, isValid } = validateInput(req.body);
+    if (!isValid) {
+      res.status(400).send({ message: errors.password || errors.username });
+    } else {
+      Users
+        .findAll({
+          where: {
+            username: [req.body.username],
+            password: md5(req.body.password)
+          }
+        })
+        .then((user) => {
+          if (user[0]) {
+          // create an authToken for the user
+            const token = jwt.sign({
+              id: user[0].id,
+              username: user[0].username
+            }, config.jwtSecret, { expiresIn: '48h' }); // token expires in 48h
+
+            res
+              .status(202)
+              .send({
+                token,
+                message: 'Successfully logged in',
+                username: `${user[0].username}`,
+              });
+            return;
+          }
+
+          res.status(404)
+            .send({
+              message: 'Username not found, please register'
+            });
+        }).catch(() => {
+          res.status(500).json({
+            message: 'An error has occurred trying to search for user',
+          });
+        });
+    }
   },
-  // function to reset password
 
   /**
    * resetPassword - function to reset users password
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
   resetPassword(req, res) {
-    Users.findAll({ where: { email: req.body.email } })
-      .then((user) => {
-        if (user[0]) {
-          const token = crypto.randomBytes(20).toString('hex');
-          const tokenExpireDate = Date.now() + 3600000; // expire in 1hr
-          Users.update({
-            resetPasswordToken: token,
-            resetPasswordExpiryTime: tokenExpireDate,
-          }, {
-            where: {
-              email: req.body.email
-            }
-          })
-            .then(() => {
-              // create reusable transporter
-              // object using the default SMTP transport
-              const transporter = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                  user: process.env.EMAIL_NAME,
-                  pass: process.env.EMAIL_PASSWORD
-                }
-              });
-              // setup email data with unicode symbols
-              const mailOptions = {
-                from: process.env.EMAIL_NAME, // sender address
-                to: req.body.email, // list of receivers
-                subject: 'PostIT Password Reset', // Subject line
-                text:
-               `You are receiving this because you (or someone else)
-                have requested the reset of the password for your account.
-                \n\n
-                Please click on the following link, or paste this into
-                your browser to complete the process:
-                \n\n ${`http://${req.headers.host}/recoverpassword/${token}`}
-                If you did not request this, please ignore this email
-                and your password will remain unchanged.\n`
+    if (!(req.body.email)) {
+      return res.status(400).send({
+        message: 'Invalid request. Email column is missing'
+      });
+    }
+    const { errors, isValid } = validateInput(req.body);
 
-              };
-              transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                  return res.status(400).send(
+    if (!isValid) {
+      const emailError = errors.email;
+      res.status(400).send({
+        message: emailError
+      });
+    } else {
+      Users.findAll({ where: { email: req.body.email } })
+        .then((user) => {
+          if (user[0]) {
+            const token = crypto.randomBytes(20).toString('hex');
+            const tokenExpireDate = Date.now() + 3600000; // expire in 1hr
+            Users.update({
+              resetPasswordToken: token,
+              resetPasswordExpiryTime: tokenExpireDate,
+            }, {
+              where: {
+                email: req.body.email
+              }
+            })
+              .then(() => {
+                const emailReceiver = [{ email: req.body.email }];
+                const emailSubject = 'PostIT Password Reset';
+                const emailText = `<hr/><p>You are receiving this because you
+                (or someone else) have requested the reset of the password
+                for your account.</p>
+                <p> Please click on the following link, or paste this into
+                your browser to complete the process:</p><p>
+                <b>${`http://${req.headers.host}/recoverpassword/${token}`}</b>
+                </p><p>If you did not request this, please ignore this email
+                and your password will remain unchanged.</p><hr/>`;
+                const send = sendMail(emailReceiver, emailText, emailSubject);
+                if (send) {
+                  res.status(200).send(
+                    { message: 'Password reset link has been sent to your email' });
+                } else {
+                  res.status(500).send(
                     { message: 'Unable to send Link to email' });
                 }
-                return res.status(200).send(
-                  { message: 'Password reset link has been sent to your email'
-                  });
-              });
-            })
-            .catch(() => res.status(400).send({
-              message: 'Cannot send Mail'
-            })
-            );
-        } else {
-          return res.status(400).send({
-            message: 'Invalid email address!'
-          });
-        }
-      })
-      .catch(() => res.status(400).send({
-        message: 'Error !!'
-      })
-      );
+              })
+              .catch(() => res.status(500).send({
+                message: 'Cannot send Mail! Try again'
+              })
+              );
+          } else {
+            return res.status(404).send({
+              message: 'Sorry! Email address not found'
+            });
+          }
+        })
+        .catch(() => res.status(500).send({
+          message: 'The action cannot be completed! Try again'
+        })
+        );
+    }
   },
-  // update password function
 
   /**
-   * updatePassword - update password in the db
-   *
+   * updatePassword - update user password in the db
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
   updatePassword(req, res) {
-    return Users.update({
-      password: md5(req.body.password),
-      resetPasswordToken: '', // resetPasswordToken set to empty
-      resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
-    }, {
-      where: {
-        resetPasswordToken: req.params.token
-      }
-    })
-      .then(() => {
-        res.status(200).send({
-          message: 'Password reset successfully!'
-        });
-      })
-      .catch((error) => {
-        res.status(400).send({
-          error,
-          message: 'Cannot reset password!',
-        });
+    if (!(req.body.password && req.body.confirmPassword)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
       });
+    }
+    const { errors, isValid } = validateInput(req.body);
+
+    if (!isValid) {
+      const emailError = errors.email;
+      const confirmPasswordError = errors.confirmPassword;
+      res.status(400).send({
+        message: emailError || confirmPasswordError
+      });
+    } else {
+      return Users.update({
+        password: md5(req.body.password),
+        resetPasswordToken: '', // resetPasswordToken set to empty
+        resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
+      }, {
+        where: {
+          resetPasswordToken: req.params.token
+        }
+      })
+        .then(() => {
+          res.status(200).send({
+            message: 'Password reset successfully!'
+          });
+        })
+        .catch((error) => {
+          res.status(500).send({
+            error,
+            message: 'Cannot reset password!',
+          });
+        });
+    }
   },
 
-  // check token passed and the one in the database. Return success
-  // if token is valid and error if token is not valid
-
   /**
-   * checkValidTokenForPasswordReset - method to check if token is
+   * isTokenValid - method to check if token is
    * still valid as of the time of changing password by the user
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  checkValidTokenForPasswordReset(req, res) {
+  isTokenValid(req, res) {
+    if (!(req.params.token)) {
+      return res.status(400).send({
+        message: 'Invalid request. Token column is missing'
+      });
+    }
     return Users
       .findAll({
         where: {
@@ -218,52 +275,59 @@ export default {
             email: `${user[0].email}`,
           });
         } else {
-          res.status(400).send({
+          res.status(404).send({
             message: 'Token not found',
           });
         }
       })
       .catch(() => {
-        res.status(400).send({
+        res.status(500).send({
           message: 'Unable to search for token',
         });
       });
   },
-  // Fetch Member by username and return its id
 
   /**
-   * FetchMemberByName - method to fetch member by its username to return
+   * fetchUserByName - method to fetch member by its username to return
    * its id
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  FetchMemberByName(req, res) {
-    return Users
-      .findAll({ where: { username: req.body.username } })
-      .then((user) => {
-        if (user[0]) {
-          res
-            .status(202)
-            .send({
-              userid: `${user[0].id}`,
-              username: `${user[0].username}`,
-              phone: `${user[0].phone}`,
-              email: `${user[0].email}`,
-            });
-          return;
-        }
-        res.status(400).send({
-          message: 'User not found',
-        });
-      })
-      .catch(() => {
-        res.status(400).send({
-          message: 'User does not exist'
-        });
+  fetchUserByName(req, res) {
+    if (!(req.body.username)) {
+      return res.status(400).send({
+        message: 'Invalid request. Username column is missing'
       });
+    }
+    const { errors, isValid } = validateInput(req.body);
+    if (!isValid) {
+      res.status(400).send({ message: errors.username });
+    } else {
+      return Users
+        .findAll({ where: { username: req.body.username } })
+        .then((user) => {
+          if (user[0]) {
+            res
+              .status(200)
+              .send({
+                userid: `${user[0].id}`,
+                username: `${user[0].username}`,
+                phone: `${user[0].phone}`,
+                email: `${user[0].email}`,
+              });
+            return;
+          }
+          res.status(404).send({
+            message: 'User not found',
+          });
+        })
+        .catch(() => {
+          res.status(500).send({
+            message: 'Cannot search for user'
+          });
+        });
+    }
   },
-
-
 };
+

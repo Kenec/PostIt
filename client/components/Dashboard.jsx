@@ -1,23 +1,31 @@
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import GroupLists from './GroupLists';
 import NavigationBarMenu from './NavigationBarMenu';
-import LeftSideGroupMenu from './LeftSideGroupMenu';
 import DashboardComponent from './DashboardComponent';
 
 /**
- * @class Signin
+ * Contain Dashboard sub components
+ * @class Dashboard
+ * @extends {Component}
  */
 export class Dashboard extends Component {
   /**
-     * @return {void}
-     */
+  * Life Cycle method to be called before a component mounts
+  * @method componentWillMount
+  * @return {void} void
+  */
   componentWillMount() {
     if (!this.props.isAuthenticated) {
       this.context.router.push('/');
     }
   }
+
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
@@ -27,7 +35,7 @@ export class Dashboard extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
-              <LeftSideGroupMenu />
+              <GroupLists />
             </div>
             <div className="col-md-7">
               <DashboardComponent />
@@ -39,21 +47,25 @@ export class Dashboard extends Component {
     );
   }
 }
+
 Dashboard.propTypes = {
-  isAuthenticated: React.PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 Dashboard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
+
 /**
- * 
+ * Map state to props
+ * @function mapStateToProps
  * @param {object} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
-    isAuthenticated: state.userLoginReducer.isAuthenticated
-  };
-}
+const mapStateToProps = state => (
+  {
+    isAuthenticated: state.userLogin.isAuthenticated
+  }
+);
+
 export default connect(mapStateToProps)(Dashboard);

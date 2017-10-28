@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    priority_level: {
+    priorityLevel: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -61,4 +61,3 @@ export default (sequelize, DataTypes) => {
   };
   return Messages;
 };
-// just before a PR for code review

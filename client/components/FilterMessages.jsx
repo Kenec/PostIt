@@ -1,11 +1,13 @@
 // import
 import React from 'react';
-import { Link } from 'react-router';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 
 /**
- * 
- * @param {*} props 
+ * Display fitered messages
+ * @method FilterMessages
+ * @param {any} props 
  * @returns {DOM} DOM Components
  */
 export default function FilterMessages(props) {
@@ -18,7 +20,7 @@ export default function FilterMessages(props) {
               <i><b>{props.groupMessage.Users.username}</b></i>
             </span>
             <span className="left yellow lighten-5">
-              <i>{props.groupMessage.priority_level}</i>
+              <i>{props.groupMessage.priorityLevel}</i>
             </span>
             <span className="right red-text lighten-5">
               {moment(props.groupMessage.createdAt, moment.ISO_8601).fromNow()}
@@ -35,7 +37,8 @@ export default function FilterMessages(props) {
     </div>
   );
 }
+
 FilterMessages.propTypes = {
-  groupMessage: React.PropTypes.object.isRequired,
-  groupSelectedId: React.PropTypes.node.isRequired
+  groupMessage: PropTypes.object.isRequired,
+  groupSelectedId: PropTypes.node.isRequired
 };

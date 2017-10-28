@@ -1,54 +1,56 @@
-/* global localStorage */
 // import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import NavigationBarMenu from './NavigationBarMenu';
 import MessageDetailBoard from './MessageDetailBoard';
 import SearchMember from './SearchMember';
 import GroupMembers from './GroupMembers';
 import { retrieveMessage } from '../actions/messageActions';
-import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 
+/**
+ * Message Board container
+ * @class MessageBoard
+ * @extends {Component}
+ */
+export class MessageBoard extends Component {
   /**
-   * @class MessageBoard
-   */
-class MessageBoard extends Component {
-  /**
-   * @return {void}
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
-    const { /* isAuthenticated, */ user } = this.props.auth;
-    // if (isAuthenticated) {
+    const { user } = this.props.auth;
     this.setState({
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-      priority_level: 'Normal',
+      sentBy: user.id,
+      priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
-    this.props.getGroupsCreatedByUser({ userId: user.id });
-    // }
+    this.props.getAdminGroups({ userId: user.id });
   }
 
   /**
+   * Display the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
     const id = this.props.params.groupid;
     const messageId = this.props.params.messageid;
 
     let groupName;
     let found = false;
 
-    if (!groups || !groupsByUser) {
+    if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
       );
     }
 
     groups.groups.map((group) => {
-      if (group.id == id) {
+      if (group.id === parseInt(id, 10)) {
         groupName = group.groupName;
         found = true;
       }
@@ -58,7 +60,7 @@ class MessageBoard extends Component {
     if (!found) {
       groupName = 'No Group Found';
       return (
-        this.context.router.push('/dashboard')
+        this.context.router.push('/NotFound')
       );
     }
 
@@ -88,29 +90,41 @@ class MessageBoard extends Component {
     );
   }
 }
+
 MessageBoard.propTypes = {
-  getUserGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  group: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
+
 MessageBoard.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
+
 /**
- * 
- * @param {*} state
+ * Map state to props
+ * @function mapStateToProps
+ * @param {any} state
  * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getGroupsCreatedByUser,
-    retrieveMessage })(MessageBoard);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageBoard);

@@ -4,9 +4,11 @@ import { Link } from 'react-router';
 import NavigationBar from './NavigationBar';
 
 /**
- * @class Signin
+ * NOT FOUND Page
+ * @method Signin
+ * @return {DOM} DOM Component
  */
-const NotFound = () =>
+export const NotFound = () =>
   (<div className="content">
     <NavigationBar />
     <div className="container-fluid">
@@ -18,7 +20,7 @@ const NotFound = () =>
           <img alt="" src="/images/404.png" width="150px" height="150px" />
         </span>
         <span className="col-md-7 col-md-offset-2 text-center">
-          <Link to="/dashboard">GET BACK HOME </Link>
+          <Link to="/dashboard">GET BACK HOME</Link>
         </span>
       </div>
     </div>

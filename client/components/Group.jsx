@@ -1,53 +1,56 @@
-/* global localStorage */
 // import
 import React, { Component } from 'react';
-import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import NavigationBarMenu from './NavigationBarMenu';
 import GroupBoard from './GroupBoard';
 import SearchMember from './SearchMember';
 import GroupMembers from './GroupMembers';
 import { retrieveMessage } from '../actions/messageActions';
-import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+import { getUserGroups, getAdminGroups }
+  from '../actions/groupActions';
 
 /**
+ * Displays Group related components
  * @class Group
+ * @extends {Component}
  */
-class Group extends Component {
+export class Group extends Component {
   /**
+   * Life Cycle method to be called before a component mounts
+   * @method componentWillMount
    * @return {void} void
    */
   componentWillMount() {
     const { user } = this.props.auth;
-    // if (isAuthenticated) {
     this.setState({
-      sentBy: jwt.decode(localStorage.getItem('jwtToken')).id,
-      priority_level: 'Normal',
+      sentBy: user.id,
+      priorityLevel: 'Normal',
     });
     this.props.getUserGroups({ username: user.username });
-    this.props.getGroupsCreatedByUser({ userId: user.id });
-    // }
+    this.props.getAdminGroups({ userId: user.id });
   }
 
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
+    const { groups, groupsBelonged } = this.props.group;
     const id = this.props.params.groupid;
 
     let groupName;
     let found = false;
 
-    if (!groups || !groupsByUser) {
+    if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
       );
     }
 
     groups.groups.map((group) => {
-      if (group.id == id) {
+      if (group.id === parseInt(id, 10)) {
         groupName = group.groupName;
         found = true;
       }
@@ -56,15 +59,12 @@ class Group extends Component {
 
     if (!found) {
       groupName = 'No Group Found';
-      return (
-        this.context.router.push('/dashboard')
-      );
+      this.context.router.push('/notFound');
     }
 
     return (
       <div className="content">
         <NavigationBarMenu />
-
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
@@ -78,34 +78,45 @@ class Group extends Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }
 }
+
 Group.propTypes = {
-  getUserGroups: React.PropTypes.func.isRequired,
-  getGroupsCreatedByUser: React.PropTypes.func.isRequired,
-  auth: React.PropTypes.object.isRequired,
-  group: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired
+  getUserGroups: PropTypes.func.isRequired,
+  getAdminGroups: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired
 };
+
 Group.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
+
 /**
- * 
- * @param {*} state 
- * @return {object} state object
+ * Map state to props
+ * @function mapStateToProps
+ * @param {object} state
+ * @return {object} state object 
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
-    auth: state.userLoginReducer,
+    auth: state.userLogin,
     message: state.message,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getGroupsCreatedByUser,
-    retrieveMessage })(Group);
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Group);

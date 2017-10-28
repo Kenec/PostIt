@@ -2,36 +2,43 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getUserGroups,
-  getGroupsCreatedByUser } from '../actions/groupActions';
+import PropTypes from 'prop-types';
 import { retrieveMessage } from '../actions/messageActions';
+import { getUserGroups, getAdminGroups }
+  from '../actions/groupActions';
 
 /**
- * @class LeftSideGroupMenu
+ * List all Groups
+ * @class GroupLists
+ * @extends {Component}
  */
-class LeftSideGroupMenu extends Component {
+export class GroupLists extends Component {
   /**
-   * @return {void}
+   * Life cycle method to be called before component mounts
+   * @method componentWillMount
+   * @return {void} void
    */
   componentWillMount() {
     // const { isAuthenticated, user } = this.props.auth;
   }
+
   /**
+   * Displays the DOM component
+   * @method render
    * @return {DOM} DOM Component
    */
   render() {
-    const { groups, groupsByUser } = this.props.group;
-
-    if (!groups || !groupsByUser) {
+    const { groups, groupsBelonged } = this.props.group;
+    if (!groups || !groupsBelonged) {
       return (
         <h4>Loading ...</h4>
       );
     }
-    groupsByUser.map(group => (
+    groupsBelonged.map(group => (
       <li key={group.id} value={group.id}>
         <Link to="#">{group.groupName}</Link>
       </li>));
-    const groupsBelongedList = groups.groups.map(group => (
+    const userGroups = groups.groups.map(group => (
       <Link to={`/group/${group.id}`} key={group.id}>
         <div className="well well-sm no_spacing">
           <span id={group.id}>{group.groupName}</span>
@@ -51,28 +58,39 @@ class LeftSideGroupMenu extends Component {
         </div>
         <div className="well well-sm group_board">
           <ul>
-            {groupsBelongedList}
+            {userGroups}
           </ul>
         </div>
       </div>
     );
   }
 }
-LeftSideGroupMenu.propTypes = {
-  group: React.PropTypes.object.isRequired
+
+GroupLists.propTypes = {
+  group: PropTypes.object.isRequired
 };
+
 /**
- * 
- * @param {*} state 
+ * Map state to props
+ * @function mapStateToProps
+ * @param {object} state 
  * @return {object} state object
  */
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = state => (
+  {
     group: state.group,
-    auth: state.userLoginReducer,
-  };
-}
-export default connect(mapStateToProps,
-  { getUserGroups,
-    getGroupsCreatedByUser,
-    retrieveMessage })(LeftSideGroupMenu);
+    auth: state.userLogin,
+  }
+);
+
+/**
+ * Map dispatch to props
+ * @return {object} dispatch objects
+ */
+const mapDispatchToProps = {
+  getUserGroups,
+  getAdminGroups,
+  retrieveMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GroupLists);

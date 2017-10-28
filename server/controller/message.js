@@ -1,79 +1,111 @@
-import _ from 'underscore';
+import underscore from 'underscore';
 import { Messages, Users, Groups, MessageReads } from '../models';
 import sendMail from '../utils/sendMail';
 import sendSMS from '../utils/sendSMS';
+import validateInput from '../shared/validations/validateInput';
+
 /**
  *  Message controller functions
  */
 export default {
-  // function to create a new message
 
   /**
    * create - create a new message
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
   create(req, res) {
-    return Messages
-      .create({
-        message: req.body.message,
-        priority_level: req.body.priority_level,
-        groupId: req.params.groupid,
-        sentBy: req.body.sentBy,
-        ReadBy: req.body.readBy
-      })
-      .then((message) => {
-        Groups.find({
-          include: [{
-            model: Users,
-            as: 'users',
-            required: false,
-            attributes: ['id', 'username', 'email', 'phone'],
-            through: { attributes: [] }
-          }],
-          where: { id: message.groupId },
-          attributes: ['id', 'groupName', 'createdby']
-        }).then((group) => {
+    if (!(req.body.message && req.body.priorityLevel
+      && req.params.groupId && req.body.sentBy
+      && req.body.readBy)) {
+      return res.status(400).send({
+        message: 'Invalid request. Some column(s) are missing'
+      });
+    }
+    // call the validateInput input function for validations
+    const { errors, isValid } = validateInput(req.body);
+    if (!isValid) {
+      const messageError = errors.message;
+      const priorityLevelError = errors.priorityLevel;
+      const sentByError = errors.sentBy;
+      const readByError = errors.readBy;
+      res.status(400).send({
+        status: messageError ||
+        priorityLevelError || sentByError ||
+        readByError
+      });
+    } else {
+      return Messages
+        .create({
+          message: req.body.message,
+          priorityLevel: req.body.priorityLevel,
+          groupId: req.params.groupId,
+          sentBy: req.body.sentBy,
+          ReadBy: req.body.readBy
+        })
+        .then((message) => {
+          Groups.find({
+            include: [{
+              model: Users,
+              as: 'users',
+              required: false,
+              attributes: ['id', 'username', 'email', 'phone'],
+              through: { attributes: [] }
+            }],
+            where: { id: message.groupId },
+            attributes: ['id', 'groupName', 'createdby']
+          }).then((group) => {
           // send email and sms when message is delivered successfully
-          if (group.length !== 0) {
-            if (message.priority_level === 'Urgent') {
-              // send mail
-              sendMail(group.users, message.message);
-            } else if (message.priority_level === 'Critical') {
-              // send mail and sms
-              sendMail(group.users, message.message);
-              sendSMS(group.users, message.message);
+            if (group.length !== 0) {
+              if (message.priorityLevel === 'Urgent') {
+                const subject = 'PostIT Urgent Notification';
+                const emailMessage = `<b>It seems you have an urgent message
+              from PostIT App</b><hr/><p>${message.message}</p>`;
+                // send mail
+                sendMail(group.users, emailMessage, subject);
+              } else if (message.priorityLevel === 'Critical') {
+                const subject = 'PostIT Critical Notification';
+                const emailMessage = `<b>It seems you have an urgent message
+              from PostIT App</b><hr/><p>${message.message}</p>`;
+                // send mail and sms
+                sendMail(group.users, emailMessage, subject);
+                sendSMS(group.users, message.message);
+              }
+              res.status(201).send({
+                status: 'Message sent successfully',
+                message: message.message,
+                priorityLevel: message.priorityLevel,
+                group: message.groupId,
+                sentBy: message.sentBy,
+                readBy: message.ReadBy,
+                id: message.id,
+                createdAt: message.createdAt,
+              });
             }
-            res.status(201).send({
-              status: 'Message sent successfully',
-              message: message.message,
-              priority_level: message.priority_level,
-              group: message.groupId,
-              sentBy: message.sentBy,
-              readBy: message.ReadBy,
-              id: message.id,
-              createdAt: message.createdAt,
-            });
-          }
-        }).catch();
-      })
-      .catch(() => res.status(400).send({
-        status: 'message cannot be sent'
-      }));
+          }).catch(() => res.status(500).send({
+            status: 'An error was encountered while trying to fetch Group'
+          }));
+        })
+        .catch(error => res.status(500).send({
+          error,
+          status: 'message cannot be sent'
+        }));
+    }
   },
-  // get messages from a particular group
-  // Message group associated to Users group with the message sender
 
   /**
    * retrieve - retrieve message for a particular group
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}  returns json response
    */
   retrieve(req, res) {
+    if (!(req.params.groupId)) {
+      return res.status(400).send({
+        message: 'Invalid request. groupId column is missing'
+      });
+    }
     return Messages
       .findAll({
         include: [{
@@ -82,41 +114,46 @@ export default {
           attributes: ['id', 'username'],
         }],
         where: {
-          groupId: req.params.groupid,
+          groupId: req.params.groupId,
         },
         attributes: [
-          'id', 'message', 'priority_level',
+          'id', 'message', 'priorityLevel',
           'groupId', 'sentBy', 'ReadBy', 'createdAt'],
         order: [['id']]
       })
-      .then((user) => {
-        if (user.length === 0) {
+      .then((message) => {
+        if (message.length === 0) {
           return res.status(404).send({
             message: 'This is the start of messaging in this group!'
           });
         }
 
-        return res.status(200).send(user);
+        return res.status(200).send(message);
       })
-      .catch((error) => { res.status(400).send(error); });
+      .catch((error) => { res.status(500).send(error); });
   },
-  // add notification to the notification table when a message is sent
-  // the notification is sent to all users that belong to that particular
-  // group at the moment the message is sent
 
   /**
-   * addMessageNotification - Add notification to the notification table when a
+   * addNotification - Add notification to the notification table when a
    * new message is sent
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  addMessageNotification(req, res) {
+  addNotification(req, res) {
+    if (!(req.params.messageId
+      && req.body.userId
+      && req.body.senderId
+      && req.body.groupId
+    )) {
+      return res.status(400).send({
+        message: 'Invalid request.Some column(s) column are missing'
+      });
+    }
     // find a message where message id
     Messages.find({
       where: {
-        id: req.params.messageid,
+        id: req.params.messageId,
       }
     })
       .then((messageRes) => {
@@ -124,14 +161,14 @@ export default {
         if (messageRes.length !== 0) {
           MessageReads.findAll({
             where: {
-              messageId: req.params.messageid,
+              messageId: req.params.messageId,
               userId: req.body.userId,
             },
           }).then((result) => {
             if (result.length === 0) {
               return MessageReads
                 .create({
-                  messageId: req.params.messageid,
+                  messageId: req.params.messageId,
                   userId: req.body.userId,
                   read: req.body.readStatus,
                   senderId: req.body.senderId,
@@ -146,32 +183,31 @@ export default {
                   message: 'Cannot Add Notification',
                 }));
             }
-            res.status(400).send({
+            res.status(409).send({
               message: 'Notification already exist',
               success: false
             });
           })
-            .catch(error => res.status(400).send(error));
+            .catch(error => res.status(500).send(error));
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
-  // get notification fom the message notification table
-
+  
   /**
-   * getMessageNotification - get notification
-   *
+   * getNotification - get notification function
+   * to retrieve notification for a user
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  getMessageNotification(req, res) {
+  getNotification(req, res) {
     return MessageReads.findAll({
       include: [{
         model: Messages,
         as: 'Messages',
         attributes:
-        ['id', 'message', 'priority_level', 'groupId', 'sentBy', 'createdAt'],
+        ['id', 'message', 'priorityLevel', 'groupId', 'sentBy', 'createdAt'],
       },
       {
         model: Users,
@@ -204,30 +240,32 @@ export default {
           });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
-  // update notification table
-  // this is called when a user reads message
 
   /**
-   * updateMessageNotification - update notification table when a user reads
+   * updateNotification - update notification table when a user reads
    * the notification
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  updateMessageNotification(req, res) {
+  updateNotification(req, res) {
+    if (!(req.params.messageId && req.body.userId)) {
+      return res.status(400).send({
+        message: 'Invalid request.Some column are missing'
+      });
+    }
     Messages.find({
       where: {
-        id: req.params.messageid,
+        id: req.params.messageId,
       }
     })
       .then((messageRes) => {
         if (messageRes.length !== 0) {
           MessageReads.findAll({
             where: {
-              messageId: req.params.messageid,
+              messageId: req.params.messageId,
               userId: req.body.userId,
             },
           }).then((result) => {
@@ -237,7 +275,7 @@ export default {
                   read: req.body.readStatus
                 }, {
                   where: {
-                    messageId: req.params.messageid,
+                    messageId: req.params.messageId,
                     userId: req.body.userId,
                   }
                 })
@@ -250,42 +288,45 @@ export default {
                   message: 'Cannot Update Notification',
                 }));
             }
-            res.status(400).send({
+            res.status(404).send({
               message: 'Notification does not exist',
               success: false
             });
           })
-            .catch(error => res.status(400).send(error));
+            .catch(error => res.status(500).send(error));
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
-  // update read by column in the message table
 
   /**
    * updateReadBy - update the ReadBy column in the message table when
    * a user clicks on the message
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
   updateReadBy(req, res) {
+    if (!(req.params.messageId && req.body.readBy)) {
+      return res.status(400).send({
+        message: 'Invalid request.Some column(s) are missing'
+      });
+    }
     Messages.find({
       where: {
-        id: req.params.messageid,
+        id: req.params.messageId,
       }
     })
       .then((messageRes) => {
         if (messageRes.length !== 0) {
           const updatedReaders = `${messageRes.ReadBy}, ${req.body.readBy}`;
-          const unqiueReadersArray = _.uniq(updatedReaders.split(','));
+          const unqiueReadersArray = underscore.uniq(updatedReaders.split(','));
           return Messages
             .update({
               ReadBy: unqiueReadersArray.toString()
             }, {
               where: {
-                id: req.params.messageid
+                id: req.params.messageId
               }
             })
             .then(() => res.status(201).send({
@@ -297,19 +338,22 @@ export default {
           message: 'Message not found!'
         });
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
-  // get Users who have read a message from a group
 
   /**
-   * getUsersWhoReadMessagesInGroup - get users who have read the message
+   * getReadBy - get users who have read the message
    * from a group
-   *
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json object
+   * @return {json}     returns json response
    */
-  getUsersWhoReadMessagesInGroup(req, res) {
+  getReadBy(req, res) {
+    if (!(req.params.messageId)) {
+      return res.status(400).send({
+        message: 'Invalid request.MessageId is missing'
+      });
+    }
     return MessageReads.findAll({
       include: [
         {
@@ -320,7 +364,7 @@ export default {
         }],
       where: {
         read: 1,
-        messageId: req.params.messageid
+        messageId: req.params.messageId
       },
       attributes: [
         'id', 'messageId', 'userId', 'read', 'createdAt']
@@ -336,7 +380,6 @@ export default {
           });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 };
-// just before a PR for code review

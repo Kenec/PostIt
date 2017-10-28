@@ -25,14 +25,15 @@ try {
 // export the webpack configurations
 module.exports = {
   // if debug is in production use inline-sourcemap as a devtool else dont't
-  devtool: debug ? 'inline-sourcemap' : false,
+  devtool: 'inline-sourcemap',
   // define the entry point of the application.
-  // define the entry point to be used by the webpack-hot-middleware for
-  // auto bundling when changes are made
   entry: [
     'webpack-hot-middleware/client',
     './client/js/client.js'
   ],
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
   // define the module loaders to be used by the webpack
   module: {
     loaders: [
@@ -56,16 +57,6 @@ module.exports = {
           use: ['css-loader', 'sass-loader']
         })
       },
-      // {
-      //   // style-loader, css-loader, font-loader for .css file extensions
-      //   test: /\.css$/,
-      //   loaders: [
-      //     'style-loader',
-      //     'css-loader?importLoaders=1',
-      //     'font-loader?format[]=truetype' +
-      //     '&format[]=woff&format[]=embedded-opentype'
-      //   ],
-      // },
       {
         // use file-loader for transpiling font files
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -73,9 +64,7 @@ module.exports = {
       }
     ]
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
+
   // specify the output path for bundled file
   output: {
     path: path.resolve('./client/dist'),
@@ -102,12 +91,12 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
+    // }),
+    // new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),

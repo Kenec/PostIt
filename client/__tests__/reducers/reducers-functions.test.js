@@ -1,10 +1,11 @@
 // import
-import flashMessages from '../reducers/flashMessages';
-// import userLoginReducer from '../reducers/users';
-import group from '../reducers/group';
-import message from '../reducers/message';
-import userLoginReducer from '../reducers/users';
-import * as types from '../actions/types';
+/* global expect */
+import flashMessages from '../../reducers/flashMessages';
+import group from '../../reducers/group';
+import message from '../../reducers/message';
+import userLoginReducer from '../../reducers/users';
+import * as types from '../../actions/types';
+import * as reducer from '../../reducers/index';
 
 // Test flashmessage reducer
 describe('FlashMessage reducers', () => {
@@ -76,21 +77,21 @@ describe('Group reducers', () => {
       expect(group(state, action)).toEqual({ groups: action.groups });
     });
   });
-  // Test GET_GROUPS_CREATED_BY_USER
+  // Test GET_ADMIN_GROUPS
   // action for getting groups created by a user
-  describe(`When GET_GROUPS_CREATED_BY_USER
+  describe(`When GET_ADMIN_GROUPS
               action type is fired from action`, () => {
       it('groups a user created should be added to the store', () => {
         const state = {};
         const action = {
-          type: types.GET_GROUPS_CREATED_BY_USER,
-          groupsByUser: {
+          type: types.GET_ADMIN_GROUPS,
+          groupsBelonged: {
             id: 1,
             groupName: 'Group'
           }
         };
         expect(group(state, action))
-          .toEqual({ groupsByUser: action.groupsByUser });
+          .toEqual({ groupsBelonged: action.groupsBelonged });
       });
     });
   // Test GET_USERS_IN_GROUP
@@ -162,7 +163,7 @@ describe('Message reducers', () => {
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
-          priority_level: 'Normal',
+          priorityLevel: 'Normal',
           groupId: 1,
           sentBy: 1,
           createdAt: '2017-08-15T11:10:50.743Z'
@@ -181,7 +182,7 @@ describe('Message reducers', () => {
         messageData: {
           id: 1,
           message: 'Hello Obi! Welcome',
-          priority_level: 'Normal',
+          priorityLevel: 'Normal',
           groupId: 1,
           sentBy: 1,
           createdAt: '2017-08-15T11:10:50.743Z'
@@ -216,7 +217,7 @@ describe('Message reducers', () => {
           notificationData: {
             id: 1,
             message: 'Hello Obi! Welcome',
-            priority_level: 'Normal',
+            priorityLevel: 'Normal',
             groupId: 1,
             sentBy: 1,
             createdAt: '2017-08-15T11:10:50.743Z'
@@ -237,7 +238,7 @@ describe('Message reducers', () => {
           messageData: {
             id: 1,
             message: 'Hello Obi! Welcome',
-            priority_level: 'Normal',
+            priorityLevel: 'Normal',
             groupId: 1,
             sentBy: 1,
             createdAt: '2017-08-15T11:10:50.743Z'

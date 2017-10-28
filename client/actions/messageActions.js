@@ -1,178 +1,171 @@
 // import
 import axios from 'axios';
-import { COMPOSE_MESSAGE,
-  GET_NOTIFICATION, RETRIEVE_MESSAGE,
-  USERS_WHO_HAVE_READ_MESSAGE
-} from './types';
+import { COMPOSE_MESSAGE, GET_NOTIFICATION,
+  RETRIEVE_MESSAGE, READ_BY } from './types';
+
 /**
- * compose message action.
- * @constructor
- * @param {object} messageData - data of message to be added to the message
- * board
- * .
- *
+ * Add message to the store
+ * @function composeMessageAction
+ * @param {object} messageData - message to be added
+ * @return {object} - object of type COMPOSE_MESSAGE and messageData
  */
-export function composeMessageAction(messageData) {
-  return {
+export const composeMessageAction = messageData => (
+  {
     type: COMPOSE_MESSAGE,
     messageData
-  };
-}
+  }
+);
 
 /**
- * addNotificationAction - description
- *
- * @param  {object} notificationData description
- * @return {type}                  description
+ * get notification from the store
+ * @function getNotificationAction
+ * @param  {object} notificationData - notification
+ * @return {object} return object of type GET_NOTIFICATION and notificationData
  */
-export function getNotificationAction(notificationData) {
-  return {
+export const getNotificationAction = notificationData => (
+  {
     type: GET_NOTIFICATION,
     notificationData
-  };
-}
+  }
+);
 
 /**
- * clear retrieved message.
- * @constructor
- * @param {object} messageData - data of message to be added to the message
- * board
- * .
- *
+ * Clear retrieved message from the store
+ * @function clearRetrievedMessageAction
+ * @param {object} messageData - messageData to be cleared
+ * @return {object} - object of type COMPOSE_MESSAGE and messageData
  */
-export function clearRetrievedMessageAction() {
-  return {
+export const clearRetrievedMessageAction = () => (
+  {
     type: COMPOSE_MESSAGE,
     messageData: []
-  };
-}
+  }
+);
+
 /**
- * retrieve message action.
- * @constructor
- * @param {object} retrieveMessages - data of message to retrieved
- * board
- * .
- *
+ * Retrieve message from the store
+ * @function retrieveMessageAction
+ * @param {object} retrieveMessages - message to retrieved board
+ * @return {object} - object of type RETRIEVE_MESSAGE
  */
-export function retrieveMessageAction(retrieveMessages) {
-  return {
+export const retrieveMessageAction = retrieveMessages => (
+  {
     type: RETRIEVE_MESSAGE,
     retrieveMessages
-  };
-}
-/**
- * get users who have read message action.
- * @constructor
- * @param {INTEGER} usersWhoHaveReadMessage - users id of those who have
- * read messages
- * .
- *
- */
-export function getUsersWhoReadMessageAction(usersWhoHaveReadMessage) {
-  return {
-    type: USERS_WHO_HAVE_READ_MESSAGE,
-    usersWhoHaveReadMessage
-  };
-}
+  }
+);
 
 /**
- * compose messge action.
- * @constructor
+ * Add message readBy's to the store
+ * @function readByAction
+ * @param {integer} readBy - users ids of message readers
+ * @return {object} object of type READ_BY and readBy
+ */
+export const readByAction = readBy => (
+  {
+    type: READ_BY,
+    readBy
+  }
+);
+
+/**
+ * Add message to the database
+ * @function composeMessage
  * @param {string} groupId - group Id
- * @param {object} messageData - message data from the UI
- * board
- * .
- *
+ * @param {object} messageData - message to be posted
+ * @param {object} prevMessage - previous message and User info
+ * @return {json} - axios post respose 
  */
-export function composeMessage(groupId, messageData) {
-  return () => axios.post(`/api/v1/group/${groupId}/message`, messageData);
-}
+export const composeMessage = (groupId, messageData) => (
+  () => axios.post(`/api/v1/groups/${groupId}/message`, messageData)
+);
 
 /**
- * compose messge action.
- * @constructor
+ * Retrieve message from the database
+ * @function retrieveMessage
  * @param {string} groupId - group Id
- * board
- * .
- *
+ * @return {json} - axios post response
  */
-export function retrieveMessage(groupId) {
-  return () => axios.get(`/api/v1/group/${groupId}/messages`);
-}
-
+export const retrieveMessage = groupId => (
+  () => axios.get(`/api/v1/groups/${groupId}/messages`)
+);
 
 /**
- * clearRetrievedMessage - description
- *
- * @return {function}  description
+ * Dispatch the clearRetrieveAction
+ * @function clearRetrievedMessage
+ * @return {object} - returns empty messageData object
  */
-export function clearRetrievedMessage() {
-  return (dispatch) => {
+export const clearRetrievedMessage = () => (
+  (dispatch) => {
     dispatch(clearRetrievedMessageAction());
-  };
-}
+  }
+);
 
 /**
- * addNotification - description
- *@param  {INTEGER} messageId the message id
+ * Add notification to the database
+ * @function addNotification
+ * @param  {integer} messageId the message id
  * @param  {object} notificationObj notification object
- * @return {type}                  description
- */
-export function addNotification(messageId, notificationObj) {
-  return () =>
-    // make a post request to add a notification
-    axios.post(`/api/v1/group/${messageId}/notification`, notificationObj);
-}
-
-/**
- * getNotification - description
- * @param {userId} userId user id to be used in fetching notification
  * @return {type} description
  */
-export function getNotification(userId) {
-  return dispatch =>
+export const addNotification = (messageId, notificationObj) => (
+  () =>
+    // make a post request to add a notification
+    axios.post(`/api/v1/groups/${messageId}/notification`, notificationObj)
+);
+
+/**
+ * Get notification from the database
+ * @function getNotification
+ * @param {userId} userId user id to be used in fetching notification
+ * @return {object} notification object
+ */
+export const getNotification = userId => (
+  dispatch =>
     // make a post request to get current notification
     axios.post('/api/v1/user/notifications', userId)
       .then((res) => {
         // dispatch the notification action to the store
         dispatch(getNotificationAction(res.data));
-      });
-}
+      })
+);
 
 /**
- * addNotification - description
- *@param  {INTEGER} messageId the message id
+ * Update notification in the table
+ * @function updateNotification
+ * @param  {integer} messageId the message id
  * @param  {object} notificationObj notification object
- * @return {type}                  description
+ * @return {json}  axios post response
  */
-export function updateNotification(messageId, notificationObj) {
-  return () =>
+export const updateNotification = (messageId, notificationObj) => (
+  () =>
     // make a post request to update the notification table
-    axios.post(`/api/v1/user/${messageId}/notification`, notificationObj);
-}
-
-
-/**
- * updateReadBy - this method updates the readby column in the message table
- * @param {INTEGER} messageId the message id
- * @param  {object} userAndMessageObj description
- * @return {type}                   description
- */
-export function updateReadBy(messageId, userAndMessageObj) {
-  return () =>
-    axios.post(`/api/v1/group/${messageId}/updateReadBy`, userAndMessageObj);
-}
+    axios.post(`/api/v1/user/${messageId}/notification`, notificationObj)
+);
 
 /**
- * getUsersWhoReadMessage - description
- *@param  {INTEGER} messageId the message id
- * @return {type}                  description
+ * Update readBy in the database
+ * @function updateReadBy
+ * @param {integer} messageId the message id
+ * @param  {object} userAndMessageObj object of user nd message
+ * @return {json} axios post response
  */
-export function getUsersWhoReadMessage(messageId) {
-  return dispatch =>
+export const updateReadBy = (messageId, userAndMessageObj) => (
+  () =>
+    axios.post(`/api/v1/groups/${messageId}/updateReadBy`, userAndMessageObj)
+);
+
+/**
+ * Get readBy from the database
+ * @function getReadBy
+ * @param  {integer} messageId the message id
+ * @return {object} description
+ */
+export const getReadBy = messageId => (
+  dispatch =>
     // make a post request to update the notification table
     axios.post(`/api/v1/users/${messageId}/read`)
       .then((res) => {
-        dispatch(getUsersWhoReadMessageAction(res.data));
-      });
-}
+        dispatch(readByAction(res.data));
+      })
+);

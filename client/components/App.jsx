@@ -1,27 +1,26 @@
 // import
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import '../scss/main.scss';
 
 /**
- * 
+ * Parent Component 
  * @function App 
- * @param {*} props
+ * @param {any} props
  * @return {DOM} DOM element 
  */
-function App({ children }) {
-  return (
-    <div className="content">
-      <div>
-        { children }
-      </div>
-      <Footer />
+const App = ({ children }) => (
+  <div className="content">
+    <div>
+      { children }
     </div>
-  );
-}
+    <Footer />
+  </div>
+);
 
 App.propTypes = {
-  children: React.PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default App;
