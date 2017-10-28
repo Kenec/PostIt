@@ -5,7 +5,6 @@ import group from '../../reducers/group';
 import message from '../../reducers/message';
 import userLoginReducer from '../../reducers/users';
 import * as types from '../../actions/types';
-import * as reducer from '../../reducers/index';
 
 // Test flashmessage reducer
 describe('FlashMessage reducers', () => {
