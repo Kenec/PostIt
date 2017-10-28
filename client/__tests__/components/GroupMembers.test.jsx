@@ -4,7 +4,7 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
-import { GroupMembers } from '../../components/GroupMembers.jsx';
+import { GroupMembers } from '../../components/GroupMembers';
 import '../../__mocks__/localStorage';
 
 describe('<GroupMembers />', () => {
@@ -27,12 +27,11 @@ describe('<GroupMembers />', () => {
   const auth = { user: { id: 1, username: 'Kene' } };
   const params = { groupid: 1 };
   const groupSelectedId = '';
-  const getUsersInGroup = sinon.spy(() => Promise.resolve({ data: { users: 'Kene' }, response: { data: 'Error' } }));
+  const getUsersInGroup = sinon.spy(() => Promise
+    .resolve({ data: { users: 'Kene' }, response: { data: 'Error' } }));
   const getUsersInGroupAction = sinon.spy();
-  const componentWillMount = sinon.spy(GroupMembers.prototype, 'componentWillMount');
-  const removeUserFromGroup = sinon.spy(() => Promise.resolve({ data: { message: 'User found' } }));
-  const getUser = sinon.spy();
-  const removeUser = sinon.spy();
+  const removeUserFromGroup = sinon.spy(() => Promise
+    .resolve({ data: { message: 'User found' } }));
   const confirmAndRemoveUser = sinon.spy();
   // assign all props to a varibale props
   const props = {
@@ -57,10 +56,11 @@ describe('<GroupMembers />', () => {
     expect(wrapper.find('span').at(1).text()).toEqual('Kene');
     expect(wrapper.find('[type="button"]').at(0).length).toEqual(1);
   });
-  it('should ask a user to confirm a removal of another user when remove button is clicked', () => {
-    wrapper.find('[type="button"]').at(0).simulate('click');
-    expect(confirmAndRemoveUser.calledOnce).toEqual(false);
-  });
+  it(`should ask a user to confirm a removal of
+  another user when remove button is clicked`, () => {
+      wrapper.find('[type="button"]').at(0).simulate('click');
+      expect(confirmAndRemoveUser.calledOnce).toEqual(false);
+    });
   it('should return Loading... when group is not resolved', () => {
     props.group.groups = null;
     wrapper = mount(<GroupMembers {...props} />);

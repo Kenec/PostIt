@@ -108,6 +108,7 @@ export class CreateGroupBoard extends Component {
             <div className="">
               <input
                 type="text"
+                maxLength="15"
                 name="groupName"
                 onChange={this.onChange}
                 value={this.state.groupName}

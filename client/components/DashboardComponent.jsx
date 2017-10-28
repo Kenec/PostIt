@@ -42,26 +42,26 @@ export class DashboardComponent extends Component {
       );
     }
 
-    let unreadMessagesList = '';
+    let unreadMessages = '';
     const noOfUnreadMessages = notificationData.messageRes.length;
     if (notificationData.messageRes !== 'undefined' &&
     notificationData.messageRes.length > 0) {
-      unreadMessagesList = notificationData.messageRes.map(unreadMessages => (<div
-        key={unreadMessages.messageId}
-        value={unreadMessages.MessageId}
+      unreadMessages = notificationData.messageRes.map(unreadMessage => (<div
+        key={unreadMessage.messageId}
+        value={unreadMessage.MessageId}
         className="white"
       >
         <div>
           <Link
             className="black-text lighten-5"
-            to={`/group/${unreadMessages.Group.id}/${unreadMessages.messageId}`}
+            to={`/group/${unreadMessage.Group.id}/${unreadMessage.messageId}`}
           >
-            <b>{unreadMessages.User.username}</b>
+            <b>{unreadMessage.User.username}</b>
             <i> sent a message on </i>
-            <em> <b>{unreadMessages.Group.groupName}  </b></em>
-            <i>{unreadMessages.Messages.message.substring(0, 100)}</i>
+            <em> <b>{unreadMessage.Group.groupName}  </b></em>
+            <i>{unreadMessage.Messages.message.substring(0, 100)}</i>
             <p className="red-text lighten-5">
-              {moment(unreadMessages.createdAt, moment.ISO_8601).fromNow()}
+              {moment(unreadMessage.createdAt, moment.ISO_8601).fromNow()}
             </p>
           </Link>
         </div>
@@ -83,7 +83,7 @@ export class DashboardComponent extends Component {
         <div className="row well well-sm message_board ">
           <div className="">
             <div className="row">
-              {unreadMessagesList}
+              {unreadMessages}
             </div>
           </div>
         </div>

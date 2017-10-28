@@ -4,7 +4,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import { NavigationBarMenu } from '../../components/NavigationBarMenu.jsx';
+import { NavigationBarMenu } from '../../components/NavigationBarMenu';
 
 describe('<NavigationBarMenu />', () => {
   const auth = {
@@ -15,7 +15,6 @@ describe('<NavigationBarMenu />', () => {
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
   const logout = sinon.spy();
-  const componentWillMount = sinon.spy(NavigationBarMenu.prototype, 'componentWillMount');
   const onLogout = sinon.spy(NavigationBarMenu.prototype, 'onLogout');
   // assign all props to a variable props
   const props = {

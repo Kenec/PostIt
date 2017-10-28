@@ -1,7 +1,7 @@
 // import
 import React from 'react';
 import { Link } from 'react-router';
-import NavigationBar from './NavigationBar.jsx';
+import NavigationBar from './NavigationBar';
 
 /**
  * NOT FOUND Page

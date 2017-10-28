@@ -1,10 +1,8 @@
 // import
 /* global expect */
 import React from 'react';
-import sinon from 'sinon';
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
-import { GroupLists } from '../../components/GroupLists.jsx';
+import { GroupLists } from '../../components/GroupLists';
 import '../../__mocks__/localStorage';
 
 describe('<GroupLists />', () => {
@@ -19,9 +17,6 @@ describe('<GroupLists />', () => {
     group,
     auth,
   };
-  const getUserGroups = sinon.spy();
-  const getAdminGroups = sinon.spy();
-  const retrieveMessage = sinon.spy();
 
   let wrapper = mount(<GroupLists {...props} />);
 

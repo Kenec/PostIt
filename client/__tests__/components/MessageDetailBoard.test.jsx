@@ -4,7 +4,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import { MessageDetailBoard } from '../../components/MessageDetailBoard.jsx';
+import { MessageDetailBoard } from '../../components/MessageDetailBoard';
 import '../../__mocks__/localStorage';
 
 describe('<MessageDetailBoard />', () => {
@@ -24,9 +24,9 @@ describe('<MessageDetailBoard />', () => {
     }],
     readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
   };
-  let groupName = 'Random';
+  const groupName = 'Random';
   const auth = {};
-  const messageId = 1;
+  const messageId = '1';
   const groupSelectedId = '';
   const retrieveMessage = sinon.spy(() =>
     Promise.resolve({ message: { data: 'Hello World' } }));
@@ -36,10 +36,6 @@ describe('<MessageDetailBoard />', () => {
   const retrieveMessageAction = sinon.spy();
   const getReadBy = sinon.spy();
 
-  const componentWillMount = sinon.spy(MessageDetailBoard.prototype, 'componentWillMount');
-  const componentDidMount = sinon.spy(MessageDetailBoard.prototype, 'componentDidMount');
-  const onChange = sinon.spy(MessageDetailBoard.prototype, 'onChange');
-  const readBy = sinon.spy(MessageDetailBoard.prototype, 'readBy');
   // assign all props to a varibale props
   const props = {
     group,

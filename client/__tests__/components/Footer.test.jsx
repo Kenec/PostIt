@@ -1,9 +1,8 @@
 // import
 /* global expect */
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
-import { Footer } from '../../components/Footer.jsx';
+import { Footer } from '../../components/Footer';
 import '../../__mocks__/localStorage';
 
 describe('<Footer />', () => {

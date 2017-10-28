@@ -2,6 +2,13 @@
 import jwt from 'jsonwebtoken';
 import config from '../../config';
 
+/**
+ * Middleware for protecting router using jwt
+ * @param  {object} req request object
+ * @param  {object} res response object
+ * @param {function} next calls the next function
+ * @return {json} returns json object as a response
+ */
 export default (req, res, next) => {
   // let token;
   const token = req.body.token || req.query.token ||

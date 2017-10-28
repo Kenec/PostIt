@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import NavigationBarMenu from './NavigationBarMenu.jsx';
-import MessageDetailBoard from './MessageDetailBoard.jsx';
-import SearchMember from './SearchMember.jsx';
-import GroupMembers from './GroupMembers.jsx';
+import NavigationBarMenu from './NavigationBarMenu';
+import MessageDetailBoard from './MessageDetailBoard';
+import SearchMember from './SearchMember';
+import GroupMembers from './GroupMembers';
 import { retrieveMessage } from '../actions/messageActions';
 import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 

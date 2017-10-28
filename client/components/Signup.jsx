@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import NavigationBar from './NavigationBar.jsx';// eslint-disable-line
+import NavigationBar from './NavigationBar';
 import userSignupRequest from '../actions/signupActions';
 import validateInput from '../../server/shared/validations/validateInput';
 import { addFlashMessage } from '../actions/flashMessages';

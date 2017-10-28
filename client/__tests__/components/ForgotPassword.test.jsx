@@ -3,17 +3,14 @@
 import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import { shallow, mount } from 'enzyme';
-import { ForgotPassword } from '../../components/ForgotPassword.jsx';
+import { mount } from 'enzyme';
+import { ForgotPassword } from '../../components/ForgotPassword';
 import '../../__mocks__/localStorage';
-import Router from '../../__mocks__/router';
 
 describe('<ForgotPassword />', () => {
   const onSubmit = sinon.spy();
-  const onChange = sinon.spy();
-  const isValid = sinon.spy();
-  const validateInput = sinon.spy();
-  const forgotPasswordRequest = sinon.spy(() => Promise.resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
+  const forgotPasswordRequest = sinon.spy(() => Promise
+    .resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
   // assign all props to a varibale props
   const props = {
     forgotPasswordRequest,

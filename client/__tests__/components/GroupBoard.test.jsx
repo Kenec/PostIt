@@ -4,7 +4,7 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
-import { GroupBoard } from '../../components/GroupBoard.jsx';
+import { GroupBoard } from '../../components/GroupBoard';
 import '../../__mocks__/localStorage';
 
 describe('<GroupBoard />', () => {
@@ -32,9 +32,8 @@ describe('<GroupBoard />', () => {
   const retrieveMessageAction = sinon.spy();
   const getUsersInGroup = sinon.spy();
   const groupName = 'Random';
-  const componentDidMount = sinon.spy(GroupBoard.prototype, 'componentDidMount');
-  const componentWillMount = sinon.spy(GroupBoard.prototype, 'componentWillMount');
-  const retrieveMessage = sinon.spy(() => Promise.resolve({ data: { users: 'Kene' }, response: { data: 'Error' } }));
+  const retrieveMessage = sinon.spy(() => Promise
+    .resolve({ data: { users: 'Kene' }, response: { data: 'Error' } }));
   const composeMessage = sinon.spy(() => Promise.resolve({ data:
     {
       id: '1',
@@ -46,11 +45,7 @@ describe('<GroupBoard />', () => {
       createdAt: '',
     }
   }));
-  const onChange = sinon.spy();
   const onSubmit = sinon.spy();
-  const readBy = sinon.spy();
-  const toastMessage = sinon.spy();
-  const toggleReadCheckBox = sinon.spy();
   // assign all props to a varibale props
   const props = {
     composeMessage,
@@ -88,7 +83,8 @@ describe('<GroupBoard />', () => {
     expect(wrapper.find('label').at(1).text()).toEqual('Unread');
     expect(wrapper.find('FilterMessages b').at(0).text()).toEqual('Kene');
     expect(wrapper.find('FilterMessages i').at(1).text()).toEqual('Normal');
-    expect(wrapper.find('FilterMessages p').at(1).text()).toEqual('Hello World');
+    expect(wrapper.find('FilterMessages p').at(1).text())
+      .toEqual('Hello World');
   });
   it('should send message when the message form is submitted', () => {
     wrapper.setState({ readCheckbox: 'read' });

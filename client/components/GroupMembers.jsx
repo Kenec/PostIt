@@ -1,4 +1,3 @@
-/* global confirm alert */
 /* global localStorage */
 // import
 import React, { Component } from 'react';
@@ -6,6 +5,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 import { retrieveMessage } from '../actions/messageActions';
 import { getUserGroups, getUsersInGroupAction,
   getUsersInGroup, getuserGroupsAction, removeUserFromGroup }
@@ -71,10 +71,11 @@ export class GroupMembers extends Component {
       ({ data }) => {
         this.setState({ message: data.message });
         this.getUser();
+        swal('Success', data.message, 'success');
       },
       ({ response }) => {
         this.setState({ message: response.data.message });
-        alert(response.data.message);
+        swal('Error!', response.data.message, 'error');
       },
     );
   }
@@ -89,14 +90,19 @@ export class GroupMembers extends Component {
     event.preventDefault();
     const username = event.target.name;
     const userId = event.target.id;
-    if (confirm(`Do you want to remove ${username} from the Group`)) {
-      const groupId = this.props.groupSelectedId;
-      const removalPayLoad = {
-        admin: jwt.decode(localStorage.jwtToken).id,
-        user: parseInt(userId, 10),
-      };
-      this.removeUser(groupId, removalPayLoad);
-    }
+    const confirm = swal(`Do you want to remove  ${username} from the Group`, {
+      buttons: { cancel: true, confirm: true, },
+    });
+    confirm.then((response) => {
+      if (response) {
+        const groupId = this.props.groupSelectedId;
+        const removalPayLoad = {
+          admin: jwt.decode(localStorage.jwtToken).id,
+          user: parseInt(userId, 10),
+        };
+        this.removeUser(groupId, removalPayLoad);
+      }
+    });
   }
 
   /**

@@ -48,7 +48,7 @@ export class MessageDetailBoard extends Component {
    * @return {void} void
    */
   componentWillMount() {
-    this.props.getReadBy(this.props.messageId);
+    this.props.getReadBy(parseInt(this.props.messageId, 10));
     this.props.clearRetrievedMessageAction();
     this.setState({
       sentBy: jwt.decode(localStorage.jwtToken).id,
@@ -221,7 +221,7 @@ MessageDetailBoard.propTypes = {
   retrieveMessageAction: PropTypes.func.isRequired,
   getReadBy: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
-  messageId: PropTypes.number.isRequired,
+  messageId: PropTypes.string.isRequired,
 };
 
 MessageDetailBoard.contextTypes = {

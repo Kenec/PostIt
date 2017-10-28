@@ -1,8 +1,8 @@
 // import
 import React from 'react';
-import GroupLists from './GroupLists.jsx';
-import NavigationBarMenu from './NavigationBarMenu.jsx';
-import CreateGroupBoard from './CreateGroupBoard.jsx';
+import GroupLists from './GroupLists';
+import NavigationBarMenu from './NavigationBarMenu';
+import CreateGroupBoard from './CreateGroupBoard';
 
 /**
  * Create Group Components

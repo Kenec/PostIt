@@ -1,9 +1,8 @@
 // import
 /* global expect */
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
-import FilterMessages from '../../components/FilterMessages.jsx';
+import FilterMessages from '../../components/FilterMessages';
 import '../../__mocks__/localStorage';
 
 describe('<FilterMessages />', () => {

@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import GroupLists from './GroupLists.jsx';
-import NavigationBarMenu from './NavigationBarMenu.jsx';
-import DashboardComponent from './DashboardComponent.jsx';
+import GroupLists from './GroupLists';
+import NavigationBarMenu from './NavigationBarMenu';
+import DashboardComponent from './DashboardComponent';
 
 /**
  * Contain Dashboard sub components

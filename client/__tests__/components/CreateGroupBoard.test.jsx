@@ -2,9 +2,8 @@
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
-import { CreateGroupBoard } from '../../components/CreateGroupBoard.jsx';
+import { CreateGroupBoard } from '../../components/CreateGroupBoard';
 import '../../__mocks__/localStorage';
 
 describe('<CreateGroupBoard />', () => {
@@ -14,10 +13,9 @@ describe('<CreateGroupBoard />', () => {
     usersInGroup: [{ id: '1', username: 'Kene' }],
   };
   const auth = { user: { id: 1, username: 'Kene' } };
-  const onSubmit = sinon.spy();
-  const componentWillMount = sinon.spy(CreateGroupBoard.prototype, 'componentWillMount');
   const getUserGroups = sinon.spy();
-  const createGroup = sinon.spy(() => Promise.resolve({ response: { data: 'Error' } }));
+  const createGroup = sinon.spy(() => Promise
+    .resolve({ response: { data: 'Error' } }));
   // assign all props to a varibale props
   const props = {
     group,

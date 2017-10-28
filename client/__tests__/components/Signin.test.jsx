@@ -4,22 +4,27 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import { Signin } from '../../components/Signin.jsx';
+import { Signin } from '../../components/Signin';
 
 describe('<Signin />', () => {
-  // const form = sinon.spy(); // spy on the Signin button
-  const userSigninRequestAction = sinon.spy(); // spy on the userSigninRequest props
+  const userSigninRequestAction = sinon.spy();
   const messages = [{
     id: '1',
     text: 'Hello'
   }]; // spy on message props
-  const deleteFlashMessage = sinon.spy(); // spy on the deleteFlashMessage props
-  const getUserGroups = sinon.spy(); // spy on getUserGroup props
-  const auth = {};
   const onSubmit = sinon.spy(Signin.prototype, 'onSubmit');
   const onChange = sinon.spy(Signin.prototype, 'onChange');
+  const deleteFlashMessage = sinon.spy();
+  const getUserGroups = sinon.spy();
+  const auth = {};
   // assign all props to a varibale props
-  const props = { userSigninRequestAction, auth, deleteFlashMessage, getUserGroups, messages };
+  const props = {
+    userSigninRequestAction,
+    deleteFlashMessage,
+    getUserGroups,
+    messages,
+    auth,
+  };
   // assign context to a variables
   Signin.contextTypes = { router: PropTypes.func };
   // assign mounting Signin component to a variable
@@ -38,9 +43,4 @@ describe('<Signin />', () => {
     wrapper.find('[type="text"]').at(0).simulate('change');
     expect(onChange.calledOnce).toEqual(true);
   });
-  // it('should call isValid function when a form is submitted', () => {
-  //   // test if isValid function checks for valid input
-  //   wrapper.find('[type="submit"]').at(0).simulate('click'); //.simulate('click');
-  //   expect(isValid.calledOnce).toEqual(true);
-  // });
 });

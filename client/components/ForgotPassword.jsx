@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import NavigationBar from './NavigationBar.jsx';
+import NavigationBar from './NavigationBar';
 import validateInput from '../../server/shared/validations/validateInput';
 import { forgotPasswordRequest } from '../actions/forgotPasswordAction';
 

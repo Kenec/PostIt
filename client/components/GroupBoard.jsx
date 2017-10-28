@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import FilterMessages from './FilterMessages.jsx';
+import FilterMessages from './FilterMessages';
 import { getUserGroups, getAdminGroups, getUsersInGroup }
   from '../actions/groupActions';
 import { retrieveMessage, composeMessage, retrieveMessageAction,
@@ -39,7 +39,7 @@ export class GroupBoard extends Component {
       sentBy: jwt.decode(localStorage.jwtToken).id,
       retrieveMessageError: '',
       retrievedMessages: [],
-      readCheckbox: 'unread',
+      readCheckbox: 'read',
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -104,48 +104,51 @@ export class GroupBoard extends Component {
         && this.state.priorityLevel &&
           this.state.sentBy) {
         this.setState({ errors: {}, success: '', isLoading: true });
-        const { messageData } = this.props.message;
-        const messageSentData = {
+        // set up message to be be sent
+        const message = {
           message: this.state.Message,
           priorityLevel: this.state.priorityLevel,
           sentBy: this.state.sentBy,
           readBy: this.state.sentBy
         };
-        this.props.composeMessage(this.props.groupSelectedId, messageSentData)
+        // fire the compose message action to send message
+        this.props.composeMessage(this.props.groupSelectedId, message)
           .then(
             ({ data }) => {
-              const updateMessageStore = {
-                id: data.id,
-                message: data.message,
-                groupId: data.group,
-                sentBy: data.sentBy,
-                priorityLevel: data.priorityLevel,
-                readBy: data.readBy,
-                createdAt: data.createdAt,
-                Users: {
-                  id: jwt.decode(localStorage.jwtToken).id,
-                  username: jwt.decode(localStorage
-                    .getItem('jwtToken')).username,
+              // fire an action to retrive the message
+              this.props.retrieveMessage(this.props.groupSelectedId).then(
+                (messageData) => {
+                  this.setState({ retrievedMessages: [] });
+                  this.props.retrieveMessageAction(messageData.data);
+                  const { updatedMessageData } = this.props.message;
+                  this.setState({
+                    retrievedMessages: updatedMessageData,
+                  });
+                },
+                ({ response }) => {
+                  this.setState({
+                    retrieveMessageError: response.data.message,
+                  });
                 }
-              };
-              const newMessageData = messageData.concat(updateMessageStore);
-              this.props.retrieveMessageAction(newMessageData);
+              );
+
+              const id = data.id;
+              const groupId = data.group;
               this.props.getUsersInGroup(this.props.groupSelectedId).then(
-                ({ data }) => {
-                  const usersArray = data.users;
-                  const sender = jwt.decode(
-                    localStorage.jwtToken).id;
-                  usersArray.map((user) => {
+                () => {
+                  const users = data.users;
+                  users.map((user) => {
                     let readStatus = 0;
-                    if (user.id === sender) {
+                    if (user.id === this.state.sentBy) {
                       readStatus = 1;
                     }
-                    this.props.addNotification(updateMessageStore.id,
+                    // fire an action to add notification
+                    this.props.addNotification(id,
                       {
                         userId: user.id,
                         readStatus,
-                        senderId: sender,
-                        groupId: updateMessageStore.groupId,
+                        senderId: this.state.sentBy,
+                        groupId,
                       });
                   });
                   this.props.getNotification(
@@ -182,6 +185,7 @@ export class GroupBoard extends Component {
     }
   }
 
+
   /**
    * Find readBy's
    * @method readBy
@@ -212,12 +216,12 @@ export class GroupBoard extends Component {
     this.toastMessage = document.getElementById('snackbar');
     // Add the "show" class to DIV
     this.toastMessage.className = 'show';
-    // After 3 seconds, remove the show class from DIV
+    // After 1 seconds, remove the show class from DIV
     setTimeout(
       () => {
         this.toastMessage.className =
         this.toastMessage.className.replace('show', '');
-      }, 2000);
+      }, 1000);
   }
 
   /**
@@ -253,9 +257,9 @@ export class GroupBoard extends Component {
       this.context.router.push('/dashboard');
     }
 
-    let groupsMessagesList;
+    let groupsMessages;
     if (messageData) {
-      groupsMessagesList = messageData.map((groupMessage) => {
+      groupsMessages = messageData.map((groupMessage) => {
         if (groupName !== 'No Group Found') {
           // filter the message in the message board
           if (this.state.readCheckbox === 'unread') {
@@ -297,7 +301,7 @@ export class GroupBoard extends Component {
             <span className="pull-right">
               <input
                 className="with-gap"
-                onClick={this.toggleReadCheckBox}
+                onChange={this.toggleReadCheckBox}
                 checked={this.state.readCheckbox === 'read'}
                 name="read"
                 type="radio"
@@ -310,7 +314,7 @@ export class GroupBoard extends Component {
                 className="with-gap"
                 onChange={this.toggleReadCheckBox}
                 checked={this.state.readCheckbox === 'unread'}
-                name="read"
+                name="unread"
                 value="unread"
                 type="radio"
                 id="unread"
@@ -324,7 +328,7 @@ export class GroupBoard extends Component {
             <div className="">
               {retrieveMessageError && <span className="help-block red-text">
                 <b>{retrieveMessageError}</b></span>}
-              {groupsMessagesList && groupsMessagesList}
+              {groupsMessages && groupsMessages}
             </div>
           </div>
           <div className="well well-sm">

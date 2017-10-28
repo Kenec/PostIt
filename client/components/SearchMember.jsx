@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
+import ReactPaginate from 'react-paginate';
 import { getUserGroups, getUserInfo, addUserToGroups,
   getUsersInGroupAction, searchAllUsers } from '../actions/groupActions';
 
@@ -30,12 +31,12 @@ export class SearchMember extends Component {
       success: '',
       userId: '',
       offset: 0,
-      togglePrevent: 'auto',
+      searchQuery: '',
+      pageCount: 0
     };
     this.onChange = this.onChange.bind(this);
     this.addUser = this.addUser.bind(this);
-    this.decreaseOffset = this.decreaseOffset.bind(this);
-    this.increaseOffset = this.increaseOffset.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
   }
 
   /**
@@ -62,48 +63,28 @@ export class SearchMember extends Component {
       [event.target.name]: event.target.value,
       errors: {},
       success: '',
+      searchQuery: '',
+      offset: 0,
     });
-    const userSearchName = event.target.value;
+    const searchQuery = event.target.value;
     // This fires a action that searches for a user and return the result
-    this.props.searchAllUsers({ username: userSearchName }, this.state.offset);
+    if (searchQuery) {
+      this.props.searchAllUsers({ username: searchQuery },
+        this.state.offset);
+      this.setState({ searchQuery });
+    }
   }
 
   /**
-   * Decrease the offset if it is greater than zero by 1
-   * @method decreaseOffset
-   * @param {object} event
-   * @return {void} 
+   * handles the pagination next and previous actions
+   * @param {any} data
+   * @return {void}
    */
-  decreaseOffset(event) {
-    event.preventDefault();
-    this.props.searchAllUsers({ username: this.state.username },
-      this.state.offset > 0 ? this.state.offset - 1 : 0);
-    const usersCount = this.props.group.searchedUsers.count;
-    this.setState({
-      errors: {},
-      offset: this.state.offset > 0 ? this.state.offset - 1 : 0,
-      togglePrevent: (usersCount / 5) < this.state.offset ? 'none' : 'auto',
-    });
-  }
-
-  /**
-   * Increase the offset by 1
-   * @method increaseOffset
-   * @param {object} event
-   * @return {void} 
-   */
-  increaseOffset(event) {
-    event.preventDefault();
-    this.props.searchAllUsers({ username: this.state.username },
-      this.state.offset + 1);
-    const usersCount = this.props.group.searchedUsers.count;
-    this.setState({
-      errors: {},
-      offset: this.state.offset < (usersCount / 5) ?
-        this.state.offset + 1 : this.state.offset,
-      togglePrevent: (usersCount / 5) - 1 <= (this.state.offset + 1) ?
-        'none' : 'auto',
-    });
+  handlePagination(data) {
+    const selected = data.selected;
+    this.setState({ offset: selected });
+    this.props.searchAllUsers({ username: this.state.searchQuery },
+      selected);
   }
 
   /**
@@ -122,17 +103,17 @@ export class SearchMember extends Component {
     const username = event.target.username.value;
     const userEmail = event.target.userEmail.value;
     const userPhone = event.target.userPhone.value;
-    const currentSearchedUser = {
+    const user = {
       id: userId,
       username,
       email: userEmail,
       phone: userPhone
     };
     this.props.addUserToGroups(this.props.groupId, { userId }).then(
-      ({ data }) => {
+      () => {
         const { usersInGroup } = this.props.group;
-        const newSearchedUser = usersInGroup.concat(currentSearchedUser);
-        this.props.getUsersInGroupAction(newSearchedUser);
+        const newUser = usersInGroup.concat(user);
+        this.props.getUsersInGroupAction(newUser);
         this.setState({
           success: 'User added successfully',
           isLoading: false
@@ -163,8 +144,9 @@ export class SearchMember extends Component {
 
     // Iterated over the array of objects of
     // the users returned. This is coming from the store
-    let returnedUsers;
+    let returnedUsers, pages;
     if (searchedUsers) {
+      pages = Math.ceil(searchedUsers.count / 5);
       returnedUsers = searchedUsers.rows.map(user => (
         <form onSubmit={this.addUser} key={user.id}>
           <div className="row">
@@ -175,7 +157,7 @@ export class SearchMember extends Component {
                 <input type="hidden" name="username" value={user.username} />
                 <input type="hidden" name="userEmail" value={user.email} />
                 <input type="hidden" name="userPhone" value={user.phone} />
-                {(usersInGroup.filter(e => e.username === user.username).length > 0) ?
+                {(usersInGroup.filter(users => users.username === user.username).length > 0) ?
                   <button type="" disabled>Already a member</button> :
                   <button type="submit">Add</button>
                 }
@@ -213,23 +195,19 @@ export class SearchMember extends Component {
           </span>}
           {(this.state.username === '' || !returnedUsers) ? '' : returnedUsers }
           {(this.state.username === '' || !returnedUsers) ? '' :
-            (<ul className="pagination">
-              <li className="waves-effect">
-                <Link to="#" onClick={this.decreaseOffset}>Back</Link>
-              </li>
-              <li className="active">
-                <Link to="#">{this.state.offset + 1}</Link>
-              </li>
-              <li className="waves-effect">
-                <Link
-                  to="#"
-                  onClick={this.increaseOffset}
-                  style={{ pointerEvents: this.state.togglePrevent }}
-                >
-                  Next
-                </Link>
-              </li>
-            </ul>)
+            (<ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={<Link disabled>of &nbsp;&nbsp; {pages}</Link>}
+              breakClassName={'active'}
+              pageCount={pages}
+              marginPagesDisplayed={0}
+              pageRangeDisplayed={0}
+              onPageChange={this.handlePagination}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />)
           }
         </div>
       </div>

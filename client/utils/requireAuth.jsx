@@ -2,22 +2,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
-// import { verifyToken } from '../actions/signinActions';
+
 /**
  * export default - component for Authenticate to disallow unauthenticated
  * user from accessing certain routes
  * @function 
  * @param  {DOM} ComposedComponent the component to be protected
- * @return {DOM}                   returns the protected component and its props
+ * @return {DOM} returns the protected component and its props
  */
 export default function (ComposedComponent) {
   /**
+   * Protect other component from unauthenticated users
    * @class Authenticate
+   * @extends {Component}
    */
   class Authenticate extends Component {
     /**
+     * Creates an instance of Authenticate
      * @constructor
-     * @param {*} props 
+     * @param {any} props 
+     * @memberof Authenticate 
      */
     constructor(props) {
       super(props);
@@ -25,9 +29,11 @@ export default function (ComposedComponent) {
         expiredToken: null
       };
     }
+
     /**
-     * @function componentWillMount
-     * @return {void}
+     * Life Cycle method to be called before a component mounts
+     * @method componentWillMount
+     * @return {void} void
      */
     componentWillMount() {
       const token = localStorage.getItem('jwtToken');
@@ -42,17 +48,21 @@ export default function (ComposedComponent) {
         }
       }
     }
+
     /**
-     * @function componentDidMount
-     * @return {void}
+     * Life cycle method to be called after a component mounts
+     * @method componentDidMount
+     * @return {void} void
      */
     componentDidMount() {
       if (!this.props.isAuthenticated) {
         this.context.router.push('/');
       }
     }
+
     /**
-     * @function componentWillUpdate
+     * Life cycle method to be called before a component updates
+     * @method componentWillUpdate
      * @param {Props} nextProps
      * @return {void}
      */
@@ -61,8 +71,10 @@ export default function (ComposedComponent) {
         this.context.router.push('/');
       }
     }
+
     /**
-     * @function isTokenExpired
+     * Check is token has expired
+     * @method isTokenExpired
      * @return {void} 
      */
     isTokenExpired() {
@@ -73,8 +85,10 @@ export default function (ComposedComponent) {
       });
       return date < Date.now() / 1000;
     }
+
     /**
-     * @function render
+     * Display the DOM Component
+     * @method render
      * @return {DOM} DOM Component
      */
     render() {
@@ -94,16 +108,18 @@ export default function (ComposedComponent) {
   Authenticate.contextTypes = {
     router: React.PropTypes.object.isRequired
   };
+
   /**
+   * Map state to props
    * @function mapStateToProps
-   * @param {object} state
-   * @return {object} state object 
-  */
-  function mapStateToProps(state) {
-    return {
+   * @param {any} state
+   * @return {object} state object
+   */
+  const mapStateToProps = state => (
+    {
       isAuthenticated: state.userLogin.isAuthenticated,
-    };
-  }
+    }
+  );
 
   return connect(mapStateToProps)(Authenticate);
 }

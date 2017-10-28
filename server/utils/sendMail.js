@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 /**
  * sendMail - This function send Mail notifcation for PostIT
- *
  * @param  {array} receivers An array of users
  * the group
  * @param  {string} message message to be sent

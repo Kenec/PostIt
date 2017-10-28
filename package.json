@@ -73,6 +73,7 @@
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-paginate": "^5.0.0",
     "react-proptypes": "^1.0.0",
     "react-redux": "^5.0.5",
     "react-router": "^2.8.1",
@@ -87,6 +88,7 @@
     "should": "^11.2.1",
     "style-loader": "^0.18.2",
     "supertest": "^3.0.0",
+    "sweetalert": "^2.0.8",
     "swig": "^1.4.2",
     "underscore": "^1.8.3",
     "uuid": "^3.1.0",
@@ -128,7 +130,9 @@
     "verbose": true,
     "testEnvironment": "jsdom",
     "transform": {
-      ".*": "<rootDir>/node_modules/babel-jest"
+      "^.+\\.jsx$": "babel-jest",
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.scss$": "babel-jest"
     },
     "collectCoverage": true,
     "collectCoverageFrom": [
@@ -137,10 +141,16 @@
       "!**/dist/**",
       "!**/js/**",
       "!**/utils/**",
-      "!**/client/store/*"
+      "!**/client/store/*",
+      "!**/client/components/App.jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
     ],
     "moduleFileExtensions": [
-      "js"
+      "js",
+      "jsx",
+      "scss"
     ],
     "setupTestFrameworkScriptFile": "mock-local-storage"
   }

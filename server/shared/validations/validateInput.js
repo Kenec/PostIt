@@ -3,7 +3,6 @@ import isEmpty from 'lodash/isEmpty';
 
 /**
  * validateInput - description
- *
  * @param  {object} inputData the form data to be validated
  * @return {object}  {} containing error and isValid
  */

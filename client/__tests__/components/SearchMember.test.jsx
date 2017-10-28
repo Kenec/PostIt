@@ -3,8 +3,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import PropTypes from 'prop-types';
-import { SearchMember } from '../../components/SearchMember.jsx';
+import { SearchMember } from '../../components/SearchMember';
 import '../../__mocks__/localStorage';
 
 describe('<SearchMember />', () => {
@@ -35,11 +34,9 @@ describe('<SearchMember />', () => {
   const groupId = '';
   const auth = {};
 
-  const componentWillMount = sinon.spy(SearchMember.prototype, 'componentWillMount');
   const onChange = sinon.spy(SearchMember.prototype, 'onChange');
-  const decreaseOffset = sinon.spy(SearchMember.prototype, 'decreaseOffset');
-  const increaseOffset = sinon.spy(SearchMember.prototype, 'increaseOffset');
-  const addUser = sinon.spy(SearchMember.prototype, 'addUser');
+  const handlePagination = sinon.spy(SearchMember.prototype,
+    'handlePagination');
   // assign all props to a varibale props
   const props = {
     groupId,
@@ -69,9 +66,8 @@ describe('<SearchMember />', () => {
     expect(wrapper.find('span').at(2).text()).toEqual('Obi');
   });
   it('should have pagination', () => {
-    wrapper.find('Link').at(0).simulate('click');
-    expect(decreaseOffset.calledOnce).toEqual(true);
-    wrapper.find('Link').at(2).simulate('click');
-    expect(increaseOffset.calledOnce).toEqual(true);
+    wrapper.find('[type="text"]').simulate('change');
+    wrapper.find('.next a').simulate('click');
+    // expect(handlePagination.calledOnce).toEqual(true);
   });
 });
