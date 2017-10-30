@@ -4,27 +4,16 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { shallow } from 'enzyme';
+import componetMocks from '../../__mocks__/componentMocks';
 import { MessageBoard } from '../../components/MessageBoard';
 import '../../__mocks__/localStorage';
 import Router from '../../__mocks__/router';
 
 describe('<MessageBoard />', () => {
-  const group = {
-    groupsBelonged: []
-  };
-  const message = {
-    messageData: [{
-      id: '1',
-      ReadBy: '1,2,3',
-      createdAt: '2-10-2019',
-      message: 'Hello Worlld',
-      priorityLevel: 'Normal',
-      Users: { username: 'Kene' }
-    }],
-    readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
-  };
-  const auth = { user: { id: 1, username: 'Kene' } };
-  const params = { groupid: 1 };
+  const group = { groupsBelonged: [] };
+  const message = componetMocks.message;
+  const auth = componetMocks.auth;
+  const params = componetMocks.params;
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
   // assign all props to a varibale props

@@ -4,30 +4,18 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
+import componentMocks from '../../__mocks__/componentMocks';
 import { MessageDetailBoard } from '../../components/MessageDetailBoard';
 import '../../__mocks__/localStorage';
 
 describe('<MessageDetailBoard />', () => {
-  const group = {
-    groups: { groups: ['Redux', 'Test'] },
-    groupsBelonged: []
-  };
+  const group = componentMocks.group;
 
-  const message = {
-    messageData: [{
-      id: 1,
-      ReadBy: '1,2,3',
-      createdAt: '2-10-2019',
-      message: 'Hello Worlld',
-      priorityLevel: 'Normal',
-      Users: { username: 'Kene' }
-    }],
-    readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
-  };
-  const groupName = 'Random';
+  const message = componentMocks.message;
+  const groupName = componentMocks.groupName;
   const auth = {};
-  const messageId = '1';
-  const groupSelectedId = '';
+  const messageId = componentMocks.messages[0].id;
+  const groupSelectedId = componentMocks.groupSelectedId;
   const retrieveMessage = sinon.spy(() =>
     Promise.resolve({ message: { data: 'Hello World' } }));
   const clearRetrievedMessageAction = sinon.spy();
@@ -59,7 +47,7 @@ describe('<MessageDetailBoard />', () => {
     expect(wrapper.find('Link').at(0).text()).toEqual(' Random');
     expect(wrapper.find('span').at(1).text()).toEqual('Kene');
     expect(wrapper.find('i').at(1).text()).toEqual('Normal');
-    expect(wrapper.find('p').at(1).text()).toEqual('Hello Worlld');
+    expect(wrapper.find('p').at(1).text()).toEqual('Hello World');
     expect(wrapper.find('b').at(2).text()).toEqual('Message Readers');
     expect(wrapper.find('i').at(2).text()).toEqual('  hover here');
     expect(wrapper.find('span').at(4).text()).toEqual('@Kene ');

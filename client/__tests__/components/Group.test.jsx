@@ -4,23 +4,20 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { shallow } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { Group } from '../../components/Group';
 import Router from '../../__mocks__/router';
 import '../../__mocks__/localStorage';
 
 
 describe('<Group />', () => {
-  const group = {
-    groups: { groups: [{ id: '1', groupName: 'Random' }] },
-    groupsBelonged: [],
-    usersInGroup: [{ id: '1', username: 'Kene' }],
-  };
-  const auth = { user: { id: '1', username: 'Kene' } };
-  const params = { groupid: '1' };
-  const groupSelectedId = '1';
+  const group = componentMocks.group;
+  const auth = componentMocks.auth;
+  const params = componentMocks.params;
+  const groupSelectedId = componentMocks.groupSelectedId;
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
-  const groupName = 'Random';
+  const groupName = componentMocks.groupName;
   // assign all props to a varibale props
   const props = {
     params,

@@ -2,18 +2,13 @@
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import FilterMessages from '../../components/FilterMessages';
 import '../../__mocks__/localStorage';
 
 describe('<FilterMessages />', () => {
-  const groupMessage = {
-    id: '1',
-    Users: { username: 'Kene' },
-    priorityLevel: 'Normal',
-    createdAt: '',
-    message: 'Hello World'
-  };
-  const groupSelectedId = '';
+  const groupMessage = componentMocks.message.messageData[0];
+  const groupSelectedId = componentMocks.groupSelectedId;
 
   // assign all props to a varibale props
   const props = {

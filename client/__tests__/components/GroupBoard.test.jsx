@@ -4,28 +4,15 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { GroupBoard } from '../../components/GroupBoard';
 import '../../__mocks__/localStorage';
 
 describe('<GroupBoard />', () => {
-  const group = {
-    groups: { groups: [{ id: '1', groupName: 'Random' }] },
-    groupsBelonged: [],
-    usersInGroup: [{ id: '1', username: 'Kene' }],
-  };
-  const message = {
-    messageData: [{
-      id: '1',
-      ReadBy: '1,2,3',
-      createdAt: '2-10-2019',
-      message: 'Hello World',
-      priorityLevel: 'Normal',
-      Users: { username: 'Kene' }
-    }],
-    readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
-  };
-  const auth = { user: { id: '1', username: 'Kene' } };
-  const groupSelectedId = '1';
+  const group = componentMocks.group;
+  const message = componentMocks.message;
+  const auth = componentMocks.auth;
+  const groupSelectedId = componentMocks.groupSelectedId;
   const clearRetrievedMessageAction = sinon.spy();
   const addNotification = sinon.spy();
   const getNotification = sinon.spy();
