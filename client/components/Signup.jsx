@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar';
+import postmanImage from '../images/postman.gif';
 import userSignupRequest from '../actions/signupActions';
 import validateInput from '../../server/shared/validations/validateInput';
 import { addFlashMessage } from '../actions/flashMessages';
@@ -104,7 +105,7 @@ export class Signup extends Component {
                 <h3 className="">Welcome To PostIt App<hr /></h3>
                 <div>
                   <img
-                    src="/images/postman.gif"
+                    src={postmanImage}
                     className="image"
                     alt="Postman"
                     width="180px"

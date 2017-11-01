@@ -39,8 +39,7 @@ export default {
           }))
           .catch(error => res.status(400).send(error)))
         .catch(error => res.status(409).send({
-          groupName: error.errors[0].message,
-          message: 'Group Already Exists',
+          message: error.errors[0].message,
           success: false,
         }));
     }

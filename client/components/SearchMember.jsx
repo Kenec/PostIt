@@ -137,9 +137,7 @@ export class SearchMember extends Component {
       usersInGroup } = this.props.group;
 
     if (!groups || !groupsBelonged) {
-      return (
-        <h2>Loading ...</h2>
-      );
+      return <h2>Loading ...</h2>;
     }
 
     // Iterated over the array of objects of
