@@ -15,7 +15,7 @@ const componentMocks = {
     }],
     readBy: { messageReadUsers: [{ Reader: { username: 'Kene' } }] }
   },
-  groupId: 1,
+  groupId: '1',
   groupName: 'Random',
   auth: {
     user: {
