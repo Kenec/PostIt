@@ -54,8 +54,9 @@ export default function validateInput(inputData) {
   if (inputData.repassword) {
     if (Validator.isEmpty(inputData.repassword)) {
       errors.confirmPassword = 'Confirm Password';
-    } else if (!Validator.isAlphanumeric(inputData.password)) {
-      errors.password = 'Confirm Password can only contain Alphanumberics';
+    } else if (!Validator.isAlphanumeric(inputData.repassword)) {
+      errors.confirmPassword =
+      'Confirm Password can only contain Alphanumberics';
     }
     if (!Validator.equals(inputData.password, inputData.repassword)) {
       errors.confirmPassword = 'Password did not match';
