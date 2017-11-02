@@ -19,7 +19,7 @@ export class ChangePassword extends Component {
    * Creates an instance of Signin
    * @constructor
    * @param {any} props
-   * @memberof {ChangePassword} 
+   * @memberof {ChangePassword}
    */
   constructor(props) {
     super(props);
@@ -69,7 +69,7 @@ export class ChangePassword extends Component {
    * Handles onSubmit event
    * @method onSubmit
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onSubmit(event) {
     event.preventDefault();
@@ -78,15 +78,25 @@ export class ChangePassword extends Component {
       const token = this.props.params.token;
       const NewPassword = {
         password: this.state.password,
-        token,
+        repassword: this.state.repassword,
       };
       this.props.updatePassword(token, NewPassword)
         .then(
           ({ data }) => {
-            this.setState({ success: data.message, isLoading: false });
+            this.setState({
+              password: '',
+              repassword: '',
+              success: data.message,
+              isLoading: false
+            });
           },
           ({ response }) => {
-            this.setState({ errors: response.data, isLoading: false });
+            this.setState({
+              password: '',
+              repassword: '',
+              errors: response.data,
+              isLoading: false
+            });
           }
         )
         .catch((error) => {
