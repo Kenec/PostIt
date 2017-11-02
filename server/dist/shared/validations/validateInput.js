@@ -80,8 +80,11 @@ function validateInput(inputData) {
   if (inputData.message) {
     if (_validator2.default.isEmpty(inputData.message)) {
       errors.message = 'Message field is required';
+<<<<<<< HEAD
     } else if (inputData.message.trim().length === 0) {
       errors.message = 'Message should not contain only spaces';
+=======
+>>>>>>> update master with current head
     }
   }
 
@@ -110,8 +113,11 @@ function validateInput(inputData) {
   if (inputData.groupName) {
     if (_validator2.default.isEmpty(inputData.groupName)) {
       errors.groupName = 'groupName is required';
+<<<<<<< HEAD
     } else if (inputData.groupName.trim().length === 0) {
       errors.groupName = 'Group name should not contain only spaces';
+=======
+>>>>>>> update master with current head
     }
   }
 

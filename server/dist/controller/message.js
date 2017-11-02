@@ -33,7 +33,11 @@ exports.default = {
    * create - create a new message
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
+<<<<<<< HEAD
    * @return {json} returns json response
+=======
+   * @return {json}     returns json response
+>>>>>>> update master with current head
    */
   create: function create(req, res) {
     if (!(req.body.message && req.body.priorityLevel && req.params.groupId && req.body.sentBy && req.body.readBy)) {
@@ -48,8 +52,17 @@ exports.default = {
         isValid = _validateInput.isValid;
 
     if (!isValid) {
+<<<<<<< HEAD
       res.status(400).send({
         status: errors.message || errors.priorityLevel || errors.sentBy || errors.readBy
+=======
+      var messageError = errors.message;
+      var priorityLevelError = errors.priorityLevel;
+      var sentByError = errors.sentBy;
+      var readByError = errors.readBy;
+      res.status(400).send({
+        status: messageError || priorityLevelError || sentByError || readByError
+>>>>>>> update master with current head
       });
     } else {
       return _models.Messages.create({
@@ -102,7 +115,12 @@ exports.default = {
         });
       }).catch(function (error) {
         return res.status(500).send({
+<<<<<<< HEAD
           status: error.errors[0].message
+=======
+          error: error,
+          status: 'message cannot be sent'
+>>>>>>> update master with current head
         });
       });
     }
@@ -154,6 +172,7 @@ exports.default = {
    * @return {json}     returns json response
    */
   addNotification: function addNotification(req, res) {
+<<<<<<< HEAD
     if (req.notification) {
       _models.MessageReads.bulkCreate(req.notification).then(function () {
         res.status(200).send({
@@ -163,6 +182,57 @@ exports.default = {
         res.status(500).send(error);
       });
     }
+=======
+    if (!(req.params.messageId && req.body.userId && req.body.senderId && req.body.groupId)) {
+      return res.status(400).send({
+        message: 'Invalid request.Some column(s) column are missing'
+      });
+    }
+    // find a message where message id
+    _models.Messages.find({
+      where: {
+        id: req.params.messageId
+      }
+    }).then(function (messageRes) {
+      // if message is found, add notification
+      if (messageRes.length !== 0) {
+        _models.MessageReads.findAll({
+          where: {
+            messageId: req.params.messageId,
+            userId: req.body.userId
+          }
+        }).then(function (result) {
+          if (result.length === 0) {
+            return _models.MessageReads.create({
+              messageId: req.params.messageId,
+              userId: req.body.userId,
+              read: req.body.readStatus,
+              senderId: req.body.senderId,
+              groupId: req.body.groupId
+            }).then(function () {
+              return res.status(201).send({
+                message: 'Notification Added',
+                success: true
+              });
+            }).catch(function (error) {
+              return res.status(400).send({
+                error: error,
+                message: 'Cannot Add Notification'
+              });
+            });
+          }
+          res.status(409).send({
+            message: 'Notification already exist',
+            success: false
+          });
+        }).catch(function (error) {
+          return res.status(500).send(error);
+        });
+      }
+    }).catch(function (error) {
+      return res.status(500).send(error);
+    });
+>>>>>>> update master with current head
   },
 
 

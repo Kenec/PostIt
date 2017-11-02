@@ -81,8 +81,14 @@ exports.default = {
         isValid = _validateInput.isValid;
 
     if (!isValid) {
+<<<<<<< HEAD
       res.status(400).send({
         message: errors.username
+=======
+      var usernameError = errors.username;
+      res.status(400).send({
+        message: usernameError
+>>>>>>> update master with current head
       });
     } else {
       var username = req.body.username;
@@ -114,12 +120,20 @@ exports.default = {
 
 
   /**
+<<<<<<< HEAD
    * getGroupMembers - fetch members from the same group
+=======
+   * fetchMembersOfGroup - fetch members from the same group
+>>>>>>> update master with current head
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
    * @return {json} returns json reponse
    */
+<<<<<<< HEAD
   getGroupMembers: function getGroupMembers(req, res) {
+=======
+  fetchMembersOfGroup: function fetchMembersOfGroup(req, res) {
+>>>>>>> update master with current head
     if (!req.params.id) {
       return res.status(400).send({
         message: 'Invalid request. id is missing'
@@ -191,8 +205,14 @@ exports.default = {
         isValid = _validateInput2.isValid;
 
     if (!isValid) {
+<<<<<<< HEAD
       res.status(400).send({
         message: errors.username
+=======
+      var usernameError = errors.username;
+      res.status(400).send({
+        message: usernameError
+>>>>>>> update master with current head
       });
     } else {
       return _models.Users.findAndCountAll({

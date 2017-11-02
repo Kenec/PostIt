@@ -13,9 +13,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * sendSMS - function to send SMS to users
+<<<<<<< HEAD
  * @param  {array} receivers array of SMS receivers
  * @param  {string} message message to be sent
  * @return {void}
+=======
+ * @param  {array} receivers array of users info
+ * @param  {string} message message to be sent
+ * @return {type}                 description
+>>>>>>> update master with current head
  */
 function sendSMS(receivers, message) {
   var nexmo = new _nexmo2.default({
@@ -23,6 +29,10 @@ function sendSMS(receivers, message) {
     apiSecret: process.env.SMS_API_SECRET
   });
   receivers.map(function (user) {
+<<<<<<< HEAD
     return nexmo.message.sendSms('PostIT', user.phone, message, function () {});
+=======
+    nexmo.message.sendSms('PostIT', user.phone, message, function () {});
+>>>>>>> update master with current head
   });
 }

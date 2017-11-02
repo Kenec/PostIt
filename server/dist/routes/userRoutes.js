@@ -26,6 +26,10 @@ userRouter.post('/api/v1/users/signin', userController.signin);
 userRouter.post('/api/v1/users/resetpassword', userController.resetPassword);
 userRouter.get('/api/v1/users/resetpassword/:token', userController.isTokenValid);
 userRouter.post('/api/v1/users/resetpassword/:token', userController.updatePassword);
+<<<<<<< HEAD
 userRouter.post('/api/v1/users/username', _jwtAuth2.default, userController.getUser);
+=======
+userRouter.post('/api/v1/users/username', _jwtAuth2.default, userController.fetchUserByName);
+>>>>>>> update master with current head
 
 exports.default = userRouter;

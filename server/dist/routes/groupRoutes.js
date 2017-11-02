@@ -22,7 +22,11 @@ var groupRouter = _express2.default.Router();
 var groupController = _controller2.default.group;
 
 groupRouter.post('/api/v1/groups', _jwtAuth2.default, groupController.create);
+<<<<<<< HEAD
 groupRouter.post('/api/v1/groups/creator', _jwtAuth2.default, groupController.getOwnerGroups);
+=======
+groupRouter.post('/api/v1/groups/creator', _jwtAuth2.default, groupController.fetchGroupByCreator);
+>>>>>>> update master with current head
 groupRouter.get('/api/v1/groups/:groupId', _jwtAuth2.default, groupController.retrieve);
 
 exports.default = groupRouter;

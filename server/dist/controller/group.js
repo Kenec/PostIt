@@ -33,6 +33,7 @@ exports.default = {
         isValid = _validateInput.isValid;
 
     if (!isValid) {
+<<<<<<< HEAD
       res.status(400).send({
         message: errors.groupName
       });
@@ -70,6 +71,33 @@ exports.default = {
         }
       }).catch(function (error) {
         res.status(500).send(error);
+=======
+      var groupError = errors.groupName;
+      res.status(400).send({
+        message: groupError
+      });
+    } else {
+      return _models.Groups.create({
+        groupName: req.body.groupName,
+        createdby: req.body.createdby
+      }).then(function (group) {
+        return _models.userGroups.create({
+          groupId: group.id,
+          userId: req.body.createdby
+        }).then(function () {
+          return res.status(201).json({
+            message: group.groupName + ' group created successfully',
+            success: true
+          });
+        }).catch(function (error) {
+          return res.status(400).send(error);
+        });
+      }).catch(function (error) {
+        return res.status(409).send({
+          message: error.errors[0].message,
+          success: false
+        });
+>>>>>>> update master with current head
       });
     }
   },
@@ -102,12 +130,20 @@ exports.default = {
 
 
   /**
+<<<<<<< HEAD
    * getOwnerGroups - function to retrieve froup by its creator
+=======
+   * fetchGroupByCreator - function to retrieve froup by its creator
+>>>>>>> update master with current head
    * @param  {object} req request object
    * @param  {object} res response object
    * @return {json}     returns json object as a response
    */
+<<<<<<< HEAD
   getOwnerGroups: function getOwnerGroups(req, res) {
+=======
+  fetchGroupByCreator: function fetchGroupByCreator(req, res) {
+>>>>>>> update master with current head
     if (!req.body.userId) {
       return res.status(400).send({
         message: 'Invalid request. userId is missing'

@@ -46,20 +46,45 @@ var _routes2 = _interopRequireDefault(_routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+<<<<<<< HEAD
 var config = process.env.NODE_ENV !== 'production' ? require('../webpack.config') : '';
 
 var app = (0, _express2.default)();
 
+=======
+// *** express instance *** //
+// *** main dependencies *** //
+var app = (0, _express2.default)();
+
+// *** config middleware *** //
+>>>>>>> update master with current head
 app.use((0, _morgan2.default)('dev'));
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use((0, _cookieParser2.default)());
+<<<<<<< HEAD
 app.use('/', _routes2.default);
 app.use((0, _expressFlash2.default)());
 
 if (process.env.NODE_ENV !== 'production') {
   var compiler = (0, _webpack2.default)(config);
 
+=======
+
+// *** main routes *** //
+app.use('/', _routes2.default);
+
+// use express flash message
+app.use((0, _expressFlash2.default)());
+
+if (process.env.NODE_ENV !== 'production') {
+  var config = require('../webpack.config');
+
+  // *** webpack compiler ***
+  var compiler = (0, _webpack2.default)(config);
+
+  // *** webpack middleware
+>>>>>>> update master with current head
   app.use((0, _webpackDevMiddleware2.default)(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath
@@ -86,12 +111,20 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+<<<<<<< HEAD
+=======
+// catch 404 and forward to error handler
+>>>>>>> update master with current head
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
+<<<<<<< HEAD
+=======
+// Listen
+>>>>>>> update master with current head
 app.listen(process.env.PORT || 3000);
 
 exports.default = app;
