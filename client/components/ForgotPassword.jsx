@@ -34,7 +34,7 @@ export class ForgotPassword extends Component {
   /**
    * Handles onChange event
    * @method onChange
-   * @param {object} event 
+   * @param {object} event
    * @return {void} void
    */
   onChange(event) {
@@ -47,7 +47,7 @@ export class ForgotPassword extends Component {
    * Handle onSubmit event
    * @method onSubmit
    * @param {object} event
-   * @return {void} void 
+   * @return {void} void
    */
   onSubmit(event) {
     event.preventDefault();
@@ -56,10 +56,14 @@ export class ForgotPassword extends Component {
       this.props.forgotPasswordRequest({ email: this.state.email })
         .then(
           ({ data }) => {
-            this.setState({ success: data.message, isLoading: false });
+            this.setState({
+              email: '', success: data.message, isLoading: false
+            });
           },
           ({ response }) => {
-            this.setState({ errors: response.data, isLoading: false });
+            this.setState({
+              email: '', errors: response.data, isLoading: false
+            });
           }
         )
         .catch(() => {
@@ -124,6 +128,7 @@ export class ForgotPassword extends Component {
                     <div className="form-group">
                       <label htmlFor="email">Email address:</label>
                       <input
+                        autoComplete="off"
                         type="email"
                         className="form-control"
                         onChange={this.onChange}

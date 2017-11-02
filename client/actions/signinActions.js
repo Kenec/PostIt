@@ -19,7 +19,7 @@ export const setCurrentUser = user => (
 );
 
 /**
- * Logout a user 
+ * Logout a user
  * @function logout
  * @return {object} - object user
  */

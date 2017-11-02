@@ -179,11 +179,13 @@ export default {
                 and your password will remain unchanged.</p><hr/>`;
                 const send = sendMail(emailReceiver, emailText, emailSubject);
                 if (send) {
-                  res.status(200).send(
-                    { message: 'Password reset link has been sent to your email' });
+                  res.status(200).send({
+                    message: 'Password reset link has been sent to your email'
+                  });
                 } else {
-                  res.status(500).send(
-                    { message: 'Unable to send Link to email' });
+                  res.status(500).send({
+                    message: 'Unable to send Link to email'
+                  });
                 }
               })
               .catch(() => res.status(500).send({
@@ -210,7 +212,7 @@ export default {
    * @return {json}     returns json response
    */
   updatePassword(req, res) {
-    if (!(req.body.password && req.body.confirmPassword)) {
+    if (!(req.body.password && req.body.repassword)) {
       return res.status(400).send({
         message: 'Invalid request. Some column(s) are missing'
       });
