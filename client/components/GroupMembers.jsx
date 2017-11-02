@@ -113,9 +113,7 @@ export class GroupMembers extends Component {
   render() {
     const { groups, groupsBelonged, usersInGroup } = this.props.group;
     if (!groups || !groupsBelonged || !usersInGroup) {
-      return (
-        <h4>Loading ...</h4>
-      );
+      return <h4>Loading ...</h4>;
     }
     const groupsMemberList = usersInGroup.map(groupMember => (
       <Link key={groupMember.id}>

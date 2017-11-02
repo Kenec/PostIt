@@ -4,8 +4,7 @@ import flashMessages from '../../reducers/flashMessages';
 import group from '../../reducers/group';
 import message from '../../reducers/message';
 import userLoginReducer from '../../reducers/users';
-import * as types from '../../actions/types';
-import * as reducer from '../../reducers/index';
+import mockAction from '../../__mocks__/actions';
 
 // Test flashmessage reducer
 describe('FlashMessage reducers', () => {
@@ -13,16 +12,12 @@ describe('FlashMessage reducers', () => {
   describe('When ADD_FLASH_MESSAGE action type is fired from an action', () => {
     it('should add message to the store', () => {
       const state = [];
-      const action = {
-        type: types.ADD_FLASH_MESSAGE,
-        message: {
-          type: 'success',
-          text: 'This is a success message!'
-        } };
+      const action = mockAction.addFlashMessage;
       expect(flashMessages(state, action)).toEqual([
         { id: 1,
           type: 'success',
-          text: 'This is a success message!' }
+          text: 'This is a success message!'
+        }
       ]);
     });
   });
@@ -30,10 +25,7 @@ describe('FlashMessage reducers', () => {
   describe('When DELETE_FLASH_MESSAGE action type is fired from action', () => {
     it('should remove message from the store', () => {
       const state = [];
-      const action = {
-        type: types.DELETE_FLASH_MESSAGE,
-        id: 1
-      };
+      const action = mockAction.deleteFlashMessage;
       expect(flashMessages(state, action)).toEqual([]);
     });
   });
@@ -53,12 +45,7 @@ describe('Group reducers', () => {
   describe('When CREATE_GROUP action type is fired from an action', () => {
     it('group should be created and pushed to the group store', () => {
       const state = {};
-      const action = {
-        type: types.CREATE_GROUP,
-        groupData: {
-          groupName: 'Group',
-          createdby: 1
-        } };
+      const action = mockAction.createGroup;
       expect(group(state, action)).toEqual({ groupData: action.groupData });
     });
   });
@@ -67,29 +54,17 @@ describe('Group reducers', () => {
   describe('When GET_USER_GROUPS action type is fired from action', () => {
     it('groups a user belonged to should be added to the store', () => {
       const state = {};
-      const action = {
-        type: types.GET_USER_GROUPS,
-        groups: {
-          id: 1,
-          groupName: 'Group'
-        }
-      };
+      const action = mockAction.getUserGroup;
       expect(group(state, action)).toEqual({ groups: action.groups });
     });
   });
   // Test GET_ADMIN_GROUPS
   // action for getting groups created by a user
   describe(`When GET_ADMIN_GROUPS
-              action type is fired from action`, () => {
+            action type is fired from action`, () => {
       it('groups a user created should be added to the store', () => {
         const state = {};
-        const action = {
-          type: types.GET_ADMIN_GROUPS,
-          groupsBelonged: {
-            id: 1,
-            groupName: 'Group'
-          }
-        };
+        const action = mockAction.getAdminGroup;
         expect(group(state, action))
           .toEqual({ groupsBelonged: action.groupsBelonged });
       });
@@ -97,18 +72,10 @@ describe('Group reducers', () => {
   // Test GET_USERS_IN_GROUP
   // action for getting users in a group
   describe(`When GET_USERS_IN_GROUP
-                action type is fired from action`, () => {
+            action type is fired from action`, () => {
       it('users in a group should be added to the store', () => {
         const state = {};
-        const action = {
-          type: types.GET_USERS_IN_GROUP,
-          usersInGroup: {
-            id: 1,
-            username: 'Kene',
-            email: 'kene@gmail.com',
-            phone: '07038550515'
-          }
-        };
+        const action = mockAction.getUsersInGroup;
         expect(group(state, action))
           .toEqual({ usersInGroup: action.usersInGroup });
       });
@@ -116,32 +83,15 @@ describe('Group reducers', () => {
   // Test SEARCH_ALL_USERS
   // action for getting all users availble
   describe(`When SEARCH_ALL_USERS
-              action type is fired from action`, () => {
+            action type is fired from action`, () => {
       it('all users should be added to the store', () => {
         const state = {};
-        const action = {
-          type: types.SEARCH_ALL_USERS,
-          users: [
-            {
-              id: 1,
-              username: 'Kene',
-              email: 'kene@gmail.com',
-              phone: '07038550515'
-            },
-            {
-              id: 2,
-              username: 'Obi',
-              email: 'obi@gmail.com',
-              phone: '07038550515'
-            },
-          ]
-        };
+        const action = mockAction.searchAllUser;
         expect(group(state, action))
           .toEqual({ searchedUsers: action.users });
       });
     });
-  // Test default action type
-  // to return state
+  // Test default action type to return state
   describe('When No action is specified', () => {
     it('the state of the group store should be returned', () => {
       const state = {};
@@ -158,16 +108,7 @@ describe('Message reducers', () => {
   describe('When COMPOSE_MESSAGE action type is fired from an action', () => {
     it('message should be added to the message store', () => {
       const state = {};
-      const action = {
-        type: types.COMPOSE_MESSAGE,
-        messageData: {
-          id: 1,
-          message: 'Hello Obi! Welcome',
-          priorityLevel: 'Normal',
-          groupId: 1,
-          sentBy: 1,
-          createdAt: '2017-08-15T11:10:50.743Z'
-        } };
+      const action = mockAction.composeMessage;
       expect(message(state, action))
         .toEqual({ messageData: action.messageData });
     });
@@ -177,17 +118,7 @@ describe('Message reducers', () => {
   describe('When RETRIEVE_MESSAGE action type is fired from action', () => {
     it('messages should be retrieved from the store', () => {
       const state = {};
-      const action = {
-        type: types.RETRIEVE_MESSAGE,
-        messageData: {
-          id: 1,
-          message: 'Hello Obi! Welcome',
-          priorityLevel: 'Normal',
-          groupId: 1,
-          sentBy: 1,
-          createdAt: '2017-08-15T11:10:50.743Z'
-        }
-      };
+      const action = mockAction.retrieveMessage;
       expect(message(state, action))
         .toEqual({ messageData: action.retrieveMessages });
     });
@@ -198,10 +129,7 @@ describe('Message reducers', () => {
       action type is fired from action`, () => {
       it('messages from the store should be cleared', () => {
         const state = {};
-        const action = {
-          type: types.CLEAR_RETRIEVED_MESSAGE,
-          messageData: []
-        };
+        const action = mockAction.clearRetrievedMessage;
         expect(message(state, action))
           .toEqual({ messageData: action.messageData });
       });
@@ -212,17 +140,7 @@ describe('Message reducers', () => {
         action type is fired from action`, () => {
       it('notification should be retrieved from the store', () => {
         const state = {};
-        const action = {
-          type: types.GET_NOTIFICATION,
-          notificationData: {
-            id: 1,
-            message: 'Hello Obi! Welcome',
-            priorityLevel: 'Normal',
-            groupId: 1,
-            sentBy: 1,
-            createdAt: '2017-08-15T11:10:50.743Z'
-          }
-        };
+        const action = mockAction.getNotification;
         expect(message(state, action))
           .toEqual({ notificationData: action.notificationData });
       });
@@ -233,17 +151,7 @@ describe('Message reducers', () => {
   action type is fired from action`, () => {
       it('notification should be updated in the store', () => {
         const state = {};
-        const action = {
-          type: types.UPDATE_NOTIFICATION,
-          messageData: {
-            id: 1,
-            message: 'Hello Obi! Welcome',
-            priorityLevel: 'Normal',
-            groupId: 1,
-            sentBy: 1,
-            createdAt: '2017-08-15T11:10:50.743Z'
-          }
-        };
+        const action = mockAction.updateNotification;
         expect(message(state, action))
           .toEqual({ messageData: action.messageData });
       });
@@ -256,18 +164,15 @@ describe('User reducers', () => {
   describe('When SET_CURRENT_USER action type is fired from an action', () => {
     it('current user should be added to the user store', () => {
       const state = {};
-      const action = {
-        type: types.SET_CURRENT_USER,
-        isAuthenticated: true,
-        user: { id: 1, username: 'Kene' }
-      };
+      const action = mockAction.setCurrentUser;
       expect(userLoginReducer(state, action))
         .toEqual(
           { isAuthenticated: true, user: { id: 1, username: 'Kene' } }
         );
     });
   });
-  // test create user reducers for returning default state when no action is fired
+  // test create user reducers for
+  // returning default state when no action is fired
   describe('When No action type is fired from an action', () => {
     it('default state of user store returned', () => {
       const state = {};

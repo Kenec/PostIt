@@ -37,9 +37,7 @@ export class DashboardComponent extends Component {
     const { notificationData } = this.props.message;
 
     if (!groups || !groupsBelonged || !notificationData) {
-      return (
-        <h4>Loading ...</h4>
-      );
+      return <h4>Loading ...</h4>;
     }
 
     let unreadMessages = '';

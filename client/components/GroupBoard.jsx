@@ -135,7 +135,7 @@ export class GroupBoard extends Component {
               const id = data.id;
               const groupId = data.group;
               this.props.getUsersInGroup(this.props.groupSelectedId).then(
-                () => {
+                ({ data }) => {
                   const users = data.users;
                   users.map((user) => {
                     let readStatus = 0;
@@ -248,9 +248,7 @@ export class GroupBoard extends Component {
     const groupName = this.props.groupName;
 
     if (!groups || !groupsBelonged || groupName === 'No Group Found') {
-      return (
-        <h4>Loading ...</h4>
-      );
+      return <h4>Loading ...</h4>;
     }
 
     if (!groups.groups) {

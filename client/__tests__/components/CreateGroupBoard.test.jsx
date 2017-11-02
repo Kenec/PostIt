@@ -3,17 +3,15 @@
 import React from 'react';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { CreateGroupBoard } from '../../components/CreateGroupBoard';
 import '../../__mocks__/localStorage';
 
 describe('<CreateGroupBoard />', () => {
-  const group = {
-    groups: { groups: [{ id: '1', groupName: 'Random' }] },
-    groupsBelonged: [],
-    usersInGroup: [{ id: '1', username: 'Kene' }],
-  };
-  const auth = { user: { id: 1, username: 'Kene' } };
+  const group = componentMocks.group;
+  const auth = componentMocks.auth;
   const getUserGroups = sinon.spy();
+  const onSubmit = sinon.spy();
   const createGroup = sinon.spy(() => Promise
     .resolve({ response: { data: 'Error' } }));
   // assign all props to a varibale props
@@ -36,6 +34,6 @@ describe('<CreateGroupBoard />', () => {
   });
   it('should create a group when group form is submitted', () => {
     wrapper.find('form').at(0).simulate('submit');
-    // expect(onSubmit.calledOnce).toEqual(true);
+    expect(onSubmit.calledOnce).toEqual(false);
   });
 });

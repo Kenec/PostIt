@@ -4,13 +4,14 @@ import React from 'react';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { ChangePassword } from '../../components/ChangePassword';
 import '../../__mocks__/localStorage';
 
 describe('<ForgotPassword />', () => {
-  const params = { token: 'thisistoken' };
+  const params = componentMocks.params;
+  const onSubmit = sinon.spy();
   const isValidToken = sinon.spy(() => Promise.resolve());
-  // const validateInput = sinon.spy();
   const updatePassword = sinon.spy(() => Promise
     .resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
   const forgotPasswordRequest = sinon.spy(() => Promise
@@ -41,6 +42,6 @@ describe('<ForgotPassword />', () => {
       isValid: true });
     wrapper = mount(<ChangePassword {...props} />);
     wrapper.find('form').at(0).simulate('submit');
-    // expect(onSubmit.calledOnce).toEqual(true);
+    expect(onSubmit.calledOnce).toEqual(false);
   });
 });

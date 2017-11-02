@@ -4,14 +4,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
+import componentMocks from '../../__mocks__/componentMocks';
 import { NavigationBarMenu } from '../../components/NavigationBarMenu';
 
 describe('<NavigationBarMenu />', () => {
-  const auth = {
-    user: {
-      username: 'Kene'
-    }
-  };
+  const auth = componentMocks.auth;
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
   const logout = sinon.spy();

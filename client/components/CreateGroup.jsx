@@ -7,7 +7,7 @@ import CreateGroupBoard from './CreateGroupBoard';
 /**
  * Create Group Components
  * @function CreateGroup
- * @return {DOM} DOM component 
+ * @return {DOM} DOM component
  */
 const CreateGroup = () => (
   <div className="content">

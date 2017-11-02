@@ -48,12 +48,14 @@ export class MessageDetailBoard extends Component {
    * @return {void} void
    */
   componentWillMount() {
-    this.props.getReadBy(parseInt(this.props.messageId, 10));
-    this.props.clearRetrievedMessageAction();
-    this.setState({
-      sentBy: jwt.decode(localStorage.jwtToken).id,
-      priorityLevel: 'Normal',
-    });
+    if (!isNaN(parseInt(this.props.messageId, 10))) {
+      this.props.getReadBy(parseInt(this.props.messageId, 10));
+      this.props.clearRetrievedMessageAction();
+      this.setState({
+        sentBy: jwt.decode(localStorage.jwtToken).id,
+        priorityLevel: 'Normal',
+      });
+    }
   }
 
   /**
@@ -126,9 +128,7 @@ export class MessageDetailBoard extends Component {
        !groupsBelonged ||
        groupName === 'No Group Found' ||
        !messageData || !readBy) {
-      return (
-        <h4>Loading....</h4>
-      );
+      return <h4>Loading....</h4>;
     }
 
     // retrieve all users who have read this message
