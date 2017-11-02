@@ -68,8 +68,8 @@ function validateInput(inputData) {
   if (inputData.repassword) {
     if (_validator2.default.isEmpty(inputData.repassword)) {
       errors.confirmPassword = 'Confirm Password';
-    } else if (!_validator2.default.isAlphanumeric(inputData.repassword)) {
-      errors.confirmPassword = 'Confirm Password can only contain Alphanumberics';
+    } else if (!_validator2.default.isAlphanumeric(inputData.password)) {
+      errors.password = 'Confirm Password can only contain Alphanumberics';
     }
     if (!_validator2.default.equals(inputData.password, inputData.repassword)) {
       errors.confirmPassword = 'Password did not match';

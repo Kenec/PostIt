@@ -19,7 +19,7 @@ export class ChangePassword extends Component {
    * Creates an instance of Signin
    * @constructor
    * @param {any} props
-   * @memberof {ChangePassword} 
+   * @memberof {ChangePassword}
    */
   constructor(props) {
     super(props);
@@ -69,7 +69,7 @@ export class ChangePassword extends Component {
    * Handles onSubmit event
    * @method onSubmit
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onSubmit(event) {
     event.preventDefault();

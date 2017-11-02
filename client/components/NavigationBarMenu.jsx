@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import postitImage from '../images/postit.png';
 import { logout } from '../actions/signinActions';
 import { getUserGroups, getAdminGroups } from '../actions/groupActions';
 
@@ -55,7 +56,7 @@ export class NavigationBarMenu extends Component {
       <div className="well well-sm container-fluid ">
         <div className="row">
           <div className="col-md-6 my_title">
-            <img alt="" src="/images/postit.png" width="50px" height="50px" />
+            <img alt="" src={postitImage} width="50px" height="50px" />
             <strong className="text-info"><b>POSTIT</b></strong>
           </div>
           <div className="col-md-6 right-align">

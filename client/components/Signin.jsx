@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import postmanImage from '../images/postman.gif';
 import NavigationBar from './NavigationBar';
 import { userSigninRequestAction } from '../actions/signinActions';
 import { deleteFlashMessage } from '../actions/flashMessages';
@@ -119,7 +120,7 @@ export class Signin extends Component {
                 <h3 className="">Welcome To PostIt App<hr /></h3>
                 <div>
                   <img
-                    src="/images/postman.gif"
+                    src={postmanImage}
                     className="image"
                     alt="Postman"
                     width="180px"

@@ -16,7 +16,7 @@ export class CreateGroupBoard extends Component {
   * Creates an instance of CreateGroupBoard
   * @constructor
   * @param {any} props
-  * @memberof {CreateGroupBoard} 
+  * @memberof {CreateGroupBoard}
   */
   constructor(props) {
     super(props);
@@ -58,7 +58,7 @@ export class CreateGroupBoard extends Component {
    * Handles onSubmit event
    * @method onSubmit
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onSubmit(event) {
     event.preventDefault();
@@ -141,7 +141,7 @@ CreateGroupBoard.propTypes = {
  * Map state to props
  * @function mapStateToProps
  * @param {object} state
- * @return {object} state object 
+ * @return {object} state object
  */
 const mapStateToProps = state => (
   {

@@ -4,14 +4,13 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
+import componentMocks from '../../__mocks__/componentMocks';
+
 import { Signin } from '../../components/Signin';
 
 describe('<Signin />', () => {
   const userSigninRequestAction = sinon.spy();
-  const messages = [{
-    id: '1',
-    text: 'Hello'
-  }]; // spy on message props
+  const messages = componentMocks.messages; // spy on message props
   const onSubmit = sinon.spy(Signin.prototype, 'onSubmit');
   const onChange = sinon.spy(Signin.prototype, 'onChange');
   const deleteFlashMessage = sinon.spy();

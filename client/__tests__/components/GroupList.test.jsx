@@ -2,16 +2,13 @@
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { GroupLists } from '../../components/GroupLists';
 import '../../__mocks__/localStorage';
 
 describe('<GroupLists />', () => {
-  const group = {
-    groups: { groups: [{ id: '1', groupName: 'Random' }] },
-    groupsBelonged: [{ id: '1', groupName: 'Random' }],
-    usersInGroup: [{ id: '1', username: 'Kene' }],
-  };
-  const auth = { user: { id: 1, username: 'Kene' } };
+  const group = componentMocks.group;
+  const auth = componentMocks.auth;
   // assign all props to a varibale props
   const props = {
     group,

@@ -30,9 +30,7 @@ export class GroupLists extends Component {
   render() {
     const { groups, groupsBelonged } = this.props.group;
     if (!groups || !groupsBelonged) {
-      return (
-        <h4>Loading ...</h4>
-      );
+      return <h4>Loading ...</h4>;
     }
     groupsBelonged.map(group => (
       <li key={group.id} value={group.id}>

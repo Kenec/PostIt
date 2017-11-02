@@ -44,9 +44,7 @@ export class Group extends Component {
     let found = false;
 
     if (!groups || !groupsBelonged) {
-      return (
-        <h4>Loading ...</h4>
-      );
+      return <h4>Loading ...</h4>;
     }
 
     groups.groups.map((group) => {

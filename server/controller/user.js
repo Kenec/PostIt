@@ -180,7 +180,9 @@ export default {
                 const send = sendMail(emailReceiver, emailText, emailSubject);
                 if (send) {
                   res.status(200).send(
-                    { message: 'Password reset link has been sent to your email' });
+                    {
+                      message: 'Password reset link has been sent to your email'
+                    });
                 } else {
                   res.status(500).send(
                     { message: 'Unable to send Link to email' });

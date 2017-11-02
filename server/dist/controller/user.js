@@ -224,7 +224,7 @@ exports.default = {
    * @return {json}     returns json response
    */
   updatePassword: function updatePassword(req, res) {
-    if (!(req.body.password && req.body.repassword)) {
+    if (!(req.body.password && req.body.confirmPassword)) {
       return res.status(400).send({
         message: 'Invalid request. Some column(s) are missing'
       });

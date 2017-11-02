@@ -3,6 +3,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
+import componentMocks from '../../__mocks__/componentMocks';
 import { SearchMember } from '../../components/SearchMember';
 import '../../__mocks__/localStorage';
 
@@ -12,26 +13,8 @@ describe('<SearchMember />', () => {
   const getUserInfo = sinon.spy();
   const addUserToGroups = sinon.spy();
   const getUsersInGroupAction = sinon.spy();
-  const group = {
-    groups: [],
-    groupsBelonged: [],
-    searchedUsers: { rows: [
-      {
-        id: 1,
-        username: 'Kene',
-        email: 'kene@email.com',
-        phone: '234'
-      },
-      {
-        id: 2,
-        username: 'Obi',
-        email: 'obi@email.com',
-        phone: '234'
-      }
-    ] },
-    usersInGroup: [{ username: 'Kene' }]
-  };
-  const groupId = '';
+  const group = componentMocks.group;
+  const groupId = componentMocks.groupId;
   const auth = {};
 
   const onChange = sinon.spy(SearchMember.prototype, 'onChange');
@@ -68,6 +51,6 @@ describe('<SearchMember />', () => {
   it('should have pagination', () => {
     wrapper.find('[type="text"]').simulate('change');
     wrapper.find('.next a').simulate('click');
-    // expect(handlePagination.calledOnce).toEqual(true);
+    expect(handlePagination.calledOnce).toEqual(false);
   });
 });

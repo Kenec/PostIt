@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import jwt from 'jsonwebtoken';
+import samples from '../../__mocks__/samples';
 import userSignupRequest from '../../actions/signupActions';
 import * as flashmessage from '../../actions/flashMessages';
 import * as forgotPassword from '../../actions/forgotPasswordAction';
@@ -16,15 +17,12 @@ import * as types from '../../actions/types';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const mock = new MockAdapter(axios);
-// const localStorage = window.localStorage;
+
 // flashmessage action
 describe('Flashmessage Action', () => {
   // should have addFlashmessage action creator
   it('should have addFlasmessage action creator', () => {
-    const myMessage = {
-      type: 'success',
-      message: 'This is a success message'
-    };
+    const myMessage = samples.myMessage;
     expect(flashmessage.addFlashMessage(myMessage)).toEqual({
       type: types.ADD_FLASH_MESSAGE,
       message: myMessage
@@ -32,7 +30,7 @@ describe('Flashmessage Action', () => {
   });
   // should have deleteFlashmessage action creator
   it('should have deleteFlasmessage action creator', () => {
-    const id = 1;
+    const id = samples.id;
     expect(flashmessage.deleteFlashMessage(id)).toEqual({
       type: types.DELETE_FLASH_MESSAGE,
       id
@@ -41,17 +39,18 @@ describe('Flashmessage Action', () => {
 });
 // forgot password action creator
 describe('Forgot Password Action', () => {
+  const store = mockStore({});
+  const token = samples.token;
   // should have forgotPasswordRequest method
   it('should have forgotPassword action creator', () => {
-    const email = 'email@email.com';
+    const email = samples.email;
     expect((typeof forgotPassword.forgotPasswordRequest(email)))
       .toEqual('function');
   });
   // should have forgotPasswordRequest method return
   // an asyn action of post request
   it('should have forgotPasswordRequest return json response', () => {
-    const store = mockStore({});
-    const email = 'email@email.com';
+    const email = samples.email;
     mock.onPost('/api/v1/users/resetpassword', email)
       .reply(200, { message: 'password reset link sent to your email' });
     return store.dispatch(forgotPassword.forgotPasswordRequest(email))
@@ -64,13 +63,10 @@ describe('Forgot Password Action', () => {
   });
   // should have isValidToken method
   it('should have isValidToken action creator', () => {
-    const token = 'gibrishastoken';
     expect((typeof forgotPassword.isValidToken(token))).toEqual('function');
   });
   // should have isValidToken method return an asyn action of get request
   it('should have isValidToken return json request', () => {
-    const store = mockStore({});
-    const token = 'thisisgibrishtoken';
     mock.onGet(`/api/v1/users/resetpassword/${token}`)
       .reply(200, { message: true });
     return store.dispatch(forgotPassword.isValidToken(token))
@@ -83,16 +79,13 @@ describe('Forgot Password Action', () => {
   });
   // should have updatePassword method
   it('should have updatePassword action creator', () => {
-    const token = 'gibrishastoken';
-    const password = 'newpassword';
+    const password = samples.password;
     expect((typeof forgotPassword.updatePassword(token, password)))
       .toEqual('function');
   });
   // should have updatePassword method return an asyn action of post request
   it('should have updatePassword return json response', () => {
-    const store = mockStore({});
-    const token = 'thisisgibrishtoken';
-    const newPassword = 'this is a new password';
+    const newPassword = samples.newPassword;
     mock.onPost(`/api/v1/users/resetpassword/${token}`, newPassword)
       .reply(200, { message: 'password updated successfully!' });
     return store.dispatch(forgotPassword.updatePassword(token, newPassword))
@@ -106,15 +99,8 @@ describe('Forgot Password Action', () => {
 });
 // group action creator
 describe('Group Action', () => {
-  const groupData = {
-    groupId: 1,
-    groupName: 'Random',
-    createdBy: 'Kene',
-  };
-  const usersData = [
-    { id: 1, username: 'kene' },
-    { id: 2, username: 'obi' },
-  ];
+  const groupData = samples.groupData;
+  const usersData = samples.usersData;
   // should have createGroupAction method
   it('should have createGroupAction action creator', () => {
     expect((group.createGroupAction(groupData))).toEqual({
@@ -159,15 +145,15 @@ describe('Group Action', () => {
   });
   // should have searchAllUsers method
   it('should have searchAllUsers action creator', () => {
-    const username = 'Kene';
-    const offset = 1;
+    const username = samples.username;
+    const offset = samples.offset;
     expect((typeof group.searchAllUsers(username, offset))).toEqual('function');
   });
   // should have dispatch an async action when searchAllUsers method is called
   it('should dispatch an async action when searchAllUsers is called', () => {
     const store = mockStore({});
-    const username = 'Kene';
-    const offset = 1;
+    const username = samples.username;
+    const offset = samples.offset;
     mock.onPost(`/api/v1/users/${offset}`, username)
       .reply(200, usersData);
     return store.dispatch(group.searchAllUsers(username, offset)).then(() => {
@@ -181,7 +167,7 @@ describe('Group Action', () => {
   // should have getUsersInGroup method 
   it('should have getUsersInGroup return result of get request', () => {
     const store = mockStore({});
-    const groupId = 1;
+    const groupId = samples.groupId;
     mock.onGet(`/api/v1/groups/${groupId}/users`)
       .reply(200, usersData);
     return store.dispatch(group.getUsersInGroup(groupId))
@@ -193,8 +179,8 @@ describe('Group Action', () => {
   // should have addUserToGroups method 
   it('should have addUserToGroups return result of post request', () => {
     const store = mockStore({});
-    const groupId = 1;
-    const newUser = { id: 3, username: 'john' };
+    const groupId = samples.groupId;
+    const newUser = samples.newUser;
     mock.onPost(`/api/v1/groups/${groupId}/user`, newUser.id)
       .reply(200, usersData.push(newUser));
     return store.dispatch(group.addUserToGroups(groupId, newUser.id))
@@ -206,7 +192,7 @@ describe('Group Action', () => {
   // should have getUserInfo method 
   it('should have getUserInfo return result of post request', () => {
     const store = mockStore({});
-    const userId = 1;
+    const userId = samples.userId;
     mock.onPost('/api/v1/users/username', userId)
       .reply(200, usersData[0].username);
     return store.dispatch(group.getUserInfo(userId)).then((username) => {
@@ -217,10 +203,7 @@ describe('Group Action', () => {
   // should have dispatch an async action when createGroup method is called
   it('should dispatch an async action when createGroup is called', () => {
     const store = mockStore({});
-    const newGroup = {
-      groupId: 1,
-      groupName: 'Random',
-      createdBy: 'Kene' };
+    const newGroup = samples.newGroup;
     mock.onPost('/api/v1/groups', newGroup)
       .reply(200, newGroup);
     return store.dispatch(group.createGroup(newGroup)).then(() => {
@@ -234,9 +217,7 @@ describe('Group Action', () => {
   // should have dispatch an async action when getUserGroups method is called
   it('should dispatch an async action when getUserGroups is called', () => {
     const store = mockStore({});
-    const usersGroup = {
-      username: 'Kene',
-      groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
+    const usersGroup = samples.usersGroup;
     mock.onPost('/api/v1/user/groups', usersGroup.username)
       .reply(200, usersGroup);
     return store.dispatch(group.getUserGroups(usersGroup.username)).then(() => {
@@ -250,9 +231,7 @@ describe('Group Action', () => {
   // should have dispatch an async action when getAdminGroups method is called
   it('should dispatch an async action when getAdminGroups is called', () => {
     const store = mockStore({});
-    const usersGroup = {
-      username: 'Kene',
-      groups: [{ groupId: 1, groupName: 'Random', createdBy: 'Kene' }] };
+    const usersGroup = samples.usersGroup;
     mock.onPost('/api/v1/groups/creator', usersGroup.username)
       .reply(200, usersGroup);
     return store.dispatch(group.getAdminGroups(usersGroup.username))
@@ -267,19 +246,11 @@ describe('Group Action', () => {
 });
 // signup action creator
 describe('Signup Action', () => {
-  const user = { id: 1, username: 'Kene' };
-  const token = jwt.sign({
-    id: 1,
-    username: 'Kene'
-  }, 'mynameiskenechukwu', { expiresIn: '2h' }); // token expires in 2h
+  const user = samples.user;
+  const token = samples.validToken;
 
   const store = mockStore({});
-  const userData = {
-    username: 'LordLugard',
-    email: 'lordlougard@email.com',
-    password: 'Kene',
-    phone: 123
-  };
+  const userData = samples.userData;
   // should have userSignupRequest method
   it('should have userSignupRequest action return json repsonse', () => {
     mock.onPost('/api/v1/users/signup', userData)
@@ -299,24 +270,10 @@ describe('Signup Action', () => {
 });
 // message action creator
 describe('Message Action', () => {
-  const messageData = [{
-    messageId: 1,
-    message: 'Random message',
-    sentBy: 'Kene',
-    readBy: 'Kene',
-  }];
-  const notificationData = [{
-    messageId: 1,
-    sentBy: 'Kene',
-    readStatus: 1
-  }];
-  const retrieveMessages = messageData.push({
-    messageId: 2,
-    message: 'Random message2',
-    sentBy: 'Kene',
-    readBy: 'Kene',
-  });
-  const readBy = 'Kene, Obi';
+  const messageData = samples.messageData;
+  const notificationData = samples.notificationData;
+  const retrieveMessages = messageData.push(samples.newMessage);
+  const readBy = samples.readBy;
   // should have composeMessageAction method
   it('should have composeMessageAction action creator', () => {
     expect((message.composeMessageAction(messageData))).toEqual({
@@ -355,7 +312,7 @@ describe('Message Action', () => {
   // should have dispatch an async action when composeMessage method is called
   it('should dispatch an async action when composeMessage is called', () => {
     const store = mockStore({});
-    const groupId = 1;
+    const groupId = samples.groupId;
     mock.onPost(`/api/v1/groups/${groupId}/message`, messageData)
       .reply(200, { message: 'sent!' });
     return store.dispatch(message.composeMessage(groupId, messageData))
@@ -369,7 +326,7 @@ describe('Message Action', () => {
   // should have retrieveMessage method 
   it('should have retrieveMessage return result of get request', () => {
     const store = mockStore({});
-    const groupId = 1;
+    const groupId = samples.groupId;
     mock.onGet(`/api/v1/groups/${groupId}/messages`)
       .reply(200, retrieveMessages);
     return store.dispatch(message.retrieveMessage(groupId))
@@ -389,11 +346,7 @@ describe('Message Action', () => {
   // should have addNotification method 
   it('should have addNotification return result of post request', () => {
     const store = mockStore({});
-    const newNotificationData = {
-      messageId: 3,
-      sentBy: 'Kene',
-      readStatus: 1
-    };
+    const newNotificationData = samples.newNotificationData;
     mock
       .onPost(`/api/v1/groups/${newNotificationData.messageId}/notification`,
         newNotificationData)
@@ -408,7 +361,7 @@ describe('Message Action', () => {
   // should have dispatch an async action when getNotification method is called
   it('should dispatch an async action when getNotification is called', () => {
     const store = mockStore({});
-    const userId = 1;
+    const userId = samples.userId;
     mock.onPost('/api/v1/user/notifications', userId)
       .reply(200, notificationData);
     return store.dispatch(message.getNotification(userId)).then(() => {
@@ -423,11 +376,7 @@ describe('Message Action', () => {
   // updateNotification method is called
   it('should dispatch an action when updateNotification is called', () => {
     const store = mockStore({});
-    const updateNotificationData = {
-      messageId: 1,
-      sentBy: 'Kene',
-      readStatus: 0
-    };
+    const updateNotificationData = samples.updateNotificationData;
     mock
       .onPost(`/api/v1/user/${updateNotificationData.messageId}/notification`,
         updateNotificationData)
@@ -443,14 +392,14 @@ describe('Message Action', () => {
   // should have dispatch an async action when updateReadBy method is called
   it('should dispatch an async action when updateReadBy is called', () => {
     const store = mockStore({});
-    const readBy = 'Kene, Francis, Love';
+    const newReadBy = samples.newReadBy;
     mock
       .onPost(`/api/v1/groups/${messageData[0].messageId}/updateReadBy`,
-        readBy)
-      .reply(200, messageData[0].readBy = readBy);
+        newReadBy)
+      .reply(200, messageData[0].readBy = newReadBy);
     return store
       .dispatch(message.updateReadBy(messageData[0].messageId,
-        readBy))
+        newReadBy))
       .then((result) => {
       // return of async actions
         expect(result.data).toEqual(messageData[0].readBy);
@@ -473,11 +422,8 @@ describe('Message Action', () => {
 });
 // signin action creator
 describe('Signin Action', () => {
-  const user = { id: 1, username: 'Kene' };
-  const token = jwt.sign({
-    id: 1,
-    username: 'Kene'
-  }, 'mynameiskenechukwu', { expiresIn: '2h' }); // token expires in 2h
+  const user = samples.user;
+  const token = samples.validToken;
 
   // should have setCurrentUser action creator
   it('should have setCurrentUser action creator', () => {
@@ -488,10 +434,7 @@ describe('Signin Action', () => {
   });
   // should have userSigninRequestAction action creator
   it('should have userSigninRequestAction action creator', () => {
-    const userDetail = {
-      username: 'Kene',
-      password: 'kene'
-    };
+    const userDetail = samples.userDetail;
     const store = mockStore({});
     mock.onPost('/api/v1/users/signin', userDetail)
       .reply(201, { token,
@@ -507,13 +450,4 @@ describe('Signin Action', () => {
         }]);
       });
   });
-  // should return true if a user logged in 
-  // it('should log a user out when logout function is called', () => {
-  //   const store = mockStore({});
-  //   return store.dispatch(signin.logout())
-  //     .then(() => {
-  //     // return of async actions
-  //     expect(localStorage.removeItem).toHaveBeenLastCalledWith('removeItem');
-  //     });
-  // });
 });

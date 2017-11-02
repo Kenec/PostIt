@@ -55,7 +55,7 @@ export class SearchMember extends Component {
    * Handle onChange event
    * @method onChange
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onChange(event) {
     event.preventDefault();
@@ -137,9 +137,7 @@ export class SearchMember extends Component {
       usersInGroup } = this.props.group;
 
     if (!groups || !groupsBelonged) {
-      return (
-        <h2>Loading ...</h2>
-      );
+      return <h2>Loading ...</h2>;
     }
 
     // Iterated over the array of objects of
@@ -147,25 +145,30 @@ export class SearchMember extends Component {
     let returnedUsers, pages;
     if (searchedUsers) {
       pages = Math.ceil(searchedUsers.count / 5);
-      returnedUsers = searchedUsers.rows.map(user => (
-        <form onSubmit={this.addUser} key={user.id}>
-          <div className="row">
-            <p className="" >
-              <span className="pull-left">{user.username}</span>
-              <span className="pull-right">
-                <input type="hidden" name="userId" value={user.id} />
-                <input type="hidden" name="username" value={user.username} />
-                <input type="hidden" name="userEmail" value={user.email} />
-                <input type="hidden" name="userPhone" value={user.phone} />
-                {(usersInGroup.filter(users => users.username === user.username).length > 0) ?
-                  <button type="" disabled>Already a member</button> :
-                  <button type="submit">Add</button>
-                }
-              </span>
-            </p>
-          </div>
-        </form>
-      ));
+      if (searchedUsers.rows.length > 0) {
+        returnedUsers = searchedUsers.rows.map(user => (
+          <form onSubmit={this.addUser} key={user.id}>
+            <div className="row">
+              <p className="" >
+                <span className="pull-left">{user.username}</span>
+                <span className="pull-right">
+                  <input type="hidden" name="userId" value={user.id} />
+                  <input type="hidden" name="username" value={user.username} />
+                  <input type="hidden" name="userEmail" value={user.email} />
+                  <input type="hidden" name="userPhone" value={user.phone} />
+                  {(usersInGroup.filter(users => users.username === user.username).length > 0) ?
+                    <button type="" disabled>Already a member</button> :
+                    <button type="submit">Add</button>
+                  }
+                </span>
+              </p>
+            </div>
+          </form>
+        ));
+      } else {
+        returnedUsers =
+          <div className="text-danger"><b>No User Found</b></div>;
+      }
     }
 
     return (
@@ -227,7 +230,7 @@ SearchMember.propTypes = {
  * Map state to props
  * @function mapStateToProps
  * @param {object} state
- * @return {object} state objects 
+ * @return {object} state objects
  */
 const mapStateToProps = state => (
   {

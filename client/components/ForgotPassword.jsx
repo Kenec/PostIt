@@ -34,7 +34,7 @@ export class ForgotPassword extends Component {
   /**
    * Handles onChange event
    * @method onChange
-   * @param {object} event 
+   * @param {object} event
    * @return {void} void
    */
   onChange(event) {
@@ -47,7 +47,7 @@ export class ForgotPassword extends Component {
    * Handle onSubmit event
    * @method onSubmit
    * @param {object} event
-   * @return {void} void 
+   * @return {void} void
    */
   onSubmit(event) {
     event.preventDefault();

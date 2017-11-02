@@ -3,7 +3,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { Footer } from '../../components/Footer';
-import '../../__mocks__/localStorage';
 
 describe('<Footer />', () => {
   const wrapper = mount(<Footer />);

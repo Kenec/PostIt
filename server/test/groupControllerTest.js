@@ -105,10 +105,8 @@ describe('Groups', () => {
             .end((err, res) => {
               res.should.have.status(409);
               res.body.should.be.a('object');
-              res.body.should.have.property('groupName')
-                .eql('groupName must be unique');
               res.body.should.have.property('message')
-                .eql('Group Already Exists');
+                .eql('groupName must be unique');
               res.body.should.have.property('success')
                 .eql(false);
               done();
