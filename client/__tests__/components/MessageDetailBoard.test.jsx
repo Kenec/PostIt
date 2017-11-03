@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -24,7 +23,6 @@ describe('<MessageDetailBoard />', () => {
   const retrieveMessageAction = sinon.spy();
   const getReadBy = sinon.spy();
 
-  // assign all props to a varibale props
   const props = {
     group,
     groupName,
@@ -39,6 +37,7 @@ describe('<MessageDetailBoard />', () => {
     message,
     messageId
   };
+
   MessageDetailBoard.contextTypes = { router: PropTypes.func };
   const wrapper = mount(<MessageDetailBoard {...props} />);
   wrapper.setState({ sentBy: '1' });

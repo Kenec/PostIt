@@ -1,5 +1,4 @@
 /* global expect */
-// import
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
@@ -10,13 +9,13 @@ import { Signin } from '../../components/Signin';
 
 describe('<Signin />', () => {
   const userSigninRequestAction = sinon.spy();
-  const messages = componentMocks.messages; // spy on message props
+  const messages = componentMocks.messages;
   const onSubmit = sinon.spy(Signin.prototype, 'onSubmit');
   const onChange = sinon.spy(Signin.prototype, 'onChange');
   const deleteFlashMessage = sinon.spy();
   const getUserGroups = sinon.spy();
   const auth = {};
-  // assign all props to a varibale props
+
   const props = {
     userSigninRequestAction,
     deleteFlashMessage,
@@ -24,9 +23,9 @@ describe('<Signin />', () => {
     messages,
     auth,
   };
-  // assign context to a variables
+
   Signin.contextTypes = { router: PropTypes.func };
-  // assign mounting Signin component to a variable
+
   const wrapper = mount(<Signin {...props} />);
   it('should have a signin form', () => {
     expect(wrapper.find('form').length).toEqual(1);

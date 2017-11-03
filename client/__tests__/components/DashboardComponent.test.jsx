@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -13,13 +12,14 @@ describe('<DashboardComponent />', () => {
   const message = componentMocks.message;
   const auth = componentMocks.auth;
   const getNotification = sinon.spy();
-  // assign all props to a varibale props
+
   const props = {
     group,
     auth,
     message,
     getNotification
   };
+
   DashboardComponent.contextTypes = { router: PropTypes.object };
   let wrapper = mount(<DashboardComponent {...props} />);
   it('should display Loading... when notificatonData is not resolved', () => {
