@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -9,7 +8,7 @@ import '../../__mocks__/localStorage';
 describe('<GroupLists />', () => {
   const group = componentMocks.group;
   const auth = componentMocks.auth;
-  // assign all props to a varibale props
+
   const props = {
     group,
     auth,
