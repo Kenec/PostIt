@@ -174,11 +174,15 @@ export default {
                 const emailText = `<hr/><p>You are receiving this because you
                 (or someone else) have requested the reset of the password
                 for your account.</p>
-                <p> Please click on the following link, or paste this into
-                your browser to complete the process:</p><p>
-                <b>${`http://${req.headers.host}/recoverpassword/${token}`}</b>
-                </p><p>If you did not request this, please ignore this email
-                and your password will remain unchanged.</p><hr/>`;
+                <p> Please click on the reset password below to change your password</p>
+                <p style="align: center"> <a
+                href="${`http://${req.headers.host}/recoverpassword/${token}`}">
+                <button style="border-radius: 0px; border: 0;
+                background: none; box-shadow: none; background-color: #31708f;
+                align: center; color: white; font-size: 26px;">
+                RESET PASSWORD </button></a></p><hr/>
+                <p style="color: black; font-size: 12px;">If you did not request this,
+                please ignore this email and your password will remain unchanged.</p><hr/>`;
                 const send = sendMail(emailReceiver, emailText, emailSubject);
                 if (send) {
                   res.status(200).send({
