@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -11,7 +10,7 @@ describe('<ForgotPassword />', () => {
   const onSubmit = sinon.spy();
   const forgotPasswordRequest = sinon.spy(() => Promise
     .resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
-  // assign all props to a varibale props
+
   const props = {
     forgotPasswordRequest,
   };

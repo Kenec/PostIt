@@ -1,20 +1,34 @@
-// Require the dev-dependencies
 import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Users } from '../models';
-import app from '../app';
+import { Users } from '../../models';
+import app from '../../app';
+import dummyData from '../dummy.json';
 
-// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
 const server = supertest.agent(app);
-const should = chai.should();
-
 chai.use(chaiHttp);
 
+const {
+  validUser,
+  anotherValidUser,
+  invalidEmail,
+  missingUsername,
+  emptyUsername,
+  missingSigninUsername,
+  emptySigninUsername,
+  validSigninAccount,
+  invalidSigninAccount,
+  validToken,
+  invalidPassword,
+  validPassword,
+  inValidToken,
+  invalidResetPassword
+} = dummyData.Users;
+
 describe('Users', () => {
-  before((done) => { // Before each test we empty the database
+  before((done) => {
     Users.sync({ force: true })
       .then(() => {
         done();
@@ -24,17 +38,13 @@ describe('Users', () => {
       });
   });
 
-  describe('API Route Tests: ', () => {
-    describe('Signup', () => {
+  describe('API Route Test: ', () => {
+    describe('/api/v1/users/signup', () => {
       it('should create a new user account when all conditions are met',
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              username: 'kene',
-              email: 'kene@gmail.com',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(validUser)
             .end((err, res) => {
               res.should.have.status(201);
               res.body.should.be.a('object');
@@ -44,15 +54,11 @@ describe('Users', () => {
               done();
             });
         });
-      it('should another a new user account',
+      it('should create another new user account with different account',
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              username: 'Mike',
-              email: 'mike@gmail.com',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(anotherValidUser)
             .end((err, res) => {
               res.should.have.status(201);
               res.body.should.be.a('object');
@@ -62,15 +68,11 @@ describe('Users', () => {
               done();
             });
         });
-      it('should throw 409 error when a duplicate account wants to be created',
+      it('should throw error when a duplicate account wants to be created',
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              username: 'kene',
-              email: 'kene@gmail.com',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(validUser)
             .end((err, res) => {
               res.should.have.status(409);
               res.body.should.have.property('message')
@@ -82,11 +84,7 @@ describe('Users', () => {
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              username: 'Miene',
-              email: 'email',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(invalidEmail)
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
@@ -98,11 +96,7 @@ describe('Users', () => {
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              // username: 'kene', // ie if the validate input fails
-              email: 'kene@gmail.com',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(missingUsername)
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
@@ -114,11 +108,7 @@ describe('Users', () => {
         (done) => {
           server
             .post('/api/v1/users/signup')
-            .send({
-              username: '',
-              email: 'kene@gmail.com',
-              phone: '07038550515',
-              password: 'kene' })
+            .send(emptyUsername)
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
@@ -128,14 +118,12 @@ describe('Users', () => {
         });
     });
   });
-  describe('Signin', () => {
+  describe('/api/v1/users/signin', () => {
     let token = '';
     it('should not signin when any field is missing', (done) => {
       server
         .post('/api/v1/users/signin')
-        .send({
-          // username: 'kene',
-          password: 'kene' })
+        .send(missingSigninUsername)
         .end((err, res) => {
           token = res.body.token;
           res.should.have.status(400);
@@ -148,9 +136,7 @@ describe('Users', () => {
     it('should not signin when any field is empty', (done) => {
       server
         .post('/api/v1/users/signin')
-        .send({
-          username: '',
-          password: 'kene' })
+        .send(emptySigninUsername)
         .end((err, res) => {
           token = res.body.token;
           res.should.have.status(400);
@@ -164,9 +150,7 @@ describe('Users', () => {
       (done) => {
         server
           .post('/api/v1/users/signin')
-          .send({
-            username: 'kene',
-            password: 'kene' })
+          .send(validSigninAccount)
           .end((err, res) => {
             res.should.have.status(202);
             res.body.should.have.property('token');
@@ -180,9 +164,7 @@ describe('Users', () => {
     it('should signin a user with correct credentials', (done) => {
       server
         .post('/api/v1/users/signin')
-        .send({
-          username: 'kene',
-          password: 'kene' })
+        .send(validSigninAccount)
         .end((err, res) => {
           token = res.body.token;
           res.should.have.status(202);
@@ -192,13 +174,12 @@ describe('Users', () => {
           done();
         });
     });
-    it('should return 404 if a user is not found',
+    it(`should return not found error
+    if a user attempts to login with invalid username and passowrd`,
       (done) => {
         server
           .post('/api/v1/users/signin')
-          .send({
-            username: 'paul',
-            password: 'kene' })
+          .send(invalidSigninAccount)
           .end((err, res) => {
             res.should.have.status(404);
             res.body.should.have.property('message')
@@ -212,7 +193,8 @@ describe('Users', () => {
           .post('/api/v1/users/username')
           .send({
             token,
-            username: 'kene' })
+            username: validUser.username
+          })
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('userid');
@@ -222,14 +204,15 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return 404 error when user
+    it(`should return not found error when user
         details is not found when searched by username`,
       (done) => {
         server
           .post('/api/v1/users/username')
           .send({
             token,
-            username: 'keneM' })
+            username: invalidSigninAccount.username
+          })
           .end((err, res) => {
             res.should.have.status(404);
             res.body.should.have.property('message')
@@ -237,26 +220,30 @@ describe('Users', () => {
             done();
           });
       });
-    it(`should return 403 error when search user by
+    it(`should return error when search user by
         username query errored`,
       (done) => {
         server
           .post('/api/v1/users/username')
           .send({
-            // token, // when token is not available
-            username: 'kene' })
+
+            // assuming the request is made without valid token
+            username: validUser.username
+          })
           .end((err, res) => {
             res.should.have.status(403);
             done();
           });
       });
-    it('should not search a user by username if username is not supplied',
+    it(`should throw an error for search by
+    username if username is not supplied`,
       (done) => {
         server
           .post('/api/v1/users/username')
           .send({
             token,
-            // username: 'kene' 
+
+            // the username parameter is missing
           })
           .end((err, res) => {
             res.should.have.status(400);
@@ -271,7 +258,7 @@ describe('Users', () => {
           .post('/api/v1/users/username')
           .send({
             token,
-            username: ''
+            username: emptyUsername.username
           })
           .end((err, res) => {
             res.should.have.status(400);
@@ -281,15 +268,17 @@ describe('Users', () => {
           });
       });
   });
-  describe('Update Password', () => {
-    const token = 'thisisagibrishtoken';
+  describe('/api/v1/users/resetpassword/:token', () => {
+    const token = validToken;
     it('should not update password if new password is not available',
       (done) => {
         server
           .post(`/api/v1/users/resetpassword/${token}`)
           .send({
-            // password: 'kene',
-            email: 'kene@gmail.com' })
+
+            // the username parameter is missing
+            password: validUser.password
+          })
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
@@ -302,10 +291,7 @@ describe('Users', () => {
       (done) => {
         server
           .post(`/api/v1/users/resetpassword/${token}`)
-          .send({
-            password: 'kene',
-            confirmPassword: 'kene',
-            email: 'kene' })
+          .send(invalidPassword)
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
@@ -318,10 +304,7 @@ describe('Users', () => {
       (done) => {
         server
           .post(`/api/v1/users/resetpassword/${token}`)
-          .send({
-            password: 'kene',
-            confirmPassword: 'kene',
-            email: 'kene@gmail.com' })
+          .send(validPassword)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
@@ -330,9 +313,8 @@ describe('Users', () => {
             done();
           });
       });
-    it('should 404 when token does not exists',
+    it('should throw error when token does not exists',
       (done) => {
-        const inValidToken = 'thisisaninvalidtoken';
         server
           .get(`/api/v1/users/resetpassword/${inValidToken}`)
           .end((err, res) => {
@@ -344,8 +326,8 @@ describe('Users', () => {
           });
       });
   });
-  describe('Valid Token', () => {
-    const token = 'thisisagibrishtoken';
+  describe('/api/v1/users/resetpassword/:token', () => {
+    const token = validToken;
     it('should check if token exist',
       (done) => {
         server
@@ -360,15 +342,12 @@ describe('Users', () => {
           });
       });
   });
-  describe('Reset password', () => {
+  describe('/api/v1/users/resetpassword', () => {
     it('should not reset password if any parameter violates validation rules',
       (done) => {
         server
           .post('/api/v1/users/resetpassword')
-          .send({
-            password: 'kene',
-            confirmPassword: 'kene',
-            email: 'kene' })
+          .send(invalidPassword)
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
@@ -381,10 +360,7 @@ describe('Users', () => {
       (done) => {
         server
           .post('/api/v1/users/resetpassword')
-          .send({
-            password: 'kene',
-            confirmPassword: 'kene',
-            email: '' })
+          .send(invalidResetPassword)
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');

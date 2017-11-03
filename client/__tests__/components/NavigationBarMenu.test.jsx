@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -13,13 +12,14 @@ describe('<NavigationBarMenu />', () => {
   const getAdminGroups = sinon.spy();
   const logout = sinon.spy();
   const onLogout = sinon.spy(NavigationBarMenu.prototype, 'onLogout');
-  // assign all props to a variable props
+
   const props = {
     auth,
     logout,
     getUserGroups,
     getAdminGroups
   };
+
   NavigationBarMenu.contextTypes = { router: PropTypes.func };
   const wrapper = mount(<NavigationBarMenu {...props} />);
   it('should have Link DASHBOARD and CREATE GROUP', () => {
