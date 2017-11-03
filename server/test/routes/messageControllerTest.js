@@ -1,26 +1,30 @@
-// Require the dev-dependencies
 import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Messages, MessageReads } from '../models';
-import app from '../app';
+import { Messages, MessageReads } from '../../models';
+import app from '../../app';
+import dummyData from '../dummy.json';
 
-// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
 const server = supertest.agent(app);
-const should = chai.should();
-
 chai.use(chaiHttp);
+
+const { validUser } = dummyData.Users;
+const {
+  validMessage,
+  invalidMessage,
+  notification,
+  invalidNotification,
+  updateNotification,
+} = dummyData.Messages;
 
 describe('Messages', () => {
   let token = '';
-  before((done) => { // Before each test we empty the database
+  before((done) => {
     server
       .post('/api/v1/users/signin')
-      .send({
-        username: 'kene',
-        password: 'kene' })
+      .send(validUser)
       .end((err, res) => {
         token = res.body.token;
       });
@@ -34,10 +38,10 @@ describe('Messages', () => {
       });
   });
 
-  describe('Controller Tests: ', () => {
-    // Test for messages
-    describe('Message Controller: ', () => {
-      const groupId = 1;
+  describe('API Route Tests: ', () => {
+    describe('/api/v1/groups/:groupId/messages ', () => {
+      const groupId = validMessage.groupId;
+      let messageId = notification.messageId;
       it('should display no message when a group does not have message',
         (done) => {
           server
@@ -57,11 +61,11 @@ describe('Messages', () => {
             .post(`/api/v1/groups/${groupId}/message`)
             .send({
               token,
-              message: 'This is a sample message',
-              priorityLevel: 'Normal',
               groupId,
-              sentBy: 1,
-              readBy: '1'
+              sentBy: validMessage.sentBy,
+              readBy: validMessage.readBy,
+              message: validMessage.message,
+              priorityLevel: validMessage.priorityLevel
             })
             .end((err, res) => {
               res.should.have.status(201);
@@ -77,11 +81,12 @@ describe('Messages', () => {
             .post(`/api/v1/groups/${groupId}/message`)
             .send({
               token,
-              // message: 'This is a sample message',
-              priorityLevel: 'Normal',
               groupId,
-              sentBy: 1,
-              readBy: '1'
+
+              // assuming the message field is empty
+              sentBy: validMessage.sentBy,
+              readBy: validMessage.readBy,
+              priorityLevel: validMessage.priorityLevel
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -97,11 +102,11 @@ describe('Messages', () => {
             .post(`/api/v1/groups/${groupId}/message`)
             .send({
               token,
-              message: '',
-              priorityLevel: 'Normal',
               groupId,
-              sentBy: 1,
-              readBy: '1'
+              sentBy: validMessage.sentBy,
+              readBy: validMessage.readBy,
+              message: invalidMessage.message,
+              priorityLevel: validMessage.priorityLevel,
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -129,15 +134,14 @@ describe('Messages', () => {
       it(`should add notification when a message
           is sent`,
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
-              userId: 1,
-              readStatus: 0,
-              senderId: 1,
-              groupId
+              groupId,
+              userId: notification.userId,
+              senderId: notification.senderId,
+              readStatus: notification.readStatus
             })
             .end((err, res) => {
               res.should.have.status(201);
@@ -152,15 +156,15 @@ describe('Messages', () => {
       it(`should not add notification when a all required 
         parameter is not available`,
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
-              // userId: 1,
-              readStatus: 0,
-              senderId: 1,
-              groupId
+              groupId,
+
+              // assuming userId is missing
+              senderId: notification.senderId,
+              readStatus: notification.readStatus,
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -172,15 +176,14 @@ describe('Messages', () => {
         });
       it('should not add a duplicate notification',
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
-              userId: 1,
-              readStatus: 0,
-              senderId: 1,
-              groupId
+              groupId,
+              userId: notification.userId,
+              senderId: notification.senderId,
+              readStatus: notification.readStatus,
             })
             .end((err, res) => {
               res.should.have.status(409);
@@ -195,15 +198,15 @@ describe('Messages', () => {
       it(`should not add a notification when message
         with messageId is not found`,
         (done) => {
-          const messageId = 10;
+          messageId = invalidNotification.messageId;
           server
             .post(`/api/v1/groups/${messageId}/notification`)
             .send({
               token,
-              userId: 1,
-              readStatus: 0,
-              senderId: 1,
-              groupId
+              groupId,
+              userId: notification.userId,
+              senderId: notification.senderId,
+              readStatus: notification.readStatus
             })
             .end((err, res) => {
               res.should.have.status(500);
@@ -217,7 +220,7 @@ describe('Messages', () => {
             .post('/api/v1/user/notifications')
             .send({
               token,
-              userId: 1,
+              userId: notification.userId,
             })
             .end((err, res) => {
               res.should.have.status(200);
@@ -232,7 +235,7 @@ describe('Messages', () => {
             .post('/api/v1/user/notifications')
             .send({
               token,
-              userId: 3,
+              userId: notification.invalidUserId,
             })
             .end((err, res) => {
               res.should.have.status(200);
@@ -244,7 +247,7 @@ describe('Messages', () => {
         });
       it('should return empty array if message readers are empty',
         (done) => {
-          const messageId = 1;
+          messageId = notification.messageId;
           server
             .post(`/api/v1/users/${messageId}/read`)
             .send({
@@ -260,13 +263,12 @@ describe('Messages', () => {
         });
       it('should update notification',
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
-              userId: 1,
-              readStatus: 1,
+              userId: updateNotification.userId,
+              readStatus: updateNotification.readStatus,
             })
             .end((err, res) => {
               res.should.have.status(201);
@@ -281,13 +283,12 @@ describe('Messages', () => {
       it(`should throw not found error when attempting
           to update a notification that does not exist`,
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
-              userId: 2,
-              readStatus: 1,
+              userId: invalidNotification.userId,
+              readStatus: updateNotification.readStatus,
             })
             .end((err, res) => {
               res.should.have.status(404);
@@ -300,13 +301,13 @@ describe('Messages', () => {
       it(`should not update the notification of a user
         if userId is not found`,
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/user/${messageId}/notification`)
             .send({
               token,
-              // userId: 2,
-              readStatus: 1,
+
+              // assuming userId is missing
+              readStatus: updateNotification.readStatus,
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -321,7 +322,6 @@ describe('Messages', () => {
           of object when getting all users that read
           a message`,
         (done) => {
-          const messageId = 1;
           server
             .post(`/api/v1/users/${messageId}/read`)
             .send({

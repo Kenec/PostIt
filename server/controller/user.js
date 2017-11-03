@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import crypto from 'crypto';
 import { Users } from '../models';
-import config from '../config';
 import sendMail from '../utils/sendMail';
 import validateInput from '../shared/validations/validateInput';
 
@@ -59,7 +58,7 @@ export default {
               const token = jwt.sign({
                 id: aUser.id,
                 username: aUser.username
-              }, config.jwtSecret, { expiresIn: '48h' }); // expires in 48h
+              }, process.env.JWT_SECRET, { expiresIn: '48h' });
               res.status(201).json({
                 token,
                 message: 'User Created successfully',
@@ -109,7 +108,7 @@ export default {
             const token = jwt.sign({
               id: user[0].id,
               username: user[0].username
-            }, config.jwtSecret, { expiresIn: '48h' }); // token expires in 48h
+            }, process.env.JWT_SECRET, { expiresIn: '48h' });
 
             res
               .status(202)
@@ -157,7 +156,7 @@ export default {
         .then((user) => {
           if (user[0]) {
             const token = crypto.randomBytes(20).toString('hex');
-            const tokenExpireDate = Date.now() + 3600000; // expire in 1hr
+            const tokenExpireDate = Date.now() + 3600000;
             Users.update({
               resetPasswordToken: token,
               resetPasswordExpiryTime: tokenExpireDate,
@@ -228,8 +227,8 @@ export default {
     } else {
       return Users.update({
         password: md5(req.body.password),
-        resetPasswordToken: '', // resetPasswordToken set to empty
-        resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
+        resetPasswordToken: '',
+        resetPasswordExpiryTime: ''
       }, {
         where: {
           resetPasswordToken: req.params.token

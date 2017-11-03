@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -20,7 +19,7 @@ describe('<GroupMembers />', () => {
   const removeUserFromGroup = sinon.spy(() => Promise
     .resolve({ data: { message: 'User found' } }));
   const confirmAndRemoveUser = sinon.spy();
-  // assign all props to a varibale props
+
   const props = {
     groupSelectedId,
     getUsersInGroup,
@@ -31,6 +30,7 @@ describe('<GroupMembers />', () => {
     auth,
     message,
   };
+
   global.confirm = () => true;
   global.alert = sinon.spy();
   GroupMembers.contextTypes = { router: PropTypes.object };

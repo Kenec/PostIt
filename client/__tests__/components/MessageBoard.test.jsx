@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -16,7 +15,7 @@ describe('<MessageBoard />', () => {
   const params = componetMocks.params;
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
-  // assign all props to a varibale props
+
   const props = {
     getAdminGroups,
     getUserGroups,
