@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -20,7 +19,7 @@ describe('<SearchMember />', () => {
   const onChange = sinon.spy(SearchMember.prototype, 'onChange');
   const handlePagination = sinon.spy(SearchMember.prototype,
     'handlePagination');
-  // assign all props to a varibale props
+
   const props = {
     groupId,
     group,

@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -33,7 +32,7 @@ describe('<GroupBoard />', () => {
     }
   }));
   const onSubmit = sinon.spy();
-  // assign all props to a varibale props
+
   const props = {
     composeMessage,
     groupSelectedId,
@@ -48,6 +47,7 @@ describe('<GroupBoard />', () => {
     group,
     auth,
   };
+
   GroupBoard.contextTypes = { router: PropTypes.object };
   let wrapper = mount(<GroupBoard {...props} />);
   wrapper.setState({ readCheckbox: 'unread' });

@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -14,13 +13,14 @@ describe('<CreateGroupBoard />', () => {
   const onSubmit = sinon.spy();
   const createGroup = sinon.spy(() => Promise
     .resolve({ response: { data: 'Error' } }));
-  // assign all props to a varibale props
+
   const props = {
     group,
     auth,
     getUserGroups,
     createGroup
   };
+
   const wrapper = mount(<CreateGroupBoard {...props} />);
   wrapper.setState({ createdby: '1' });
   wrapper.setState({ errors: 'Error' });

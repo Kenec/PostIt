@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,10 +9,10 @@ import '../../__mocks__/localStorage';
 
 describe('<Dashboard />', () => {
   const isAuthenticated = true;
-  // assign all props to a varibale props
   const props = {
     isAuthenticated
   };
+
   Dashboard.contextTypes = { router: PropTypes.object };
   const wrapper = shallow(<Dashboard {...props} />,
     { context: { router: new Router() } });

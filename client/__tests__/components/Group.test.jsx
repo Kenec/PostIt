@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -18,7 +17,7 @@ describe('<Group />', () => {
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
   const groupName = componentMocks.groupName;
-  // assign all props to a varibale props
+
   const props = {
     params,
     getUserGroups,
@@ -28,6 +27,7 @@ describe('<Group />', () => {
     group,
     auth,
   };
+
   Group.contextTypes = { router: PropTypes.object };
   let wrapper = shallow(<Group {...props} />,
     { context: { router: new Router() } });
