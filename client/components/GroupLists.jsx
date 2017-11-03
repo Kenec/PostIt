@@ -49,7 +49,7 @@ export class GroupLists extends Component {
         <div className="well well-sm blue lighten-2 no_spacing">
           <span className="white-text"><b>Groups</b></span>
           <span className="right">
-            <Link to="/createGroup">
+            <Link to="/createGroup" className="add-new">
               <b>Add New</b>
             </Link>
           </span>
