@@ -56,7 +56,7 @@ export default {
             where: { id: message.groupId },
             attributes: ['id', 'groupName', 'createdby']
           }).then((group) => {
-          // send email and sms when message is delivered successfully
+            // send email and sms when message is delivered successfully
             if (group.length !== 0) {
               if (message.priorityLevel === 'Urgent') {
                 const subject = 'PostIT Urgent Notification';
@@ -193,7 +193,7 @@ export default {
       })
       .catch(error => res.status(500).send(error));
   },
-  
+
   /**
    * getNotification - get notification function
    * to retrieve notification for a user
