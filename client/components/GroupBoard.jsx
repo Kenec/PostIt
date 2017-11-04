@@ -1,11 +1,8 @@
-/* global localStorage */
-/* global document */
-// import
+/* global localStorage document */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import FilterMessages from './FilterMessages';
 import { getUserGroups, getAdminGroups, getUsersInGroup }
   from '../actions/groupActions';
@@ -82,7 +79,7 @@ export class GroupBoard extends Component {
   /**
    * Handles onChange event
    * @method onChange
-   * @param {object} event 
+   * @param {object} event
    * @return {void}
    */
   onChange(event) {
@@ -190,7 +187,7 @@ export class GroupBoard extends Component {
    * Find readBy's
    * @method readBy
    * @param {array} existingReaders
-   * @return {boolean} foundUser 
+   * @return {boolean} foundUser
    */
   readBy(existingReaders) {
     let userId;
@@ -228,7 +225,7 @@ export class GroupBoard extends Component {
    * Toggle read and unread checkbox
    * @method toggleReadChechBox
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   toggleReadCheckBox(event) {
     this.setState({
@@ -284,6 +281,7 @@ export class GroupBoard extends Component {
             }
           }
         }
+        return groupsMessages;
       });
     }
 
@@ -291,11 +289,7 @@ export class GroupBoard extends Component {
       <div className="row">
         <div className="blue-text text-darken-2">
           <div className="well well-sm no_spacing">
-            <b>Group:
-              <Link to={`/group/${this.props.groupSelectedId}`}>
-                {` ${groupName}`}
-              </Link>
-            </b>
+            <b>Group: { groupName }</b>
             <span className="pull-right">
               <input
                 className="with-gap"
@@ -389,7 +383,7 @@ GroupBoard.propTypes = {
 /**
  * @function mapStateToProps
  * @param {any} state
- * @return {object} state object 
+ * @return {object} state object
  */
 const mapStateToProps = state => (
   {
