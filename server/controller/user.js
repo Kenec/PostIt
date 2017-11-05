@@ -39,8 +39,10 @@ export default {
       Users
         .findAll({
           where: {
-            username: [req.body.username],
-            password: md5(req.body.password)
+            $or: [
+              { email: req.body.email },
+              { username: req.body.username },
+            ]
           }
         })
         .then((user) => {
@@ -100,7 +102,7 @@ export default {
       Users
         .findAll({
           where: {
-            username: [req.body.username],
+            username: req.body.username,
             password: md5(req.body.password)
           }
         })
@@ -124,7 +126,7 @@ export default {
 
           res.status(404)
             .send({
-              message: 'Username not found, please register'
+              message: 'Invalid username or password'
             });
         }).catch((error) => {
           res.status(500).json({

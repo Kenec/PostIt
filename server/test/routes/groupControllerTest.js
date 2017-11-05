@@ -106,9 +106,7 @@ describe('Groups', () => {
               res.should.have.status(409);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
-                .eql('groupName must be unique');
-              res.body.should.have.property('success')
-                .eql(false);
+                .eql('Group already exists!');
               done();
             });
         });

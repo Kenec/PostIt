@@ -355,7 +355,7 @@ export class GroupBoard extends Component {
                   <span id="snackbar"><b>{success}</b></span>
                 </span>}
                 {errors.status && <span className="help-block red-text">
-                  <span id="snackbar"><b>{errors.status}</b></span>
+                  <b>{errors.status}</b>
                 </span>}
               </p>
             </form>
