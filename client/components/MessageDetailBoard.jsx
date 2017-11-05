@@ -85,7 +85,7 @@ export class MessageDetailBoard extends Component {
    * Handle onChange event
    * @method onChange
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onChange(event) {
     this.setState({
@@ -96,7 +96,7 @@ export class MessageDetailBoard extends Component {
   /**
    * Find readBy's
    * @method readBy
-   * @param {array} existingReaders  
+   * @param {array} existingReaders
    * @return {boolean} foundUser
    */
   readBy(existingReaders) {

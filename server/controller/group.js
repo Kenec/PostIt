@@ -24,24 +24,39 @@ export default {
         message: groupError
       });
     } else {
-      return Groups
-        .create({
-          groupName: req.body.groupName,
-          createdby: req.body.createdby,
+      Groups.findAll({
+        where: { groupName: req.body.groupName },
+        attributes: ['id', 'groupName', 'createdAt']
+      })
+        .then((groupExist) => {
+          if (groupExist.length > 0) {
+            res.status(409).send({
+              message: 'Group already exists!'
+            });
+          } else {
+            return Groups
+              .create({
+                groupName: req.body.groupName,
+                createdby: req.body.createdby,
+              })
+              .then(group => userGroups.create({
+                groupId: group.id,
+                userId: req.body.createdby
+              })
+                .then(() => res.status(201).json({
+                  message: `${group.groupName} group created successfully`,
+                  success: true,
+                }))
+                .catch(error => res.status(500).send(error)))
+              .catch(error => res.status(500).send({
+                message: error.errors[0].message,
+                success: false,
+              }));
+          }
         })
-        .then(group => userGroups.create({
-          groupId: group.id,
-          userId: req.body.createdby
-        })
-          .then(() => res.status(201).json({
-            message: `${group.groupName} group created successfully`,
-            success: true,
-          }))
-          .catch(error => res.status(400).send(error)))
-        .catch(error => res.status(409).send({
-          message: error.errors[0].message,
-          success: false,
-        }));
+        .catch((error) => {
+          res.status(500).send(error);
+        });
     }
   },
 
