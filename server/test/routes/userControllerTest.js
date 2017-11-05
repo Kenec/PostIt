@@ -183,7 +183,7 @@ describe('Users', () => {
           .end((err, res) => {
             res.should.have.status(404);
             res.body.should.have.property('message')
-              .eql('Username not found, please register');
+              .eql('Invalid username or password');
             done();
           });
       });

@@ -88,8 +88,7 @@ export default {
           }));
         })
         .catch(error => res.status(500).send({
-          error,
-          status: 'message cannot be sent'
+          status: error.errors[0].message
         }));
     }
   },
