@@ -74,7 +74,7 @@ export const readByAction = readBy => (
  * @param {string} groupId - group Id
  * @param {object} messageData - message to be posted
  * @param {object} prevMessage - previous message and User info
- * @return {json} - axios post respose 
+ * @return {json} - axios post respose
  */
 export const composeMessage = (groupId, messageData) => (
   () => axios.post(`/api/v1/groups/${groupId}/message`, messageData)

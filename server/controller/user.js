@@ -25,15 +25,10 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const usernameError = errors.username;
-      const emailError = errors.email;
-      const phoneError = errors.phone;
-      const passwordError = errors.password;
-      const confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: usernameError ||
-        emailError || phoneError ||
-        passwordError || confirmPasswordError
+        message: errors.username ||
+        errors.email || errors.phone ||
+        errors.password || errors.confirmPassword
       });
     } else {
       Users
@@ -45,8 +40,8 @@ export default {
             ]
           }
         })
-        .then((user) => {
-          if (user[0]) {
+        .then((foundUser) => {
+          if (foundUser[0]) {
             return res.status(409).send({
               message: 'User already exist'
             });
@@ -58,15 +53,15 @@ export default {
               email: req.body.email,
               password: md5(req.body.password)
             })
-            .then((aUser) => {
+            .then((user) => {
               const token = jwt.sign({
-                id: aUser.id,
-                username: aUser.username
+                id: user.id,
+                username: user.username
               }, process.env.JWT_SECRET, { expiresIn: '48h' });
               res.status(201).json({
                 token,
                 message: 'User Created successfully',
-                username: `${aUser.username}`,
+                username: `${user.username}`,
               });
             })
             .catch(() => {
@@ -108,7 +103,7 @@ export default {
         })
         .then((user) => {
           if (user[0]) {
-          // create an authToken for the user
+            // create an authToken for the user
             const token = jwt.sign({
               id: user[0].id,
               username: user[0].username
@@ -152,9 +147,8 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const emailError = errors.email;
       res.status(400).send({
-        message: emailError
+        message: errors.email
       });
     } else {
       Users.findAll({ where: { email: req.body.email } })
@@ -228,10 +222,8 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const emailError = errors.email;
-      const confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: emailError || confirmPasswordError
+        message: errors.email || errors.confirmPassword
       });
     } else {
       return Users.update({
@@ -262,7 +254,7 @@ export default {
    * still valid as of the time of changing password by the user
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
   isTokenValid(req, res) {
     if (!(req.params.token)) {
@@ -298,13 +290,13 @@ export default {
   },
 
   /**
-   * fetchUserByName - method to fetch member by its username to return
+   * getUser - method to fetch member by its username to return
    * its id
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
-  fetchUserByName(req, res) {
+  getUser(req, res) {
     if (!(req.body.username)) {
       return res.status(400).send({
         message: 'Invalid request. Username column is missing'

@@ -1,12 +1,10 @@
-/* global localStorage */
-/* global document */
+/* global localStorage document */
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import jwt from 'jsonwebtoken';
-
-import routes from './routes';
+import routes from './Routes';
 import configureStore from '../store/store';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import { setCurrentUser } from '../actions/signinActions';

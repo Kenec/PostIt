@@ -13,7 +13,7 @@ export default {
    * create - create a new message
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
   create(req, res) {
     if (!(req.body.message && req.body.priorityLevel
@@ -26,14 +26,10 @@ export default {
     // call the validateInput input function for validations
     const { errors, isValid } = validateInput(req.body);
     if (!isValid) {
-      const messageError = errors.message;
-      const priorityLevelError = errors.priorityLevel;
-      const sentByError = errors.sentBy;
-      const readByError = errors.readBy;
       res.status(400).send({
-        status: messageError ||
-        priorityLevelError || sentByError ||
-        readByError
+        status: errors.message ||
+        errors.priorityLevel || errors.sentBy ||
+        errors.readBy
       });
     } else {
       return Messages

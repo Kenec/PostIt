@@ -19,9 +19,8 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const groupError = errors.groupName;
       res.status(400).send({
-        message: groupError
+        message: errors.groupName
       });
     } else {
       Groups.findAll({
@@ -87,12 +86,12 @@ export default {
   },
 
   /**
-   * fetchGroupByCreator - function to retrieve froup by its creator
+   * getOwnerGroups - function to retrieve froup by its creator
    * @param  {object} req request object
    * @param  {object} res response object
    * @return {json}     returns json object as a response
    */
-  fetchGroupByCreator(req, res) {
+  getOwnerGroups(req, res) {
     if (!(req.body.userId)) {
       return res.status(400).send({
         message: 'Invalid request. userId is missing'
