@@ -14,7 +14,7 @@ groupUserRouter.post('/api/v1/user/groups', jwtAuth,
 groupUserRouter.post('/api/v1/users/:offset', jwtAuth,
   groupUserController.searchUser);
 groupUserRouter.get('/api/v1/groups/:id/users', jwtAuth,
-  groupUserController.fetchMembersOfGroup);
+  groupUserController.getGroupMembers);
 groupUserRouter.get('/api/v1/groups', jwtAuth,
   groupUserController.list);
 

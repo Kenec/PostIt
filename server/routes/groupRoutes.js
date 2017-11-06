@@ -8,7 +8,7 @@ const groupController = controller.group;
 groupRouter.post('/api/v1/groups', jwtAuth,
   groupController.create);
 groupRouter.post('/api/v1/groups/creator', jwtAuth,
-  groupController.fetchGroupByCreator);
+  groupController.getOwnerGroups);
 groupRouter.get('/api/v1/groups/:groupId', jwtAuth,
   groupController.retrieve);
 

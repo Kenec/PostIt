@@ -64,9 +64,8 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const usernameError = errors.username;
       res.status(400).send({
-        message: usernameError
+        message: errors.username
       });
     } else {
       const username = req.body.username;
@@ -101,12 +100,12 @@ export default {
   },
 
   /**
-   * fetchMembersOfGroup - fetch members from the same group
+   * getGroupMembers - fetch members from the same group
    * @param  {object} req incoming request object
    * @param  {object} res response object from the server
    * @return {json} returns json reponse
    */
-  fetchMembersOfGroup(req, res) {
+  getGroupMembers(req, res) {
     if (!(req.params.id)) {
       return res.status(400).send({
         message: 'Invalid request. id is missing'
@@ -175,9 +174,8 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const usernameError = errors.username;
       res.status(400).send({
-        message: usernameError
+        message: errors.username
       });
     } else {
       return Users.findAndCountAll({

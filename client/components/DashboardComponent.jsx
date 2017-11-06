@@ -99,7 +99,7 @@ DashboardComponent.propTypes = {
 /**
  * Map state to props
  * @function mapStateToProps
- * @param {object} state 
+ * @param {object} state
  * @return {object} state objects
  */
 const mapStateToProps = state => (

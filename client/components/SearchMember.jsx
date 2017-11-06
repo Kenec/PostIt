@@ -1,5 +1,4 @@
 /* global localStorage */
-// import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -127,10 +126,10 @@ export class SearchMember extends Component {
   }
 
   /**
-  * Display the DOM component
-  * @method render
-  * @return {DOM} DOM Component
-  */
+   * Display the DOM component
+   * @method render
+   * @return {DOM} DOM Component
+   */
   render() {
     const { errors, success } = this.state;
     const { groups, groupsBelonged, searchedUsers,

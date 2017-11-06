@@ -84,7 +84,7 @@ export const addUserToGroupsAction = user => (
 
 /**
  * Search user from the database
- * @function searchAllUsers 
+ * @function searchAllUsers
  * @param {string} username - the username of the user being searched.
  * @param {number} offset - the offset
  * @return {json} -  axios post response
@@ -166,7 +166,7 @@ export const getAdminGroups = user => (
 /**
  * Remove user from a group
  * @function removeUserFromGroup
- * @param {integer} id 
+ * @param {integer} id
  * @param {object} payLoad
  * @return {json} - axios post response
  */
