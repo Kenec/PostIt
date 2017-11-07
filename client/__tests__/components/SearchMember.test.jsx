@@ -43,7 +43,7 @@ describe('<SearchMember />', () => {
     wrapper.find('input').simulate('change');
     expect(onChange.calledOnce).toEqual(true);
     wrapper.setState({ username: 'Kene' });
-    expect(wrapper.find('[type="hidden"]').length).toEqual(8);
+    expect(wrapper.find('[type="hidden"]').length).toEqual(2);
     expect(wrapper.find('span').at(0).text()).toEqual('Kene');
     expect(wrapper.find('span').at(2).text()).toEqual('Obi');
   });

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-
+import Helper from '../utils/Helpers';
 /**
  * sendMail - This function send Mail notifcation for PostIT
  * @param  {array} receivers An array of email receivers
@@ -28,26 +28,7 @@ export default function sendMail(receivers, message, subject) {
     from: process.env.EMAIL_NAME,
     to: emailReceivers,
     subject,
-    html: `
-      <div style="width: 100%; height:100%;">
-      <div style=" background-color: #d3d3d3;
-      padding: 20px 0px 0px 20px; height: 50px">
-        <img src="https://postit-lite.herokuapp.com/dist/1c64eafe95f643b0b131e5e2384513d4.png"
-        width="40px"; height="40px" style="float: left" />
-        <strong style="color:#31708f; font-size: 20px">POSTIT</strong>
-      </div>
-      <div style="padding: 35px">
-        <div style="font-size:18px;  text-align: center; color:#31708f">
-          ${message}
-        </div>
-      </div>
-        <div style="position:absolute; background-color: #d3d3d3; 
-        height: 40px; width: 100%; bottom: 10px; color:#31708f ">
-          <div style="text-align: center; padding-top: 10px">
-          Copyright © 2017
-          </div>
-        </div>
-    </div>`
+    html: Helper.getEmailHtml(message)
   };
 
   // send mail with defined transport object

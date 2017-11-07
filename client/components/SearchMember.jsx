@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { getUserGroups, getUserInfo, addUserToGroups,
-  getUsersInGroupAction, searchAllUsers } from '../actions/groupActions';
+  getUsersInGroup, searchAllUsers } from '../actions/groupActions';
 
 /**
  * Search a user
@@ -99,20 +99,9 @@ export class SearchMember extends Component {
       success: '',
     });
     const userId = event.target.userId.value;
-    const username = event.target.username.value;
-    const userEmail = event.target.userEmail.value;
-    const userPhone = event.target.userPhone.value;
-    const user = {
-      id: userId,
-      username,
-      email: userEmail,
-      phone: userPhone
-    };
     this.props.addUserToGroups(this.props.groupId, { userId }).then(
       () => {
-        const { usersInGroup } = this.props.group;
-        const newUser = usersInGroup.concat(user);
-        this.props.getUsersInGroupAction(newUser);
+        this.props.getUsersInGroup(this.props.groupId);
         this.setState({
           success: 'User added successfully',
           isLoading: false
@@ -152,9 +141,6 @@ export class SearchMember extends Component {
                 <span className="pull-left">{user.username}</span>
                 <span className="pull-right">
                   <input type="hidden" name="userId" value={user.id} />
-                  <input type="hidden" name="username" value={user.username} />
-                  <input type="hidden" name="userEmail" value={user.email} />
-                  <input type="hidden" name="userPhone" value={user.phone} />
                   {(usersInGroup.filter(users => users.username === user.username).length > 0) ?
                     <button type="" disabled>Already a member</button> :
                     <button type="submit">Add</button>
@@ -222,7 +208,7 @@ SearchMember.propTypes = {
   groupId: PropTypes.string.isRequired,
   searchAllUsers: PropTypes.func.isRequired,
   addUserToGroups: PropTypes.func.isRequired,
-  getUsersInGroupAction: PropTypes.func.isRequired,
+  getUsersInGroup: PropTypes.func.isRequired,
 };
 
 /**
@@ -247,7 +233,7 @@ const mapDispatchToProps = {
   searchAllUsers,
   getUserInfo,
   addUserToGroups,
-  getUsersInGroupAction
+  getUsersInGroup
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchMember);

@@ -1,14 +1,13 @@
-/* global localStorage document */
+/* global localStorage */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
 import FilterMessages from './FilterMessages';
-import { getUserGroups, getAdminGroups, getUsersInGroup }
+import { getUserGroups, getAdminGroups }
   from '../actions/groupActions';
-import { retrieveMessage, composeMessage, retrieveMessageAction,
-  clearRetrievedMessageAction, addNotification, updateNotification,
-  getNotification, getReadBy }
+import { retrieveMessage, composeMessage, clearRetrievedMessage,
+  addNotification, updateNotification, getNotification, getReadBy }
   from '../actions/messageActions';
 
 /**
@@ -49,7 +48,7 @@ export class GroupBoard extends Component {
    * @return {void} void
    */
   componentWillMount() {
-    this.props.clearRetrievedMessageAction();
+    this.props.clearRetrievedMessage();
   }
 
   /**
@@ -59,21 +58,7 @@ export class GroupBoard extends Component {
    */
   componentDidMount() {
     // fire an action to get messages belonging to each user in a group
-    this.props.retrieveMessage(this.props.groupSelectedId).then(
-      (messageData) => {
-        this.setState({ retrievedMessages: [] });
-        this.props.retrieveMessageAction(messageData.data);
-        const { updatedMessageData } = this.props.message;
-        this.setState({
-          retrievedMessages: updatedMessageData,
-        });
-      },
-      ({ response }) => {
-        this.setState({
-          retrieveMessageError: response.data.message,
-        });
-      }
-    );
+    this.props.retrieveMessage(this.props.groupSelectedId);
   }
 
   /**
@@ -97,10 +82,12 @@ export class GroupBoard extends Component {
   onSubmit(event) {
     event.preventDefault();
     if (this.props.groupName !== 'No Group Found') {
-      if (typeof (this.state.Message) === 'string'
-        && this.state.priorityLevel &&
-          this.state.sentBy) {
+      if (typeof (this.state.Message) === 'string' &&
+        this.state.priorityLevel && this.state.sentBy) {
+        const messageReaders = [];
         this.setState({ errors: {}, success: '', isLoading: true });
+        const { usersInGroup } = this.props.group;
+
         // set up message to be be sent
         const message = {
           message: this.state.Message,
@@ -108,80 +95,32 @@ export class GroupBoard extends Component {
           sentBy: this.state.sentBy,
           readBy: this.state.sentBy
         };
-        // fire the compose message action to send message
-        this.props.composeMessage(this.props.groupSelectedId, message)
-          .then(
-            ({ data }) => {
-              // fire an action to retrive the message
-              this.props.retrieveMessage(this.props.groupSelectedId).then(
-                (messageData) => {
-                  this.setState({ retrievedMessages: [] });
-                  this.props.retrieveMessageAction(messageData.data);
-                  const { updatedMessageData } = this.props.message;
-                  this.setState({
-                    retrievedMessages: updatedMessageData,
-                  });
-                },
-                ({ response }) => {
-                  this.setState({
-                    retrieveMessageError: response.data.message,
-                  });
-                }
-              );
 
-              const id = data.id;
-              const groupId = data.group;
-              this.props.getUsersInGroup(this.props.groupSelectedId).then(
-                ({ data }) => {
-                  const users = data.users;
-                  users.map((user) => {
-                    let readStatus = 0;
-                    if (user.id === this.state.sentBy) {
-                      readStatus = 1;
-                    }
-                    // fire an action to add notification
-                    this.props.addNotification(id,
-                      {
-                        userId: user.id,
-                        readStatus,
-                        senderId: this.state.sentBy,
-                        groupId,
-                      });
-                  });
-                  this.props.getNotification(
-                    { userId: jwt.decode(localStorage.jwtToken).id }
-                  );
-                  this.setState({
-                    success: 'Sent!',
-                    isLoading: false,
-                    Message: '',
-                    priorityLevel: 'Normal',
-                  });
-                  this.toastMessage();
-                },
-                ({ response }) => {
-                  this.setState({
-                    errors: response.data,
-                    isLoading: false,
-                    Message: '',
-                    priorityLevel: 'Normal',
-                  });
-                }
-              );
-            },
-            ({ response }) => {
-              this.setState({
-                errors: response.data,
-                isLoading: false,
-                Message: '',
-                priorityLevel: 'Normal',
-              });
-            }
-          ).catch(() => {});
+        // get id of users in the group for message notification
+        usersInGroup.map((user) => {
+          const userId = user.id;
+          if (userId === this.state.sentBy) {
+            messageReaders.push({ userId, readStatus: 1 });
+          } else {
+            messageReaders.push({ userId, readStatus: 0 });
+          }
+          return messageReaders;
+        });
+
+        // fire the compose message action to send message
+        this.props.composeMessage(this.props.groupSelectedId,
+          message, messageReaders);
+
+        // release the send message button, clear message field
+        // and set priority to normal
+        this.setState({
+          isLoading: false,
+          Message: '',
+          priorityLevel: 'Normal',
+        });
       }
     }
   }
-
 
   /**
    * Find readBy's
@@ -204,24 +143,6 @@ export class GroupBoard extends Component {
   }
 
   /**
-   * Toast message for sent message
-   * @method toastMessage
-   * @return {void}
-   */
-  toastMessage() {
-    // Get the snackbar DIV
-    this.toastMessage = document.getElementById('snackbar');
-    // Add the "show" class to DIV
-    this.toastMessage.className = 'show';
-    // After 1 seconds, remove the show class from DIV
-    setTimeout(
-      () => {
-        this.toastMessage.className =
-        this.toastMessage.className.replace('show', '');
-      }, 1000);
-  }
-
-  /**
    * Toggle read and unread checkbox
    * @method toggleReadChechBox
    * @param {object} event
@@ -239,9 +160,8 @@ export class GroupBoard extends Component {
    * @return {DOM} DOM Component
    */
   render() {
-    const { errors, success, retrieveMessageError } = this.state;
     const { groups, groupsBelonged } = this.props.group;
-    const { messageData } = this.props.message;
+    const { messageData, messageError, error } = this.props.message;
     const groupName = this.props.groupName;
 
     if (!groups || !groupsBelonged || groupName === 'No Group Found') {
@@ -318,8 +238,8 @@ export class GroupBoard extends Component {
         <div className="row">
           <div className="well well-sm message_board no_spacing">
             <div className="">
-              {retrieveMessageError && <span className="help-block red-text">
-                <b>{retrieveMessageError}</b></span>}
+              {error && <span className="help-block red-text">
+                <b>{error}</b></span>}
               {groupsMessages && groupsMessages}
             </div>
           </div>
@@ -351,11 +271,8 @@ export class GroupBoard extends Component {
               > Send Message
               </button>
               <p>
-                {success && <span className="help-block green-text">
-                  <span id="snackbar"><b>{success}</b></span>
-                </span>}
-                {errors.status && <span className="help-block red-text">
-                  <b>{errors.status}</b>
+                {messageError && <span className="help-block red-text">
+                  <b>{messageError.status}</b>
                 </span>}
               </p>
             </form>
@@ -370,12 +287,8 @@ GroupBoard.propTypes = {
   composeMessage: PropTypes.func.isRequired,
   groupSelectedId: PropTypes.string.isRequired,
   retrieveMessage: PropTypes.func.isRequired,
-  clearRetrievedMessageAction: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
+  clearRetrievedMessage: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
-  getNotification: PropTypes.func.isRequired,
-  retrieveMessageAction: PropTypes.func.isRequired,
-  getUsersInGroup: PropTypes.func.isRequired,
   groupName: PropTypes.string.isRequired,
   group: PropTypes.object.isRequired
 };
@@ -400,11 +313,9 @@ const mapStateToProps = state => (
 const mapDispatchToProps = {
   addNotification,
   getUserGroups,
-  clearRetrievedMessageAction,
+  clearRetrievedMessage,
   getAdminGroups,
-  retrieveMessageAction,
   composeMessage,
-  getUsersInGroup,
   retrieveMessage,
   updateNotification,
   getNotification,

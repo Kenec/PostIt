@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import crypto from 'crypto';
+import Helpers from '../utils/Helpers';
+
 import { Users } from '../models';
 import sendMail from '../utils/sendMail';
 import validateInput from '../shared/validations/validateInput';
@@ -110,7 +112,7 @@ export default {
             }, process.env.JWT_SECRET, { expiresIn: '48h' });
 
             res
-              .status(202)
+              .status(200)
               .send({
                 token,
                 message: 'Successfully logged in',
@@ -119,7 +121,7 @@ export default {
             return;
           }
 
-          res.status(404)
+          res.status(401)
             .send({
               message: 'Invalid username or password'
             });
@@ -167,20 +169,9 @@ export default {
               .then(() => {
                 const emailReceiver = [{ email: req.body.email }];
                 const emailSubject = 'PostIT Password Reset';
-                const emailText = `<hr/><p>You are receiving this because you
-                (or someone else) have requested the reset of the password
-                for your account.</p>
-                <p> Please click on the reset password below to change your password</p>
-                <p style="align: center"> <a
-                href="${`http://${req.headers.host}/recoverpassword/${token}`}">
-                <button style="border-radius: 0px; border: 0;
-                background: none; box-shadow: none; background-color: #31708f;
-                align: center; color: white; font-size: 26px;">
-                RESET PASSWORD </button></a></p><hr/>
-                <p style="color: black; font-size: 12px;">If you did not request this,
-                please ignore this email and your password will remain unchanged.</p><hr/>`;
-                const send = sendMail(emailReceiver, emailText, emailSubject);
-                if (send) {
+                const emailText = Helpers.getEmailText(req.headers.host, token);
+                const sendStatus = sendMail(emailReceiver, emailText, emailSubject);
+                if (sendStatus) {
                   res.status(200).send({
                     message: 'Password reset link has been sent to your email'
                   });
