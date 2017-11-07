@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import dummyData from '../dummy.json';
+import mockData from '../mockData.json';
 import { Groups, userGroups } from '../../models';
 import app from '../../app';
 
@@ -12,8 +12,8 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-const { group } = dummyData.Groups;
-const { validSigninAccount } = dummyData.Users;
+const { group } = mockData.Groups;
+const { validSigninAccount } = mockData.Users;
 
 
 describe('Groups', () => {
@@ -36,7 +36,7 @@ describe('Groups', () => {
   });
 
   describe('API Routes Test: ', () => {
-    describe('/api/v1/groups', () => {
+    describe('POST: /api/v1/groups', () => {
       it('should create a group when all parameters are supplied',
         (done) => {
           server
@@ -74,7 +74,7 @@ describe('Groups', () => {
             });
         });
       it(`should not create a group when any 
-      of the required field is not available`,
+          of the required field is not available`,
         (done) => {
           server
             .post('/api/v1/groups')
@@ -110,6 +110,8 @@ describe('Groups', () => {
               done();
             });
         });
+    });
+    describe('POST: /api/v1/groups/creator', () => {
       it('should fetch a groups by its creator id',
         (done) => {
           server
@@ -129,38 +131,8 @@ describe('Groups', () => {
               done();
             });
         });
-      it('should return groups by its id',
-        (done) => {
-          const groupId = group.groupId;
-          server
-            .get(`/api/v1/groups/${groupId}`)
-            .set({ 'x-access-token': token })
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.be.a('array');
-              res.body[0].should.have.property('id')
-                .eql(1);
-              res.body[0].should.have.property('groupName')
-                .eql('Group');
-              res.body[0].should.have.property('createdAt');
-              done();
-            });
-        });
-      it('should return not found for group not found',
-        (done) => {
-          const groupId = null;
-          server
-            .get(`/api/v1/groups/${groupId}`)
-            .set({ 'x-access-token': token })
-            .end((err, res) => {
-              res.should.have.status(404);
-              res.body.should.have.property('message')
-                .eql('Group selected not found');
-              done();
-            });
-        });
-      it(`should not return a group when a userId passed is
-        not the creator's id`,
+      it(`should not return a group when getting a group by
+        creator and the id passed is not the creator's id`,
         (done) => {
           server
             .post('/api/v1/groups/creator')
@@ -181,13 +153,45 @@ describe('Groups', () => {
             .post('/api/v1/groups/creator')
             .send({
 
-              // userId not passed
+            // userId not passed
               token,
             })
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property('message')
                 .eql('Invalid request. userId is missing');
+              done();
+            });
+        });
+    });
+    describe('GET: /api/v1/groups/:groupId', () => {
+      it('should return groups by its id',
+        (done) => {
+          const groupId = group.groupId;
+          server
+            .get(`/api/v1/groups/${groupId}`)
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('array');
+              res.body[0].should.have.property('id')
+                .eql(1);
+              res.body[0].should.have.property('groupName')
+                .eql('Group');
+              res.body[0].should.have.property('createdAt');
+              done();
+            });
+        });
+      it('should return not found when getting a group that does not exist',
+        (done) => {
+          const groupId = null;
+          server
+            .get(`/api/v1/groups/${groupId}`)
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.have.property('message')
+                .eql('Group selected not found');
               done();
             });
         });

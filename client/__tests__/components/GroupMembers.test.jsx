@@ -16,7 +16,7 @@ describe('<GroupMembers />', () => {
   const getUsersInGroup = sinon.spy(() => Promise
     .resolve({ data: { users: 'Kene' }, response: { data: 'Error' } }));
   const getUsersInGroupAction = sinon.spy();
-  const removeUserFromGroup = sinon.spy(() => Promise
+  const removeGroupUser = sinon.spy(() => Promise
     .resolve({ data: { message: 'User found' } }));
   const confirmAndRemoveUser = sinon.spy();
 
@@ -24,7 +24,7 @@ describe('<GroupMembers />', () => {
     groupSelectedId,
     getUsersInGroup,
     getUsersInGroupAction,
-    removeUserFromGroup,
+    removeGroupUser,
     params,
     group,
     auth,

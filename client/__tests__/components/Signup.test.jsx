@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { Signup } from '../../components/Signup';
 
 describe('<Signup />', () => {
-  const userSignupRequest = sinon.spy();
+  const signup = sinon.spy();
   const addFlashMessage = sinon.spy();
   const getUserGroups = sinon.spy();
   const onSubmit = sinon.spy(Signup.prototype, 'onSubmit');
   const onChange = sinon.spy(Signup.prototype, 'onChange');
   const isValid = sinon.spy(Signup.prototype, 'isValid');
 
-  const props = { userSignupRequest, addFlashMessage, getUserGroups };
+  const props = { signup, addFlashMessage, getUserGroups };
   Signup.contextTypes = { router: PropTypes.func };
 
   const wrapper = mount(<Signup {...props} />);

@@ -1,6 +1,7 @@
 import express from 'express';
 import controller from '../controller';
 import jwtAuth from '../shared/middleware/jwtAuth';
+import notification from '../shared/middleware/notificationMiddleware';
 
 const messageRouter = express.Router();
 const messageController = controller.message;
@@ -10,7 +11,7 @@ messageRouter.post('/api/v1/groups/:groupId/message', jwtAuth,
 messageRouter.get('/api/v1/groups/:groupId/messages', jwtAuth,
   messageController.retrieve);
 messageRouter.post('/api/v1/groups/:messageId/notification', jwtAuth,
-  messageController.addNotification);
+  notification, messageController.addNotification);
 messageRouter.post('/api/v1/groups/:messageId/updateReadBy', jwtAuth,
   messageController.updateReadBy);
 messageRouter.post('/api/v1/user/notifications', jwtAuth,

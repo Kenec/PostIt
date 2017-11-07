@@ -1,5 +1,4 @@
 /* global localStorage */
-// import
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
@@ -7,11 +6,11 @@ import { setCurrentUser } from '../actions/signinActions';
 
 /**
  * Signup a user
- * @function userSignupRequest
+ * @function signup
  * @param  {object} userData - user data to signup
  * @return {json} - json response from the server
  */
-const userSignupRequest = userData => (
+const signup = userData => (
   dispatch => axios.post('/api/v1/users/signup', userData)
     .then((response) => {
       const token = response.data.token;
@@ -22,4 +21,4 @@ const userSignupRequest = userData => (
     })
 );
 
-export default userSignupRequest;
+export default signup;

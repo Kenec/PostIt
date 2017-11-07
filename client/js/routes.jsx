@@ -6,7 +6,7 @@ import SigninPage from '../components/Signin';
 import SignupPage from '../components/Signup';
 import ForgotPassword from '../components/ForgotPassword';
 import CreateGroup from '../components/CreateGroup';
-import DashboardPage from '../components/Dashboard';
+import DashboardPage from '../components/DashboardPage';
 import Group from '../components/Group';
 import MessageBoard from '../components/MessageBoard';
 import ChangePassword from '../components/ChangePassword';
