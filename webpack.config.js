@@ -13,7 +13,7 @@ module.exports = {
   devtool: 'inline-sourcemap',
   entry: [
     'webpack-hot-middleware/client',
-    './client/js/client.jsx'
+    './client/js/Client.jsx'
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx']

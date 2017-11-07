@@ -1,24 +1,43 @@
 /* global expect */
 import React from 'react';
+import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import componentMocks from '../../__mocks__/componentMocks';
 import { Dashboard } from '../../components/Dashboard';
-import Router from '../../__mocks__/router';
 import '../../__mocks__/localStorage';
 
-
 describe('<Dashboard />', () => {
-  const isAuthenticated = true;
+  const group = componentMocks.group;
+  const message = componentMocks.message;
+  const auth = componentMocks.auth;
+  const getNotification = sinon.spy();
+
   const props = {
-    isAuthenticated
+    group,
+    auth,
+    message,
+    getNotification
   };
 
   Dashboard.contextTypes = { router: PropTypes.object };
-  const wrapper = shallow(<Dashboard {...props} />,
-    { context: { router: new Router() } });
-  it('should display GroupList and Dashboard Component', () => {
-    expect(wrapper.find('<NavigationBarMenu />').at(0).length).toEqual(1);
-    expect(wrapper.find('<GroupLists />').at(0).length).toEqual(1);
-    expect(wrapper.find('<DashboardComponent />').at(0).length).toEqual(1);
+  let wrapper = mount(<Dashboard {...props} />);
+  it('should display Loading... when notificatonData is not resolved', () => {
+    expect(wrapper.find('h4').at(0).text()).toEqual('Loading ...');
+  });
+  it('should display dashboard and notifications', () => {
+    props.message.notificationData = {
+      messageRes: [{
+        messageId: '1',
+        Group: { id: '1', groupName: 'Random', createdAt: '' },
+        User: { username: 'Kene' },
+        Messages: { message: 'Hello World' } }],
+    };
+    wrapper = mount(<Dashboard {...props} />);
+    expect(wrapper.find('b').at(0).text()).toEqual('NOTIFICATIONS');
+    expect(wrapper.find('span').at(0).text())
+      .toEqual('You have (1) unread messages');
+    expect(wrapper.find('Link').at(0).text())
+      .toEqual('Kene sent a message on  Random  Hello WorldInvalid date');
   });
 });

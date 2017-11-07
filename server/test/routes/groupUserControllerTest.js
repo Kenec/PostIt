@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { userGroups } from '../../models';
-import dummyData from '../dummy.json';
+import mockData from '../mockData.json';
 import app from '../../app';
 
 process.env.NODE_ENV = 'test';
@@ -10,14 +10,14 @@ process.env.NODE_ENV = 'test';
 const server = supertest.agent(app);
 chai.use(chaiHttp);
 
-const { group } = dummyData.Groups;
+const { group } = mockData.Groups;
 const {
   validUser,
   invalidUser,
   emptyUsername,
   anotherValidUser,
   validSigninAccount
-} = dummyData.Users;
+} = mockData.Users;
 
 describe('GroupsUser', () => {
   let token = '';
@@ -36,8 +36,8 @@ describe('GroupsUser', () => {
   });
 
   describe('API Routes Test: ', () => {
-    describe('/api/v1/groups/:groupId/user', () => {
-      const groupId = group.groupId;
+    const groupId = group.groupId;
+    describe('POST: /api/v1/groups/:groupId/user', () => {
       it('should add a user to a group',
         (done) => {
           server
@@ -123,7 +123,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
-      it('should throw internal server error when a user cannot be added',
+      it(`should throw internal server error when a user cannot be added
+          due to server error`,
         (done) => {
           server
             .post(`/api/v1/groups/${undefined}/user`)
@@ -139,8 +140,10 @@ describe('GroupsUser', () => {
               done();
             });
         });
-      it(`should not remove a user if all parameter required is
-          not supplied`,
+    });
+    describe('POST: /api/v1/groups/:groupId/users', () => {
+      it(`should not remove a user if userId, token and admin parameters
+          required are not supplied`,
         (done) => {
           server
             .post(`/api/v1/groups/${groupId}/users`)
@@ -210,9 +213,10 @@ describe('GroupsUser', () => {
               done();
             });
         });
-
+    });
+    describe('POST: /api/v1/user/groups', () => {
       it(`should return groups a user belonged to
-      by username`,
+          by username`,
         (done) => {
           server
             .post('/api/v1/user/groups')
@@ -231,7 +235,7 @@ describe('GroupsUser', () => {
             });
         });
       it(`should not return groups a user belonged to
-      by username if username is not supplied`,
+          by username if username is not supplied`,
         (done) => {
           server
             .post('/api/v1/user/groups')
@@ -249,7 +253,7 @@ describe('GroupsUser', () => {
             });
         });
       it(`should not return groups a user belonged to
-      by username if username is empty`,
+         by username if username is empty`,
         (done) => {
           server
             .post('/api/v1/user/groups')
@@ -265,7 +269,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
-
+    });
+    describe('POST: /api/v1/users/:id', () => {
       it('should search a user',
         (done) => {
           server
@@ -315,8 +320,8 @@ describe('GroupsUser', () => {
             });
         });
 
-      it(`should throw unauthorized error when trying 
-        calling the groupUser endpoint without token`,
+      it(`should throw unauthorized error when trying to 
+          call the groupUser endpoint without token`,
         (done) => {
           server
             .post('/api/v1/users/0')
@@ -333,6 +338,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
+    });
+    describe('GET: /api/v1/groups', () => {
       it('should return all groups',
         (done) => {
           server
@@ -350,6 +357,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
+    });
+    describe('GET: /api/v1/groups/:groupId/users', () => {
       it('should fetch members of a group',
         (done) => {
           server
