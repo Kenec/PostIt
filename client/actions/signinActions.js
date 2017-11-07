@@ -33,11 +33,11 @@ export const logout = () => (
 
 /**
  * User signin request
- * @function userSigninRequestAction
+ * @function signin
  * @param  {object} userData userdata for firing signin action
  * @return {object} - user
  */
-export const userSigninRequestAction = userData => (
+export const signin = userData => (
   dispatch => axios.post('/api/v1/users/signin', userData)
     .then((res) => {
       const token = res.data.token;

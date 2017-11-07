@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import dummyData from '../dummy.json';
+import mockData from '../mockData.json';
 import validateInput from '../../shared/validations/validateInput';
 
 process.env.NODE_ENV = 'test';
@@ -8,7 +8,7 @@ process.env.NODE_ENV = 'test';
 chai.use(chaiHttp);
 
 describe('inputValidation', () => {
-  const { validInput, invalidInput } = dummyData.inputData;
+  const { validInput, invalidInput } = mockData.inputData;
   const data = {
     email: validInput.email,
     phone: validInput.phone,

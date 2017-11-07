@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavigationBar from './NavigationBar';
 import postmanImage from '../images/postman.gif';
-import userSignupRequest from '../actions/signupActions';
+import signup from '../actions/signupActions';
 import validateInput from '../../server/shared/validations/validateInput';
 import { addFlashMessage } from '../actions/flashMessages';
 import { getUserGroups } from '../actions/groupActions';
@@ -60,7 +60,7 @@ export class Signup extends Component {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, success: {}, isLoading: true });
-      this.props.userSignupRequest(this.state)
+      this.props.signup(this.state)
         .then(
           () => {
             this.props.getUserGroups({ username: this.state.username });
@@ -268,7 +268,7 @@ export class Signup extends Component {
 }
 
 Signup.propTypes = {
-  userSignupRequest: PropTypes.func.isRequired,
+  signup: PropTypes.func.isRequired,
   getUserGroups: PropTypes.func.isRequired,
 };
 
@@ -281,7 +281,7 @@ Signup.contextTypes = {
  * @return {object} dispatch objects
  */
 const mapDispatchToProps = {
-  userSignupRequest,
+  signup,
   getUserGroups,
   addFlashMessage
 };
