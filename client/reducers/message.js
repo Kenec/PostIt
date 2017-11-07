@@ -2,10 +2,13 @@ import {
   COMPOSE_MESSAGE,
   GET_NOTIFICATION,
   RETRIEVE_MESSAGE,
+  RETRIEVE_MESSAGE_ERROR,
   READ_BY,
   CLEAR_RETRIEVED_MESSAGE,
   UPDATE_NOTIFICATION,
-  CLEAR_NOTIFICATION
+  CLEAR_NOTIFICATION,
+  COMPOSE_MESSAGE_ERROR,
+  COMPOSE_MESSAGE_SUCCESS
 } from '../actions/types';
 
 /**
@@ -34,6 +37,15 @@ export default function message(state = {}, action) {
     case READ_BY:
       return Object.assign({}, state,
         { readBy: action.readBy });
+    case COMPOSE_MESSAGE_ERROR:
+      return Object.assign({}, state,
+        { messageError: action.error });
+    case RETRIEVE_MESSAGE_ERROR:
+      return Object.assign({}, state,
+        { error: action.error });
+    case COMPOSE_MESSAGE_SUCCESS:
+      return Object.assign({}, state,
+        { messageSuccess: action.success });
     default:
       return state;
   }

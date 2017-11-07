@@ -12,7 +12,7 @@ try {
 
 module.exports = {
   entry: [
-    './client/js/client.jsx'
+    './client/js/Client.jsx'
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx']

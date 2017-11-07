@@ -12,7 +12,7 @@ describe('<GroupBoard />', () => {
   const message = componentMocks.message;
   const auth = componentMocks.auth;
   const groupSelectedId = componentMocks.groupSelectedId;
-  const clearRetrievedMessageAction = sinon.spy();
+  const clearRetrievedMessage = sinon.spy();
   const addNotification = sinon.spy();
   const getNotification = sinon.spy();
   const retrieveMessageAction = sinon.spy();
@@ -37,7 +37,7 @@ describe('<GroupBoard />', () => {
     composeMessage,
     groupSelectedId,
     retrieveMessage,
-    clearRetrievedMessageAction,
+    clearRetrievedMessage,
     addNotification,
     getNotification,
     retrieveMessageAction,

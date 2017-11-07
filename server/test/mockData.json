@@ -106,7 +106,10 @@
       "userId": 3,
       "readStatus": 0,
       "senderId": 1
-    }
+    },
+    "messageReaders": [
+      { "userId": 1, "readStatus": 0 }
+    ]
   },
   "inputData": {
     "validInput": {
