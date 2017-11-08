@@ -8,7 +8,7 @@ import componentMocks from '../../__mocks__/componentMocks';
 import { Signin } from '../../components/Signin';
 
 describe('<Signin />', () => {
-  const userSigninRequestAction = sinon.spy();
+  const signin = sinon.spy();
   const messages = componentMocks.messages;
   const onSubmit = sinon.spy(Signin.prototype, 'onSubmit');
   const onChange = sinon.spy(Signin.prototype, 'onChange');
@@ -17,7 +17,7 @@ describe('<Signin />', () => {
   const auth = {};
 
   const props = {
-    userSigninRequestAction,
+    signin,
     deleteFlashMessage,
     getUserGroups,
     messages,

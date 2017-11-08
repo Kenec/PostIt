@@ -3,7 +3,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Users } from '../../models';
 import app from '../../app';
-import dummyData from '../dummy.json';
+import mockData from '../mockData.json';
 
 process.env.NODE_ENV = 'test';
 
@@ -25,7 +25,7 @@ const {
   validPassword,
   inValidToken,
   invalidResetPassword
-} = dummyData.Users;
+} = mockData.Users;
 
 describe('Users', () => {
   before((done) => {
@@ -39,7 +39,8 @@ describe('Users', () => {
   });
 
   describe('API Route Test: ', () => {
-    describe('/api/v1/users/signup', () => {
+    let token = '';
+    describe('POST: /api/v1/users/signup', () => {
       it('should create a new user account when all conditions are met',
         (done) => {
           server
@@ -117,169 +118,13 @@ describe('Users', () => {
             });
         });
     });
-  });
-  describe('/api/v1/users/signin', () => {
-    let token = '';
-    it('should not signin when any field is missing', (done) => {
-      server
-        .post('/api/v1/users/signin')
-        .send(missingSigninUsername)
-        .end((err, res) => {
-          token = res.body.token;
-          res.should.have.status(400);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message')
-            .eql('Invalid request. Some column(s) are missing');
-          done();
-        });
-    });
-    it('should not signin when any field is empty', (done) => {
-      server
-        .post('/api/v1/users/signin')
-        .send(emptySigninUsername)
-        .end((err, res) => {
-          token = res.body.token;
-          res.should.have.status(400);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message')
-            .eql('Invalid request. Some column(s) are missing');
-          done();
-        });
-    });
-    it('should expect parameter of object returned on successful signin',
-      (done) => {
+    describe('POST: /api/v1/users/signin', () => {
+      it('should not signin when any field is missing', (done) => {
         server
           .post('/api/v1/users/signin')
-          .send(validSigninAccount)
+          .send(missingSigninUsername)
           .end((err, res) => {
-            res.should.have.status(202);
-            res.body.should.have.property('token');
-            res.body.should.have.property('message')
-              .eql('Successfully logged in');
-            res.body.should.have.property('username')
-              .eql('kene');
-            done();
-          });
-      });
-    it('should signin a user with correct credentials', (done) => {
-      server
-        .post('/api/v1/users/signin')
-        .send(validSigninAccount)
-        .end((err, res) => {
-          token = res.body.token;
-          res.should.have.status(202);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message')
-            .eql('Successfully logged in');
-          done();
-        });
-    });
-    it(`should return not found error
-    if a user attempts to login with invalid username and passowrd`,
-      (done) => {
-        server
-          .post('/api/v1/users/signin')
-          .send(invalidSigninAccount)
-          .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.have.property('message')
-              .eql('Invalid username or password');
-            done();
-          });
-      });
-    it('should return user details when searched by username',
-      (done) => {
-        server
-          .post('/api/v1/users/username')
-          .send({
-            token,
-            username: validUser.username
-          })
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property('userid');
-            res.body.should.have.property('username');
-            res.body.should.have.property('phone');
-            res.body.should.have.property('email');
-            done();
-          });
-      });
-    it(`should return not found error when user
-        details is not found when searched by username`,
-      (done) => {
-        server
-          .post('/api/v1/users/username')
-          .send({
-            token,
-            username: invalidSigninAccount.username
-          })
-          .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.have.property('message')
-              .eql('User not found');
-            done();
-          });
-      });
-    it(`should return error when search user by
-        username query errored`,
-      (done) => {
-        server
-          .post('/api/v1/users/username')
-          .send({
-
-            // assuming the request is made without valid token
-            username: validUser.username
-          })
-          .end((err, res) => {
-            res.should.have.status(403);
-            done();
-          });
-      });
-    it(`should throw an error for search by
-    username if username is not supplied`,
-      (done) => {
-        server
-          .post('/api/v1/users/username')
-          .send({
-            token,
-
-            // the username parameter is missing
-          })
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property('message')
-              .eql('Invalid request. Username column is missing');
-            done();
-          });
-      });
-    it('should not search a user by username if username is empty',
-      (done) => {
-        server
-          .post('/api/v1/users/username')
-          .send({
-            token,
-            username: emptyUsername.username
-          })
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property('message')
-              .eql('Invalid request. Username column is missing');
-            done();
-          });
-      });
-  });
-  describe('/api/v1/users/resetpassword/:token', () => {
-    const token = validToken;
-    it('should not update password if new password is not available',
-      (done) => {
-        server
-          .post(`/api/v1/users/resetpassword/${token}`)
-          .send({
-
-            // the username parameter is missing
-            password: validUser.password
-          })
-          .end((err, res) => {
+            token = res.body.token;
             res.should.have.status(400);
             res.body.should.be.a('object');
             res.body.should.have.property('message')
@@ -287,87 +132,245 @@ describe('Users', () => {
             done();
           });
       });
-    it('should not update password if any parameter violates validation rules',
-      (done) => {
+      it('should not signin when any field is empty', (done) => {
         server
-          .post(`/api/v1/users/resetpassword/${token}`)
-          .send(invalidPassword)
+          .post('/api/v1/users/signin')
+          .send(emptySigninUsername)
           .end((err, res) => {
+            token = res.body.token;
             res.should.have.status(400);
             res.body.should.be.a('object');
             res.body.should.have.property('message')
-              .eql('Email is invalid');
+              .eql('Invalid request. Some column(s) are missing');
             done();
           });
       });
-    it('should update password when all conditions are met',
-      (done) => {
+      it('should expect parameter of object returned on successful signin',
+        (done) => {
+          server
+            .post('/api/v1/users/signin')
+            .send(validSigninAccount)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.have.property('token');
+              res.body.should.have.property('message')
+                .eql('Successfully logged in');
+              res.body.should.have.property('username')
+                .eql('kene');
+              done();
+            });
+        });
+      it('should signin a user with correct credentials', (done) => {
         server
-          .post(`/api/v1/users/resetpassword/${token}`)
-          .send(validPassword)
+          .post('/api/v1/users/signin')
+          .send(validSigninAccount)
           .end((err, res) => {
+            token = res.body.token;
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('message')
-              .eql('Password reset successfully!');
+              .eql('Successfully logged in');
             done();
           });
       });
-    it('should throw error when token does not exists',
-      (done) => {
-        server
-          .get(`/api/v1/users/resetpassword/${inValidToken}`)
-          .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message')
-              .eql('Token not found');
-            done();
-          });
-      });
-  });
-  describe('/api/v1/users/resetpassword/:token', () => {
-    const token = validToken;
-    it('should check if token exist',
-      (done) => {
-        server
-          .get(`/api/v1/users/resetpassword/${token}`)
-          .set({ 'x-access-token': token })
-          .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message')
-              .eql('Token not found');
-            done();
-          });
-      });
-  });
-  describe('/api/v1/users/resetpassword', () => {
-    it('should not reset password if any parameter violates validation rules',
-      (done) => {
-        server
-          .post('/api/v1/users/resetpassword')
-          .send(invalidPassword)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message')
-              .eql('Email is invalid');
-            done();
-          });
-      });
-    it('should not update password when any field is empty',
-      (done) => {
-        server
-          .post('/api/v1/users/resetpassword')
-          .send(invalidResetPassword)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message')
-              .eql('Invalid request. Email column is missing');
-            done();
-          });
-      });
+      it(`should return not found error
+        if a user attempts to login with invalid username and passowrd`,
+        (done) => {
+          server
+            .post('/api/v1/users/signin')
+            .send(invalidSigninAccount)
+            .end((err, res) => {
+              res.should.have.status(401);
+              res.body.should.have.property('message')
+                .eql('Invalid username or password');
+              done();
+            });
+        });
+    });
+    describe('POST: /api/v1/users/username', () => {
+      it('should return user details when searched by username',
+        (done) => {
+          server
+            .post('/api/v1/users/username')
+            .send({
+              token,
+              username: validUser.username
+            })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.have.property('userid');
+              res.body.should.have.property('username');
+              res.body.should.have.property('phone');
+              res.body.should.have.property('email');
+              done();
+            });
+        });
+      it(`should return not found error when user
+        details is not found when searched by username`,
+        (done) => {
+          server
+            .post('/api/v1/users/username')
+            .send({
+              token,
+              username: invalidSigninAccount.username
+            })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.have.property('message')
+                .eql('User not found');
+              done();
+            });
+        });
+      it(`should return error when search user by
+        username query errored`,
+        (done) => {
+          server
+            .post('/api/v1/users/username')
+            .send({
+
+            // assuming the request is made without valid token
+              username: validUser.username
+            })
+            .end((err, res) => {
+              res.should.have.status(403);
+              done();
+            });
+        });
+      it(`should throw an error for search by
+        username if username is not supplied`,
+        (done) => {
+          server
+            .post('/api/v1/users/username')
+            .send({
+              token,
+
+            // the username parameter is missing
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. Username column is missing');
+              done();
+            });
+        });
+      it('should not search a user by username if username is empty',
+        (done) => {
+          server
+            .post('/api/v1/users/username')
+            .send({
+              token,
+              username: emptyUsername.username
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. Username column is missing');
+              done();
+            });
+        });
+    });
+    describe('POST: /api/v1/users/resetpassword/:token', () => {
+      token = validToken;
+      it('should not update password if new password is not available',
+        (done) => {
+          server
+            .post(`/api/v1/users/resetpassword/${token}`)
+            .send({
+
+            // the username parameter is missing
+              password: validUser.password
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Some column(s) are missing');
+              done();
+            });
+        });
+      it(`should not update password if any parameter
+          violates validation rule`,
+        (done) => {
+          server
+            .post(`/api/v1/users/resetpassword/${token}`)
+            .send(invalidPassword)
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Email is invalid');
+              done();
+            });
+        });
+      it('should update password when all conditions are met',
+        (done) => {
+          server
+            .post(`/api/v1/users/resetpassword/${token}`)
+            .send(validPassword)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Password reset successfully!');
+              done();
+            });
+        });
+      it('should throw error when token does not exists',
+        (done) => {
+          server
+            .get(`/api/v1/users/resetpassword/${inValidToken}`)
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Token not found');
+              done();
+            });
+        });
+    });
+    describe('GET: /api/v1/users/resetpassword/:token', () => {
+      token = validToken;
+      it('should check if token exist',
+        (done) => {
+          server
+            .get(`/api/v1/users/resetpassword/${token}`)
+            .set({ 'x-access-token': token })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Token not found');
+              done();
+            });
+        });
+    });
+    describe('POST: /api/v1/users/resetpassword', () => {
+      it('should not reset password if any parameter violates validation rules',
+        (done) => {
+          server
+            .post('/api/v1/users/resetpassword')
+            .send(invalidPassword)
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Email is invalid');
+              done();
+            });
+        });
+      it('should not update password when any field is empty',
+        (done) => {
+          server
+            .post('/api/v1/users/resetpassword')
+            .send(invalidResetPassword)
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message')
+                .eql('Invalid request. Email column is missing');
+              done();
+            });
+        });
+    });
   });
 });

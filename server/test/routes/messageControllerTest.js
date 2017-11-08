@@ -3,21 +3,22 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Messages, MessageReads } from '../../models';
 import app from '../../app';
-import dummyData from '../dummy.json';
+import mockData from '../mockData.json';
 
 process.env.NODE_ENV = 'test';
 
 const server = supertest.agent(app);
 chai.use(chaiHttp);
 
-const { validUser } = dummyData.Users;
+const { validUser } = mockData.Users;
 const {
   validMessage,
   invalidMessage,
   notification,
   invalidNotification,
   updateNotification,
-} = dummyData.Messages;
+  messageReaders
+} = mockData.Messages;
 
 describe('Messages', () => {
   let token = '';
@@ -39,9 +40,9 @@ describe('Messages', () => {
   });
 
   describe('API Route Tests: ', () => {
-    describe('/api/v1/groups/:groupId/messages ', () => {
-      const groupId = validMessage.groupId;
-      let messageId = notification.messageId;
+    const groupId = validMessage.groupId;
+    let messageId = notification.messageId;
+    describe('GET: /api/v1/groups/:groupId/messages ', () => {
       it('should display no message when a group does not have message',
         (done) => {
           server
@@ -55,6 +56,8 @@ describe('Messages', () => {
               done();
             });
         });
+    });
+    describe('POST: /api/v1/groups/:groupId/message ', () => {
       it('should send message',
         (done) => {
           server
@@ -131,6 +134,8 @@ describe('Messages', () => {
               done();
             });
         });
+    });
+    describe('POST: /api/v1/groups/:messageId/notification ', () => {
       it(`should add notification when a message
           is sent`,
         (done) => {
@@ -139,17 +144,14 @@ describe('Messages', () => {
             .send({
               token,
               groupId,
-              userId: notification.userId,
+              messageReaders,
               senderId: notification.senderId,
-              readStatus: notification.readStatus
             })
             .end((err, res) => {
-              res.should.have.status(201);
+              res.should.have.status(200);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
                 .eql('Notification Added');
-              res.body.should.have.property('success')
-                .eql(true);
               done();
             });
         });
@@ -174,29 +176,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it('should not add a duplicate notification',
-        (done) => {
-          server
-            .post(`/api/v1/groups/${messageId}/notification`)
-            .send({
-              token,
-              groupId,
-              userId: notification.userId,
-              senderId: notification.senderId,
-              readStatus: notification.readStatus,
-            })
-            .end((err, res) => {
-              res.should.have.status(409);
-              res.body.should.be.a('object');
-              res.body.should.have.property('message')
-                .eql('Notification already exist');
-              res.body.should.have.property('success')
-                .eql(false);
-              done();
-            });
-        });
       it(`should not add a notification when message
-        with messageId is not found`,
+          with messageId is not found`,
         (done) => {
           messageId = invalidNotification.messageId;
           server
@@ -209,11 +190,13 @@ describe('Messages', () => {
               readStatus: notification.readStatus
             })
             .end((err, res) => {
-              res.should.have.status(500);
+              res.should.have.status(400);
               res.body.should.be.a('object');
               done();
             });
         });
+    });
+    describe('POST: /api/v1/user/notifications ', () => {
       it('should retrieve notifications',
         (done) => {
           server
@@ -245,6 +228,8 @@ describe('Messages', () => {
               done();
             });
         });
+    });
+    describe('POST: /api/v1/users/:messageId/read', () => {
       it('should return empty array if message readers are empty',
         (done) => {
           messageId = notification.messageId;
@@ -261,6 +246,8 @@ describe('Messages', () => {
               done();
             });
         });
+    });
+    describe('POST: /api/v1/user/:messageId/notification', () => {
       it('should update notification',
         (done) => {
           server
@@ -299,7 +286,7 @@ describe('Messages', () => {
             });
         });
       it(`should not update the notification of a user
-        if userId is not found`,
+          if userId is not found`,
         (done) => {
           server
             .post(`/api/v1/user/${messageId}/notification`)
@@ -317,7 +304,8 @@ describe('Messages', () => {
               done();
             });
         });
-
+    });
+    describe('POST: /api/v1/users/:messageId/read', () => {
       it(`should return status code 200 and  res
           of object when getting all users that read
           a message`,

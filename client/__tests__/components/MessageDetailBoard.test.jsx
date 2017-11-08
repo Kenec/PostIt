@@ -17,7 +17,7 @@ describe('<MessageDetailBoard />', () => {
   const groupSelectedId = componentMocks.groupSelectedId;
   const retrieveMessage = sinon.spy(() =>
     Promise.resolve({ message: { data: 'Hello World' } }));
-  const clearRetrievedMessageAction = sinon.spy();
+  const clearRetrievedMessage = sinon.spy();
   const updateNotification = sinon.spy();
   const updateReadBy = sinon.spy();
   const retrieveMessageAction = sinon.spy();
@@ -28,7 +28,7 @@ describe('<MessageDetailBoard />', () => {
     groupName,
     auth,
     retrieveMessage,
-    clearRetrievedMessageAction,
+    clearRetrievedMessage,
     groupSelectedId,
     updateNotification,
     updateReadBy,
