@@ -3,12 +3,8 @@ import thunk from 'redux-thunk';
 // import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 // declare the redux devtool dependencies
-/*eslint-disable*/
-const composeEnhancers =
-typeof window === 'object' &&
-window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-  }) : compose;
+
+const composeEnhancers = compose;
 
 const finalCreateStore = composeEnhancers(
   applyMiddleware(thunk)

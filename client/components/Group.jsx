@@ -97,7 +97,7 @@ Group.contextTypes = {
  * Map state to props
  * @function mapStateToProps
  * @param {object} state
- * @return {object} state object 
+ * @return {object} state object
  */
 const mapStateToProps = state => (
   {
