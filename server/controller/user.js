@@ -170,7 +170,8 @@ export default {
                 const emailReceiver = [{ email: req.body.email }];
                 const emailSubject = 'PostIT Password Reset';
                 const emailText = Helpers.getEmailText(req.headers.host, token);
-                const sendStatus = sendMail(emailReceiver, emailText, emailSubject);
+                const sendStatus =
+                    sendMail(emailReceiver, emailText, emailSubject);
                 if (sendStatus) {
                   res.status(200).send({
                     message: 'Password reset link has been sent to your email'
