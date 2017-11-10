@@ -200,8 +200,8 @@ export default {
    */
   removeUser(req, res) {
     const groupId = req.params.id;
-    const removalAdmin = req.body.admin;
-    const userToBeRemoved = req.body.user;
+    const removalAdmin = req.query.admin;
+    const userToBeRemoved = req.query.user;
     if (removalAdmin && userToBeRemoved && groupId) {
       Groups.find({
         where: { id: groupId, createdby: removalAdmin },
@@ -249,7 +249,8 @@ export default {
             }
           } else {
             res.status(401).send({
-              message: 'Incomplete Action!. Only the Group Admin can remove a user'
+              message:
+              'Incomplete Action!. Only the Group Admin can remove a user'
             });
           }
         })

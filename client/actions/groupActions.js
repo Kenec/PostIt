@@ -96,9 +96,15 @@ export const getAdminGroups = user => (
  * Remove user from a group
  * @function removeGroupUser
  * @param {integer} id
- * @param {object} payLoad
+ * @param {object} payLoad contains group admin and user to be remobed
  * @return {json} - axios post response
  */
 export const removeGroupUser = (id, payLoad) => (
-  () => axios.post(`/api/v1/groups/${id}/users`, payLoad)
+  () => axios.delete(`/api/v1/groups/${id}/users`,
+    { params:
+      {
+        admin: payLoad.admin,
+        user: payLoad.user
+      }
+    })
 );
