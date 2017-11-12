@@ -15,6 +15,7 @@ describe('<FilterMessages />', () => {
   };
 
   const wrapper = mount(<FilterMessages {...props} />);
+
   it('should message filter component', () => {
     expect(wrapper.find('b').at(0).text()).toEqual('Kene');
     expect(wrapper.find('i').at(1).text()).toEqual('Normal');

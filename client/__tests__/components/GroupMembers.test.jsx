@@ -38,16 +38,19 @@ describe('<GroupMembers />', () => {
   wrapper.setState({ groupMember: 'Kene' });
   wrapper.setState({ errors: 'Error' });
   wrapper.setState({ message: 'Success' });
+
   it('should display all users of a group', () => {
     expect(wrapper.find('span').at(0).text()).toEqual('Group Members');
     expect(wrapper.find('span').at(1).text()).toEqual('Kene');
     expect(wrapper.find('[type="button"]').at(0).length).toEqual(1);
   });
+
   it(`should ask a user to confirm a removal of
   another user when remove button is clicked`, () => {
       wrapper.find('[type="button"]').at(0).simulate('click');
       expect(confirmAndRemoveUser.calledOnce).toEqual(false);
     });
+
   it('should return Loading... when group is not resolved', () => {
     props.group.groups = null;
     wrapper = mount(<GroupMembers {...props} />);

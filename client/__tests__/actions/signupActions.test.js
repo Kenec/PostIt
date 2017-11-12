@@ -18,19 +18,18 @@ describe('Signup Action', () => {
   const store = mockStore({});
   const userData = samples.userData;
 
-  it(`should have signup action return json repsonse
-      on successful signup`, () => {
-      mock.onPost('/api/v1/users/signup', userData)
-        .reply(200, { token,
-          message: 'User created successfully',
-          username: 'Kene',
-          success: true });
-      return store.dispatch(signup(userData))
-        .then(() => {
-          expect(store.getActions()).toEqual([{
-            type: types.SET_CURRENT_USER,
-            user
-          }]);
-        });
-    });
+  it('should create a new user', () => {
+    mock.onPost('/api/v1/users/signup', userData)
+      .reply(200, { token,
+        message: 'User created successfully',
+        username: 'Kene',
+        success: true });
+    return store.dispatch(signup(userData))
+      .then(() => {
+        expect(store.getActions()).toEqual([{
+          type: types.SET_CURRENT_USER,
+          user
+        }]);
+      });
+  });
 });
