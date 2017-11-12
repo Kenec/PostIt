@@ -14,10 +14,10 @@ export default (sequelize, DataTypes) => {
       },
       validate: {
         isInt: {
-          msg: 'Userid Must be an Integer'
+          msg: 'UserId Must be an Integer'
         },
         notEmpty: {
-          msg: 'Userid must not be empty'
+          msg: 'UserId must not be empty'
         },
       },
     },
@@ -30,10 +30,10 @@ export default (sequelize, DataTypes) => {
       },
       validate: {
         isInt: {
-          msg: 'Groupid Must be an Integer'
+          msg: 'GroupId Must be an Integer'
         },
         notEmpty: {
-          msg: 'Groupid must not be empty'
+          msg: 'GroupId must not be empty'
         },
       },
     }

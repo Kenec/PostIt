@@ -13,6 +13,7 @@ describe('sendMail', () => {
         sendMail.should.be.a('function');
       }
     );
+
     it('should send an email if all conditions are met', () => {
       const receivers = [{ user: 'nnamani.kene@gmail.com' }];
       const message = 'Hello World';

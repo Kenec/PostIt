@@ -25,6 +25,7 @@ describe('inputValidation', () => {
       }
     );
   });
+
   describe('Data input validations', () => {
     it('should return error if password did not match',
       () => {
@@ -33,8 +34,8 @@ describe('inputValidation', () => {
           .eql({ confirmPassword: 'Password did not match' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
+
     it('should return error if invalid Email',
       () => {
         data.email = invalidInput.email;
@@ -43,8 +44,8 @@ describe('inputValidation', () => {
             confirmPassword: 'Password did not match' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
+
     it('should return error if invalid Phone number',
       () => {
         data.phone = invalidInput.phone;
@@ -54,7 +55,6 @@ describe('inputValidation', () => {
             phone: 'Phone number is invalid' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
   });
 });

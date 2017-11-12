@@ -17,6 +17,7 @@ describe('<ForgotPassword />', () => {
 
   ForgotPassword.contextTypes = { router: PropTypes.object };
   let wrapper = mount(<ForgotPassword {...props} />);
+
   it('should have a reset password form', () => {
     expect(wrapper.find('b').at(1).text()).toEqual('Recover Password');
     expect(wrapper.find('form').at(0).length).toEqual(1);
@@ -25,6 +26,7 @@ describe('<ForgotPassword />', () => {
     expect(wrapper.find('button').at(0).length).toEqual(1);
     expect(wrapper.find('button').at(0).text()).toEqual('Recover Password');
   });
+
   it('should call onSubmit when reset password form is submitted', () => {
     wrapper.setState({ email: 'Kene@email.com', error: '', isValid: true });
     wrapper = mount(<ForgotPassword {...props} />);
