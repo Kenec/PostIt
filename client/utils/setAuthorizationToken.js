@@ -5,7 +5,7 @@ import axios from 'axios';
  * header of the browser with the name x-access-token
  * @param  {string} token token generated when a
  * user provides a valid credential for logging in
- * @return {void}   
+ * @return {void}
  */
 const setAuthorizationToken = (token) => {
   if (token) {

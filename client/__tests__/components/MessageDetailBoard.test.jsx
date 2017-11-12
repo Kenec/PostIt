@@ -42,6 +42,7 @@ describe('<MessageDetailBoard />', () => {
   const wrapper = mount(<MessageDetailBoard {...props} />);
   wrapper.setState({ sentBy: '1' });
   wrapper.setState({ priorityLevel: 'Normal' });
+
   it('should have the message details and readers', () => {
     expect(wrapper.find('Link').at(0).text()).toEqual(' Random');
     expect(wrapper.find('span').at(1).text()).toEqual('Kene');

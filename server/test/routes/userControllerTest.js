@@ -55,6 +55,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should create another new user account with different account',
         (done) => {
           server
@@ -69,6 +70,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should throw error when a duplicate account wants to be created',
         (done) => {
           server
@@ -81,6 +83,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should not allow user to be created when any field is invalid',
         (done) => {
           server
@@ -93,6 +96,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should not create a new user when all field is not available',
         (done) => {
           server
@@ -118,6 +122,7 @@ describe('Users', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/signin', () => {
       it('should not signin when any field is missing', (done) => {
         server
@@ -132,6 +137,7 @@ describe('Users', () => {
             done();
           });
       });
+
       it('should not signin when any field is empty', (done) => {
         server
           .post('/api/v1/users/signin')
@@ -145,7 +151,8 @@ describe('Users', () => {
             done();
           });
       });
-      it('should expect parameter of object returned on successful signin',
+
+      it('should return success message and token on successful signin',
         (done) => {
           server
             .post('/api/v1/users/signin')
@@ -160,6 +167,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should signin a user with correct credentials', (done) => {
         server
           .post('/api/v1/users/signin')
@@ -173,6 +181,7 @@ describe('Users', () => {
             done();
           });
       });
+
       it(`should return not found error
         if a user attempts to login with invalid username and passowrd`,
         (done) => {
@@ -187,6 +196,7 @@ describe('Users', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/username', () => {
       it('should return user details when searched by username',
         (done) => {
@@ -205,6 +215,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it(`should return not found error when user
         details is not found when searched by username`,
         (done) => {
@@ -221,6 +232,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it(`should return error when search user by
         username query errored`,
         (done) => {
@@ -236,6 +248,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it(`should throw an error for search by
         username if username is not supplied`,
         (done) => {
@@ -253,7 +266,8 @@ describe('Users', () => {
               done();
             });
         });
-      it('should not search a user by username if username is empty',
+
+      it('should not search a user its username if username is empty',
         (done) => {
           server
             .post('/api/v1/users/username')
@@ -269,6 +283,7 @@ describe('Users', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/resetpassword/:token', () => {
       token = validToken;
       it('should not update password if new password is not available',
@@ -288,6 +303,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it(`should not update password if any parameter
           violates validation rule`,
         (done) => {
@@ -302,6 +318,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should update password when all conditions are met',
         (done) => {
           server
@@ -315,6 +332,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should throw error when token does not exists',
         (done) => {
           server
@@ -328,6 +346,7 @@ describe('Users', () => {
             });
         });
     });
+
     describe('GET: /api/v1/users/resetpassword/:token', () => {
       token = validToken;
       it('should check if token exist',
@@ -344,6 +363,7 @@ describe('Users', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/resetpassword', () => {
       it('should not reset password if any parameter violates validation rules',
         (done) => {
@@ -358,6 +378,7 @@ describe('Users', () => {
               done();
             });
         });
+
       it('should not update password when any field is empty',
         (done) => {
           server

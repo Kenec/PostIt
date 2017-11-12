@@ -31,12 +31,14 @@ describe('<Group />', () => {
   Group.contextTypes = { router: PropTypes.object };
   let wrapper = shallow(<Group {...props} />,
     { context: { router: new Router() } });
+
   it('should display groups and messages board of a group ', () => {
     expect(wrapper.find('<NavigationBarMenu />').at(0).length).toEqual(1);
     expect(wrapper.find('<GroupMembers />').at(0).length).toEqual(1);
     expect(wrapper.find('<GroupBoard />').at(4).length).toEqual(1);
     expect(wrapper.find('<SearchMember />').at(5).length).toEqual(1);
   });
+
   it('should display Loading... when group is not resolved ', () => {
     props.group.groups = null;
     wrapper = shallow(<Group {...props} />,

@@ -3,9 +3,9 @@ import flashMessages from '../../reducers/flashMessages';
 import mockAction from '../../__mocks__/actions';
 
 const state = [];
-describe('FlashMessage reducers', () => {
-  describe('When ADD_FLASH_MESSAGE action type is fired from an action', () => {
-    it('should add message to the store', () => {
+describe('FlashMessage reducers: ', () => {
+  describe('addFlashMessage', () => {
+    it('should add flash message to the store', () => {
       const action = mockAction.addFlashMessage;
       expect(flashMessages(state, action)).toEqual([
         { id: 1,
@@ -15,12 +15,14 @@ describe('FlashMessage reducers', () => {
       ]);
     });
   });
-  describe('When DELETE_FLASH_MESSAGE action type is fired from action', () => {
-    it('should remove message from the store', () => {
+
+  describe('deletFlashMessage', () => {
+    it('should remove flash message from the store', () => {
       const action = mockAction.deleteFlashMessage;
       expect(flashMessages(state, action)).toEqual([]);
     });
   });
+
   describe('When No action is fired', () => {
     it('flash message reducer should return the initial state', () => {
       const action = {};

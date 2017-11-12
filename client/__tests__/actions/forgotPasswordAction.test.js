@@ -21,36 +21,36 @@ describe('Forgot Password Action', () => {
         .toEqual('function');
     });
 
-    it(`should make an api post request
-        to update user reset password toke`, () => {
-        const email = samples.email;
-        mock.onPost('/api/v1/users/resetpassword', email)
-          .reply(200, { message: 'password reset link sent to your email' });
-        return store.dispatch(forgotPassword.forgotPasswordRequest(email))
-          .then((messages) => {
-            expect(messages.data).toEqual({
-              message: 'password reset link sent to your email'
-            });
+    it('should send password reset link to users email', () => {
+      const email = samples.email;
+      mock.onPost('/api/v1/users/resetpassword', email)
+        .reply(200, { message: 'password reset link sent to your email' });
+      return store.dispatch(forgotPassword.forgotPasswordRequest(email))
+        .then((messages) => {
+          expect(messages.data).toEqual({
+            message: 'password reset link sent to your email'
           });
-      });
+        });
+    });
   });
+
   describe('isValidToken', () => {
     it('should be a function', () => {
       expect((typeof forgotPassword.isValidToken(token))).toEqual('function');
     });
 
-    it(`should make an api GET request to get users token
-        and check if it is valid`, () => {
-        mock.onGet(`/api/v1/users/resetpassword/${token}`)
-          .reply(200, { message: true });
-        return store.dispatch(forgotPassword.isValidToken(token))
-          .then((messages) => {
-            expect(messages.data).toEqual({
-              message: true
-            });
+    it('should check if a change password token is valid', () => {
+      mock.onGet(`/api/v1/users/resetpassword/${token}`)
+        .reply(200, { message: true });
+      return store.dispatch(forgotPassword.isValidToken(token))
+        .then((messages) => {
+          expect(messages.data).toEqual({
+            message: true
           });
-      });
+        });
+    });
   });
+
   describe('updatePassword', () => {
     it('should be a function', () => {
       const password = samples.password;
@@ -58,7 +58,7 @@ describe('Forgot Password Action', () => {
         .toEqual('function');
     });
 
-    it('should make an api post request to update users password', () => {
+    it('should update users password', () => {
       const newPassword = samples.newPassword;
       mock.onPost(`/api/v1/users/resetpassword/${token}`, newPassword)
         .reply(200, { message: 'password updated successfully!' });

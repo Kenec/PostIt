@@ -57,6 +57,7 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/groups/:groupId/message ', () => {
       it('should send message',
         (done) => {
@@ -78,7 +79,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it('should not send a message if any paramter is missing',
+
+      it('should not send a message if message paramter is missing',
         (done) => {
           server
             .post(`/api/v1/groups/${groupId}/message`)
@@ -99,7 +101,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it('should not send a message if any paramter is empty',
+
+      it('should not send a message if message paramter is empty',
         (done) => {
           server
             .post(`/api/v1/groups/${groupId}/message`)
@@ -119,6 +122,7 @@ describe('Messages', () => {
               done();
             });
         });
+
       it('should display message when a group have message',
         (done) => {
           server
@@ -135,6 +139,7 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/groups/:messageId/notification ', () => {
       it(`should add notification when a message
           is sent`,
@@ -155,7 +160,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should not add notification when a all required 
+
+      it(`should not add notification when userId 
         parameter is not available`,
         (done) => {
           server
@@ -176,6 +182,7 @@ describe('Messages', () => {
               done();
             });
         });
+
       it(`should not add a notification when message
           with messageId is not found`,
         (done) => {
@@ -196,6 +203,7 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/user/notifications ', () => {
       it('should retrieve notifications',
         (done) => {
@@ -211,7 +219,8 @@ describe('Messages', () => {
               done();
             });
         });
-      it(`should return empty array when
+
+      it(`should return empty result when
           retrieving a notification of user who has no notification`,
         (done) => {
           server
@@ -229,8 +238,9 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/:messageId/read', () => {
-      it('should return empty array if message readers are empty',
+      it('should return empty result if message readers are empty',
         (done) => {
           messageId = notification.messageId;
           server
@@ -247,6 +257,7 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/user/:messageId/notification', () => {
       it('should update notification',
         (done) => {
@@ -267,6 +278,7 @@ describe('Messages', () => {
               done();
             });
         });
+
       it(`should throw not found error when attempting
           to update a notification that does not exist`,
         (done) => {
@@ -285,6 +297,7 @@ describe('Messages', () => {
               done();
             });
         });
+
       it(`should not update the notification of a user
           if userId is not found`,
         (done) => {
@@ -305,10 +318,9 @@ describe('Messages', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/:messageId/read', () => {
-      it(`should return status code 200 and  res
-          of object when getting all users that read
-          a message`,
+      it('should get all users that read a message',
         (done) => {
           server
             .post(`/api/v1/users/${messageId}/read`)

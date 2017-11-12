@@ -2,8 +2,8 @@ import { Messages } from '../../models';
 
 /**
  * notification - middleware to prepare notification data
- * @param  {object} req incoming request object
- * @param  {object} res server respose object
+ * @param {object} req incoming request object
+ * @param {object} res server respose object
  * @param {function} next calls the next function
  * @return {json} returns json response
  */
