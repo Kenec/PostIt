@@ -25,7 +25,7 @@ groupUserRouter.post('/api/v1/groups/:groupId/user', _jwtAuth2.default, groupUse
 groupUserRouter.post('/api/v1/groups/:id/users', _jwtAuth2.default, groupUserController.removeUser);
 groupUserRouter.post('/api/v1/user/groups', _jwtAuth2.default, groupUserController.fetchUsersGroup);
 groupUserRouter.post('/api/v1/users/:offset', _jwtAuth2.default, groupUserController.searchUser);
-groupUserRouter.get('/api/v1/groups/:id/users', _jwtAuth2.default, groupUserController.fetchMembersOfGroup);
+groupUserRouter.get('/api/v1/groups/:id/users', _jwtAuth2.default, groupUserController.getGroupMembers);
 groupUserRouter.get('/api/v1/groups', _jwtAuth2.default, groupUserController.list);
 
 exports.default = groupUserRouter;

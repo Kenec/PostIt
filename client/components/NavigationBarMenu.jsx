@@ -16,7 +16,7 @@ export class NavigationBarMenu extends Component {
   /**
    * Creates an instance of NavigationBarMenu
    * @constructor
-   * @param {any} props 
+   * @param {any} props
    */
   constructor(props) {
     super(props);
@@ -38,7 +38,7 @@ export class NavigationBarMenu extends Component {
    * Handle User logout
    * @method logout
    * @param {object} event
-   * @return {void} void 
+   * @return {void} void
    */
   onLogout(event) {
     event.preventDefault();
@@ -105,7 +105,7 @@ NavigationBarMenu.contextTypes = {
  * Map state to props
  * @function mapStateToProps
  * @param {object} state
- * @return {object} state object 
+ * @return {object} state object
  */
 const mapStateToProps = state => (
   {

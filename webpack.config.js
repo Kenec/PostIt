@@ -13,12 +13,11 @@ module.exports = {
   devtool: 'inline-sourcemap',
   entry: [
     'webpack-hot-middleware/client',
-    './client/js/client.jsx'
+    './client/js/Client.jsx'
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
-  // define the module loaders to be used by the webpack
   module: {
     loaders: [
       {
@@ -49,14 +48,11 @@ module.exports = {
       },
     ]
   },
-
-  // specify the output path for bundled file
   output: {
     path: path.resolve('./client/dist'),
     filename: 'bundle.min.js',
     publicPath: '/dist/'
   },
-  // assign the node files that cannot be found to empty
   node: {
     net: 'empty',
     dns: 'empty',
@@ -64,7 +60,6 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty',
   },
-  // webpack plugins
   plugins: [
     new ExtractTextPlugin('css/main.css'),
     new webpack.ProvidePlugin({
@@ -82,7 +77,8 @@ module.exports = {
         SMS_API_KEY: JSON.stringify(process.env.SMS_API_KEY),
         SMS_API_SECRET: JSON.stringify(process.env.SMS_API_SECRET),
         EMAIL_NAME: JSON.stringify(process.env.EMAIL_NAME),
-        EMAIL_PASSWORD: JSON.stringify(process.env.EMAIL_PASSWORD)
+        EMAIL_PASSWORD: JSON.stringify(process.env.EMAIL_PASSWORD),
+        JWT_SECRET: JSON.stringify(process.env.JWT_SECRET)
       },
     })
   ],

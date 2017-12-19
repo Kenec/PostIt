@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -16,7 +15,7 @@ describe('<MessageBoard />', () => {
   const params = componetMocks.params;
   const getUserGroups = sinon.spy();
   const getAdminGroups = sinon.spy();
-  // assign all props to a varibale props
+
   const props = {
     getAdminGroups,
     getUserGroups,
@@ -28,10 +27,12 @@ describe('<MessageBoard />', () => {
 
   MessageBoard.contextTypes = { router: PropTypes.object };
   let wrapper = shallow(<MessageBoard {...props} />);
+
   it('should display loading when no group is not selected', () => {
     expect(wrapper.find('h4').length).toEqual(1);
     expect(wrapper.find('h4').text()).toEqual('Loading ...');
   });
+
   it('should render the component when group is selected', () => {
     props.group.groups = { groups: [{ id: 1, groupName: 'Random' }] };
     wrapper = shallow(<MessageBoard {...props} />);
@@ -42,6 +43,7 @@ describe('<MessageBoard />', () => {
     expect(wrapper.find('div').at(5).text())
       .toEqual('<Connect(SearchMember) />');
   });
+
   it('should redirect to NOT FOUND PAGE when groupId is invalid', () => {
     wrapper = shallow(<MessageBoard {...props} />,
       { context: { router: new Router() } });

@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -9,7 +8,7 @@ import '../../__mocks__/localStorage';
 describe('<GroupLists />', () => {
   const group = componentMocks.group;
   const auth = componentMocks.auth;
-  // assign all props to a varibale props
+
   const props = {
     group,
     auth,
@@ -22,6 +21,7 @@ describe('<GroupLists />', () => {
     expect(wrapper.find('Link').at(0).text()).toEqual('Add New');
     expect(wrapper.find('span').at(2).text()).toEqual('Random');
   });
+
   it('should display Loading... when group is not resolved', () => {
     props.group = {};
     wrapper = mount(<GroupLists {...props} />);

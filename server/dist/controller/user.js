@@ -16,11 +16,11 @@ var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
+var _Helpers = require('../utils/Helpers');
+
+var _Helpers2 = _interopRequireDefault(_Helpers);
+
 var _models = require('../models');
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
 
 var _sendMail = require('../utils/sendMail');
 
@@ -31,6 +31,8 @@ var _validateInput6 = require('../shared/validations/validateInput');
 var _validateInput7 = _interopRequireDefault(_validateInput6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+require('dotenv').config();
 
 exports.default = {
   /**
@@ -52,22 +54,16 @@ exports.default = {
         isValid = _validateInput.isValid;
 
     if (!isValid) {
-      var usernameError = errors.username;
-      var emailError = errors.email;
-      var phoneError = errors.phone;
-      var passwordError = errors.password;
-      var confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: usernameError || emailError || phoneError || passwordError || confirmPasswordError
+        message: errors.username || errors.email || errors.phone || errors.password || errors.confirmPassword
       });
     } else {
       _models.Users.findAll({
         where: {
-          username: [req.body.username],
-          password: (0, _md2.default)(req.body.password)
+          $or: [{ email: req.body.email }, { username: req.body.username }]
         }
-      }).then(function (user) {
-        if (user[0]) {
+      }).then(function (foundUser) {
+        if (foundUser[0]) {
           return res.status(409).send({
             message: 'User already exist'
           });
@@ -77,15 +73,15 @@ exports.default = {
           phone: req.body.phone,
           email: req.body.email,
           password: (0, _md2.default)(req.body.password)
-        }).then(function (aUser) {
+        }).then(function (user) {
           var token = _jsonwebtoken2.default.sign({
-            id: aUser.id,
-            username: aUser.username
-          }, _config2.default.jwtSecret, { expiresIn: '48h' }); // expires in 48h
+            id: user.id,
+            username: user.username
+          }, process.env.JWT_SECRET, { expiresIn: '48h' });
           res.status(201).json({
             token: token,
             message: 'User Created successfully',
-            username: '' + aUser.username
+            username: '' + user.username
           });
         }).catch(function () {
           res.status(500).json({
@@ -123,7 +119,7 @@ exports.default = {
     } else {
       _models.Users.findAll({
         where: {
-          username: [req.body.username],
+          username: req.body.username,
           password: (0, _md2.default)(req.body.password)
         }
       }).then(function (user) {
@@ -132,9 +128,9 @@ exports.default = {
           var token = _jsonwebtoken2.default.sign({
             id: user[0].id,
             username: user[0].username
-          }, _config2.default.jwtSecret, { expiresIn: '48h' }); // token expires in 48h
+          }, process.env.JWT_SECRET, { expiresIn: '48h' });
 
-          res.status(202).send({
+          res.status(200).send({
             token: token,
             message: 'Successfully logged in',
             username: '' + user[0].username
@@ -142,11 +138,12 @@ exports.default = {
           return;
         }
 
-        res.status(404).send({
-          message: 'Username not found, please register'
+        res.status(401).send({
+          message: 'Invalid username or password'
         });
-      }).catch(function () {
+      }).catch(function (error) {
         res.status(500).json({
+          error: error.errors.message,
           message: 'An error has occurred trying to search for user'
         });
       });
@@ -172,15 +169,14 @@ exports.default = {
         isValid = _validateInput3.isValid;
 
     if (!isValid) {
-      var emailError = errors.email;
       res.status(400).send({
-        message: emailError
+        message: errors.email
       });
     } else {
       _models.Users.findAll({ where: { email: req.body.email } }).then(function (user) {
         if (user[0]) {
           var token = _crypto2.default.randomBytes(20).toString('hex');
-          var tokenExpireDate = Date.now() + 3600000; // expire in 1hr
+          var tokenExpireDate = Date.now() + 3600000;
           _models.Users.update({
             resetPasswordToken: token,
             resetPasswordExpiryTime: tokenExpireDate
@@ -191,12 +187,16 @@ exports.default = {
           }).then(function () {
             var emailReceiver = [{ email: req.body.email }];
             var emailSubject = 'PostIT Password Reset';
-            var emailText = '<hr/><p>You are receiving this because you\n                (or someone else) have requested the reset of the password\n                for your account.</p>\n                <p> Please click on the following link, or paste this into\n                your browser to complete the process:</p><p>\n                <b>' + ('http://' + req.headers.host + '/recoverpassword/' + token) + '</b>\n                </p><p>If you did not request this, please ignore this email\n                and your password will remain unchanged.</p><hr/>';
-            var send = (0, _sendMail2.default)(emailReceiver, emailText, emailSubject);
-            if (send) {
-              res.status(200).send({ message: 'Password reset link has been sent to your email' });
+            var emailText = _Helpers2.default.getEmailText(req.headers.host, token);
+            var sendStatus = (0, _sendMail2.default)(emailReceiver, emailText, emailSubject);
+            if (sendStatus) {
+              res.status(200).send({
+                message: 'Password reset link has been sent to your email'
+              });
             } else {
-              res.status(500).send({ message: 'Unable to send Link to email' });
+              res.status(500).send({
+                message: 'Unable to send Link to email'
+              });
             }
           }).catch(function () {
             return res.status(500).send({
@@ -224,7 +224,7 @@ exports.default = {
    * @return {json}     returns json response
    */
   updatePassword: function updatePassword(req, res) {
-    if (!(req.body.password && req.body.confirmPassword)) {
+    if (!(req.body.password && req.body.repassword)) {
       return res.status(400).send({
         message: 'Invalid request. Some column(s) are missing'
       });
@@ -235,16 +235,14 @@ exports.default = {
         isValid = _validateInput4.isValid;
 
     if (!isValid) {
-      var emailError = errors.email;
-      var confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: emailError || confirmPasswordError
+        message: errors.email || errors.confirmPassword
       });
     } else {
       return _models.Users.update({
         password: (0, _md2.default)(req.body.password),
-        resetPasswordToken: '', // resetPasswordToken set to empty
-        resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
+        resetPasswordToken: '',
+        resetPasswordExpiryTime: ''
       }, {
         where: {
           resetPasswordToken: req.params.token
@@ -268,7 +266,7 @@ exports.default = {
    * still valid as of the time of changing password by the user
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
   isTokenValid: function isTokenValid(req, res) {
     if (!req.params.token) {
@@ -302,13 +300,13 @@ exports.default = {
 
 
   /**
-   * fetchUserByName - method to fetch member by its username to return
+   * getUser - method to fetch member by its username to return
    * its id
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
-  fetchUserByName: function fetchUserByName(req, res) {
+  getUser: function getUser(req, res) {
     if (!req.body.username) {
       return res.status(400).send({
         message: 'Invalid request. Username column is missing'

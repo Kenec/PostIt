@@ -1,5 +1,4 @@
 /* global localStorage */
-// import
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -7,8 +6,7 @@ import jwt from 'jsonwebtoken';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
 import { retrieveMessage } from '../actions/messageActions';
-import { getUserGroups, getUsersInGroupAction,
-  getUsersInGroup, getuserGroupsAction, removeUserFromGroup }
+import { getUserGroups, getUsersInGroup, removeGroupUser }
   from '../actions/groupActions';
 
 /**
@@ -26,7 +24,6 @@ export class GroupMembers extends Component {
     super(props);
     this.state = {
       errors: {},
-      groupMembers: [],
       removalApproval: false,
       message: ''
     };
@@ -48,26 +45,18 @@ export class GroupMembers extends Component {
    * @return {void}
    */
   getUser() {
-    this.props.getUsersInGroup(this.props.groupSelectedId).then(
-      ({ data }) => {
-        this.props.getUsersInGroupAction(data.users);
-        this.setState({ groupMembers: data.users });
-      },
-      ({ response }) => {
-        this.setState({ errors: response.data });
-      }
-    );
+    this.props.getUsersInGroup(this.props.groupSelectedId);
   }
 
   /**
    * Remove user from a Group
    * @method removeUser
-   * @param {number} id 
+   * @param {number} id
    * @param {object} userDetail
-   * @return {void}  
+   * @return {void}
    */
   removeUser(id, userDetail) {
-    this.props.removeUserFromGroup(id, userDetail).then(
+    this.props.removeGroupUser(id, userDetail).then(
       ({ data }) => {
         this.setState({ message: data.message });
         this.getUser();
@@ -149,17 +138,16 @@ export class GroupMembers extends Component {
 
 GroupMembers.propTypes = {
   getUsersInGroup: PropTypes.func.isRequired,
-  getUsersInGroupAction: PropTypes.func.isRequired,
   groupSelectedId: PropTypes.string.isRequired,
   group: PropTypes.object.isRequired,
-  removeUserFromGroup: PropTypes.func.isRequired,
+  removeGroupUser: PropTypes.func.isRequired,
 };
 
 /**
  * Map state to props
  * @function mapStateToProps
  * @param {object} state
- * @return {object} state object 
+ * @return {object} state object
  */
 const mapStateToProps = state => (
   {
@@ -175,11 +163,9 @@ const mapStateToProps = state => (
  */
 const mapDispatchToProps = {
   getUserGroups,
-  getUsersInGroupAction,
-  getuserGroupsAction,
   getUsersInGroup,
   retrieveMessage,
-  removeUserFromGroup
+  removeGroupUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers);

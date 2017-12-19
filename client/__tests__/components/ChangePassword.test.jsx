@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import sinon from 'sinon';
@@ -16,7 +15,7 @@ describe('<ForgotPassword />', () => {
     .resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
   const forgotPasswordRequest = sinon.spy(() => Promise
     .resolve({ data: { message: 'Success' }, response: { data: 'Error' } }));
-  // assign all props to a varibale props
+
   const props = {
     params,
     isValidToken,
@@ -26,6 +25,7 @@ describe('<ForgotPassword />', () => {
 
   ChangePassword.contextTypes = { router: PropTypes.object };
   let wrapper = mount(<ChangePassword {...props} />);
+
   it('should have a chnage password form', () => {
     expect(wrapper.find('b').at(1).text()).toEqual('Change Password');
     expect(wrapper.find('form').at(0).length).toEqual(1);
@@ -35,6 +35,7 @@ describe('<ForgotPassword />', () => {
     expect(wrapper.find('[type="password"]').at(1).length).toEqual(1);
     expect(wrapper.find('button').at(0).text()).toEqual('Change Password');
   });
+
   it('should call onSubmit when change password form is submitted', () => {
     wrapper.setState({ email: 'Kene@email.com',
       errors: '',

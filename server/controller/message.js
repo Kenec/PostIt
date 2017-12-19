@@ -13,7 +13,7 @@ export default {
    * create - create a new message
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
   create(req, res) {
     if (!(req.body.message && req.body.priorityLevel
@@ -26,14 +26,10 @@ export default {
     // call the validateInput input function for validations
     const { errors, isValid } = validateInput(req.body);
     if (!isValid) {
-      const messageError = errors.message;
-      const priorityLevelError = errors.priorityLevel;
-      const sentByError = errors.sentBy;
-      const readByError = errors.readBy;
       res.status(400).send({
-        status: messageError ||
-        priorityLevelError || sentByError ||
-        readByError
+        status: errors.message ||
+        errors.priorityLevel || errors.sentBy ||
+        errors.readBy
       });
     } else {
       return Messages
@@ -56,7 +52,7 @@ export default {
             where: { id: message.groupId },
             attributes: ['id', 'groupName', 'createdby']
           }).then((group) => {
-          // send email and sms when message is delivered successfully
+            // send email and sms when message is delivered successfully
             if (group.length !== 0) {
               if (message.priorityLevel === 'Urgent') {
                 const subject = 'PostIT Urgent Notification';
@@ -88,8 +84,7 @@ export default {
           }));
         })
         .catch(error => res.status(500).send({
-          error,
-          status: 'message cannot be sent'
+          status: error.errors[0].message
         }));
     }
   },
@@ -141,59 +136,17 @@ export default {
    * @return {json}     returns json response
    */
   addNotification(req, res) {
-    if (!(req.params.messageId
-      && req.body.userId
-      && req.body.senderId
-      && req.body.groupId
-    )) {
-      return res.status(400).send({
-        message: 'Invalid request.Some column(s) column are missing'
-      });
+    if (req.notification) {
+      MessageReads.bulkCreate(req.notification)
+        .then(() => {
+          res.status(200).send({
+            message: 'Notification Added'
+          });
+        })
+        .catch((error) => { res.status(500).send(error); });
     }
-    // find a message where message id
-    Messages.find({
-      where: {
-        id: req.params.messageId,
-      }
-    })
-      .then((messageRes) => {
-        // if message is found, add notification
-        if (messageRes.length !== 0) {
-          MessageReads.findAll({
-            where: {
-              messageId: req.params.messageId,
-              userId: req.body.userId,
-            },
-          }).then((result) => {
-            if (result.length === 0) {
-              return MessageReads
-                .create({
-                  messageId: req.params.messageId,
-                  userId: req.body.userId,
-                  read: req.body.readStatus,
-                  senderId: req.body.senderId,
-                  groupId: req.body.groupId,
-                })
-                .then(() => res.status(201).send({
-                  message: 'Notification Added',
-                  success: true
-                }))
-                .catch(error => res.status(400).send({
-                  error,
-                  message: 'Cannot Add Notification',
-                }));
-            }
-            res.status(409).send({
-              message: 'Notification already exist',
-              success: false
-            });
-          })
-            .catch(error => res.status(500).send(error));
-        }
-      })
-      .catch(error => res.status(500).send(error));
   },
-  
+
   /**
    * getNotification - get notification function
    * to retrieve notification for a user

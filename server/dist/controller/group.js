@@ -33,31 +33,43 @@ exports.default = {
         isValid = _validateInput.isValid;
 
     if (!isValid) {
-      var groupError = errors.groupName;
       res.status(400).send({
-        message: groupError
+        message: errors.groupName
       });
     } else {
-      return _models.Groups.create({
-        groupName: req.body.groupName,
-        createdby: req.body.createdby
-      }).then(function (group) {
-        return _models.userGroups.create({
-          groupId: group.id,
-          userId: req.body.createdby
-        }).then(function () {
-          return res.status(201).json({
-            message: group.groupName + ' group created successfully',
-            success: true
+      _models.Groups.findAll({
+        where: { groupName: req.body.groupName },
+        attributes: ['id', 'groupName', 'createdAt']
+      }).then(function (groupExist) {
+        if (groupExist.length > 0) {
+          res.status(409).send({
+            message: 'Group already exists!'
           });
-        }).catch(function (error) {
-          return res.status(400).send(error);
-        });
+        } else {
+          return _models.Groups.create({
+            groupName: req.body.groupName,
+            createdby: req.body.createdby
+          }).then(function (group) {
+            return _models.userGroups.create({
+              groupId: group.id,
+              userId: req.body.createdby
+            }).then(function () {
+              return res.status(201).json({
+                message: group.groupName + ' group created successfully',
+                success: true
+              });
+            }).catch(function (error) {
+              return res.status(500).send(error);
+            });
+          }).catch(function (error) {
+            return res.status(500).send({
+              message: error.errors[0].message,
+              success: false
+            });
+          });
+        }
       }).catch(function (error) {
-        return res.status(409).send({
-          message: error.errors[0].message,
-          success: false
-        });
+        res.status(500).send(error);
       });
     }
   },
@@ -90,12 +102,12 @@ exports.default = {
 
 
   /**
-   * fetchGroupByCreator - function to retrieve froup by its creator
+   * getOwnerGroups - function to retrieve froup by its creator
    * @param  {object} req request object
    * @param  {object} res response object
    * @return {json}     returns json object as a response
    */
-  fetchGroupByCreator: function fetchGroupByCreator(req, res) {
+  getOwnerGroups: function getOwnerGroups(req, res) {
     if (!req.body.userId) {
       return res.status(400).send({
         message: 'Invalid request. userId is missing'

@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -10,12 +9,13 @@ describe('<FilterMessages />', () => {
   const groupMessage = componentMocks.message.messageData[0];
   const groupSelectedId = componentMocks.groupSelectedId;
 
-  // assign all props to a varibale props
   const props = {
     groupMessage,
     groupSelectedId,
   };
+
   const wrapper = mount(<FilterMessages {...props} />);
+
   it('should message filter component', () => {
     expect(wrapper.find('b').at(0).text()).toEqual('Kene');
     expect(wrapper.find('i').at(1).text()).toEqual('Normal');

@@ -78,15 +78,25 @@ export class ChangePassword extends Component {
       const token = this.props.params.token;
       const NewPassword = {
         password: this.state.password,
-        token,
+        repassword: this.state.repassword,
       };
       this.props.updatePassword(token, NewPassword)
         .then(
           ({ data }) => {
-            this.setState({ success: data.message, isLoading: false });
+            this.setState({
+              password: '',
+              repassword: '',
+              success: data.message,
+              isLoading: false
+            });
           },
           ({ response }) => {
-            this.setState({ errors: response.data, isLoading: false });
+            this.setState({
+              password: '',
+              repassword: '',
+              errors: response.data,
+              isLoading: false
+            });
           }
         )
         .catch((error) => {

@@ -1,84 +1,8 @@
 // import
 import axios from 'axios';
 import { COMPOSE_MESSAGE, GET_NOTIFICATION,
-  RETRIEVE_MESSAGE, READ_BY } from './types';
-
-/**
- * Add message to the store
- * @function composeMessageAction
- * @param {object} messageData - message to be added
- * @return {object} - object of type COMPOSE_MESSAGE and messageData
- */
-export const composeMessageAction = messageData => (
-  {
-    type: COMPOSE_MESSAGE,
-    messageData
-  }
-);
-
-/**
- * get notification from the store
- * @function getNotificationAction
- * @param  {object} notificationData - notification
- * @return {object} return object of type GET_NOTIFICATION and notificationData
- */
-export const getNotificationAction = notificationData => (
-  {
-    type: GET_NOTIFICATION,
-    notificationData
-  }
-);
-
-/**
- * Clear retrieved message from the store
- * @function clearRetrievedMessageAction
- * @param {object} messageData - messageData to be cleared
- * @return {object} - object of type COMPOSE_MESSAGE and messageData
- */
-export const clearRetrievedMessageAction = () => (
-  {
-    type: COMPOSE_MESSAGE,
-    messageData: []
-  }
-);
-
-/**
- * Retrieve message from the store
- * @function retrieveMessageAction
- * @param {object} retrieveMessages - message to retrieved board
- * @return {object} - object of type RETRIEVE_MESSAGE
- */
-export const retrieveMessageAction = retrieveMessages => (
-  {
-    type: RETRIEVE_MESSAGE,
-    retrieveMessages
-  }
-);
-
-/**
- * Add message readBy's to the store
- * @function readByAction
- * @param {integer} readBy - users ids of message readers
- * @return {object} object of type READ_BY and readBy
- */
-export const readByAction = readBy => (
-  {
-    type: READ_BY,
-    readBy
-  }
-);
-
-/**
- * Add message to the database
- * @function composeMessage
- * @param {string} groupId - group Id
- * @param {object} messageData - message to be posted
- * @param {object} prevMessage - previous message and User info
- * @return {json} - axios post respose 
- */
-export const composeMessage = (groupId, messageData) => (
-  () => axios.post(`/api/v1/groups/${groupId}/message`, messageData)
-);
+  RETRIEVE_MESSAGE, READ_BY, COMPOSE_MESSAGE_ERROR,
+  COMPOSE_MESSAGE_SUCCESS, RETRIEVE_MESSAGE_ERROR } from './types';
 
 /**
  * Retrieve message from the database
@@ -87,18 +11,18 @@ export const composeMessage = (groupId, messageData) => (
  * @return {json} - axios post response
  */
 export const retrieveMessage = groupId => (
-  () => axios.get(`/api/v1/groups/${groupId}/messages`)
-);
-
-/**
- * Dispatch the clearRetrieveAction
- * @function clearRetrievedMessage
- * @return {object} - returns empty messageData object
- */
-export const clearRetrievedMessage = () => (
-  (dispatch) => {
-    dispatch(clearRetrievedMessageAction());
-  }
+  dispatch => axios.get(`/api/v1/groups/${groupId}/messages`)
+    .then(
+      (message) => {
+        dispatch({ type: RETRIEVE_MESSAGE, retrieveMessages: message.data });
+        dispatch({ type: RETRIEVE_MESSAGE_ERROR, error: '' });
+      },
+      ({ response }) => {
+        dispatch({ type: RETRIEVE_MESSAGE_ERROR,
+          error: response.data.message });
+      }
+    )
+    .catch(() => {})
 );
 
 /**
@@ -115,6 +39,44 @@ export const addNotification = (messageId, notificationObj) => (
 );
 
 /**
+ * Add message to the database
+ * @function composeMessage
+ * @param {string} groupId - group Id
+ * @param {object} messageData - message to be posted
+ * @param  {array} messageReaders array of users in a group
+ * @return {json} - axios post respose
+ */
+export const composeMessage = (groupId, messageData, messageReaders) => (
+  dispatch => axios.post(`/api/v1/groups/${groupId}/message`, messageData)
+    .then(
+      ({ data }) => {
+        const { id, sentBy } = data;
+        dispatch(retrieveMessage(groupId));
+        dispatch(addNotification(id,
+          { messageReaders, senderId: sentBy, groupId }));
+        dispatch({ type: COMPOSE_MESSAGE_ERROR, error: '' });
+        dispatch({ type: COMPOSE_MESSAGE_SUCCESS, success: 'Sent!' });
+      },
+      ({ response }) => {
+        dispatch({ type: COMPOSE_MESSAGE_ERROR, error: response.data });
+        dispatch({ type: COMPOSE_MESSAGE_SUCCESS, success: '' });
+      }
+    )
+    .catch(() => {})
+);
+
+/**
+ * Dispatch the clearRetrieveAction
+ * @function clearRetrievedMessage
+ * @return {object} - returns empty messageData object
+ */
+export const clearRetrievedMessage = () => (
+  (dispatch) => {
+    dispatch({ type: COMPOSE_MESSAGE, messageData: [] });
+  }
+);
+
+/**
  * Get notification from the database
  * @function getNotification
  * @param {userId} userId user id to be used in fetching notification
@@ -126,7 +88,7 @@ export const getNotification = userId => (
     axios.post('/api/v1/user/notifications', userId)
       .then((res) => {
         // dispatch the notification action to the store
-        dispatch(getNotificationAction(res.data));
+        dispatch({ type: GET_NOTIFICATION, notificationData: res.data });
       })
 );
 
@@ -166,6 +128,6 @@ export const getReadBy = messageId => (
     // make a post request to update the notification table
     axios.post(`/api/v1/users/${messageId}/read`)
       .then((res) => {
-        dispatch(readByAction(res.data));
+        dispatch({ type: READ_BY, readBy: res.data });
       })
 );

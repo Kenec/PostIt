@@ -68,8 +68,8 @@ function validateInput(inputData) {
   if (inputData.repassword) {
     if (_validator2.default.isEmpty(inputData.repassword)) {
       errors.confirmPassword = 'Confirm Password';
-    } else if (!_validator2.default.isAlphanumeric(inputData.password)) {
-      errors.password = 'Confirm Password can only contain Alphanumberics';
+    } else if (!_validator2.default.isAlphanumeric(inputData.repassword)) {
+      errors.confirmPassword = 'Confirm Password can only contain Alphanumberics';
     }
     if (!_validator2.default.equals(inputData.password, inputData.repassword)) {
       errors.confirmPassword = 'Password did not match';
@@ -80,6 +80,8 @@ function validateInput(inputData) {
   if (inputData.message) {
     if (_validator2.default.isEmpty(inputData.message)) {
       errors.message = 'Message field is required';
+    } else if (inputData.message.trim().length === 0) {
+      errors.message = 'Message should not contain only spaces';
     }
   }
 
@@ -108,6 +110,8 @@ function validateInput(inputData) {
   if (inputData.groupName) {
     if (_validator2.default.isEmpty(inputData.groupName)) {
       errors.groupName = 'groupName is required';
+    } else if (inputData.groupName.trim().length === 0) {
+      errors.groupName = 'Group name should not contain only spaces';
     }
   }
 

@@ -70,6 +70,14 @@ const mockAction = {
       createdAt: '2017-08-15T11:10:50.743Z'
     }
   },
+  composeMessageError: {
+    type: types.COMPOSE_MESSAGE_ERROR,
+    error: 'Message error!'
+  },
+  composeMessageSuccess: {
+    type: types.COMPOSE_MESSAGE_SUCCESS,
+    success: 'Sent!'
+  },
   retrieveMessage: {
     type: types.RETRIEVE_MESSAGE,
     messageData: {
@@ -80,6 +88,10 @@ const mockAction = {
       sentBy: 1,
       createdAt: '2017-08-15T11:10:50.743Z'
     }
+  },
+  retrieveMessageError: {
+    type: types.RETRIEVE_MESSAGE_ERROR,
+    error: 'Message error!'
   },
   clearRetrievedMessage: {
     type: types.CLEAR_RETRIEVED_MESSAGE,
@@ -98,7 +110,7 @@ const mockAction = {
   },
   updateNotification: {
     type: types.UPDATE_NOTIFICATION,
-    messageData: {
+    notificationData: {
       id: 1,
       message: 'Hello Obi! Welcome',
       priorityLevel: 'Normal',
@@ -107,11 +119,22 @@ const mockAction = {
       createdAt: '2017-08-15T11:10:50.743Z'
     }
   },
+  clearNotification: {
+    type: types.CLEAR_NOTIFICATION,
+    notificationData: ''
+  },
   setCurrentUser: {
     type: types.SET_CURRENT_USER,
     isAuthenticated: true,
     user: { id: 1, username: 'Kene' }
-  }
+  },
+  mockError: {
+    message: 'Error!'
+  },
+  readBy: {
+    type: types.READ_BY,
+    readBy: '1'
+  },
 };
 
 export default mockAction;

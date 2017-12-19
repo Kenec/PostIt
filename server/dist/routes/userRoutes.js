@@ -26,6 +26,6 @@ userRouter.post('/api/v1/users/signin', userController.signin);
 userRouter.post('/api/v1/users/resetpassword', userController.resetPassword);
 userRouter.get('/api/v1/users/resetpassword/:token', userController.isTokenValid);
 userRouter.post('/api/v1/users/resetpassword/:token', userController.updatePassword);
-userRouter.post('/api/v1/users/username', _jwtAuth2.default, userController.fetchUserByName);
+userRouter.post('/api/v1/users/username', _jwtAuth2.default, userController.getUser);
 
 exports.default = userRouter;
