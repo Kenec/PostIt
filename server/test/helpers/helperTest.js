@@ -13,10 +13,12 @@ describe('Helper Class', () => {
         Helpers.getEmailText.should.be.a('function');
       }
     );
+
     it('should return Email string', () => {
       Helpers.getEmailText('http://test:3000', 'token').should.be.a('string');
     });
   });
+
   describe('getEmailHTML', () => {
     it('should return string', () => {
       Helpers.getEmailHtml('message').should.be.a('string');

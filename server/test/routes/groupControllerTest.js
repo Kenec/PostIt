@@ -37,7 +37,7 @@ describe('Groups', () => {
 
   describe('API Routes Test: ', () => {
     describe('POST: /api/v1/groups', () => {
-      it('should create a group when all parameters are supplied',
+      it('should create a group',
         (done) => {
           server
             .post('/api/v1/groups')
@@ -56,7 +56,8 @@ describe('Groups', () => {
               done();
             });
         });
-      it('should not create a group if any field is empty',
+
+      it('should not create a group if group name field is empty',
         (done) => {
           server
             .post('/api/v1/groups')
@@ -73,8 +74,9 @@ describe('Groups', () => {
               done();
             });
         });
+
       it(`should not create a group when any 
-          of the required field is not available`,
+          of the createdby field is not available`,
         (done) => {
           server
             .post('/api/v1/groups')
@@ -92,6 +94,7 @@ describe('Groups', () => {
               done();
             });
         });
+
       it(`should not create a group with a
           group name that already exists`,
         (done) => {
@@ -111,6 +114,7 @@ describe('Groups', () => {
             });
         });
     });
+
     describe('POST: /api/v1/groups/creator', () => {
       it('should fetch a groups by its creator id',
         (done) => {
@@ -131,8 +135,9 @@ describe('Groups', () => {
               done();
             });
         });
-      it(`should not return a group when getting a group by
-        creator and the id passed is not the creator's id`,
+
+      it(`should not fetch a group by creator with
+          invalid creators id`,
         (done) => {
           server
             .post('/api/v1/groups/creator')
@@ -147,6 +152,7 @@ describe('Groups', () => {
               done();
             });
         });
+
       it('should not fetch group by creator when userId is not passed',
         (done) => {
           server
@@ -164,6 +170,7 @@ describe('Groups', () => {
             });
         });
     });
+
     describe('GET: /api/v1/groups/:groupId', () => {
       it('should return groups by its id',
         (done) => {
@@ -182,6 +189,7 @@ describe('Groups', () => {
               done();
             });
         });
+
       it('should return not found when getting a group that does not exist',
         (done) => {
           const groupId = null;

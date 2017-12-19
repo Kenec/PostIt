@@ -16,6 +16,7 @@ describe('Group Action', () => {
   const groupData = samples.groupData;
   const usersData = samples.usersData;
   const errorMessage = mockActions.mockError;
+
   describe('searchAllUsers', () => {
     it('should be a function', () => {
       const username = samples.username;
@@ -23,7 +24,8 @@ describe('Group Action', () => {
       expect((typeof group.searchAllUsers(username, offset)))
         .toEqual('function');
     });
-    it('should dispatch searched users to the store', () => {
+
+    it('should search all user', () => {
       const store = mockStore({});
       const username = samples.username;
       const offset = samples.offset;
@@ -37,38 +39,38 @@ describe('Group Action', () => {
       });
     });
   });
-  describe('getUserInGroup', () => {
-    it(`should dispatch getUserInGroup error when
-        users cannot be fetched`, () => {
-        const store = mockStore({});
-        const groupId = undefined;
-        mock.onGet(`/api/v1/groups/${groupId}/users`)
-          .reply(400, errorMessage.message);
-        return store.dispatch(group.getUsersInGroup(groupId))
-          .then(() => {
-            expect(store.getActions()).toEqual([{
-              type: types.GET_USER_ERROR, error: errorMessage.message
-            }]);
-          });
-      });
 
-    it(`should add users that belong to a group to the
-        store when getUsersInGroup is fired`, () => {
-        const store = mockStore({});
-        const groupId = samples.groupId;
-        mock.onGet(`/api/v1/groups/${groupId}/users`)
-          .reply(200, usersData);
-        return store.dispatch(group.getUsersInGroup(groupId))
-          .then((groupMembers) => {
-            expect(store.getActions()).toEqual([{
-              type: types.GET_USERS_IN_GROUP,
-              usersInGroup: groupMembers
-            }]);
-          });
-      });
+  describe('getUserInGroup', () => {
+    it('should throw an error when groupId is not supplied', () => {
+      const store = mockStore({});
+      const groupId = undefined;
+      mock.onGet(`/api/v1/groups/${groupId}/users`)
+        .reply(400, errorMessage.message);
+      return store.dispatch(group.getUsersInGroup(groupId))
+        .then(() => {
+          expect(store.getActions()).toEqual([{
+            type: types.GET_USER_ERROR, error: errorMessage.message
+          }]);
+        });
+    });
+
+    it('should get all users that belong to a group', () => {
+      const store = mockStore({});
+      const groupId = samples.groupId;
+      mock.onGet(`/api/v1/groups/${groupId}/users`)
+        .reply(200, usersData);
+      return store.dispatch(group.getUsersInGroup(groupId))
+        .then((groupMembers) => {
+          expect(store.getActions()).toEqual([{
+            type: types.GET_USERS_IN_GROUP,
+            usersInGroup: groupMembers
+          }]);
+        });
+    });
   });
+
   describe('addUserToGroups', () => {
-    it('should make an api post request to add user to a group', () => {
+    it('should add user to a group', () => {
       const store = mockStore({});
       const groupId = samples.groupId;
       const newUser = samples.newUser;
@@ -80,8 +82,9 @@ describe('Group Action', () => {
         });
     });
   });
+
   describe('getUserInfo', () => {
-    it('should make an api request to getUserInfo', () => {
+    it('should get users information by username', () => {
       const store = mockStore({});
       const userId = samples.userId;
       mock.onPost('/api/v1/users/username', userId)
@@ -91,51 +94,51 @@ describe('Group Action', () => {
       });
     });
   });
+
   describe('createGroup', () => {
-    it(`should make an api post request to add a user to a group
-        and dipatchan action to update groupMembers in the store`, () => {
-        const store = mockStore({});
-        const newGroup = samples.newGroup;
-        mock.onPost('/api/v1/groups', newGroup)
-          .reply(200, newGroup);
-        return store.dispatch(group.createGroup(newGroup)).then(() => {
+    it('should create new group', () => {
+      const store = mockStore({});
+      const newGroup = samples.newGroup;
+      mock.onPost('/api/v1/groups', newGroup)
+        .reply(200, newGroup);
+      return store.dispatch(group.createGroup(newGroup)).then(() => {
+        expect(store.getActions()).toEqual([{
+          type: types.CREATE_GROUP,
+          groupData
+        }]);
+      });
+    });
+  });
+
+  describe('getUserGroups', () => {
+    it('should get users group', () => {
+      const store = mockStore({});
+      const usersGroup = samples.usersGroup;
+      mock.onPost('/api/v1/user/groups', usersGroup.username)
+        .reply(200, usersGroup);
+      return store
+        .dispatch(group.getUserGroups(usersGroup.username)).then(() => {
           expect(store.getActions()).toEqual([{
-            type: types.CREATE_GROUP,
-            groupData
+            type: types.GET_USER_GROUPS,
+            groups: usersGroup
           }]);
         });
-      });
+    });
   });
-  describe('getUserGroups', () => {
-    it(`make an api post request to get user's group
-       and dispatch an action to update the store`, () => {
-        const store = mockStore({});
-        const usersGroup = samples.usersGroup;
-        mock.onPost('/api/v1/user/groups', usersGroup.username)
-          .reply(200, usersGroup);
-        return store
-          .dispatch(group.getUserGroups(usersGroup.username)).then(() => {
-            expect(store.getActions()).toEqual([{
-              type: types.GET_USER_GROUPS,
-              groups: usersGroup
-            }]);
-          });
-      });
-  });
+
   describe('getAdminGroups', () => {
-    it(`should make an api post request to get all group created by a
-    user and dispatch an action to update the store`, () => {
-        const store = mockStore({});
-        const usersGroup = samples.usersGroup;
-        mock.onPost('/api/v1/groups/creator', usersGroup.username)
-          .reply(200, usersGroup);
-        return store.dispatch(group.getAdminGroups(usersGroup.username))
-          .then(() => {
-            expect(store.getActions()).toEqual([{
-              type: types.GET_ADMIN_GROUPS,
-              groupsBelonged: usersGroup
-            }]);
-          });
-      });
+    it('should get all groups a user created', () => {
+      const store = mockStore({});
+      const usersGroup = samples.usersGroup;
+      mock.onPost('/api/v1/groups/creator', usersGroup.username)
+        .reply(200, usersGroup);
+      return store.dispatch(group.getAdminGroups(usersGroup.username))
+        .then(() => {
+          expect(store.getActions()).toEqual([{
+            type: types.GET_ADMIN_GROUPS,
+            groupsBelonged: usersGroup
+          }]);
+        });
+    });
   });
 });

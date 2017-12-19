@@ -56,6 +56,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should add another user to a group',
         (done) => {
           server
@@ -74,6 +75,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should not add a user to a group if userId is not supplied',
         (done) => {
           server
@@ -91,6 +93,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should not add a user who does not exist to a group',
         (done) => {
           server
@@ -107,6 +110,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should not add a user who already exist in a group',
         (done) => {
           server
@@ -123,7 +127,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
-      it(`should throw internal server error when a user cannot be added
+
+      it(`should throw error when a user cannot be added
           due to server error`,
         (done) => {
           server
@@ -141,12 +146,13 @@ describe('GroupsUser', () => {
             });
         });
     });
-    describe('POST: /api/v1/groups/:groupId/users', () => {
+
+    describe('DELETE: /api/v1/groups/:groupId/users', () => {
       it(`should not remove a user if userId, token and admin parameters
           required are not supplied`,
         (done) => {
           server
-            .post(`/api/v1/groups/${groupId}/users`)
+            .delete(`/api/v1/groups/${groupId}/users`)
             .send({
 
               // assuming userId is missing
@@ -161,16 +167,13 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it(`should not remove a user from a group
           he created`,
         (done) => {
           server
-            .post(`/api/v1/groups/${groupId}/users`)
-            .send({
-              token,
-              admin: group.admin,
-              user: validUser.userId,
-            })
+            .delete(`/api/v1/groups/${groupId}/users?admin=${group.admin}&user=${validUser.userId}`)
+            .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(401);
               res.body.should.be.a('object');
@@ -179,15 +182,12 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should not remove a user who does not exist from a group',
         (done) => {
           server
-            .post(`/api/v1/groups/${groupId}/users`)
-            .send({
-              token,
-              admin: group.admin,
-              user: invalidUser.userId,
-            })
+            .delete(`/api/v1/groups/${groupId}/users?admin=${group.admin}&user=${invalidUser.userId}`)
+            .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(404);
               res.body.should.be.a('object');
@@ -196,15 +196,12 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should remove a user from a group',
         (done) => {
           server
-            .post(`/api/v1/groups/${groupId}/users`)
-            .send({
-              token,
-              admin: group.admin,
-              user: anotherValidUser.userId,
-            })
+            .delete(`/api/v1/groups/${groupId}/users?admin=${group.admin}&user=${anotherValidUser.userId}`)
+            .set({ 'x-access-token': token })
             .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('object');
@@ -214,6 +211,7 @@ describe('GroupsUser', () => {
             });
         });
     });
+
     describe('POST: /api/v1/user/groups', () => {
       it(`should return groups a user belonged to
           by username`,
@@ -234,6 +232,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it(`should not return groups a user belonged to
           by username if username is not supplied`,
         (done) => {
@@ -252,6 +251,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it(`should not return groups a user belonged to
          by username if username is empty`,
         (done) => {
@@ -270,6 +270,7 @@ describe('GroupsUser', () => {
             });
         });
     });
+
     describe('POST: /api/v1/users/:id', () => {
       it('should search a user',
         (done) => {
@@ -288,6 +289,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should not search a user if username field is not available',
         (done) => {
           server
@@ -304,7 +306,8 @@ describe('GroupsUser', () => {
               done();
             });
         });
-      it('should not search a user if username field is not empty',
+
+      it('should not search a user if username field is empty',
         (done) => {
           server
             .post('/api/v1/users/0')
@@ -320,8 +323,8 @@ describe('GroupsUser', () => {
             });
         });
 
-      it(`should throw unauthorized error when trying to 
-          call the groupUser endpoint without token`,
+      it(`should throw an error when unauthenticated user
+          attempts to add another user to a group`,
         (done) => {
           server
             .post('/api/v1/users/0')
@@ -339,6 +342,7 @@ describe('GroupsUser', () => {
             });
         });
     });
+
     describe('GET: /api/v1/groups', () => {
       it('should return all groups',
         (done) => {
@@ -358,6 +362,7 @@ describe('GroupsUser', () => {
             });
         });
     });
+
     describe('GET: /api/v1/groups/:groupId/users', () => {
       it('should fetch members of a group',
         (done) => {
@@ -376,6 +381,7 @@ describe('GroupsUser', () => {
               done();
             });
         });
+
       it('should return not found for a groupId with no Group',
         (done) => {
           server

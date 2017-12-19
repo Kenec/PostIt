@@ -1,0 +1,74 @@
+{
+  "validUser": {
+    "username": "Keneokk",
+    "email": "email@email.com",
+    "password": "12345678abc",
+    "phone": "23456789012"
+  },
+  "inValidUser": {
+    "username": [],
+    "email": 123,
+    "password": [],
+    "phone": "wonderful"
+  },
+  "validMessage": {
+    "message": "Hello World",
+    "priorityLevel": "Normal",
+    "groupId": 1,
+    "sentBy": 1,
+    "ReadBy": "1"
+  },
+  "inValidMessage": {
+    "message": [],
+    "priorityLevel": [],
+    "groupId": [],
+    "sentBy": [],
+    "ReadBy": []
+  },
+  "validUserGroup": {
+    "userId": 1,
+    "groupId": 1
+  },
+  "anotherValidUserGroup": {
+    "userId": 2,
+    "groupId": 1
+  },
+  "inValidUserGroup": {
+    "userId": [],
+    "groupId": []
+  },
+  "validMessageReads": {
+    "messageId": 1,
+    "userId": 1,
+    "senderId": 1,
+    "groupId": 1,
+    "read": 1
+  },
+  "inValidMessageReads": {
+    "messageId": [],
+    "userId": [],
+    "senderId": [],
+    "groupId": [],
+    "read": []
+  },
+  "validGroup": {
+    "groupName": "Group",
+    "createdby": "1"
+  },
+  "anotherValidGroup": {
+    "groupName": "Group2",
+    "createdby": "1"
+  },
+  "inValidGroup": {
+    "groupName": [],
+    "createdby": []
+  },
+  "validArchive":{
+    "messageId": 1,
+    "userId": 1
+  },
+  "inValidArchive":{
+    "messageId": [],
+    "userId": []
+  }
+}

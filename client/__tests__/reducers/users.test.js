@@ -1,23 +1,23 @@
 /* global expect */
-import userLoginReducer from '../../reducers/users';
+import login from '../../reducers/users';
 import mockAction from '../../__mocks__/actions';
 
 const state = {};
 
-describe('User reducers', () => {
-  describe('When SET_CURRENT_USER action type is fired from an action', () => {
-    it('current user should be added to the user store', () => {
+describe('User reducers:', () => {
+  describe('Login', () => {
+    it('should handle SET_CURRENT_USER', () => {
       const action = mockAction.setCurrentUser;
-      expect(userLoginReducer(state, action))
+      expect(login(state, action))
         .toEqual(
           { isAuthenticated: true, user: { id: 1, username: 'Kene' } }
         );
     });
   });
-  describe('When No action type is fired from an action', () => {
-    it('default state of user store returned', () => {
+  describe('DEFAULT', () => {
+    it('should return the initial state', () => {
       const action = {};
-      expect(userLoginReducer(state, action))
+      expect(login(state, action))
         .toEqual({});
     });
   });

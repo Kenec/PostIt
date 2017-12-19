@@ -53,6 +53,7 @@ describe('<GroupBoard />', () => {
   wrapper.setState({ readCheckbox: 'unread' });
   wrapper.setState({ errors: 'Error' });
   wrapper.setState({ message: 'Success' });
+
   it('should display groups and messages board of a group ', () => {
     expect(wrapper.find('b').at(0).text()).toEqual('Group: Random');
     expect(wrapper.find('[type="radio"]').at(0).length).toEqual(1);
@@ -65,6 +66,7 @@ describe('<GroupBoard />', () => {
     expect(wrapper.find('textarea').at(0).length).toEqual(1);
     expect(wrapper.find('button').at(0).length).toEqual(1);
   });
+
   it('should have filter message component', () => {
     expect(wrapper.find('label').at(0).text()).toEqual('Read');
     expect(wrapper.find('label').at(1).text()).toEqual('Unread');
@@ -73,11 +75,13 @@ describe('<GroupBoard />', () => {
     expect(wrapper.find('FilterMessages p').at(1).text())
       .toEqual('Hello World');
   });
+
   it('should send message when the message form is submitted', () => {
     wrapper.setState({ readCheckbox: 'read' });
     wrapper.find('form').at(0).simulate('submit');
     expect(onSubmit.calledOnce).toEqual(false);
   });
+
   it('should return Loading... when groups is not resolved', () => {
     props.group.groups = null;
     wrapper = shallow(<GroupBoard {...props} />);

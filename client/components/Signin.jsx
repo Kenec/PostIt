@@ -19,7 +19,7 @@ export class Signin extends Component {
    * Creates an instance of Signin
    * @constructor
    * @param {any} props
-   * @memberof {Signin} 
+   * @memberof {Signin}
    */
   constructor(props) {
     super(props);

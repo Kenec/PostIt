@@ -4,43 +4,45 @@ import mockAction from '../../__mocks__/actions';
 
 const state = {};
 
-describe('Group reducers', () => {
-  describe('When CREATE_GROUP action type is fired from an action', () => {
-    it('group should be created and pushed to the group store', () => {
+describe('Group reducers:', () => {
+  describe('creatGroup', () => {
+    it('should add created group to the store', () => {
       const action = mockAction.createGroup;
       expect(group(state, action)).toEqual({ groupData: action.groupData });
     });
   });
-  describe('When GET_USER_GROUPS action type is fired from action', () => {
-    it('groups a user belonged to should be added to the store', () => {
+
+  describe('getUsergroup', () => {
+    it('should add groups a user belonged to to the store', () => {
       const action = mockAction.getUserGroup;
       expect(group(state, action)).toEqual({ groups: action.groups });
     });
   });
-  describe(`When GET_ADMIN_GROUPS
-            action type is fired from action`, () => {
-      it('groups a user created should be added to the store', () => {
-        const action = mockAction.getAdminGroup;
-        expect(group(state, action))
-          .toEqual({ groupsBelonged: action.groupsBelonged });
-      });
+
+  describe('getAdminGroup', () => {
+    it('should add a group a user created to the store', () => {
+      const action = mockAction.getAdminGroup;
+      expect(group(state, action))
+        .toEqual({ groupsBelonged: action.groupsBelonged });
     });
-  describe(`When GET_USERS_IN_GROUP
-            action type is fired from action`, () => {
-      it('users in a group should be added to the store', () => {
-        const action = mockAction.getUsersInGroup;
-        expect(group(state, action))
-          .toEqual({ usersInGroup: action.usersInGroup });
-      });
+  });
+
+  describe('getUsersInGroup', () => {
+    it('should add users in a group to the store', () => {
+      const action = mockAction.getUsersInGroup;
+      expect(group(state, action))
+        .toEqual({ usersInGroup: action.usersInGroup });
     });
-  describe(`When SEARCH_ALL_USERS
-            action type is fired from action`, () => {
-      it('all users should be added to the store', () => {
-        const action = mockAction.searchAllUser;
-        expect(group(state, action))
-          .toEqual({ searchedUsers: action.users });
-      });
+  });
+
+  describe('searchAllUsers', () => {
+    it('should add all users to the store', () => {
+      const action = mockAction.searchAllUser;
+      expect(group(state, action))
+        .toEqual({ searchedUsers: action.users });
     });
+  });
+
   describe('When No action is specified', () => {
     it('the state of the group store should be returned', () => {
       const action = {};

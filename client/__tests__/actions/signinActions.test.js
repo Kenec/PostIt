@@ -15,7 +15,7 @@ describe('Signin Action', () => {
   const user = samples.user;
   const token = samples.validToken;
   describe('setCurrentUser', () => {
-    it('should dispatch current user to the store', () => {
+    it('should create an action to set current user', () => {
       expect(signin.setCurrentUser(user)).toEqual({
         type: types.SET_CURRENT_USER,
         user
@@ -24,8 +24,7 @@ describe('Signin Action', () => {
   });
 
   describe('signin', () => {
-    it(`should make an api call to check users login credential and
-        then dispatch current user to the store on success`,
+    it('should grant a user access to the application',
       () => {
         const userDetail = samples.userDetail;
         const store = mockStore({});

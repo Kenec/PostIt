@@ -16,6 +16,7 @@ describe('<DashboardPage />', () => {
   DashboardPage.contextTypes = { router: PropTypes.object };
   const wrapper = shallow(<DashboardPage {...props} />,
     { context: { router: new Router() } });
+
   it('should display GroupList and DashboardPage Component', () => {
     expect(wrapper.find('<NavigationBarMenu />').at(0).length).toEqual(1);
     expect(wrapper.find('<GroupLists />').at(0).length).toEqual(1);

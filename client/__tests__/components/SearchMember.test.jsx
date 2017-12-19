@@ -34,11 +34,13 @@ describe('<SearchMember />', () => {
 
   wrapper.setState({ user: 'Kene' });
   wrapper.setState({ groupId: 1 });
+
   it('should have a search user form', () => {
     expect(wrapper.find('SearchMember').length).toEqual(1);
     expect(wrapper.find('form').length).toEqual(1);
     expect(wrapper.find('input').length).toEqual(1);
   });
+
   it('should display users onChange of the input field', () => {
     wrapper.find('input').simulate('change');
     expect(onChange.calledOnce).toEqual(true);
@@ -47,6 +49,7 @@ describe('<SearchMember />', () => {
     expect(wrapper.find('span').at(0).text()).toEqual('Kene');
     expect(wrapper.find('span').at(2).text()).toEqual('Obi');
   });
+
   it('should have pagination', () => {
     wrapper.find('[type="text"]').simulate('change');
     wrapper.find('.next a').simulate('click');

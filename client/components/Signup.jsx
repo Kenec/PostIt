@@ -20,7 +20,7 @@ export class Signup extends Component {
    * Creates an instance of Signup
    * @constructor
    * @param {any} props
-   * @memberof Signup 
+   * @memberof Signup
    */
   constructor(props) {
     super(props);

@@ -22,9 +22,11 @@ describe('<Dashboard />', () => {
 
   Dashboard.contextTypes = { router: PropTypes.object };
   let wrapper = mount(<Dashboard {...props} />);
+
   it('should display Loading... when notificatonData is not resolved', () => {
     expect(wrapper.find('h4').at(0).text()).toEqual('Loading ...');
   });
+
   it('should display dashboard and notifications', () => {
     props.message.notificationData = {
       messageRes: [{
@@ -34,6 +36,7 @@ describe('<Dashboard />', () => {
         Messages: { message: 'Hello World' } }],
     };
     wrapper = mount(<Dashboard {...props} />);
+
     expect(wrapper.find('b').at(0).text()).toEqual('NOTIFICATIONS');
     expect(wrapper.find('span').at(0).text())
       .toEqual('You have (1) unread messages');
