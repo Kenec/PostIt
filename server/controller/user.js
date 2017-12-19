@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+ import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import crypto from 'crypto';
 import Helpers from '../utils/Helpers';
