@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import postmanImage from '../images/postman.gif';
 import NavigationBar from './NavigationBar';
-import { userSigninRequestAction } from '../actions/signinActions';
+import { signin } from '../actions/signinActions';
 import { deleteFlashMessage } from '../actions/flashMessages';
 import { getUserGroups } from '../actions/groupActions';
 
@@ -19,7 +19,7 @@ export class Signin extends Component {
    * Creates an instance of Signin
    * @constructor
    * @param {any} props
-   * @memberof {Signin} 
+   * @memberof {Signin}
    */
   constructor(props) {
     super(props);
@@ -79,7 +79,7 @@ export class Signin extends Component {
   onSubmit(event) {
     event.preventDefault();
     this.setState({ errors: {}, isLoading: true });
-    this.props.userSigninRequestAction(this.state)
+    this.props.signin(this.state)
       .then(
         () => {
           this.props.getUserGroups({ username: this.state.username });
@@ -210,7 +210,7 @@ export class Signin extends Component {
 }
 
 Signin.propTypes = {
-  userSigninRequestAction: PropTypes.func.isRequired,
+  signin: PropTypes.func.isRequired,
   messages: PropTypes.array.isRequired,
   deleteFlashMessage: PropTypes.func.isRequired,
   getUserGroups: PropTypes.func.isRequired,
@@ -240,7 +240,7 @@ const mapStateToProps = state => (
  * @return {object} dispatch objects
  */
 const mapDispatchToProps = {
-  userSigninRequestAction,
+  signin,
   deleteFlashMessage,
   getUserGroups
 };

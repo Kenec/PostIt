@@ -1,24 +1,22 @@
-// Require the dev-dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import validateInput from '../shared/validations/validateInput';
-// During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+import mockData from '../mockData.json';
+import validateInput from '../../shared/validations/validateInput';
 
-const should = chai.should();
+process.env.NODE_ENV = 'test';
 
 chai.use(chaiHttp);
 
 describe('inputValidation', () => {
-  // Test for Signup Validation to be a function
+  const { validInput, invalidInput } = mockData.inputData;
   const data = {
-    username: 'Kene',
-    phone: '07038550515',
-    email: 'mail@email.com',
-    password: 'kene',
-    repassword: 'kene',
-    readBy: '1',
-    sentBy: '1',
+    email: validInput.email,
+    phone: validInput.phone,
+    sentBy: validInput.sentBy,
+    readBy: validInput.readBy,
+    username: validInput.username,
+    password: validInput.password,
+    repassword: validInput.repassword,
   };
   describe('function', () => {
     it('should accept two params',
@@ -27,37 +25,36 @@ describe('inputValidation', () => {
       }
     );
   });
-  // Test if username validation works
+
   describe('Data input validations', () => {
     it('should return error if password did not match',
       () => {
-        data.repassword = 'KeneM';
+        data.repassword = invalidInput.repassword;
         validateInput(data).should.have.property('errors')
           .eql({ confirmPassword: 'Password did not match' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
+
     it('should return error if invalid Email',
       () => {
-        data.email = 'kene';
+        data.email = invalidInput.email;
         validateInput(data).should.have.property('errors')
           .eql({ email: 'Email is invalid',
             confirmPassword: 'Password did not match' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
+
     it('should return error if invalid Phone number',
       () => {
-        data.phone = 'kene';
+        data.phone = invalidInput.phone;
         validateInput(data).should.have.property('errors')
           .eql({ email: 'Email is invalid',
             confirmPassword: 'Password did not match',
             phone: 'Phone number is invalid' });
         validateInput(data).should.have.property('isValid')
           .eql(false);
-      }
-    );
+      });
   });
 });

@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 /**
  * export default - component for Authenticate to disallow unauthenticated
  * user from accessing certain routes
- * @function 
+ * @function
  * @param  {DOM} ComposedComponent the component to be protected
  * @return {DOM} returns the protected component and its props
  */
@@ -20,8 +20,8 @@ export default function (ComposedComponent) {
     /**
      * Creates an instance of Authenticate
      * @constructor
-     * @param {any} props 
-     * @memberof Authenticate 
+     * @param {any} props
+     * @memberof Authenticate
      */
     constructor(props) {
       super(props);
@@ -75,7 +75,7 @@ export default function (ComposedComponent) {
     /**
      * Check is token has expired
      * @method isTokenExpired
-     * @return {void} 
+     * @return {void}
      */
     isTokenExpired() {
       const token = jwt.decode(localStorage.getItem('jwtToken'));

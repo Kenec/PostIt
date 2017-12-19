@@ -1,10 +1,13 @@
-import jwt from 'jsonwebtoken';
+ import jwt from 'jsonwebtoken';
 import md5 from 'md5';
 import crypto from 'crypto';
+import Helpers from '../utils/Helpers';
+
 import { Users } from '../models';
-import config from '../config';
 import sendMail from '../utils/sendMail';
 import validateInput from '../shared/validations/validateInput';
+
+require('dotenv').config();
 
 export default {
   /**
@@ -24,26 +27,23 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const usernameError = errors.username;
-      const emailError = errors.email;
-      const phoneError = errors.phone;
-      const passwordError = errors.password;
-      const confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: usernameError ||
-        emailError || phoneError ||
-        passwordError || confirmPasswordError
+        message: errors.username ||
+        errors.email || errors.phone ||
+        errors.password || errors.confirmPassword
       });
     } else {
       Users
         .findAll({
           where: {
-            username: [req.body.username],
-            password: md5(req.body.password)
+            $or: [
+              { email: req.body.email },
+              { username: req.body.username },
+            ]
           }
         })
-        .then((user) => {
-          if (user[0]) {
+        .then((foundUser) => {
+          if (foundUser[0]) {
             return res.status(409).send({
               message: 'User already exist'
             });
@@ -55,15 +55,15 @@ export default {
               email: req.body.email,
               password: md5(req.body.password)
             })
-            .then((aUser) => {
+            .then((user) => {
               const token = jwt.sign({
-                id: aUser.id,
-                username: aUser.username
-              }, config.jwtSecret, { expiresIn: '48h' }); // expires in 48h
+                id: user.id,
+                username: user.username
+              }, process.env.JWT_SECRET, { expiresIn: '48h' });
               res.status(201).json({
                 token,
                 message: 'User Created successfully',
-                username: `${aUser.username}`,
+                username: `${user.username}`,
               });
             })
             .catch(() => {
@@ -99,20 +99,20 @@ export default {
       Users
         .findAll({
           where: {
-            username: [req.body.username],
+            username: req.body.username,
             password: md5(req.body.password)
           }
         })
         .then((user) => {
           if (user[0]) {
-          // create an authToken for the user
+            // create an authToken for the user
             const token = jwt.sign({
               id: user[0].id,
               username: user[0].username
-            }, config.jwtSecret, { expiresIn: '48h' }); // token expires in 48h
+            }, process.env.JWT_SECRET, { expiresIn: '48h' });
 
             res
-              .status(202)
+              .status(200)
               .send({
                 token,
                 message: 'Successfully logged in',
@@ -121,12 +121,13 @@ export default {
             return;
           }
 
-          res.status(404)
+          res.status(401)
             .send({
-              message: 'Username not found, please register'
+              message: 'Invalid username or password'
             });
-        }).catch(() => {
+        }).catch((error) => {
           res.status(500).json({
+            error: error.errors.message,
             message: 'An error has occurred trying to search for user',
           });
         });
@@ -148,16 +149,15 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const emailError = errors.email;
       res.status(400).send({
-        message: emailError
+        message: errors.email
       });
     } else {
       Users.findAll({ where: { email: req.body.email } })
         .then((user) => {
           if (user[0]) {
             const token = crypto.randomBytes(20).toString('hex');
-            const tokenExpireDate = Date.now() + 3600000; // expire in 1hr
+            const tokenExpireDate = Date.now() + 3600000;
             Users.update({
               resetPasswordToken: token,
               resetPasswordExpiryTime: tokenExpireDate,
@@ -169,21 +169,17 @@ export default {
               .then(() => {
                 const emailReceiver = [{ email: req.body.email }];
                 const emailSubject = 'PostIT Password Reset';
-                const emailText = `<hr/><p>You are receiving this because you
-                (or someone else) have requested the reset of the password
-                for your account.</p>
-                <p> Please click on the following link, or paste this into
-                your browser to complete the process:</p><p>
-                <b>${`http://${req.headers.host}/recoverpassword/${token}`}</b>
-                </p><p>If you did not request this, please ignore this email
-                and your password will remain unchanged.</p><hr/>`;
-                const send = sendMail(emailReceiver, emailText, emailSubject);
-                if (send) {
-                  res.status(200).send(
-                    { message: 'Password reset link has been sent to your email' });
+                const emailText = Helpers.getEmailText(req.headers.host, token);
+                const sendStatus =
+                    sendMail(emailReceiver, emailText, emailSubject);
+                if (sendStatus) {
+                  res.status(200).send({
+                    message: 'Password reset link has been sent to your email'
+                  });
                 } else {
-                  res.status(500).send(
-                    { message: 'Unable to send Link to email' });
+                  res.status(500).send({
+                    message: 'Unable to send Link to email'
+                  });
                 }
               })
               .catch(() => res.status(500).send({
@@ -210,7 +206,7 @@ export default {
    * @return {json}     returns json response
    */
   updatePassword(req, res) {
-    if (!(req.body.password && req.body.confirmPassword)) {
+    if (!(req.body.password && req.body.repassword)) {
       return res.status(400).send({
         message: 'Invalid request. Some column(s) are missing'
       });
@@ -218,16 +214,14 @@ export default {
     const { errors, isValid } = validateInput(req.body);
 
     if (!isValid) {
-      const emailError = errors.email;
-      const confirmPasswordError = errors.confirmPassword;
       res.status(400).send({
-        message: emailError || confirmPasswordError
+        message: errors.email || errors.confirmPassword
       });
     } else {
       return Users.update({
         password: md5(req.body.password),
-        resetPasswordToken: '', // resetPasswordToken set to empty
-        resetPasswordExpiryTime: '' // resetPasswordExpiryTime set to empty
+        resetPasswordToken: '',
+        resetPasswordExpiryTime: ''
       }, {
         where: {
           resetPasswordToken: req.params.token
@@ -252,7 +246,7 @@ export default {
    * still valid as of the time of changing password by the user
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
   isTokenValid(req, res) {
     if (!(req.params.token)) {
@@ -288,13 +282,13 @@ export default {
   },
 
   /**
-   * fetchUserByName - method to fetch member by its username to return
+   * getUser - method to fetch member by its username to return
    * its id
    * @param  {object} req incoming request object
    * @param  {object} res server respose object
-   * @return {json}     returns json response
+   * @return {json} returns json response
    */
-  fetchUserByName(req, res) {
+  getUser(req, res) {
     if (!(req.body.username)) {
       return res.status(400).send({
         message: 'Invalid request. Username column is missing'

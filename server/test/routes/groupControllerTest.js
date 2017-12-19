@@ -1,11 +1,10 @@
-// Require the dev-dependencies
 import supertest from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Groups, userGroups } from '../models';
-import app from '../app';
+import mockData from '../mockData.json';
+import { Groups, userGroups } from '../../models';
+import app from '../../app';
 
-// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
 const server = supertest.agent(app);
@@ -13,14 +12,16 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
+const { group } = mockData.Groups;
+const { validSigninAccount } = mockData.Users;
+
+
 describe('Groups', () => {
   let token = '';
-  before((done) => { // Before each test we empty the database
+  before((done) => {
     server
       .post('/api/v1/users/signin')
-      .send({
-        username: 'kene',
-        password: 'kene' })
+      .send(validSigninAccount)
       .end((err, res) => {
         token = res.body.token;
       });
@@ -34,17 +35,16 @@ describe('Groups', () => {
       });
   });
 
-  describe('Controller Tests: ', () => {
-    // Test for succesful group creation
-    describe('Group', () => {
-      it('should create a group when all parameters are supplied',
+  describe('API Routes Test: ', () => {
+    describe('POST: /api/v1/groups', () => {
+      it('should create a group',
         (done) => {
           server
             .post('/api/v1/groups')
             .send({
               token,
-              groupName: 'Group',
-              createdby: 1,
+              groupName: group.groupName,
+              createdby: group.createdby,
             })
             .end((err, res) => {
               res.should.have.status(201);
@@ -56,14 +56,15 @@ describe('Groups', () => {
               done();
             });
         });
-      it('should not create a group if any field is empty',
+
+      it('should not create a group if group name field is empty',
         (done) => {
           server
             .post('/api/v1/groups')
             .send({
               token,
-              groupName: '',
-              createdby: 1,
+              groupName: group.emptyGroupName,
+              createdby: group.createdby,
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -73,15 +74,17 @@ describe('Groups', () => {
               done();
             });
         });
+
       it(`should not create a group when any 
-      of the required field is not available`,
+          of the createdby field is not available`,
         (done) => {
           server
             .post('/api/v1/groups')
             .send({
+
+              // assuming createdby is missing
               token,
-              groupName: 'Group',
-              // createdby: 1, // missing parameter
+              groupName: group.groupName
             })
             .end((err, res) => {
               res.should.have.status(400);
@@ -91,7 +94,7 @@ describe('Groups', () => {
               done();
             });
         });
-      // Test for uniquness of a group
+
       it(`should not create a group with a
           group name that already exists`,
         (done) => {
@@ -99,26 +102,27 @@ describe('Groups', () => {
             .post('/api/v1/groups')
             .send({
               token,
-              groupName: 'Group',
-              createdby: 1,
+              groupName: group.groupName,
+              createdby: group.createdby,
             })
             .end((err, res) => {
               res.should.have.status(409);
               res.body.should.be.a('object');
               res.body.should.have.property('message')
-                .eql('groupName must be unique');
-              res.body.should.have.property('success')
-                .eql(false);
+                .eql('Group already exists!');
               done();
             });
         });
+    });
+
+    describe('POST: /api/v1/groups/creator', () => {
       it('should fetch a groups by its creator id',
         (done) => {
           server
             .post('/api/v1/groups/creator')
             .send({
               token,
-              userId: '1'
+              userId: group.user
             })
             .end((err, res) => {
               res.should.have.status(200);
@@ -131,10 +135,46 @@ describe('Groups', () => {
               done();
             });
         });
-      // Test for retrieving group by its id
+
+      it(`should not fetch a group by creator with
+          invalid creators id`,
+        (done) => {
+          server
+            .post('/api/v1/groups/creator')
+            .send({
+              token,
+              userId: group.invalidUserId
+            })
+            .end((err, res) => {
+              res.should.have.status(500);
+              res.body.should.have.property('message')
+                .eql('Error retrieving Groups');
+              done();
+            });
+        });
+
+      it('should not fetch group by creator when userId is not passed',
+        (done) => {
+          server
+            .post('/api/v1/groups/creator')
+            .send({
+
+            // userId not passed
+              token,
+            })
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message')
+                .eql('Invalid request. userId is missing');
+              done();
+            });
+        });
+    });
+
+    describe('GET: /api/v1/groups/:groupId', () => {
       it('should return groups by its id',
         (done) => {
-          const groupId = '1';
+          const groupId = group.groupId;
           server
             .get(`/api/v1/groups/${groupId}`)
             .set({ 'x-access-token': token })
@@ -149,7 +189,8 @@ describe('Groups', () => {
               done();
             });
         });
-      it('should return 404 for group not found',
+
+      it('should return not found when getting a group that does not exist',
         (done) => {
           const groupId = null;
           server
@@ -159,37 +200,6 @@ describe('Groups', () => {
               res.should.have.status(404);
               res.body.should.have.property('message')
                 .eql('Group selected not found');
-              done();
-            });
-        });
-      it(`should not return a group when a userId passed is
-        not the creator's id`,
-        (done) => {
-          server
-            .post('/api/v1/groups/creator')
-            .send({
-              token,
-              userId: 3
-            })
-            .end((err, res) => {
-              res.should.have.status(500);
-              res.body.should.have.property('message')
-                .eql('Error retrieving Groups');
-              done();
-            });
-        });
-      it('should not fetch group by creator when userId is not passed',
-        (done) => {
-          server
-            .post('/api/v1/groups/creator')
-            .send({
-              token,
-              // userId: 1 // userId not passed
-            })
-            .end((err, res) => {
-              res.should.have.status(400);
-              res.body.should.have.property('message')
-                .eql('Invalid request. userId is missing');
               done();
             });
         });

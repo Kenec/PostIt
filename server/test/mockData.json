@@ -1,0 +1,145 @@
+{
+  "Users": {
+    "validUser": {
+      "userId": "1",
+      "username": "kene",
+      "email": "kene@gmail.com",
+      "phone": "07038550515",
+      "password": "kene"
+    },
+    "anotherValidUser": {
+      "userId": "2",
+      "username": "Mike",
+      "email": "mike@gmail.com",
+      "phone": "07038550515",
+      "password": "kene"
+    },
+    "invalidUser": {
+      "userId": "100",
+      "username": "Love",
+      "email": "love@gmail.com",
+      "phone": "qed",
+      "password": "kene"
+    },
+    "invalidEmail": {
+      "username": "Miene",
+      "email": "email",
+      "phone": "07038550515",
+      "password": "kene"
+    },
+    "missingUsername": {
+      "email": "kene@gmail.com",
+      "phone": "07038550515",
+      "password": "kene"
+    },
+    "emptyUsername": {
+      "username": "",
+      "email": "kene@gmail.com",
+      "phone": "07038550515",
+      "password": "kene"
+    },
+    "validSigninAccount": {
+      "username": "kene",
+      "password": "kene"
+    },
+    "missingSigninUsername": {
+      "password": "kene"
+    },
+    "emptySigninUsername": {
+      "username": "",
+      "password": "kene"
+    },
+    "invalidSigninAccount": {
+      "username": "paul",
+      "password": "kene"
+    },
+    "validToken": "thisisagibrishtoken",
+    "inValidToken": "thisisaninvalidtoken",
+    "invalidPassword": {
+      "password": "kene",
+      "repassword": "kene",
+      "email": "kene"
+    },
+    "validPassword": {
+      "password": "kene",
+      "repassword": "kene",
+      "email": "kene@gmail.com" 
+    },
+    "invalidResetPassword": {
+      "password": "kene",
+      "repassword": "kene",
+      "email": ""
+    }
+  },
+  "Messages": {
+    "validMessage": {
+      "groupId": 1,
+      "message": "This is a sample message",
+      "priorityLevel": "Normal",
+      "sentBy": 1,
+      "readBy": "1"
+    },
+    "invalidMessage": {
+      "groupId": null,
+      "message": "",
+      "priorityLevel": "",
+      "sentBy": null,
+      "readBy": ""
+    },
+    "notification": {
+      "messageId": 1,
+      "groupId": 1,
+      "userId": 1,
+      "readStatus": 0,
+      "senderId": 1
+    },
+    "updateNotification": {
+      "messageId": 1,
+      "groupId": 1,
+      "userId": 1,
+      "readStatus": 1,
+      "senderId": 1
+    },
+    "invalidNotification": {
+      "messageId": 10,
+      "groupId": 1,
+      "userId": 3,
+      "readStatus": 0,
+      "senderId": 1
+    },
+    "messageReaders": [
+      { "userId": 1, "readStatus": 0 }
+    ]
+  },
+  "inputData": {
+    "validInput": {
+      "username": "Kene",
+      "phone": "07038550515",
+      "email": "mail@email.com",
+      "password": "kene",
+      "repassword": "kene",
+      "readBy": "1",
+      "sentBy": "1"
+    },
+    "invalidInput": {
+      "username": "Kene",
+      "phone": "kene",
+      "email": "kene",
+      "password": "kene",
+      "repassword": "keneM",
+      "readBy": "1",
+      "sentBy": "1"
+    }
+  },
+  "Groups": {
+    "group": {
+      "groupId": 1,
+      "admin": "1",
+      "user": "1",
+      "invalidUserId": 3,
+      "groupName": "Group",
+      "emptyGroupName": "",
+      "createdby": 1
+    }
+  }
+}

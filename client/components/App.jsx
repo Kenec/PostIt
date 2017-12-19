@@ -5,10 +5,10 @@ import Footer from './Footer';
 import '../scss/main.scss';
 
 /**
- * Parent Component 
- * @function App 
+ * Parent Component
+ * @function App
  * @param {any} props
- * @return {DOM} DOM element 
+ * @return {DOM} DOM element
  */
 const App = ({ children }) => (
   <div className="content">

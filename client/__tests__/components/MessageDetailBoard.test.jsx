@@ -1,4 +1,3 @@
-// import
 /* global expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -18,19 +17,18 @@ describe('<MessageDetailBoard />', () => {
   const groupSelectedId = componentMocks.groupSelectedId;
   const retrieveMessage = sinon.spy(() =>
     Promise.resolve({ message: { data: 'Hello World' } }));
-  const clearRetrievedMessageAction = sinon.spy();
+  const clearRetrievedMessage = sinon.spy();
   const updateNotification = sinon.spy();
   const updateReadBy = sinon.spy();
   const retrieveMessageAction = sinon.spy();
   const getReadBy = sinon.spy();
 
-  // assign all props to a varibale props
   const props = {
     group,
     groupName,
     auth,
     retrieveMessage,
-    clearRetrievedMessageAction,
+    clearRetrievedMessage,
     groupSelectedId,
     updateNotification,
     updateReadBy,
@@ -39,10 +37,12 @@ describe('<MessageDetailBoard />', () => {
     message,
     messageId
   };
+
   MessageDetailBoard.contextTypes = { router: PropTypes.func };
   const wrapper = mount(<MessageDetailBoard {...props} />);
   wrapper.setState({ sentBy: '1' });
   wrapper.setState({ priorityLevel: 'Normal' });
+
   it('should have the message details and readers', () => {
     expect(wrapper.find('Link').at(0).text()).toEqual(' Random');
     expect(wrapper.find('span').at(1).text()).toEqual('Kene');

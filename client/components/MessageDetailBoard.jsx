@@ -1,5 +1,4 @@
 /* global localStorage */
-// import
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -8,8 +7,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { getUserGroups, getAdminGroups, getUsersInGroup }
   from '../actions/groupActions';
-import { retrieveMessage, composeMessage, retrieveMessageAction,
-  clearRetrievedMessageAction, addNotification, updateNotification,
+import { retrieveMessage, composeMessage,
+  clearRetrievedMessage, addNotification, updateNotification,
   getNotification, getReadBy, updateReadBy }
   from '../actions/messageActions';
 
@@ -50,7 +49,7 @@ export class MessageDetailBoard extends Component {
   componentWillMount() {
     if (!isNaN(parseInt(this.props.messageId, 10))) {
       this.props.getReadBy(parseInt(this.props.messageId, 10));
-      this.props.clearRetrievedMessageAction();
+      this.props.clearRetrievedMessage();
       this.setState({
         sentBy: jwt.decode(localStorage.jwtToken).id,
         priorityLevel: 'Normal',
@@ -64,28 +63,14 @@ export class MessageDetailBoard extends Component {
    * @return {void} void
    */
   componentDidMount() {
-    this.props.retrieveMessage(this.props.groupSelectedId).then(
-      (message) => {
-        this.setState({ retrievedMessages: [] });
-        this.props.retrieveMessageAction(message.data);
-        const { updatedMessageData } = this.props.message;
-        this.setState({
-          retrievedMessages: updatedMessageData,
-        });
-      },
-      ({ response }) => {
-        this.setState({
-          retrieveMessageError: response.data.message,
-        });
-      }
-    );
+    this.props.retrieveMessage(this.props.groupSelectedId);
   }
 
   /**
    * Handle onChange event
    * @method onChange
    * @param {object} event
-   * @return {void} 
+   * @return {void}
    */
   onChange(event) {
     this.setState({
@@ -96,7 +81,7 @@ export class MessageDetailBoard extends Component {
   /**
    * Find readBy's
    * @method readBy
-   * @param {array} existingReaders  
+   * @param {array} existingReaders
    * @return {boolean} foundUser
    */
   readBy(existingReaders) {
@@ -139,8 +124,8 @@ export class MessageDetailBoard extends Component {
     });
 
     // retrieve full message by id
-    let singleReturnedMessage = '';
-    singleReturnedMessage = messageData.map((groupMessage) => {
+    let message = '';
+    message = messageData.map((groupMessage) => {
       if (groupMessage.id === parseInt(this.props.messageId, 10)) {
         this.props.updateNotification(groupMessage.id,
           { userId: this.state.sentBy, readStatus: 1 });
@@ -181,6 +166,7 @@ export class MessageDetailBoard extends Component {
           </div>
         );
       }
+      return message;
     });
 
     if (!groups.groups) {
@@ -201,7 +187,7 @@ export class MessageDetailBoard extends Component {
         <div className="row">
           <div className="well well-sm message_board no_spacing">
             <div className="">
-              {singleReturnedMessage}
+              {message}
             </div>
           </div>
         </div>
@@ -214,11 +200,10 @@ MessageDetailBoard.propTypes = {
   group: PropTypes.object.isRequired,
   groupName: PropTypes.string.isRequired,
   retrieveMessage: PropTypes.func.isRequired,
-  clearRetrievedMessageAction: PropTypes.func.isRequired,
+  clearRetrievedMessage: PropTypes.func.isRequired,
   groupSelectedId: PropTypes.string.isRequired,
   updateNotification: PropTypes.func.isRequired,
   updateReadBy: PropTypes.func.isRequired,
-  retrieveMessageAction: PropTypes.func.isRequired,
   getReadBy: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   messageId: PropTypes.string.isRequired,
@@ -244,9 +229,8 @@ const mapStateToProps = state => (
 const mapDispatchToProps = {
   addNotification,
   getUserGroups,
-  clearRetrievedMessageAction,
+  clearRetrievedMessage,
   getAdminGroups,
-  retrieveMessageAction,
   composeMessage,
   getUsersInGroup,
   retrieveMessage,
