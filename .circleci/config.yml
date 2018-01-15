@@ -1,18 +1,19 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/tmp
     docker:
       - image: gcr.io/cicdtest-192020/kene
-      auth:
-        #Put the contents of keyfile.json into an environment variable for the build called GCR_CREDS, which is then passed in.
-        username: _json_key
-        password: $GOOGLE_AUTH 
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm run test-prod
-      - run:
-        name: Dump Google Cloud Credentials to file
-        command: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
+        auth:
+          #Put the contents of keyfile.json into an environment variable for the build called GCR_CREDS, which is then passed in.
+          username: _json_key
+          password: $GOOGLE_AUTH 
+      - steps:
+        - checkout
+        - run: npm install
+        - run: npm run test-prod
+        - run:
+          name: Dump Google Cloud Credentials to file
+          command: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
 
 
