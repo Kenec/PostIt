@@ -27,8 +27,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Install npm
+          command: npm install
+      - run:
           name: Run test
-          command: npm run test
+          command: npm run test-prod
       # - deploy:
       #     name: Publish to Docker Hub
       #     command: |
