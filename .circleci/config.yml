@@ -22,12 +22,12 @@ jobs:
   build:
     working_directory: /tmp/build
     docker:
-      - image: gcr.io/cicdtest-192020/kene
+      - image: circleci/node:7.4
     steps:
       - checkout
       - setup_remote_docker
       - run:
-          name: npm run test-prod
+          name: Run test
           command: npm run test-prod
       # - deploy:
       #     name: Publish to Docker Hub
@@ -44,7 +44,7 @@ jobs:
   deploy_to_gce:
     working_directory: /
     docker:
-      - image: google/cloud-sdk
+      - image: ggcr.io/cicdtest-192020/kene
     steps:
       - run:
           name: Deploy to GCE
