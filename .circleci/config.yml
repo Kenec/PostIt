@@ -22,6 +22,7 @@ jobs:
         username: _json_key
         password: $GOOGLE_AUTH  
     steps:
+      - checkout
       - run:
           name: Deploy to GCE
           command: |
