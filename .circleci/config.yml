@@ -14,7 +14,7 @@ jobs:
           command: npm run test-prod
   
   deploy:
-    working_directory: /
+    working_directory: /tmp/build
     docker:
       - image: google/cloud-sdk
         auth:
