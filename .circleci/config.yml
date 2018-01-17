@@ -13,7 +13,7 @@ jobs:
           name: Run test
           command: npm run test-prod
   
-  deploy_to_gce:
+  deploy:
     working_directory: /
     docker:
       - image: google/cloud-sdk
@@ -33,7 +33,9 @@ jobs:
             kubectl rolling-update node-app --image=gcr.io/cicdtest-192020/node-app:latest --image-pull-policy Always
 workflows:
   version: 2
-  build_and_test_and_deploy:
+  build-and-deploy:
     jobs:
       - build
-      - deploy_to_gce
+      - deploy
+          requires:
+            - build
