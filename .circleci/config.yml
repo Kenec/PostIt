@@ -30,7 +30,7 @@ jobs:
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
-            kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:latest --image-pull-policy Always
+            kubectl rolling-update postit-deployment-3169010646-31tpl --image=gcr.io/cicdtest-192020/node-app:v2 --image-pull-policy Always
 
 workflows:
   version: 2
