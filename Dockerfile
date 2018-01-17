@@ -1,21 +1,25 @@
-FROM node:carbon
+# create an image from Node 6.11.2
+FROM node:6.11.2
 
-# Create app directory
+MAINTAINER Nnamani Kenechukwu <nnamani.kenechukwu@gmail.com>
+
+# Create new directory to run our app
+RUN mkdir -p /usr/scr/app
+
+# set the new directory as our working directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+# copy all the content into the working directory
+COPY . /usr/src/app
 
+# install node packages
 RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
 
-# RUN NODE_ENV=production npm run build
+# build the app
+RUN NODE_ENV=production npm run build
 
-# Bundle app source
-COPY . .
-
+# Our app runs on port 3000. Expose it!
 EXPOSE 3000
-CMD [ "npm", "start" ]
+
+# Run the appplication
+CMD export $(cat .env); NODE_ENV=production npm run start
