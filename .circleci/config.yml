@@ -13,7 +13,6 @@ jobs:
           name: Run test
           command: npm run test-prod
   deploy:
-    working_directory: /
     docker:
       - image: google/cloud-sdk
         auth:
