@@ -36,7 +36,7 @@ jobs:
             gcloud --quiet config set container/cluster ${GOOGLE_CLUSTER_NAME}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
-            service docker start
+            # service docker start
             docker build -t gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1 .
             gcloud docker -- push gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
             kubectl set image postit-deployment node-app=gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
