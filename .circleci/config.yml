@@ -14,12 +14,25 @@ jobs:
           command: npm run test-prod
   deploy:
     working_directory: /tmp/build
+    machine:
+      environment:
+        PROJECT_ID: ${GOOGLE_PROJECT_ID}
+        CLUSTER_NAME: ${GOOGLE_CLUSTER_NAME}
+        COMPUTE_ZONE: ${GOOGLE_COMPUTE_ZONE}
+        #As specified in Deployment.yml
+        DEPLOYMENT_NAME: postit-deployment
+        CONTAINER_NAME: node-app
     docker:
       - image: google/cloud-sdk
         auth:
         #Put the contents of keyfile.json into an environment variable for the build called GCR_CREDS, which is then passed in.
         username: _json_key
-        password: $GOOGLE_AUTH  
+        password: $GOOGLE_AUTH
+    #Ensure that gcloud and kubectl are updated.
+    dependencies:
+      pre:
+        - gcloud --quiet components update --version 120.0.0
+        - gcloud --quiet components update --version 120.0.0 kubectl
     steps:
       - checkout
       - run:
@@ -28,9 +41,14 @@ jobs:
             echo ${GOOGLE_AUTH} | base64 --decode --ignore-garbage > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set container/cluster ${GOOGLE_CLUSTER_NAME}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
-            kubectl rolling-update postit-deployment-3169010646-31tpl --image=gcr.io/cicdtest-192020/node-app:v2 --image-pull-policy Always
+            service docker start
+            docker build -t gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1 .
+            gcloud docker -- push gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
+            kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
+            # kubectl rolling-update postit-deployment-3169010646-31tpl --image=gcr.io/cicdtest-192020/node-app:v2 --image-pull-policy Always
 
 workflows:
   version: 2

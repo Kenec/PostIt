@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postiit-deployment
+  labels:
+    #Project ID
+    app: cicdtest-192020
+spec:
+  #Run two instances of our application
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cicdtest-192020
+    spec:
+      #Container details
+      containers:
+        - name: node-app
+          image: gcr.io/cicdtest-192020/node-app:0.0.1
+          imagePullPolicy: Always
+          #Ports to expose
+          ports:
+          - containerPort: 3000
