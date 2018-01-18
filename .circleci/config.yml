@@ -14,14 +14,6 @@ jobs:
           command: npm run test-prod
   deploy:
     working_directory: /tmp/build
-    machine:
-      environment:
-        PROJECT_ID: ${GOOGLE_PROJECT_ID}
-        CLUSTER_NAME: ${GOOGLE_CLUSTER_NAME}
-        COMPUTE_ZONE: ${GOOGLE_COMPUTE_ZONE}
-        #As specified in Deployment.yml
-        DEPLOYMENT_NAME: postit-deployment
-        CONTAINER_NAME: node-app
     docker:
       - image: google/cloud-sdk
         auth:
@@ -47,7 +39,7 @@ jobs:
             service docker start
             docker build -t gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1 .
             gcloud docker -- push gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
-            kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
+            kubectl set image postit-deployment node-app=gcr.io/${GOOGLE_PROJECT_ID}/node-app:v1
             # kubectl rolling-update postit-deployment-3169010646-31tpl --image=gcr.io/cicdtest-192020/node-app:v2 --image-pull-policy Always
 
 workflows:
