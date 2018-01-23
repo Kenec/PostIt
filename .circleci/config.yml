@@ -39,7 +39,9 @@ jobs:
             mv /tmp/docker/* /usr/bin
 
       # build Docker image
-      - run: |
+      - run: 
+          name: Build Docker Image
+          command: |
           TAG=0.1.$CIRCLE_BUILD_NUM
           docker build -t gcr.io/cicdtest-192020/node-app:$TAG . 
 
@@ -54,7 +56,7 @@ jobs:
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
             gcloud docker -- push gcr.io/cicdtest-192020/node-app:$TAG
             kubectl create -f replicationController.json
-            kubectl rolling-update postit-deployment --image=gcr.io/${GOOGLE_PROJECT_ID}/tmp/build/node-app:$TAG --image-pull-policy Always
+            kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:$TAG --image-pull-policy Always
 
 workflows:
   version: 2
