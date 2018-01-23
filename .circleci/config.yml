@@ -27,8 +27,24 @@ jobs:
         - gcloud --quiet components update --version 120.0.0 kubectl
     steps:
       - checkout
+      - setup_remote_docker
+          docker_layer_caching: true
       - run:
-          name: Deploy to GCE
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+
+      # build Docker image
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t /tmp/build/node-app:$TAG . 
+
+      - run:
+          name: Deploy to GKE
           command: |
             echo ${GOOGLE_AUTH} | base64 --decode --ignore-garbage > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
@@ -36,8 +52,9 @@ jobs:
             gcloud --quiet config set container/cluster ${GOOGLE_CLUSTER_NAME}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+            gcloud docker -- push gcr.io/${GOOGLE_PROJECT_ID}/tmp/build/node-app:$TAG
             kubectl create -f replicationController.json
-            kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:0.0.1 --image-pull-policy Always
+            kubectl rolling-update postit-deployment --image=gcr.io/${GOOGLE_PROJECT_ID}/tmp/build/node-app:$TAG --image-pull-policy Always
 
 workflows:
   version: 2
@@ -47,3 +64,6 @@ workflows:
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only: master
