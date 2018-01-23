@@ -1,0 +1,37 @@
+{
+  "apiVersion": "v1",
+  "kind": "ReplicationController",
+  "metadata": {
+    "name": "postit-deployment"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "app":"postit-deployment"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app":"postit-deployment"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "postit-deployment",
+            "image": "gcr.io/cicdtest-192020/node-app:0.0.1",
+            "ports": [
+              {
+                "containerPort": 3000,
+                "protocol": "TCP"
+              }
+            ],
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst"
+      }
+    }
+  }
+}
