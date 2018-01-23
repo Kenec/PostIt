@@ -30,6 +30,8 @@ jobs:
       - run:
           name: Deploy to GCE
           command: |
+            gcloud --quiet components update
+            gcloud --quiet components update kubectl
             echo ${GOOGLE_AUTH} | base64 --decode --ignore-garbage > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
