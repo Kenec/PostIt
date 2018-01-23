@@ -27,7 +27,7 @@ jobs:
         - gcloud --quiet components update --version 120.0.0 kubectl
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Install Docker client
@@ -41,7 +41,7 @@ jobs:
       # build Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t /tmp/build/node-app:$TAG . 
+          docker build -t gcr.io/cicdtest-192020/node-app:$TAG . 
 
       - run:
           name: Deploy to GKE
@@ -52,7 +52,7 @@ jobs:
             gcloud --quiet config set container/cluster ${GOOGLE_CLUSTER_NAME}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
-            gcloud docker -- push gcr.io/${GOOGLE_PROJECT_ID}/tmp/build/node-app:$TAG
+            gcloud docker -- push gcr.io/cicdtest-192020/node-app:$TAG
             kubectl create -f replicationController.json
             kubectl rolling-update postit-deployment --image=gcr.io/${GOOGLE_PROJECT_ID}/tmp/build/node-app:$TAG --image-pull-policy Always
 
