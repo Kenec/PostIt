@@ -54,6 +54,8 @@ jobs:
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
             gcloud docker -- push gcr.io/cicdtest-192020/node-app:$TAG
             # kubectl create -f replicationController.json
+            kubectl create -f secret.yml
+            kubectl apply -f deployment.yml
             kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:$TAG --image-pull-policy Always
 
 workflows:

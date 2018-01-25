@@ -9,7 +9,7 @@ build
 bin
 client/dist
 server/dist
-
+secret.yml
 
 # misc
 .DS_Store
