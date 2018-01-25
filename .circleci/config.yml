@@ -41,7 +41,7 @@ jobs:
           name: Build Docker Image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build --build-arg DATABASE_URL=${DATABASE_URL} --build-arg JWT_SECRET=${JWT_SECRET} --build-arg EMAIL_NAME=${EMAIL_NAME} --build-arg EMAIL_PASSWORD=${EMAIL_PASSWORD} --build-arg SMS_API_KEY=${SMS_API_KEY} --build-arg SMS_API_SECRET=${SMS_API_SECRET} -t gcr.io/cicdtest-192020/node-app:$TAG . 
+            docker build --build-arg NODE_ENV=production --build-arg DATABASE_URL=${DATABASE_URL} --build-arg JWT_SECRET=${JWT_SECRET} --build-arg EMAIL_NAME=${EMAIL_NAME} --build-arg EMAIL_PASSWORD=${EMAIL_PASSWORD} --build-arg SMS_API_KEY=${SMS_API_KEY} --build-arg SMS_API_SECRET=${SMS_API_SECRET} -t gcr.io/cicdtest-192020/node-app:$TAG . 
       - run:
           name: Deploy to GKE
           command: |
