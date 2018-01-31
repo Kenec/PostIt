@@ -56,7 +56,8 @@ jobs:
             # kubectl create -f replicationController.json
             kubectl create -f secret.yml
             kubectl apply -f deployment.yml
-            kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:$TAG --image-pull-policy Always
+            # kubectl rolling-update postit-deployment --image=gcr.io/cicdtest-192020/node-app:$TAG --image-pull-policy Always
+            kubectl set image deployment/postit-deployment  postit-deployment=gcr.io/cicdtest-192020/node-app:0.0.4 --record
 
 workflows:
   version: 2
