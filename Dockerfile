@@ -28,6 +28,6 @@ EXPOSE 3000
 # ENV EMAIL_PASSWORD=$EMAIL_PASSWORD
 # ENV SMS_API_KEY=$SMS_API_KEY
 # ENV SMS_API_SECRET=$SMS_API_SECRET
-
+export cat $env
 # Run the appplication
 CMD export $(cat .env);NODE_ENV=production npm run start
