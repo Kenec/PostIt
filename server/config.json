@@ -9,7 +9,11 @@
     "dialect": "postgres"
   },
   "test": {
-    "use_env_variable":"DATABASE_URL",
+    "username": "postgres",
+    "password": "kene",
+    "database": "postit-test",
+    "host": "127.0.0.1",
+    "port":"5000",
     "dialect": "postgres"
   },
   "production": {
